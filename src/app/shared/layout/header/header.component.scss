@@ -1,0 +1,46 @@
+@use "tailwindcss";
+@reference "tailwindcss/utilities";
+
+/* 外層容器：左邊橘色（背景）、右邊黑色區塊容器 */
+.header {
+  /* pl-[56px] → 左內距 56px（黑色區域內文向右偏移）*/
+  @apply w-full h-fit relative overflow-hidden bg-orange-400 pl-[80px];
+
+  /* dark 模式 */
+  &.dark {
+    --after-bg: black;
+    @apply text-white;
+  }
+
+  /* light 模式 */
+  &.light {
+    --after-bg: white;
+    @apply text-blue-500;
+  }
+}
+
+/* 黑色梯形區塊（使用 ::after 疊加上去） */
+.header::after {
+  content: "";
+  @apply absolute top-0;
+  /* 使用變數當背景顏色（可被 dark/light 更新） */
+  background: var(--after-bg);
+
+  /*
+    left: 32px              → 左邊橘色固定寬度 32px
+    width: calc(100% - 32px) → 剩下寬度全部給黑色區塊
+    height: 100%            → 填滿高度
+  */
+  left: 32px;
+  width: calc(100% - 32px);
+  height: 100%;
+
+  /*
+    clip-path: polygon(...) 用來製作“左側斜邊”
+    16px 0px    → 左上向右偏移（斜邊長度 = 16px）
+    100% 0px    → 右上角
+    100% 100%   → 右下角
+    0px 100%    → 左下角（水平）
+  */
+  clip-path: polygon(16px 0px, 100% 0px, 100% 100%, 0px 100%);
+}

@@ -1,0 +1,4 @@
+<app-header [theme]="theme"></app-header>
+<div class="flex-1 px-4 pb-4" [ngClass]="theme == 'dark' ? '' : 'bg-blue-100'">
+  <router-outlet></router-outlet>
+</div>
