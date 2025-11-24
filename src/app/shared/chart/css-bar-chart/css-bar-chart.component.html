@@ -1,0 +1,45 @@
+<div class="grid grid-cols-[max-content_1fr_max-content] gap-3 items-center">
+  <!-- 第一行：chart legend -->
+  <div></div>
+  <div class="h-12 relative">
+    <div class="absolute inset-0 flex items-center text-2xl font-bold">
+      <div class="flex flex-1 items-center gap-3">
+        <div class="w-6 h-8 rounded-md {{ colorClass }}"></div>
+        <span>{{ labels[0] }}</span>
+      </div>
+      <div class="flex flex-1 items-center gap-3">
+        <div class="w-6 h-8 rounded-md bg-[#dedede]"></div>
+        <span>{{ labels[1] }}</span>
+      </div>
+    </div>
+  </div>
+  <div></div>
+
+  <!-- 後面 row：chartData -->
+  @for(data of chartData; track data.label) {
+  <!-- 第一列：label -->
+  <div class="text-2xl font-semibold mr-2">
+    {{ data.label }}
+  </div>
+
+  <!-- 第二列：進度條 -->
+  <div class="h-12 bg-[#dedede] rounded-md relative">
+    <div
+      class="h-full rounded-md relative"
+      [ngClass]="colorClass"
+      [ngStyle]="{ width: (data.value / data.total) * 100 + '%' }"
+    >
+      <div
+        class="absolute right-0 top-1/2 transform -translate-y-1/2 text-3xl text-white font-bold pr-2"
+      >
+        {{ data.value | number }}
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三列：總數 -->
+  <div class="text-3xl font-semibold">
+    {{ data.total | number }}
+  </div>
+  }
+</div>

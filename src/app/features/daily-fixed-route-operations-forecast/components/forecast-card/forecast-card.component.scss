@@ -1,0 +1,14 @@
+/* 左塊：右側切斜角 */
+.clip-left {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+}
+
+/* 右塊：左側切斜角 */
+.clip-right {
+  clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* 右塊：左側切斜角 */
+.clip-right-sm {
+  clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%);
+}

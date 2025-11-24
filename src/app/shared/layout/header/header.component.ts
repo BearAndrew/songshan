@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { routes } from '../../../app.routes';
 import { MainLayoutComponent } from '../main-layout/main-layout.component';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,12 @@ export class HeaderComponent {
   title: string = '';
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.getCurrentRouteTitle();
+    });
+
     this.loadRoutes();
     this.getCurrentRouteTitle();
   }
@@ -30,10 +37,10 @@ export class HeaderComponent {
     if (!mainRoute || !mainRoute.children) return;
 
     this.menuRoutes = mainRoute.children
-      .filter((r) => r.path && r.title)
+      .filter((r) => r.path && r.data?.['title'])
       .map((r) => ({
         path: r.path!,
-        title: r.title as string,
+        title: r.data?.['title'] as string,
         theme: r.data?.['theme'] ?? 'light',
       }));
   }

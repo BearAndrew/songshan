@@ -1,2 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 @use "tailwindcss";
+
+.light {
+  @apply bg-blue-100;
+
+  .card {
+    @apply bg-white rounded-lg;
+  }
+}
+
+.dark {
+  @apply bg-[#191919] [&>*]:text-white;
+
+  .card {
+    @apply bg-[#252525] rounded-lg;
+  }
+}

@@ -27,7 +27,7 @@ export const routes: Routes = [
       {
         path: 'daily-fixed-route-operations-forecast',
         component: DailyFixedRouteOperationsForecastComponent,
-        data: { title: '當日定航營運狀況（含預報）', theme: 'light' },
+        data: { title: '當日定航營運狀況-含預報', theme: 'light' },
       },
       {
         path: 'daily-international-flight-analysis',
