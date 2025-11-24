@@ -1,3 +1,41 @@
-<div class="header" [ngClass]="theme">
+<!-- <div class="header" [ngClass]="theme">
   <h1 class="text-[50px] font-bold relative z-10">Header Title</h1>
+</div> -->
+
+<div class="header flex items-center justify-between p-4" [ngClass]="theme">
+  <div class="flex items-center gap-2 relative z-10">
+    <!-- 按鈕 -->
+    <button
+      #menuTrigger="cdkOverlayOrigin"
+      cdkOverlayOrigin
+      class="px-4 py-2 bg-gray-700 text-white rounded"
+      (click)="toggleMenu()"
+    >
+      Menu
+    </button>
+
+    <!-- 下拉 Overlay -->
+    <ng-template
+      cdk-connected-overlay
+      [cdkConnectedOverlayOrigin]="menuTrigger"
+      [cdkConnectedOverlayOpen]="menuOpen"
+      cdkConnectedOverlayHasBackdrop
+      (overlayOutsideClick)="closeMenu()"
+      (detach)="closeMenu()"
+    >
+      <div class="bg-white shadow-xl rounded p-1 w-72">
+        <!-- 🔥 自動產生 menu -->
+        <ng-container *ngFor="let item of menuRoutes">
+          <button
+            class="w-full text-left p-2 hover:bg-gray-100"
+            (click)="navigate(item.path)"
+          >
+            {{ item.title }}
+          </button>
+        </ng-container>
+      </div>
+    </ng-template>
+
+    <h1 class="text-[50px] font-bold leading-none">{{ title}}</h1>
+  </div>
 </div>

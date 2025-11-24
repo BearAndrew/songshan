@@ -1,0 +1,29 @@
+<div class="flex items-center gap-4 w-full h-full pl-20">
+  @if (isShowSideHeader) {
+  <div class="flex flex-col h-full pt-12 justify-around items-center text-xl">
+    <span>航班數</span>
+    <span>遊客數</span>
+  </div>
+  }
+
+  <div class="flex flex-col flex-1 h-full">
+    <div
+      class="grid grid-cols-3 items-center h-12 bg-[#334f8a] rounded-xl text-2xl text-center font-semibold"
+    >
+      @for (item of header; track $index) {
+      <div>{{ item }}</div>
+      }
+    </div>
+
+    @for (item of data; track item; let i = $index) {
+    <div
+      class="flex-1 items-center grid grid-cols-3 text-[50px] font-bold leading-none text-center"
+      [ngClass]="{ 'border-b border-gray-300': i !== data.length - 1 }"
+    >
+      <div>{{ item.out }}</div>
+      <div>{{ item.in }}</div>
+      <div>{{ item.out + item.in }}</div>
+    </div>
+    }
+  </div>
+</div>
