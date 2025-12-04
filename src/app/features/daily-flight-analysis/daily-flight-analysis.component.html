@@ -1,1 +1,5 @@
-<p>daily-flight-analysis works!</p>
+<app-dropdown
+  [data]="cities"
+  placeholder="Select city"
+  (selectionChange)="onCityChange($event)"
+></app-dropdown>

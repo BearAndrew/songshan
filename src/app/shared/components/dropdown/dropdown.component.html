@@ -1,0 +1,23 @@
+<div class="w-full">
+  <div
+    #dropdownTrigger
+    class="flex justify-between items-center border border-gray-300 bg-white px-3 py-2 rounded cursor-pointer select-none"
+    (click)="toggle()"
+  >
+    <span>{{ selected?.label || placeholder }}</span>
+    <span class="text-gray-500">▾</span>
+  </div>
+
+  <ng-template #dropdownMenu>
+    <div class="w-full bg-white border border-gray-200 rounded shadow-md py-1">
+      @for (item of data; track $index) {
+      <div
+        class="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+        (click)="select(item)"
+      >
+        {{ item.label }}
+      </div>
+      }
+    </div>
+  </ng-template>
+</div>

@@ -1,136 +1,157 @@
 <div class="card flex flex-2 flex-col gap-2 p-4 w-full h-full">
   <div class="flex items-center gap-2">
-    <h2 class="text-xl font-bold text-[#02b3e5]">後續預報</h2>
+    <h2 class="text-2xl font-bold text-[#06e5ff]">後續預報</h2>
   </div>
 
-  <div class="flex flex-col px-4 gap-1 h-full">
-    <div class="flex flex-shrink-0 items-center gap-1 ml-18 mb-1">
+  <div class="flex flex-col h-full text-xl">
+    <!-- 國際標題列 -->
+    <div
+      class="grid [grid-template-columns:60px_repeat(5,1fr)] text-center mb-2"
+    >
+      <div></div>
+      <div></div>
       <div
-        class="flex-1 translate-x-3.5 bg-[#43B4E8] text-white px-2 py-1 text-center relative clip-left"
+        class="flex items-center justify-center col-span-2 text-[#06e5ff] font-bold"
       >
-        <span class="text-3xl font-bold">60</span>
-        <span class="ml-1">分鐘預報架次/人數</span>
+        <span class="text-4xl">60</span>分鐘預報架次/人數
       </div>
-
       <div
-        class="flex-1 bg-[#43B4E8] text-[#43B4E8] p-1 text-center relative clip-right"
+        class="flex items-center justify-center col-span-2 text-[#06e5ff] font-bold"
       >
-        <div class="bg-white ml-0.75 pl-4 clip-right-sm">
-          <span class="text-3xl font-bold">120</span>
-          <span class="ml-1">分鐘預報架次/人數</span>
-        </div>
+        <span class="text-4xl">120</span>分鐘預報架次/人數
       </div>
     </div>
 
-    <table
-      class="flex-1 table-auto border-collapse border-3 border-gray-400 text-center"
+    <!-- 國際 -->
+    <div
+      class="flex-1 relative rounded-t-md overflow-hidden border border-gray-400 border-b-0"
     >
-      <colgroup>
-        <col style="width: 2%" />
-        <col style="width: 8%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-      </colgroup>
-
-      <tbody class="[&_td]:border [&_td]:border-gray-400 [&_td]:px-2">
-        <tr>
-          <td rowspan="2" class="text-gray-400 font-bold">國際</td>
-          <td class="text-gray-400">出境</td>
-          <td class="text-xl font-bold">100</td>
-          <td class="text-xl font-bold !border-r-3">200</td>
-          <td class="text-xl font-bold">300</td>
-          <td class="text-xl font-bold">400</td>
-        </tr>
-        <tr>
-          <td class="text-gray-400">入境</td>
-          <td class="text-xl font-bold">110</td>
-          <td class="text-xl font-bold !border-r-3">210</td>
-          <td class="text-xl font-bold">310</td>
-          <td class="text-xl font-bold">510</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table
-      class="flex-1 table-auto border-collapse border-3 border-gray-400 text-center"
-    >
-      <colgroup>
-        <col style="width: 2%" />
-        <col style="width: 8%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-      </colgroup>
-
-      <tbody class="[&_td]:border [&_td]:border-gray-400 [&_td]:px-2">
-        <tr>
-          <td rowspan="2" class="text-gray-400 font-bold">兩岸</td>
-          <td class="text-gray-400">出境</td>
-          <td class="text-xl font-bold">100</td>
-          <td class="text-xl font-bold !border-r-3">200</td>
-          <td class="text-xl font-bold">300</td>
-          <td class="text-xl font-bold">400</td>
-        </tr>
-        <tr>
-          <td class="text-gray-400">入境</td>
-          <td class="text-xl font-bold">110</td>
-          <td class="text-xl font-bold !border-r-3">210</td>
-          <td class="text-xl font-bold">310</td>
-          <td class="text-xl font-bold">510</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="flex flex-shrink-0 items-center gap-1 mt-2 ml-18 mb-1">
+      <!-- 背景層 -->
       <div
-        class="flex-1 translate-x-3.5 bg-[#43B4E8] text-white px-2 py-1 text-center relative clip-left"
+        class="absolute inset-0 grid [grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
       >
-        <span class="text-3xl font-bold">30</span>
-        <span class="ml-1">分鐘預報架次/人數</span>
+        <div></div>
+        <div></div>
+        <div class="mr-1 col-span-2 bg-[#2cb7ae] rounded-t-sm"></div>
+        <div class="ml-1 col-span-2 bg-[#2cb7ae] rounded-t-sm"></div>
       </div>
 
+      <!-- 內容 -->
       <div
-        class="flex-1 bg-[#43B4E8] text-[#43B4E8] p-1 text-center relative clip-right"
+        class="h-full relative grid [grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
       >
-        <div class="bg-white ml-0.75 pl-4 clip-right-sm">
-          <span class="text-3xl font-bold">60</span>
-          <span class="ml-1">分鐘預報架次/人數</span>
+        <div
+          class="row-span-2 flex items-center justify-center border-r border-gray-400 text-white font-bold [writing-mode:vertical-rl]"
+        >
+          國際
         </div>
+
+        <div class="border-b border-gray-400 text-white">出境</div>
+        <div class="border-b border-gray-400 text-black font-bold">100</div>
+        <div class="border-b border-gray-400 text-black font-bold">200</div>
+        <div class="border-b border-gray-400 text-black font-bold">300</div>
+        <div class="border-b border-gray-400 text-black font-bold">400</div>
+
+        <div class="border-gray-400 text-white">入境</div>
+        <div class="border-gray-400 text-black font-bold">110</div>
+        <div class="border-gray-400 text-black font-bold">210</div>
+        <div class="border-gray-400 text-black font-bold">310</div>
+        <div class="text-black font-bold">510</div>
       </div>
     </div>
 
-    <table
-      class="flex-1 table-auto border-collapse border-3 border-gray-400 text-center"
+    <!-- 兩岸 -->
+    <div
+      class="flex-1 relative rounded-b-md overflow-hidden border border-gray-400 mt-1"
     >
-      <colgroup>
-        <col style="width: 2%" />
-        <col style="width: 8%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-        <col style="width: 20%" />
-      </colgroup>
+      <!-- 背景層 -->
+      <div
+        class="absolute inset-0 grid [grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
+      >
+        <div></div>
+        <div></div>
+        <div class="mr-1 col-span-2 bg-[#2cb7ae] rounded-b-sm"></div>
+        <div class="ml-1 col-span-2 bg-[#2cb7ae] rounded-b-sm"></div>
+      </div>
 
-      <tbody class="[&_td]:border [&_td]:border-gray-400 [&_td]:px-2">
-        <tr>
-          <td rowspan="2" class="text-gray-400 font-bold">國內</td>
-          <td class="text-gray-400">離站</td>
-          <td class="text-xl font-bold">100</td>
-          <td class="text-xl font-bold !border-r-3">200</td>
-          <td class="text-xl font-bold">300</td>
-          <td class="text-xl font-bold">400</td>
-        </tr>
-        <tr>
-          <td class="text-gray-400">到站</td>
-          <td class="text-xl font-bold">110</td>
-          <td class="text-xl font-bold !border-r-3">210</td>
-          <td class="text-xl font-bold">310</td>
-          <td class="text-xl font-bold">510</td>
-        </tr>
-      </tbody>
-    </table>
+      <!-- 內容 -->
+      <div
+        class="h-full relative grid [grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
+      >
+        <div
+          class="row-span-2 flex items-center justify-center border-r border-gray-400 text-white font-bold [writing-mode:vertical-rl]"
+        >
+          兩岸
+        </div>
+
+        <div class="border-b border-gray-400 text-white">出境</div>
+        <div class="border-b border-gray-400 text-black font-bold">100</div>
+        <div class="border-b border-gray-400 text-black font-bold">200</div>
+        <div class="border-b border-gray-400 text-black font-bold">300</div>
+        <div class="border-b border-gray-400 text-black font-bold">400</div>
+
+        <div class="border-gray-400 text-white">入境</div>
+        <div class="border-gray-400 text-black font-bold">110</div>
+        <div class="border-gray-400 text-black font-bold">210</div>
+        <div class="border-gray-400 text-black font-bold">310</div>
+        <div class="text-black font-bold">510</div>
+      </div>
+    </div>
+
+    <!-- 國內標題列 -->
+    <div
+      class="grid [grid-template-columns:60px_repeat(5,1fr)] text-center my-2"
+    >
+      <div></div>
+      <div></div>
+      <div
+        class="flex items-center justify-center col-span-2 text-[#06e5ff] font-bold"
+      >
+        <span class="text-4xl">30</span>分鐘預報架次/人數
+      </div>
+      <div
+        class="flex items-center justify-center col-span-2 text-[#06e5ff] font-bold"
+      >
+        <span class="text-4xl">60</span>分鐘預報架次/人數
+      </div>
+    </div>
+
+    <!-- 國內 -->
+    <div
+      class="flex-1 relative rounded-md overflow-hidden border border-gray-400"
+    >
+      <!-- 背景層 -->
+      <div
+        class="absolute inset-0 grid [grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
+      >
+        <div></div>
+        <div></div>
+        <div class="mr-1 col-span-2 bg-[#2cb7ae] rounded-sm"></div>
+        <div class="ml-1 col-span-2 bg-[#2cb7ae] rounded-sm"></div>
+      </div>
+
+      <!-- 內容 -->
+      <div
+        class="h-full relative grid [grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
+      >
+        <div
+          class="row-span-2 flex items-center justify-center border-r border-gray-400 text-white [writing-mode:vertical-rl]"
+        >
+          國內
+        </div>
+
+        <div class="border-b border-gray-400 text-white">到站</div>
+        <div class="border-b border-gray-400 text-black font-bold">100</div>
+        <div class="border-b border-gray-400 text-black font-bold">200</div>
+        <div class="border-b border-gray-400 text-black font-bold">300</div>
+        <div class="border-b border-gray-400 text-black font-bold">400</div>
+
+        <div class="border-gray-400 text-white">離站</div>
+        <div class="border-gray-400 text-black font-bold">110</div>
+        <div class="border-gray-400 text-black font-bold">210</div>
+        <div class="border-gray-400 text-black font-bold">310</div>
+        <div class="text-black font-bold">510</div>
+      </div>
+    </div>
   </div>
 </div>

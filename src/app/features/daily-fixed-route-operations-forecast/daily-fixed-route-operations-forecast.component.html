@@ -19,31 +19,71 @@
     <div class="flex gap-2">
       <app-css-bar-chart
         class="flex-1 px-12"
-        [labels]="['實際人數', '預報人數']"
-        [chartData]="chartData[activeIndex].passengerData"
-        [colorClass]="'bg-[#02b3e5]'"
-      ></app-css-bar-chart>
-      <app-css-bar-chart
-        class="flex-1 px-12"
         [labels]="['實際架次', '預報架次']"
         [chartData]="chartData[activeIndex].flightData"
         [colorClass]="'bg-gradient-to-r from-[#fd9c44] to-[#ffb029]'"
       ></app-css-bar-chart>
+      <app-css-bar-chart
+        class="flex-1 px-12"
+        [labels]="['實際人數', '預報人數']"
+        [chartData]="chartData[activeIndex].passengerData"
+        [colorClass]="'bg-[#02b3e5]'"
+      ></app-css-bar-chart>
     </div>
   </div>
 
-  <div class="flex flex-1 items-center gap-4 w-full h-0">
+  <div class="flex flex-2 items-center gap-4 w-full h-0">
     <app-forecast-card class="flex-2 w-full h-full"></app-forecast-card>
 
-    <div class="card flex flex-3 items-center gap-2 p-4 w-full h-full">
-      <div class="flex flex-1 flex-col items-center gap-2 h-full">
-        <h2 class="text-xl font-bold text-[#ee8150]">當日總航班數</h2>
-        <div class="flex-1 h-0" id="pie-chart-1"></div>
+    <div
+      class="card flex flex-1 flex-col items-center gap-8 px-8 pt-8 pb-4 w-full h-full"
+    >
+      <div class="flex-1 w-full border-4 border-[#3372bd] rounded-lg relative">
+        <div
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
+        >
+          實際總數
+        </div>
+        <div class="flex items-center h-full">
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div
+              class="text-[70px] text-[#f08622] leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+            >
+              19
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-[70px] text-[#02b3e7] leading-none">
+              {{ 1000 | number }}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="flex flex-1 flex-col items-center gap-2 h-full">
-        <h2 class="text-xl font-bold text-[#ee8150]">當日總遊客數</h2>
-        <div class="flex-1 h-0" id="pie-chart-2"></div>
+      <div class="flex-1 w-full border-4 border-[#3372bd] rounded-lg relative">
+        <div
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
+        >
+          預報總數
+        </div>
+        <div class="flex items-center h-full">
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div
+              class="text-[70px] text-[#f08622] leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+            >
+              19
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-[70px] text-[#02b3e7] leading-none">
+              {{ 1000 | number }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -27,22 +27,22 @@ export const routes: Routes = [
       {
         path: 'daily-fixed-route-operations-forecast',
         component: DailyFixedRouteOperationsForecastComponent,
-        data: { title: '當日定航營運狀況-含預報', theme: 'light' },
+        data: { title: '當日定航營運狀況-含預報', theme: 'dark' },
       },
       {
         path: 'daily-international-flight-analysis',
         component: DailyFlightAnalysisComponent,
-        data: { title: '當日國際兩岸線定航出入境航班分析', theme: 'light', type: 'international' },
+        data: { title: '當日國際兩岸線定航出入境航班分析', theme: 'dark', type: 'international' },
       },
       {
         path: 'daily-domestic-flight-analysis',
         component: DailyFlightAnalysisComponent,
-        data: { title: '當日國內線定航離到站航班分析', theme: 'light', type: 'domestic' },
+        data: { title: '當日國內線定航離到站航班分析', theme: 'dark', type: 'domestic' },
       },
       {
         path: 'daily-domestic-standby-analysis',
         component: DailyDomesticStandbyAnalysisComponent,
-        data: { title: '當日國內線候補分析', theme: 'light' },
+        data: { title: '當日國內線候補分析', theme: 'dark' },
       },
       {
         path: 'daily-abnormal-flight-info',
@@ -62,17 +62,17 @@ export const routes: Routes = [
       {
         path: 'traffic-forecast',
         component: TrafficForecastComponent,
-        data: { title: '運量預報', theme: 'light' },
+        data: { title: '運量預報', theme: 'dark' },
       },
       {
         path: 'traffic-analysis',
         component: ChartPageComponent,
-        data: { title: '運量分析', theme: 'light' },
+        data: { title: '運量分析', theme: 'dark' },
       },
       {
         path: 'fixed-route-traffic-analysis',
         component: ChartPageComponent,
-        data: { title: '定航運量分析', theme: 'light' },
+        data: { title: '定航運量分析', theme: 'dark' },
       },
       {
         path: 'traffic-comparison-data',
@@ -87,7 +87,7 @@ export const routes: Routes = [
       {
         path: 'on-time-performance-analysis',
         component: ChartPageComponent,
-        data: { title: '準點率分析', theme: 'light' },
+        data: { title: '準點率分析', theme: 'dark' },
       },
       {
         path: 'flight-abnormal-analysis',
@@ -97,12 +97,12 @@ export const routes: Routes = [
       {
         path: 'domestic-route-standby-analysis',
         component: DomesticRouteStandbyAnalysisComponent,
-        data: { title: '國內航線候補分析', theme: 'light' },
+        data: { title: '國內航線候補分析', theme: 'dark' },
       },
       {
         path: 'intl-checkin-counter',
         component: IntlCheckinCounterComponent,
-        data: { title: '國際線報到櫃檯模組', theme: 'light' },
+        data: { title: '國際線報到櫃檯模組', theme: 'dark' },
       },
       {
         path: 'taxi-module',

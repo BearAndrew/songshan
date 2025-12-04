@@ -15,14 +15,12 @@ export class DailyFixedRouteOperationsForecastComponent {
     {
       label: '國際兩岸線',
       passengerData: [
-        { label: '出境', value: 5000, total: 10000 },
+        { label: '出境', value: 50, total: 10000 },
         { label: '入境', value: 70, total: 100 },
-        { label: '總數', value: 5070, total: 10100 },
       ],
       flightData: [
         { label: '到站', value: 90, total: 100 },
         { label: '離站', value: 40, total: 100 },
-        { label: '總數', value: 130, total: 200 },
       ],
     },
     {
@@ -30,12 +28,10 @@ export class DailyFixedRouteOperationsForecastComponent {
       passengerData: [
         { label: '出境', value: 3000, total: 5000 },
         { label: '入境', value: 50, total: 80 },
-        { label: '總數', value: 3050, total: 5080 },
       ],
       flightData: [
         { label: '到站', value: 60, total: 70 },
         { label: '離站', value: 30, total: 40 },
-        { label: '總數', value: 90, total: 110 },
       ],
     },
     {
