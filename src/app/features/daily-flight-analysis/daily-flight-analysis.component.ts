@@ -4,7 +4,7 @@ import { DailyFlightAnalysisFlightCardComponent } from './components/daily-fligh
 import { DailyFlightAnalysisDelayCardComponent } from './components/daily-flight-analysis-delay-card/daily-flight-analysis-delay-card.component';
 import { DailyFlightAnalysisDelayPieChartCardComponent } from './components/daily-flight-analysis-delay-pie-chart-card/daily-flight-analysis-delay-pie-chart-card.component';
 import { DailyFlightAnalysisAbnormalCardComponent } from './components/daily-flight-analysis-abnormal-card/daily-flight-analysis-abnormal-card.component';
-import { DailyFlightAnalysisData } from '../../core/daily-flight-analysis.interface';
+import { DailyFlightAnalysisData } from '../../core/interface/daily-flight-analysis.interface';
 import { DailyFlightAnalysisBarlineChartCardComponent } from "./components/daily-flight-analysis-barline-chart-card/daily-flight-analysis-barline-chart-card.component";
 
 @Component({

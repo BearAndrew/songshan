@@ -1,59 +1,43 @@
-# Songshan
+### 松山機場
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.0.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
+#### 專案架構圖
 ```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+app/
+├── shared/
+│   └── layout/
+│       └── main-layout/
+│           └── main-layout.component.ts      ← 主版型
+├── features/
+│   ├── daily-fixed-route-operations/
+│   │   └── daily-fixed-route-operations.component.ts      ← 當日航班營運狀況
+│   ├── daily-fixed-route-operations-forecast/
+│   │   └── daily-fixed-route-operations-forecast.component.ts      ← 當日航班即時營運狀況
+│   ├── daily-flight-analysis/
+│   │   └── daily-flight-analysis.component.ts
+│   │       ├── daily-international-flight-analysis      ← 當日定航出入境航班分析
+│   │       └── daily-domestic-flight-analysis           ← 當日國內線定航離到站航班分析
+│   ├── daily-domestic-standby-analysis/
+│   │   └── daily-domestic-standby-analysis.component.ts      ← 當日國內線候補分析
+│   ├── daily-abnormal-flight-info/
+│   │   └── daily-abnormal-flight-info.component.ts      ← 當日異常航班資訊
+│   ├── realtime-passenger-vehicle-domestic/
+│   │   └── realtime-passenger-vehicle-domestic.component.ts      ← 即時人車流（國內線）
+│   ├── realtime-passenger-vehicle-international/
+│   │   └── realtime-passenger-vehicle-international.component.ts      ← 即時人車流（國際線）
+│   ├── traffic-forecast/
+│   │   └── traffic-forecast.component.ts      ← 運量預報
+│   ├── chart-page/
+│   │   └── chart-page.component.ts
+│   │       ├── traffic-analysis                  ← 運量分析
+│   │       ├── fixed-route-traffic-analysis     ← 定航運量分析
+│   │       ├── traffic-comparison-data          ← 運量對比資料
+│   │       ├── fixed-route-traffic-comparison-data  ← 定航運量對比資料
+│   │       ├── on-time-performance-analysis     ← 準點率分析
+│   │       └── flight-abnormal-analysis        ← 航班異常分析
+│   ├── domestic-route-standby-analysis/
+│   │   └── domestic-route-standby-analysis.component.ts      ← 國內航線候補分析
+│   ├── intl-checkin-counter/
+│   │   └── intl-checkin-counter.component.ts      ← 國際線報到櫃檯模組
+│   └── taxi-module/
+│       └── taxi-module.component.ts      ← 計程車模組
 ```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

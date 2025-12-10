@@ -1,5 +1,5 @@
 import { Directive, Input } from "@angular/core";
-import { DailyFlightAnalysisData } from "../../../core/daily-flight-analysis.interface";
+import { DailyFlightAnalysisData } from "../../../core/interface/daily-flight-analysis.interface";
 
 @Directive()
 export abstract class DailyFlightAnalysisChildComponent {

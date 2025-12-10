@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { DailyFixedRouteOperationsTableComponent } from './components/daily-fixed-route-operations-table/daily-fixed-route-operations-table.component';
+import { PieChartComponent } from "../../shared/chart/pie-chart/pie-chart.component";
 
 @Component({
   selector: 'app-daily-fixed-route-operations',
-  imports: [CommonModule, DailyFixedRouteOperationsTableComponent],
+  imports: [CommonModule, DailyFixedRouteOperationsTableComponent, PieChartComponent],
   templateUrl: './daily-fixed-route-operations.component.html',
   styleUrl: './daily-fixed-route-operations.component.scss',
 })
