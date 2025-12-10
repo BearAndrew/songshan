@@ -9,6 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class CssBarChartComponent {
 
+  @Input()size: 'sm' | 'lg' = 'lg';
   @Input()colorClass = 'bg-[#02b3e5]';
   @Input()labels = ['實際人數', '預報人數'];
   @Input()chartData = [

@@ -22,17 +22,17 @@ export const routes: Routes = [
       {
         path: 'daily-fixed-route-operations',
         component: DailyFixedRouteOperationsComponent,
-        data: { title: '當日定航營運狀況', theme: 'dark' },
+        data: { title: '當日航班營運狀況', theme: 'dark' },
       },
       {
         path: 'daily-fixed-route-operations-forecast',
         component: DailyFixedRouteOperationsForecastComponent,
-        data: { title: '當日定航營運狀況-含預報', theme: 'dark' },
+        data: { title: '當日航班即時營運狀況', theme: 'dark' },
       },
       {
         path: 'daily-international-flight-analysis',
         component: DailyFlightAnalysisComponent,
-        data: { title: '當日國際兩岸線定航出入境航班分析', theme: 'dark', type: 'international' },
+        data: { title: '當日定航出入境航班分析', theme: 'dark', type: 'international' },
       },
       {
         path: 'daily-domestic-flight-analysis',

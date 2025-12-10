@@ -1,0 +1,128 @@
+<div class="flex justify-between items-center">
+  <h3 class="text-xl">延誤狀況</h3>
+  <div class="flex gap-2 text-sm">
+    <button
+      class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"
+      [ngClass]="toggleIndex == 0 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
+      (click)="toggleIndex = 0"
+    >
+      航空公司
+    </button>
+    <button
+      class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"
+      [ngClass]="toggleIndex == 1 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
+      (click)="toggleIndex = 1"
+    >
+      航點
+    </button>
+  </div>
+</div>
+
+<div class="flex flex-col flex-1 justify-between mx-4 border border-white rounded-lg">
+  <div class="flex-1 py-1 relative">
+    @for (i of [0,1,2]; track i) {
+    <div
+      class="grid grid-cols-[24px_1fr_100px] items-center gap-1 mx-4 px-1 py-0.5 relative"
+      [ngClass]="i % 2 === 1 ? 'bg-[#535353]' : ''"
+    >
+      <div
+        class="flex items-center justify-center absolute -left-4 -translate-x-1/2 w-7 h-7 bg-[#00c4ce] text-black text-lg font-bold rounded-full"
+      >
+        {{ i + 1 }}
+      </div>
+
+      <div class="text-lg whitespace-nowrap">
+        @if(data[activeIndex].delayData?.out?.[i]?.flightCode) {
+        {{ data[activeIndex].delayData.out[i].flightCode }}
+        } @else { <span class="text-[#7d7d7d]">無延誤</span> }
+      </div>
+
+      <div class="flex items-end gap-1 whitespace-nowrap">
+        @if(data[activeIndex].delayData?.out?.[i]?.flightCount) {
+        <span class="text-xs">架次/人數</span>
+        <span class="text-2xl leading-none">
+          {{
+            data[activeIndex].delayData.out[i].flightCount +
+              " / " +
+              (data[activeIndex].delayData.out[i].passengerCount | number)
+          }}
+        </span>
+        }
+      </div>
+
+      <div class="flex items-center gap-1 whitespace-nowrap">
+        <div class="flex flex-col items-center text-xs">
+          <span>平均延誤</span>
+          <span>時間/分鐘</span>
+        </div>
+        <span
+          class="flex-1 min-w-10 px-1 py-2 text-right text-xl leading-none bg-[#c2ae97] text-black rounded-sm"
+        >
+          {{ data[activeIndex].delayData?.out?.[i]?.delayTime ?? '&nbsp;' }}
+        </span>
+      </div>
+    </div>
+    }
+
+    <div
+      class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-white text-black text-center leading-tight rounded-full [writing-mode:vertical-rl] h-22 flex items-center justify-center px-1"
+    >
+      出境
+    </div>
+  </div>
+
+  <div class="mx-3 border-b border-white"></div>
+
+  <div class="flex-1 py-1 relative">
+    @for (i of [0,1,2]; track i) {
+    <div
+      class="grid grid-cols-[24px_1fr_100px] items-center gap-1 mx-4 px-1 py-0.5 relative"
+      [ngClass]="i % 2 === 1 ? 'bg-[#535353]' : ''"
+    >
+      <!-- index 圓形 -->
+      <div
+        class="flex items-center justify-center absolute -left-4 -translate-x-1/2 w-7 h-7 bg-[#00c4ce] text-black text-lg font-bold rounded-full"
+      >
+        {{ i + 1 }}
+      </div>
+
+      <div class="text-lg whitespace-nowrap">
+        @if(data[activeIndex].delayData?.in?.[i]?.flightCode) {
+        {{ data[activeIndex].delayData.in[i].flightCode }}
+        } @else { <span class="text-[#7d7d7d]">無延誤</span> }
+      </div>
+
+      <div class="flex items-end gap-1 whitespace-nowrap">
+        @if(data[activeIndex].delayData?.in?.[i]?.flightCount) {
+        <span class="text-xs">架次/人數</span>
+        <span class="text-2xl leading-none">
+          {{
+            data[activeIndex].delayData.in[i].flightCount +
+              " / " +
+              (data[activeIndex].delayData.in[i].passengerCount | number)
+          }}
+        </span>
+        }
+      </div>
+
+      <div class="flex items-center gap-1 whitespace-nowrap">
+        <div class="flex flex-col items-center text-xs">
+          <span>平均延誤</span>
+          <span>時間/分鐘</span>
+        </div>
+        <span
+          class="flex-1 min-w-10 px-1 py-2 text-right text-xl leading-none bg-[#c2ae97] text-black rounded-sm"
+        >
+          {{ data[activeIndex].delayData?.in?.[i]?.delayTime ?? '&nbsp;' }}
+        </span>
+      </div>
+    </div>
+    }
+
+    <div
+      class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-white text-black text-center leading-tight rounded-full [writing-mode:vertical-rl] h-22 flex items-center justify-center px-1"
+    >
+      入境
+    </div>
+  </div>
+</div>

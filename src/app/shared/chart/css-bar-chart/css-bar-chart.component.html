@@ -1,14 +1,30 @@
-<div class="grid grid-cols-[max-content_1fr_max-content] gap-3 items-center">
+<div
+  class="grid items-center"
+  [ngClass]="
+    size === 'sm'
+      ? 'gap-1.5 grid-cols-[max-content_1fr_minmax(60px,max-content)]'
+      : 'gap-3 grid-cols-[max-content_1fr_minmax(120px,max-content)]'
+  "
+>
   <!-- 第一行：chart legend -->
   <div></div>
-  <div class="h-12 relative">
-    <div class="absolute inset-0 flex items-center text-2xl font-bold">
+  <div class="relative" [ngClass]="size === 'sm' ? 'h-7' : 'h-12'">
+    <div
+      class="absolute inset-0 flex items-center font-bold"
+      [ngClass]="size === 'sm' ? 'text-md' : 'text-2xl'"
+    >
       <div class="flex flex-1 items-center gap-3">
-        <div class="w-6 h-8 rounded-md {{ colorClass }}"></div>
+        <div
+          class="rounded-md {{ colorClass }}"
+          [ngClass]="size === 'sm' ? 'w-4.5 h-6' : 'w-6 h-8'"
+        ></div>
         <span>{{ labels[0] }}</span>
       </div>
       <div class="flex flex-1 items-center gap-3">
-        <div class="w-6 h-8 rounded-md bg-[#dedede]"></div>
+        <div
+          class="rounded-md bg-[#dedede]"
+          [ngClass]="size === 'sm' ? 'w-4.5 h-6' : 'w-6 h-8'"
+        ></div>
         <span>{{ labels[1] }}</span>
       </div>
     </div>
@@ -18,19 +34,26 @@
   <!-- 後面 row：chartData -->
   @for(data of chartData; track data.label) {
   <!-- 第一列：label -->
-  <div class="text-2xl font-semibold mr-2">
+  <div
+    class="font-semibold mr-2"
+    [ngClass]="size === 'sm' ? 'text-md' : 'text-2xl'"
+  >
     {{ data.label }}
   </div>
 
   <!-- 第二列：進度條 -->
-  <div class="h-12 bg-[#dedede] rounded-md relative overflow-hidden">
+  <div
+    class="bg-[#dedede] rounded-md relative overflow-hidden"
+    [ngClass]="size === 'sm' ? 'h-7' : 'h-12'"
+  >
     <div
       class="h-full rounded-md relative"
       [ngClass]="colorClass"
       [ngStyle]="{ width: (data.value / data.total) * 100 + '%' }"
     >
       <div
-        class="absolute right-0 top-1/2 transform -translate-y-1/2 text-3xl text-white font-bold pr-2"
+        class="absolute right-0 top-1/2 transform -translate-y-1/2 text-white font-bold pr-2"
+        [ngClass]="size === 'sm' ? 'text-md' : 'text-3xl'"
       >
         {{ data.value | number }}
       </div>
@@ -38,7 +61,7 @@
   </div>
 
   <!-- 第三列：總數 -->
-  <div class="text-3xl font-semibold">
+  <div class="font-semibold" [ngClass]="size === 'sm' ? 'text-md' : 'text-3xl'">
     {{ data.total | number }}
   </div>
   }
