@@ -3673,7 +3673,7 @@ class RadialFactory extends BasicFactory {
     draw(useAnimation = false) {
         // Sample data
         const fontSize = this.radialConfig.labelFontConfig['font-size'];
-        const textHeight = getTextRect('q0p', undefined, fontSize).height / 0.8; // 文字高度
+        const textHeight = getTextRect('q0p', undefined, fontSize).height / 1.5; // 文字高度
         let maxWidthItem = null;
         let maxWidth = 0;
         for (const item of this.dataSetWithData) {

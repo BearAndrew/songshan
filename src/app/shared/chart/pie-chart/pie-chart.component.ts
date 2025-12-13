@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import {
   Color,
   DataSetWithData,
@@ -15,24 +15,31 @@ import { CommonModule } from '@angular/common';
   templateUrl: './pie-chart.component.html',
   styleUrl: './pie-chart.component.scss',
 })
-export class PieChartComponent implements OnInit {
-  data: DataSetWithData[] = [
-    {
-      label: '國際兩岸線',
-      data: { value: 17 },
-    },
-    {
-      label: '國內線',
-      data: { value: 23 },
-    },
-  ];
-
+export class PieChartComponent {
+  @Input() data: DataSetWithData[] = [];
+  @Input() centerLabel: string | number = '';
+  @Input() textColor: string = '';
+  @Input() flexDirection: 'v' | 'h' = 'v';
+  @Input() showLegend: boolean = true;
   id: string;
   private pieChart!: PieChart;
   colorArray: Color[] = [];
 
   constructor() {
     this.id = '_' + randomId();
+  }
+
+  get formattedCenterLabel(): string | number {
+    return typeof this.centerLabel === 'number'
+      ? new Intl.NumberFormat().format(this.centerLabel) // Angular number pipe 等效
+      : this.centerLabel;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']?.firstChange) {
+      return;
+    }
+    this.draw();
   }
 
   ngAfterViewInit(): void {
@@ -56,15 +63,13 @@ export class PieChartComponent implements OnInit {
     }, 0);
   }
 
-  ngOnInit(): void {}
-
   draw() {
     this.colorArray = this.data.map((item, index) => {
       let colors: Color;
       if (item.colors) {
-        colors = {color: item.colors[0], opacity: 1};
+        colors = { color: item.colors[0], opacity: 1 };
       } else {
-        colors = DefaultDataColorArray[index][0] || [{color: '', opacity: 1}];
+        colors = DefaultDataColorArray[index][0] || [{ color: '', opacity: 1 }];
       }
       return colors;
     });
