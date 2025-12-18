@@ -1,89 +1,154 @@
-<div class="flex flex-col gap-4 w-full h-full">
-  <div class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-fit">
-    <div class="flex gap-4 h-fit">
-      @for(button of chartData; track button.label; let i = $index) {
-      <button
-        class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
-        [ngClass]="{
-          'bg-[#b2b2b2]': activeIndex !== i,
-          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
-        }"
-        type="button"
-        (click)="activeIndex = i"
-      >
-        {{ button.label }}
-      </button>
-      }
-    </div>
-
-    <div class="flex gap-2">
-      <app-css-bar-chart
-        class="flex-1 px-12"
-        [labels]="['實際架次', '預報架次']"
-        [chartData]="chartData[activeIndex].flightData"
-        [colorClass]="'bg-gradient-to-r from-[#fd9c44] to-[#ffb029]'"
-      ></app-css-bar-chart>
-      <app-css-bar-chart
-        class="flex-1 px-12"
-        [labels]="['實際人數', '預報人數']"
-        [chartData]="chartData[activeIndex].passengerData"
-        [colorClass]="'bg-[#02b3e5]'"
-      ></app-css-bar-chart>
-    </div>
-  </div>
-
-  <div class="flex flex-2 items-center gap-4 w-full h-0">
-
+<div class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative">
+  <div class="w-full overflow-auto">
+    <!-- Header -->
     <div
-      class="card flex flex-1 flex-col items-center gap-8 px-8 pt-8 pb-4 w-full h-full"
+      class="fixed w-[calc(100%-5rem)] grid grid-cols-8 bg-[#00c4ce] text-2xl font-semibold text-center mb-4 z-10"
     >
-      <div class="flex-1 w-full border-4 border-[#3372bd] rounded-lg relative">
-        <div
-          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
-        >
-          實際總數
-        </div>
-        <div class="flex items-center h-full">
-          <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-3xl text-[#a5a5a5]">總架次</div>
-            <div
-              class="text-[70px] text-[#f08622] leading-none w-full text-center border-r-2 border-[#a5a5a5]"
-            >
-              19
-            </div>
-          </div>
-          <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-3xl text-[#a5a5a5]">總人數</div>
-            <div class="text-[70px] text-[#02b3e7] leading-none">
-              {{ 1000 | number }}
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="p-2">航點</div>
+      <div class="p-2">對站天氣</div>
+      <div class="p-2">航空公司</div>
+      <div class="p-2">登記候補</div>
+      <div class="p-2">現場人數</div>
+      <div class="p-2">後續班次數</div>
+      <div class="p-2">已飛人數</div>
+      <div class="p-2">補上人數</div>
+    </div>
 
-      <div class="flex-1 w-full border-4 border-[#3372bd] rounded-lg relative">
-        <div
-          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
-        >
-          預報總數
-        </div>
-        <div class="flex items-center h-full">
-          <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-3xl text-[#a5a5a5]">總架次</div>
-            <div
-              class="text-[70px] text-[#f08622] leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+    <!-- 航點群組 -->
+    <div class="mt-12 text-2xl">
+      @for (group of tableData;track group) {
+      <div class="py-1 border-b text-[#baeaff] hover:bg-[#494746]">
+        <!-- 明細 -->
+        @for (detail of group.details; let i = $index; track detail;) {
+        <div class="grid grid-cols-8 text-center">
+          <!-- 航點 / 天氣 -->
+          @if (i === 0) {
+          <div
+            class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
+          >
+            <span
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-bold"
+              >{{ group.route }}</span
             >
-              19
+          </div>
+          <div
+            class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
+          >
+            <div
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-between gap-2 text-white"
+            >
+              <div class="flex flex-col gap-2">
+                <div class="text-4xl">{{ group.weather.temperature }}</div>
+                <div class="text-2xl whitespace-nowrap">
+                  {{ group.weather.description }}
+                </div>
+              </div>
+              <div class="flex flex-col gap-1 text-xl">
+                <div class="flex gap-1">
+                  <img class="w-6 h-6" alt="visibility" />
+                  <div class="whitespace-nowrap">
+                    {{ group.weather.visibility }}
+                  </div>
+                </div>
+                <div class="flex gap-1">
+                  <img class="w-6 h-6" alt="visibility" />
+                  <div class="whitespace-nowrap">
+                    {{ group.weather.altitude }}
+                  </div>
+                </div>
+                <div class="flex gap-1">
+                  <img class="w-6 h-6" alt="visibility" />
+                  <div class="whitespace-nowrap">
+                    {{ group.weather.windSpeed }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-3xl text-[#a5a5a5]">總人數</div>
-            <div class="text-[70px] text-[#02b3e7] leading-none">
-              {{ 1000 | number }}
+          } @else {
+          <div></div>
+          <div></div>
+          }
+
+          <!-- 明細資料 -->
+          <div class="p-1 text-2xl flex items-center justify-center">
+            {{ detail.airline }}
+          </div>
+          <div
+            class="p-1 leading-none flex items-center justify-center {{
+              detail.waitlist === group.maxWaitlist
+                ? 'text-3xl text-orange-400 font-bold'
+                : ''
+            }}"
+          >
+            {{ detail.waitlist }}
+          </div>
+
+          <!-- 現場人數：只在第一筆明細顯示 -->
+          @if (i === 0) {
+          <div
+            class="relative p-1 h-[300%] text-orange-400 flex items-center justify-center"
+          >
+            <div
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold"
+            >
+              {{ detail.onsite }}
             </div>
+          </div>
+          } @else {
+          <div></div>
+          }
+
+          <!-- nextFlights -->
+          <div
+            class="p-1 leading-none flex items-center justify-center {{
+              detail.nextFlights === group.maxNextFlights
+                ? 'text-3xl text-orange-400 font-bold'
+                : ''
+            }}"
+          >
+            {{ detail.nextFlights }}
+          </div>
+
+          <!-- flown -->
+          <div
+            class="p-1 leading-none flex items-center justify-center {{
+              detail.flown === group.maxFlown
+                ? 'text-3xl text-orange-400 font-bold'
+                : ''
+            }}"
+          >
+            {{ detail.flown }}
+          </div>
+
+          <!-- filled 欄位：左數值 + 右 button -->
+          <div class="grid grid-cols-[1fr_2rem]">
+            <div
+              class="p-1 leading-none flex items-center justify-center {{
+                detail.filled === group.maxFilled
+                  ? 'text-3xl text-orange-400 font-bold'
+                  : ''
+              }}"
+            >
+              {{ detail.filled }}
+            </div>
+
+            @if (i === 0) {
+            <div class="relative row-span-3 flex items-center justify-center h-[300%]">
+              <button
+                class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20
+                flex flex-col items-start px-3 py-1 text-sm text-[#999] cursor-pointer hover:text-[#eee]"
+              >
+                <span>補上</span>
+                <span>明細>></span>
+              </button>
+            </div>
+            }
           </div>
         </div>
+        }
       </div>
+      }
     </div>
   </div>
 </div>
