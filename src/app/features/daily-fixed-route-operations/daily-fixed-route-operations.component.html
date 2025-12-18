@@ -46,12 +46,12 @@
     >
       <div class="flex flex-1 flex-col items-center gap-2 h-full">
         <h2 class="text-3xl">當日總航班數</h2>
-        <app-pie-chart class="flex-1 min-h-0 w-full"></app-pie-chart>
+        <app-pie-chart class="flex-1 min-h-0 w-full" [data]="flightData"></app-pie-chart>
       </div>
 
       <div class="flex flex-1 flex-col items-center gap-2 h-full">
         <h2 class="text-3xl">當日總遊客數</h2>
-        <app-pie-chart class="flex-1 min-h-0 w-full"></app-pie-chart>
+        <app-pie-chart class="flex-1 min-h-0 w-full" [data]="passengerData"></app-pie-chart>
       </div>
     </div>
   </div>
