@@ -12,13 +12,18 @@ import { ChartPageComponent } from './features/chart-page/chart-page.component';
 import { DomesticRouteStandbyAnalysisComponent } from './features/domestic-route-standby-analysis/domestic-route-standby-analysis.component';
 import { IntlCheckinCounterComponent } from './features/intl-checkin-counter/intl-checkin-counter.component';
 import { TaxiModuleComponent } from './features/taxi-module/taxi-module.component';
+import { DailyDomesticStandbyAnalysisDetailComponent } from './features/daily-domestic-standby-analysis/daily-domestic-standby-analysis-detail/daily-domestic-standby-analysis-detail.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', redirectTo: 'daily-fixed-route-operations', pathMatch: 'full' },
+      {
+        path: '',
+        redirectTo: 'daily-fixed-route-operations',
+        pathMatch: 'full',
+      },
       {
         path: 'daily-fixed-route-operations',
         component: DailyFixedRouteOperationsComponent,
@@ -32,17 +37,30 @@ export const routes: Routes = [
       {
         path: 'daily-international-flight-analysis',
         component: DailyFlightAnalysisComponent,
-        data: { title: '當日定航出入境航班分析', theme: 'dark', type: 'international' },
+        data: {
+          title: '當日定航出入境航班分析',
+          theme: 'dark',
+          type: 'international',
+        },
       },
       {
         path: 'daily-domestic-flight-analysis',
         component: DailyFlightAnalysisComponent,
-        data: { title: '當日國內線定航離到站航班分析', theme: 'dark', type: 'domestic' },
+        data: {
+          title: '當日國內線定航離到站航班分析',
+          theme: 'dark',
+          type: 'domestic',
+        },
       },
       {
         path: 'daily-domestic-standby-analysis',
         component: DailyDomesticStandbyAnalysisComponent,
         data: { title: '當日國內線候補分析', theme: 'dark' },
+      },
+      {
+        path: 'daily-domestic-standby-analysis/detail',
+        component: DailyDomesticStandbyAnalysisDetailComponent,
+        data: { title: '當日國內線候補分析 - 明細', theme: 'dark' },
       },
       {
         path: 'daily-abnormal-flight-info',

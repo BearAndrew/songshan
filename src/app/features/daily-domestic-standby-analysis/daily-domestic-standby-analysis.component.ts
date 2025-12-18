@@ -1,76 +1,242 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { CssBarChartComponent } from '../../shared/chart/css-bar-chart/css-bar-chart.component';
+import { FlightRow } from '../../core/interface/daily-domestic-standby-analysis.interface';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-daily-domestic-standby-analysis',
-  imports: [CommonModule, CssBarChartComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './daily-domestic-standby-analysis.component.html',
-  styleUrl: './daily-domestic-standby-analysis.component.scss'
+  styleUrl: './daily-domestic-standby-analysis.component.scss',
 })
 export class DailyDomesticStandbyAnalysisComponent {
-  activeIndex: number = 0;
-  chartData = [
+  tableData: FlightRow[] = [
     {
-      label: '國際兩岸線',
-      passengerData: [
-        { label: '出境', value: 50, total: 10000 },
-        { label: '入境', value: 70, total: 100 },
-      ],
-      flightData: [
-        { label: '到站', value: 90, total: 100 },
-        { label: '離站', value: 40, total: 100 },
+      route: '金門',
+      weather: {
+        temperature: '23°C',
+        description: '晴時多雲',
+        visibility: '10公里以上',
+        altitude: '3800呎',
+        windSpeed: '17浬/時',
+      },
+      details: [
+        {
+          airline: '立榮航空',
+          waitlist: 5,
+          onsite: 20,
+          nextFlights: 3,
+          flown: 150,
+          filled: 10,
+        },
+        {
+          airline: '華信航空',
+          waitlist: 3,
+          onsite: 15,
+          nextFlights: 2,
+          flown: 120,
+          filled: 8,
+        },
+        {
+          airline: '立榮航空',
+          waitlist: 6,
+          onsite: 18,
+          nextFlights: 1,
+          flown: 90,
+          filled: 5,
+        },
       ],
     },
     {
-      label: '國際線',
-      passengerData: [
-        { label: '出境', value: 3000, total: 5000 },
-        { label: '入境', value: 50, total: 80 },
-      ],
-      flightData: [
-        { label: '到站', value: 60, total: 70 },
-        { label: '離站', value: 30, total: 40 },
+      route: '澎湖',
+      weather: {
+        temperature: '23°C',
+        description: '晴時多雲',
+        visibility: '10公里以上+',
+        altitude: '3800呎',
+        windSpeed: '17浬/時',
+      },
+      details: [
+        {
+          airline: '立榮航空',
+          waitlist: 4,
+          onsite: 22,
+          nextFlights: 2,
+          flown: 140,
+          filled: 9,
+        },
+        {
+          airline: '華信航空',
+          waitlist: 2,
+          onsite: 12,
+          nextFlights: 1,
+          flown: 100,
+          filled: 6,
+        },
+        {
+          airline: '立榮航空',
+          waitlist: 7,
+          onsite: 25,
+          nextFlights: 3,
+          flown: 180,
+          filled: 12,
+        },
       ],
     },
-    {
-      label: '兩岸線',
-      passengerData: [
-        { label: '出境', value: 2000, total: 5000 },
-        { label: '入境', value: 20, total: 20 },
-        { label: '總數', value: 2020, total: 5020 },
-      ],
-      flightData: [
-        { label: '到站', value: 30, total: 30 },
-        { label: '離站', value: 10, total: 20 },
-        { label: '總數', value: 40, total: 50 },
+     {
+      route: '澎湖',
+      weather: {
+        temperature: '23°C',
+        description: '晴時多雲',
+        visibility: '10公里以上+',
+        altitude: '3800呎',
+        windSpeed: '17浬/時',
+      },
+      details: [
+        {
+          airline: '立榮航空',
+          waitlist: 4,
+          onsite: 22,
+          nextFlights: 2,
+          flown: 140,
+          filled: 9,
+        },
+        {
+          airline: '華信航空',
+          waitlist: 2,
+          onsite: 12,
+          nextFlights: 1,
+          flown: 100,
+          filled: 6,
+        },
+        {
+          airline: '立榮航空',
+          waitlist: 7,
+          onsite: 25,
+          nextFlights: 3,
+          flown: 180,
+          filled: 12,
+        },
       ],
     },
-    {
-      label: '國內線',
-      passengerData: [
-        { label: '出境', value: 4000, total: 4500 },
-        { label: '入境', value: 100, total: 120 },
-        { label: '總數', value: 4100, total: 4620 },
-      ],
-      flightData: [
-        { label: '到站', value: 70, total: 80 },
-        { label: '離站', value: 50, total: 60 },
-        { label: '總數', value: 120, total: 140 },
+     {
+      route: '澎湖',
+      weather: {
+        temperature: '23°C',
+        description: '晴時多雲',
+        visibility: '10公里以上+',
+        altitude: '3800呎',
+        windSpeed: '17浬/時',
+      },
+      details: [
+        {
+          airline: '立榮航空',
+          waitlist: 4,
+          onsite: 22,
+          nextFlights: 2,
+          flown: 140,
+          filled: 9,
+        },
+        {
+          airline: '華信航空',
+          waitlist: 2,
+          onsite: 12,
+          nextFlights: 1,
+          flown: 100,
+          filled: 6,
+        },
+        {
+          airline: '立榮航空',
+          waitlist: 7,
+          onsite: 25,
+          nextFlights: 3,
+          flown: 180,
+          filled: 12,
+        },
       ],
     },
-    {
-      label: '總數',
-      passengerData: [
-        { label: '出境', value: 10000, total: 20000 },
-        { label: '入境', value: 240, total: 320 },
-        { label: '總數', value: 10240, total: 20320 },
+     {
+      route: '澎湖',
+      weather: {
+        temperature: '23°C',
+        description: '晴時多雲',
+        visibility: '10公里以上+',
+        altitude: '3800呎',
+        windSpeed: '17浬/時',
+      },
+      details: [
+        {
+          airline: '立榮航空',
+          waitlist: 4,
+          onsite: 22,
+          nextFlights: 2,
+          flown: 140,
+          filled: 9,
+        },
+        {
+          airline: '華信航空',
+          waitlist: 2,
+          onsite: 12,
+          nextFlights: 1,
+          flown: 100,
+          filled: 6,
+        },
+        {
+          airline: '立榮航空',
+          waitlist: 7,
+          onsite: 25,
+          nextFlights: 3,
+          flown: 180,
+          filled: 12,
+        },
       ],
-      flightData: [
-        { label: '到站', value: 250, total: 270 },
-        { label: '離站', value: 130, total: 160 },
-        { label: '總數', value: 380, total: 430 },
+    },
+     {
+      route: '澎湖',
+      weather: {
+        temperature: '23°C',
+        description: '晴時多雲',
+        visibility: '10公里以上+',
+        altitude: '3800呎',
+        windSpeed: '17浬/時',
+      },
+      details: [
+        {
+          airline: '立榮航空',
+          waitlist: 4,
+          onsite: 22,
+          nextFlights: 2,
+          flown: 140,
+          filled: 9,
+        },
+        {
+          airline: '華信航空',
+          waitlist: 2,
+          onsite: 12,
+          nextFlights: 1,
+          flown: 100,
+          filled: 6,
+        },
+        {
+          airline: '立榮航空',
+          waitlist: 7,
+          onsite: 25,
+          nextFlights: 3,
+          flown: 180,
+          filled: 12,
+        },
       ],
     },
   ];
+
+  ngOnInit(): void {
+    this.tableData.forEach((group) => {
+      group.maxWaitlist = Math.max(...group.details.map((d) => d.waitlist));
+      group.maxNextFlights = Math.max(
+        ...group.details.map((d) => d.nextFlights)
+      );
+      group.maxFlown = Math.max(...group.details.map((d) => d.flown));
+      group.maxFilled = Math.max(...group.details.map((d) => d.filled));
+    });
+  }
 }
