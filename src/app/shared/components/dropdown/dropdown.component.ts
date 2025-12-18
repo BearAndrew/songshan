@@ -17,6 +17,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 })
 export class DropdownComponent {
   @Input() data: { label: string; value: any }[] = [];
+  @Input() selected: any;
   @Input() placeholder = 'Select...';
   @Output() selectionChange = new EventEmitter<{ label: string; value: any }>();
 
@@ -24,47 +25,46 @@ export class DropdownComponent {
   @ViewChild('dropdownMenu') dropdownMenu!: TemplateRef<any>;
 
   overlayRef!: OverlayRef;
-  selected?: { label: string; value: any };
+  selectedLabel: string = '';
 
-  constructor(
-    private overlay: Overlay,
-    private vcr: ViewContainerRef
-  ) {}
+  constructor(private overlay: Overlay, private vcr: ViewContainerRef) {}
+
+  ngOnInit(): void {
+    this.selectedLabel = this.data.find(item => item.value == this.selected)?.label || '';
+  }
 
   toggle() {
     this.overlayRef ? this.close() : this.open();
   }
 
-open() {
-  const position = this.overlay
-    .position()
-    .flexibleConnectedTo(this.trigger)
-    .withPositions([
-      {
-        originX: 'start',
-        originY: 'bottom',
-        overlayX: 'start',
-        overlayY: 'top',
-      },
-    ]);
+  open() {
+    const position = this.overlay
+      .position()
+      .flexibleConnectedTo(this.trigger)
+      .withPositions([
+        {
+          originX: 'start',
+          originY: 'bottom',
+          overlayX: 'start',
+          overlayY: 'top',
+        },
+      ]);
 
-  const triggerWidth = this.trigger.nativeElement.offsetWidth;
+    const triggerWidth = this.trigger.nativeElement.offsetWidth;
 
-  this.overlayRef = this.overlay.create({
-    width: triggerWidth,     // 👈 設定 panel 和 trigger 等寬
-    // 或改成 minWidth: triggerWidth,
-    positionStrategy: position,
-    hasBackdrop: true,
-    backdropClass: 'cdk-overlay-transparent-backdrop',
-    scrollStrategy: this.overlay.scrollStrategies.reposition(),
-  });
+    this.overlayRef = this.overlay.create({
+      width: triggerWidth,
+      positionStrategy: position,
+      hasBackdrop: true,
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+    });
 
-  const portal = new TemplatePortal(this.dropdownMenu, this.vcr);
-  this.overlayRef.attach(portal);
+    const portal = new TemplatePortal(this.dropdownMenu, this.vcr);
+    this.overlayRef.attach(portal);
 
-  this.overlayRef.backdropClick().subscribe(() => this.close());
-}
-
+    this.overlayRef.backdropClick().subscribe(() => this.close());
+  }
 
   close() {
     this.overlayRef?.dispose();
@@ -72,8 +72,9 @@ open() {
   }
 
   select(item: { label: string; value: any }) {
-    this.selected = item;                // 👈 更新畫面
-    this.selectionChange.emit(item);     // 👈 回傳選擇
+    this.selected = item.value;
+    this.selectedLabel = item.label;
+    this.selectionChange.emit(item);
     this.close();
   }
 }

@@ -5,10 +5,11 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { routes } from '../../../app.routes';
 import { MainLayoutComponent } from '../main-layout/main-layout.component';
 import { filter } from 'rxjs';
+import { DropdownComponent } from "../../components/dropdown/dropdown.component";
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, OverlayModule],
+  imports: [CommonModule, OverlayModule, DropdownComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

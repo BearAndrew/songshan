@@ -134,14 +134,16 @@
             </div>
 
             @if (i === 0) {
-            <div class="relative row-span-3 flex items-center justify-center h-[300%]">
-              <button
-                class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20
-                flex flex-col items-start px-3 py-1 text-sm text-[#999] cursor-pointer hover:text-[#eee]"
+            <div
+              class="relative row-span-3 flex items-center justify-center h-[300%]"
+            >
+              <a
+                class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 flex flex-col items-start px-3 py-1 text-sm text-[#999] cursor-pointer hover:text-[#eee]"
+                routerLink="detail"
               >
                 <span>補上</span>
                 <span>明細>></span>
-              </button>
+              </a>
             </div>
             }
           </div>

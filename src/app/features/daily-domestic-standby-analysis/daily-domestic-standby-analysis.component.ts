@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FlightRow } from '../../core/interface/daily-domestic-standby-analysis.interface';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-daily-domestic-standby-analysis',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './daily-domestic-standby-analysis.component.html',
   styleUrl: './daily-domestic-standby-analysis.component.scss',
 })
