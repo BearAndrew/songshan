@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { DropdownComponent } from "../../shared/components/dropdown/dropdown.component";
 
 @Component({
   selector: 'app-daily-abnormal-flight-info',
-  imports: [CommonModule],
+  imports: [CommonModule, DropdownComponent],
   templateUrl: './daily-abnormal-flight-info.component.html',
   styleUrl: './daily-abnormal-flight-info.component.scss',
 })
@@ -161,4 +162,8 @@ export class DailyAbnormalFlightInfoComponent {
       actualAction: '改降',
     },
   ];
+
+  dropdownOptions = [
+    {label: '全部', value: 0}
+  ]
 }

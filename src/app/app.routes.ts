@@ -13,6 +13,7 @@ import { DomesticRouteStandbyAnalysisComponent } from './features/domestic-route
 import { IntlCheckinCounterComponent } from './features/intl-checkin-counter/intl-checkin-counter.component';
 import { TaxiModuleComponent } from './features/taxi-module/taxi-module.component';
 import { DailyDomesticStandbyAnalysisDetailComponent } from './features/daily-domestic-standby-analysis/components/daily-domestic-standby-analysis-detail/daily-domestic-standby-analysis-detail.component';
+import { RealtimePassengerVehicleComponent } from './features/realtime-passenger-vehicle/realtime-passenger-vehicle.component';
 
 export const routes: Routes = [
   {
@@ -68,14 +69,26 @@ export const routes: Routes = [
         data: { title: '當日異常航班資訊', theme: 'dark' },
       },
       {
-        path: 'realtime-pax-vehicle-domestic',
-        component: RealtimePassengerVehicleDomesticComponent,
-        data: { title: '即時人車流（國內線）', theme: 'dark' },
-      },
-      {
-        path: 'realtime-pax-vehicle-international',
-        component: RealtimePassengerVehicleInternationalComponent,
-        data: { title: '即時人車流（國際線）', theme: 'dark' },
+        path: 'realtime-passenger-vehicle',
+        component: RealtimePassengerVehicleComponent,
+        data: { title: '即時人車流', theme: 'dark' },
+        children: [
+          {
+            path: 'domestic',
+            component: RealtimePassengerVehicleDomesticComponent,
+            data: { title: '即時人車流', theme: 'dark' },
+          },
+          {
+            path: 'international',
+            component: RealtimePassengerVehicleInternationalComponent,
+            data: { title: '即時人車流', theme: 'dark' },
+          },
+          {
+            path: 'taxi',
+            component: RealtimePassengerVehicleInternationalComponent,
+            data: { title: '即時人車流', theme: 'dark' },
+          },
+        ],
       },
       {
         path: 'traffic-forecast',

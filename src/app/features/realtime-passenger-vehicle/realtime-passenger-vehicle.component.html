@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-4 w-full h-full">
+  <div class="flex gap-2 h-fit">
+    @for(button of data; track button.label; let i = $index) {
+    <button
+      class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
+      [ngClass]="{
+        'bg-[#b2b2b2]': activeIndex !== i,
+        'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
+      }"
+      type="button"
+      (click)="activeIndex = i"
+    >
+      {{ button.label }}
+    </button>
+    }
+  </div>
+</div>
+
+<router-outlet></router-outlet>

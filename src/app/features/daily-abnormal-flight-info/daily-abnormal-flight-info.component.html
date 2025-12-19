@@ -1,18 +1,26 @@
 <div class="flex flex-col gap-4 w-full h-full">
-  <div class="flex gap-8 h-fit">
-    @for(button of data; track button.label; let i = $index) {
-    <button
-      class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
-      [ngClass]="{
-        'bg-[#b2b2b2]': activeIndex !== i,
-        'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
-      }"
-      type="button"
-      (click)="activeIndex = i"
-    >
-      {{ button.label }}
-    </button>
-    }
+  <div class="flex justify-between">
+    <div class="flex gap-8 h-fit">
+      @for(button of data; track button.label; let i = $index) {
+      <button
+        class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
+        [ngClass]="{
+          'bg-[#b2b2b2]': activeIndex !== i,
+          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
+        }"
+        type="button"
+        (click)="activeIndex = i"
+      >
+        {{ button.label }}
+      </button>
+      }
+    </div>
+
+    <div class="flex items-center gap-2">
+      <label class="text-[#aaa]">飛航類型</label>
+      <app-dropdown class="w-25" [options]="dropdownOptions" [value]="0"></app-dropdown>
+      <button class="w-30 px-2 py-1 rounded-xs bg-gradient-to-r from-[#44b59b] to-[#008abf] cursor-pointer">匯出(列印)</button>
+    </div>
   </div>
 
   <div class="card flex flex-1 flex-col flex-shrink-0 gap-2 p-4 w-full min-h-0">
@@ -42,7 +50,9 @@
           <div class="p-2">{{ row.flightNumber }}</div>
           <div class="p-2">{{ row.origin }}</div>
           <div class="p-2 flex justify-center">
-            <div class="w-8 border border-[#27c4a9] rounded-xs">{{ row.gate }}</div>
+            <div class="w-8 border border-[#27c4a9] rounded-xs">
+              {{ row.gate }}
+            </div>
           </div>
           <div class="p-2">{{ row.scheduledArrival }}</div>
           <div class="p-2">{{ row.actualArrival }}</div>

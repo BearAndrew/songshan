@@ -16,9 +16,10 @@ import { TemplatePortal } from '@angular/cdk/portal';
   templateUrl: './dropdown.component.html',
 })
 export class DropdownComponent {
-  @Input() data: { label: string; value: any }[] = [];
-  @Input() selected: any;
+  @Input() options: { label: string; value: any }[] = [];
+  @Input() value: any;
   @Input() placeholder = 'Select...';
+  @Input() showIcon: boolean = false;
   @Output() selectionChange = new EventEmitter<{ label: string; value: any }>();
 
   @ViewChild('dropdownTrigger') trigger!: ElementRef;
@@ -30,7 +31,7 @@ export class DropdownComponent {
   constructor(private overlay: Overlay, private vcr: ViewContainerRef) {}
 
   ngOnInit(): void {
-    this.selectedLabel = this.data.find(item => item.value == this.selected)?.label || '';
+    this.selectedLabel = this.options.find(item => item.value == this.value)?.label || '';
   }
 
   toggle() {
@@ -72,7 +73,7 @@ export class DropdownComponent {
   }
 
   select(item: { label: string; value: any }) {
-    this.selected = item.value;
+    this.value = item.value;
     this.selectedLabel = item.label;
     this.selectionChange.emit(item);
     this.close();
