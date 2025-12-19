@@ -5,8 +5,8 @@ import { DailyFixedRouteOperationsForecastComponent } from './features/daily-fix
 import { DailyFlightAnalysisComponent } from './features/daily-flight-analysis/daily-flight-analysis.component';
 import { DailyDomesticStandbyAnalysisComponent } from './features/daily-domestic-standby-analysis/daily-domestic-standby-analysis.component';
 import { DailyAbnormalFlightInfoComponent } from './features/daily-abnormal-flight-info/daily-abnormal-flight-info.component';
-import { RealtimePassengerVehicleDomesticComponent } from './features/realtime-passenger-vehicle-domestic/realtime-passenger-vehicle-domestic.component';
-import { RealtimePassengerVehicleInternationalComponent } from './features/realtime-passenger-vehicle-international/realtime-passenger-vehicle-international.component';
+import { RealtimePassengerVehicleDomesticComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-domestic/realtime-passenger-vehicle-domestic.component';
+import { RealtimePassengerVehicleInternationalComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-international/realtime-passenger-vehicle-international.component';
 import { TrafficForecastComponent } from './features/traffic-forecast/traffic-forecast.component';
 import { ChartPageComponent } from './features/chart-page/chart-page.component';
 import { DomesticRouteStandbyAnalysisComponent } from './features/domestic-route-standby-analysis/domestic-route-standby-analysis.component';
@@ -73,6 +73,11 @@ export const routes: Routes = [
         component: RealtimePassengerVehicleComponent,
         data: { title: '即時人車流', theme: 'dark' },
         children: [
+          {
+            path: '',
+            redirectTo: 'domestic',
+            pathMatch: 'full',
+          },
           {
             path: 'domestic',
             component: RealtimePassengerVehicleDomesticComponent,
