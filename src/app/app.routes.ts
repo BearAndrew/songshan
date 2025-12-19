@@ -14,6 +14,7 @@ import { IntlCheckinCounterComponent } from './features/intl-checkin-counter/int
 import { TaxiModuleComponent } from './features/taxi-module/taxi-module.component';
 import { DailyDomesticStandbyAnalysisDetailComponent } from './features/daily-domestic-standby-analysis/components/daily-domestic-standby-analysis-detail/daily-domestic-standby-analysis-detail.component';
 import { RealtimePassengerVehicleComponent } from './features/realtime-passenger-vehicle/realtime-passenger-vehicle.component';
+import { RealtimePassengerVehicleTaxiComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-taxi/realtime-passenger-vehicle-taxi.component';
 
 export const routes: Routes = [
   {
@@ -90,7 +91,7 @@ export const routes: Routes = [
           },
           {
             path: 'taxi',
-            component: RealtimePassengerVehicleDomesticComponent,
+            component: RealtimePassengerVehicleTaxiComponent,
             data: { title: '即時人車流', theme: 'dark' },
           },
         ],
