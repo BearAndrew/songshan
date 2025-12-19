@@ -12,7 +12,7 @@ import { ChartPageComponent } from './features/chart-page/chart-page.component';
 import { DomesticRouteStandbyAnalysisComponent } from './features/domestic-route-standby-analysis/domestic-route-standby-analysis.component';
 import { IntlCheckinCounterComponent } from './features/intl-checkin-counter/intl-checkin-counter.component';
 import { TaxiModuleComponent } from './features/taxi-module/taxi-module.component';
-import { DailyDomesticStandbyAnalysisDetailComponent } from './features/daily-domestic-standby-analysis/daily-domestic-standby-analysis-detail/daily-domestic-standby-analysis-detail.component';
+import { DailyDomesticStandbyAnalysisDetailComponent } from './features/daily-domestic-standby-analysis/components/daily-domestic-standby-analysis-detail/daily-domestic-standby-analysis-detail.component';
 
 export const routes: Routes = [
   {
@@ -60,7 +60,7 @@ export const routes: Routes = [
       {
         path: 'daily-domestic-standby-analysis/detail',
         component: DailyDomesticStandbyAnalysisDetailComponent,
-        data: { title: '當日國內線候補分析 - 明細', theme: 'dark' },
+        data: { title: '當日國內線候補分析', theme: 'dark' },
       },
       {
         path: 'daily-abnormal-flight-info',
