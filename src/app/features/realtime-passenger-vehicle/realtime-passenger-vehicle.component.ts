@@ -13,12 +13,15 @@ export class RealtimePassengerVehicleComponent {
   data = [
     {
       label: '國際線',
+      routerLink: '/realtime-passenger-vehicle/international'
     },
     {
       label: '國內線',
+      routerLink: '/realtime-passenger-vehicle/domestic'
     },
     {
       label: '計程車',
+      routerLink: '/realtime-passenger-vehicle/taxi'
     },
   ];
 }

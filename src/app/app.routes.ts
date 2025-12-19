@@ -75,13 +75,8 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'domestic',
+            redirectTo: 'international',
             pathMatch: 'full',
-          },
-          {
-            path: 'domestic',
-            component: RealtimePassengerVehicleDomesticComponent,
-            data: { title: '即時人車流', theme: 'dark' },
           },
           {
             path: 'international',
@@ -89,8 +84,13 @@ export const routes: Routes = [
             data: { title: '即時人車流', theme: 'dark' },
           },
           {
+            path: 'domestic',
+            component: RealtimePassengerVehicleDomesticComponent,
+            data: { title: '即時人車流', theme: 'dark' },
+          },
+          {
             path: 'taxi',
-            component: RealtimePassengerVehicleInternationalComponent,
+            component: RealtimePassengerVehicleDomesticComponent,
             data: { title: '即時人車流', theme: 'dark' },
           },
         ],
