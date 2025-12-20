@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { CommonService } from '../../../core/services/common.service';
 
 @Component({
   selector: 'app-dropdown',
@@ -27,7 +28,7 @@ export class DropdownComponent {
   overlayRef!: OverlayRef;
   selectedLabel: string = '';
 
-  constructor(private overlay: Overlay, private vcr: ViewContainerRef) {}
+  constructor(private overlay: Overlay, private vcr: ViewContainerRef, private commonService: CommonService) {}
 
   ngOnInit(): void {
     this.selectedLabel = this.data.find(item => item.value == this.selected)?.label || '';
@@ -75,6 +76,7 @@ export class DropdownComponent {
     this.selected = item.value;
     this.selectedLabel = item.label;
     this.selectionChange.emit(item);
+    this.commonService.setSelectedAirport(item.value);
     this.close();
   }
 }

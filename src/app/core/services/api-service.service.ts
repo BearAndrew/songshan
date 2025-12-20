@@ -9,7 +9,7 @@ import { IrregularInboundFlightResponse } from '../../models/irregular-inbound-f
 import { RealTimeTrafficFlowItem } from '../../models/real-time-traffic-flow.model';
 import { StandbySummaryItem, StandbyListItem } from '../../models/standby.model';
 import { TodayDelayStat } from '../../models/today-delay-stat.model';
-import { TodayPredict, TodayPredictByAirport } from '../../models/today-predict.model';
+import { TodayPredict } from '../../models/today-predict.model';
 import { TodayStatus } from '../../models/today-status.model';
 import { HttpHeaders } from '@angular/common/http';
 import { FlightUpdateWebhookRequest } from '../../models/webhook-flight-update.model';
@@ -41,7 +41,7 @@ export class ApiService {
   }
 
   /** 指定機場今日狀態 */
-  getTodayStatusByAirport(airport: string): Observable<TodayStatus> {
+  getTodayStatusByAirport(airport: string|null): Observable<TodayStatus> {
     return this.http.get<TodayStatus>(`GetTodayStatusByAirport/${airport}`);
   }
 
@@ -51,8 +51,8 @@ export class ApiService {
   }
 
   /** 指定機場今日預測 */
-  getTodayPredictByAirport(airport: string): Observable<TodayPredictByAirport> {
-    return this.http.get<TodayPredictByAirport>(`GetTodayPredictByAirport/${airport}`);
+  getTodayPredictByAirport(airport: string | null): Observable<TodayPredict> {
+    return this.http.get<TodayPredict>(`GetTodayPredictByAirport/${airport}`);
   }
 
   // ========= 延誤統計 =========
