@@ -38,6 +38,5 @@
 
     <h1 class="text-[50px] font-bold leading-none">{{ title}}</h1>
   </div>
-
-  <app-dropdown class="w-45 z-20" [data]="airportList" [selected]="-1"></app-dropdown>
+  <app-dropdown class="w-45 z-20" [options]="airportList" [value]="-1" [showIcon]="true"></app-dropdown>
 </div>

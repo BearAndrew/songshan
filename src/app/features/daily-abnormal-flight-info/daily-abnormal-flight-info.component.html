@@ -1,1 +1,122 @@
-<p>daily-abnormal-flight-info works!</p>
+<div class="flex flex-col gap-4 w-full h-full">
+  <div class="flex justify-between">
+    <div class="flex gap-8 h-fit">
+      @for(button of data; track button.label; let i = $index) {
+      <button
+        class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
+        [ngClass]="{
+          'bg-[#b2b2b2]': activeIndex !== i,
+          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
+        }"
+        type="button"
+        (click)="activeIndex = i"
+      >
+        {{ button.label }}
+      </button>
+      }
+    </div>
+
+    <div class="flex items-center gap-2">
+      <label class="text-[#aaa]">飛航類型</label>
+      <app-dropdown class="w-25" [options]="dropdownOptions" [value]="0"></app-dropdown>
+      <button class="w-30 px-2 py-1 rounded-xs bg-gradient-to-r from-[#44b59b] to-[#008abf] cursor-pointer">匯出(列印)</button>
+    </div>
+  </div>
+
+  <div class="card flex flex-1 flex-col flex-shrink-0 gap-2 p-4 w-full min-h-0">
+    <!-- table -->
+    <div class="flex-1 w-full min-h-0 mb-12 overflow-auto">
+      <div
+        class="fixed w-[calc(100%-5rem)] grid grid-cols-9 bg-[#00b2ee] text-2xl font-semibold text-center mb-4 z-10"
+      >
+        <div class="p-2">航班編號</div>
+        <div class="p-2">出發地</div>
+        <div class="p-2">登機門</div>
+        <div class="p-2">表定抵達</div>
+        <div class="p-2">實際抵達</div>
+        <div class="p-2">延誤時間</div>
+        <div class="p-2">異常狀況</div>
+        <div class="p-2">預計處理方式</div>
+        <div class="p-2">實際處理方式</div>
+      </div>
+
+      <div class="mt-11 py-1 text-xl">
+        <!-- 明細 -->
+        @for (row of table; let i = $index; track row;) {
+        <div
+          class="grid grid-cols-9 text-center hover:bg-[#494746]"
+          [ngClass]="{ 'bg-[#333333]': i % 2 === 1 }"
+        >
+          <div class="p-2">{{ row.flightNumber }}</div>
+          <div class="p-2">{{ row.origin }}</div>
+          <div class="p-2 flex justify-center">
+            <div class="w-8 border border-[#27c4a9] rounded-xs">
+              {{ row.gate }}
+            </div>
+          </div>
+          <div class="p-2">{{ row.scheduledArrival }}</div>
+          <div class="p-2">{{ row.actualArrival }}</div>
+          <div class="p-2">{{ row.delayTime }}</div>
+          <div class="p-2 text-[#be985b]">{{ row.issue }}</div>
+          <div class="p-2 text-[#27c4a9]">{{ row.plannedAction }}</div>
+          <div class="p-2 text-[#27c4a9]">{{ row.actualAction }}</div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4 h-[180px]">
+      <div
+        class="flex-1 mx-8 w-full h-full border-4 border-[#3372bd] rounded-lg relative"
+      >
+        <div
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
+        >
+          實際異常總數
+        </div>
+        <div class="flex items-center h-full">
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div
+              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+            >
+              19
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+              {{ 1000 | number }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="flex-1 mx-8 w-full h-full border-4 border-[#3372bd] rounded-lg relative"
+      >
+        <div
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
+        >
+          預計異常總數
+        </div>
+        <div class="flex items-center h-full">
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div
+              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+            >
+              19
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+              {{ 1000 | number }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
