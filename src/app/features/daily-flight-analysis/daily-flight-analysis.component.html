@@ -34,7 +34,7 @@
       </div>
 
       <!-- 航班延誤數據 -->
-      <app-daily-flight-analysis-delay-pie-chart-card
+      <app-daily-flight-analysis-delay-pie-chart-card [inboundData]="inboundData" [outboundData]="outboundData" [pieCharData]="pieCharData" 
         class="card flex flex-col flex-1 gap-2 p-4 min-w-0 h-fit"
       ></app-daily-flight-analysis-delay-pie-chart-card>
     </div>
@@ -49,13 +49,15 @@
       <app-daily-flight-analysis-barline-chart-card
         class="card flex flex-col flex-1 gap-2 p-4 w-full min-h-0"
         [activeIndex]="activeIndex"
-        [data]="data"
+        [barData]="outboundBarData"
+        [lineData]="outboundLineData"
         [title]="'逐時出境統計'"
       ></app-daily-flight-analysis-barline-chart-card>
       <app-daily-flight-analysis-barline-chart-card
         class="card flex flex-col flex-1 gap-2 p-4 w-full min-h-0"
         [activeIndex]="activeIndex"
-        [data]="data"
+        [barData]="inboundBarData"
+        [lineData]="inboundLineData"  
         [title]="'逐時入境統計'"
       ></app-daily-flight-analysis-barline-chart-card>
     </div>

@@ -1,13 +1,20 @@
 export interface IrregularFlightItem {
   flightNo: string;
-  arrivalTime: string;
   departurePort: string;
   gate: string;
+  sta: string;
+  ata: string;
+  delay: string;
   reason: string;
-  status: string;
+  estHandle: string;
+  actualHandle: string;
 }
 
-export interface IrregularInboundFlightResponse {
-  actual: IrregularFlightItem[];
-  estimate: IrregularFlightItem[];
+// Wrapper matching the provided JSON shape
+export interface IrregularInboundFlight {
+  flightinfo: IrregularFlightItem[];
+  actualFlight: number;
+  actualPax: number;
+  estFlight: number;
+  estPax: number;
 }

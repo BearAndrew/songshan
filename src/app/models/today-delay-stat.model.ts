@@ -64,4 +64,7 @@ export interface TodayDelayStat {
 
   inBoundStatByHour: StatByHour[];
   outBoundStatByHour: StatByHour[];
+
+  inBoundPredictByHour: StatByHour[];
+  outBoundPredictByHour: StatByHour[];
 }

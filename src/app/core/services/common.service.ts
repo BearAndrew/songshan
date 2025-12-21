@@ -11,6 +11,7 @@ export class CommonService {
   
   airportList: {'label':string, 'value':number, code:string}[] = [];
   selectedAirport: Subject<number> = new Subject<number>();
+  realAirportValue: number = -1;
 
   setAirportList(data: {'label':string, 'value':number, code:string}[]) {
     this.airportList = data;
@@ -22,10 +23,15 @@ export class CommonService {
 
   setSelectedAirport(airportId: number) {
     this.selectedAirport.next(airportId);
+    this.realAirportValue = airportId;
   }
 
   getSelectedAirport() {
     return this.selectedAirport.asObservable();
+  }
+
+  getSelectedAirportValue() {
+    return this.realAirportValue;
   }
 
   getAirportCodeById(airportId: number): string | null {

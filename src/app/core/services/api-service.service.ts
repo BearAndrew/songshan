@@ -5,7 +5,7 @@ import { Airline } from '../../models/airline.model';
 import { Airport } from '../../models/airport.model';
 import { FlightTrafficAnalysisRequest } from '../../models/flight-traffic-analysis.model';
 import { FlightTrafficPredictResponse } from '../../models/flight-traffic-predict.model';
-import { IrregularInboundFlightResponse } from '../../models/irregular-inbound-flight.model';
+import { IrregularFlightItem, IrregularInboundFlight } from '../../models/irregular-inbound-flight.model';
 import { RealTimeTrafficFlowItem } from '../../models/real-time-traffic-flow.model';
 import { StandbySummaryItem, StandbyListItem } from '../../models/standby.model';
 import { TodayDelayStat } from '../../models/today-delay-stat.model';
@@ -65,12 +65,12 @@ export class ApiService {
   // ========= 候補旅客 =========
 
   /** 指定機場候補總覽 */
-  getStandbySummary(airport: string): Observable<StandbySummaryItem[]> {
+  getStandbySummary(airport: string | null): Observable<StandbySummaryItem[]> {
     return this.http.get<StandbySummaryItem[]>(`GetStandbySummary/${airport}`);
   }
 
   /** 指定機場候補名單 */
-  getStandbyList(airport: string): Observable<StandbyListItem[]> {
+  getStandbyList(airport: string | null): Observable<StandbyListItem[]> {
     return this.http.get<StandbyListItem[]>(`GetStandbyList/${airport}`);
   }
 
@@ -80,8 +80,8 @@ export class ApiService {
    * 不正常入境航班
    * @param type 依 API 定義的分類 (例如: "ALL", "DIVERT", "CANCEL"… 若後端有定義)
    */
-  getIrregularInboundFlight(type: string): Observable<IrregularInboundFlightResponse> {
-    return this.http.get<IrregularInboundFlightResponse>(`IrregularInboundFlight/${type}`);
+  getIrregularInboundFlight(type: string | null): Observable<IrregularInboundFlight> {
+    return this.http.get<IrregularInboundFlight>(`IrregularInboundFlight/${type}`);
   }
 
   /** 即時人流資訊 */

@@ -10,4 +10,6 @@ import { BarLineChartComponent } from "../../../../shared/chart/bar-line-chart/b
 })
 export class DailyFlightAnalysisBarlineChartCardComponent extends DailyFlightAnalysisChildComponent {
   @Input() title: string = '';
+  @Input() barData: any[] = [];
+  @Input() lineData: any[] = []; 
 }

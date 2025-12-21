@@ -1,4 +1,4 @@
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { CssBarChartComponent } from '../../shared/chart/css-bar-chart/css-bar-chart.component';
 import { ForecastCardComponent } from "./components/forecast-card/forecast-card.component";
@@ -9,7 +9,7 @@ import { ForecastInput } from '../../models/forcast-input.model';
 
 @Component({
   selector: 'app-daily-fixed-route-operations-forecast',
-  imports: [CommonModule, CssBarChartComponent, ForecastCardComponent, NgIf],
+  imports: [CommonModule, CssBarChartComponent, ForecastCardComponent],
   templateUrl: './daily-fixed-route-operations-forecast.component.html',
   styleUrl: './daily-fixed-route-operations-forecast.component.scss',
 })
