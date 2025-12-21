@@ -19,7 +19,7 @@
 
   <ng-template #dropdownMenu>
     <div
-      class="w-full text-white bg-black border border-[#3372bd] rounded shadow-md py-1"
+      class="w-full text-white bg-black border border-[#3372bd] rounded shadow-md py-1 max-h-100 overflow-auto"
     >
       @for (item of options; track $index) {
       <div
