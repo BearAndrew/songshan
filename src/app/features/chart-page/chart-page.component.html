@@ -1,1 +1,166 @@
-<p>chart-page works!</p>
+<div class="flex flex-col gap-4 w-full h-full">
+  <div class="flex gap-8 h-fit">
+    @for(button of data; track button.label; let i = $index) {
+    <button
+      class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
+      [ngClass]="{
+        'bg-[#b2b2b2]': activeIndex !== i,
+        'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
+      }"
+      type="button"
+      (click)="activeIndex = i"
+    >
+      {{ button.label }}
+    </button>
+    }
+  </div>
+
+  <div class="flex items-center justify-between text-[#aaa]">
+    <div class="flex items-center gap-2">
+      <label>指定期間</label>
+      <app-dropdown class="w-30"></app-dropdown>
+      <span>年</span>
+      <app-dropdown class="w-20"></app-dropdown>
+      <span>月</span>
+      <app-dropdown class="w-20"></app-dropdown>
+      <span>日</span>
+
+      <span>~</span>
+
+      <app-dropdown class="w-30"></app-dropdown>
+      <span>年</span>
+      <app-dropdown class="w-20"></app-dropdown>
+      <span>月</span>
+      <app-dropdown class="w-20"></app-dropdown>
+      <span>日</span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <label>航點</label>
+      <app-dropdown class="w-30"></app-dropdown>
+
+      <label>航班類別</label>
+      <app-dropdown class="w-30"></app-dropdown>
+
+      <label>航空公司</label>
+      <app-dropdown class="w-30"></app-dropdown>
+
+      <label>飛航類型</label>
+      <app-dropdown class="w-20"></app-dropdown>
+
+      <button class="px-3 text-white bg-[#318dce] rounded-sm cursor-pointer">
+        確認
+      </button>
+    </div>
+  </div>
+
+  <div class="card flex flex-col flex-1 gap-2 items-center p-4">
+    <div class="flex items-center gap-4">
+      @for(bar of barData; let i = $index; track bar;) {
+      <div class="flex items-center gap-1">
+        <div
+          class="w-4 h-4 rounded-full"
+          [ngStyle]="{ 'background-color': bar.colors?.[0] }"
+        ></div>
+        <div>{{ bar.label }}</div>
+      </div>
+      <div class="flex items-center gap-1">
+        <div
+          class="w-4 h-2"
+          [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
+        ></div>
+        <div>{{ lineData[i].label }}</div>
+      </div>
+      }
+    </div>
+
+
+    <div class="flex flex-1 items-center gap-2 w-full relative">
+      <div class="text-xl [writing-mode:vertical-rl]">架次</div>
+      <app-bar-line-chart class="flex-1 h-full" [barData]="barData" [lineData]="lineData" [showLegend]="false"></app-bar-line-chart>
+      <div class="text-xl [writing-mode:vertical-rl]">人數</div>
+    </div>
+
+    <div class="flex items-center w-full h-50 mt-8">
+      <div
+        class="flex-1 mx-8 w-full h-full max-w-150 border-4 border-[#3372bd] rounded-lg relative"
+      >
+        <div
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
+        >
+          2019年8月
+        </div>
+        <div class="flex items-center h-full">
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div
+              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+            >
+              19
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+              {{ 1000 | number }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="flex-1 mx-8 w-full h-full max-w-150 border-4 border-[#3372bd] rounded-lg relative"
+      >
+        <div
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
+        >
+          2019年8月
+        </div>
+        <div class="flex items-center h-full">
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div
+              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+            >
+              19
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+              {{ 1000 | number }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div
+        class="flex-1 mx-8 w-full h-full max-w-150 border-4 border-[#3372bd] rounded-lg relative"
+      >
+        <div
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
+        >
+          2019年8月
+        </div>
+        <div class="flex items-center h-full">
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div
+              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+            >
+              19
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+              {{ 1000 | number }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
