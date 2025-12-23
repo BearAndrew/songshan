@@ -1,1 +1,106 @@
-<p>traffic-forecast works!</p>
+<div class="flex flex-col gap-4 w-full h-full">
+  <div class="flex justify-between">
+    <div class="flex gap-8 h-fit">
+      @for(button of data; track button.label; let i = $index) {
+      <button
+        class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
+        [ngClass]="{
+          'bg-[#b2b2b2]': activeIndex !== i,
+          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
+        }"
+        type="button"
+        (click)="activeIndex = i"
+      >
+        {{ button.label }}
+      </button>
+      }
+    </div>
+
+    <div class="flex gap-4 h-fit">
+      @for(button of dayData; track button.label; let i = $index) {
+      <button
+        class="text-xl text-white rounded-md w-24 px-2 py-0.5 cursor-pointer"
+        [ngClass]="{
+          'bg-[#b2b2b2]': dayActiveIndex !== i,
+          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': dayActiveIndex === i
+        }"
+        type="button"
+        (click)="dayActiveIndex = i"
+      >
+        {{ button.label }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <div class="card flex flex-1 gap-12 p-4 w-full min-h-0 overflow-hidden">
+    <app-traffic-forecast-table
+      class="flex-1 min-h-0"
+      [title]="'出境'"
+      [table]="table1"
+    ></app-traffic-forecast-table>
+
+    <app-traffic-forecast-table
+      class="flex-1 min-h-0"
+      [title]="'入境'"
+      [table]="table2"
+    ></app-traffic-forecast-table>
+  </div>
+
+  <div class="flex flex-1 items-center gap-4">
+    <div class="card flex flex-2 flex-col gap-2 p-4 w-full h-full">
+      <div class="flex justify-between">
+        <h3 class="text-xl font-semibold">分時預報</h3>
+
+        <div class="flex items-center gap-4">
+          @for(bar of barData; let i = $index; track bar;) {
+          <div class="flex items-center gap-1">
+            <div
+              class="w-4 h-4"
+              [ngStyle]="{ 'background-color': bar.colors?.[0] }"
+            ></div>
+            <div>{{ bar.label }}</div>
+          </div>
+          <div class="flex items-center gap-1">
+            <div
+              class="w-8 h-0.5"
+              [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
+            ></div>
+            <div>{{ lineData[i].label }}</div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="flex justify-between">
+        <span>單位:人數</span>
+        <span>單位:架次</span>
+      </div>
+      <div class="flex flex-1 min-h-0 w-full">
+        <app-bar-line-chart
+          class="w-full h-full"
+          [showLegend]="false"
+        ></app-bar-line-chart>
+      </div>
+    </div>
+
+    <div class="card flex-1 grid grid-cols-2 p-4 w-full h-full">
+      <div class="flex flex-col items-center justify-around gap-2">
+        <div class="text-3xl font-bold text-[#5dc7c7]">明日預報航班數</div>
+        <div class="text-5xl font-bold">26</div>
+      </div>
+      <div class="flex flex-col items-center justify-around gap-2">
+        <div  class="text-3xl font-bold text-[#5dc7c7]">明日預報旅客數</div>
+        <div class="text-5xl font-bold">{{ 26000 | number}}</div>
+      </div>
+      <div class="flex flex-col items-center justify-around gap-2">
+        <div class="text-3xl font-bold text-[#fbb441]">後日預報航班數</div>
+        <div class="text-5xl font-bold">26</div>
+      </div>
+      <div class="flex flex-col items-center justify-around gap-2">
+        <div class="text-3xl font-bold text-[#fbb441]">後日預報旅客數</div>
+        <div class="text-5xl font-bold">{{ 26000 | number}}</div>
+      </div>
+    </div>
+  </div>
+</div>

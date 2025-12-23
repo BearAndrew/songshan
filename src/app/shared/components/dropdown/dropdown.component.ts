@@ -19,7 +19,7 @@ import { CommonService } from '../../../core/services/common.service';
 export class DropdownComponent {
   @Input() options: { label: string; value: any }[] = [];
   @Input() value: any;
-  @Input() placeholder = 'Select...';
+  @Input() placeholder = ' ';
   @Input() showIcon: boolean = false;
   @Output() selectionChange = new EventEmitter<{ label: string; value: any }>();
 
