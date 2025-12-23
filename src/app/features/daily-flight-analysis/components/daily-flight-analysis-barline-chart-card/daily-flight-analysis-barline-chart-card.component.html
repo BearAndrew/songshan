@@ -27,8 +27,7 @@
 </div>
 
 <div class="flex flex-1 min-h-0 w-full">
-  <app-bar-line-chart
-    class="w-full h-full"
-    [showLegend]="false"
-  ></app-bar-line-chart>
+  @if(barData.length > 0 && lineData.length > 0) {
+  <app-bar-line-chart [barData]="barData" [lineData]="lineData" class="w-full h-full" [showLegend]="false"></app-bar-line-chart>
+  }
 </div>

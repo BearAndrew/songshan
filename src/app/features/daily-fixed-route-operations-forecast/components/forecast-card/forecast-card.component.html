@@ -47,16 +47,16 @@
         </div>
 
         <div class="border-b border-gray-400 text-white">出境</div>
-        <div class="border-b border-gray-400 text-black font-bold">100</div>
-        <div class="border-b border-gray-400 text-black font-bold">200</div>
-        <div class="border-b border-gray-400 text-black font-bold">300</div>
-        <div class="border-b border-gray-400 text-black font-bold">400</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.intl_Predict60_noOfFlight_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{data?.intl_Predict60_noOfPax_OutBound}}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{data?.intl_Predict120_noOfFlight_OutBound}}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{data?.intl_Predict120_noOfPax_OutBound}}</div>
 
         <div class="border-gray-400 text-white">入境</div>
-        <div class="border-gray-400 text-black font-bold">110</div>
-        <div class="border-gray-400 text-black font-bold">210</div>
-        <div class="border-gray-400 text-black font-bold">310</div>
-        <div class="text-black font-bold">510</div>
+        <div class="border-gray-400 text-black font-bold">{{data?.intl_Predict60_noOfFlight_InBound}}</div>
+        <div class="border-gray-400 text-black font-bold">{{data?.intl_Predict60_noOfPax_InBound}}</div>
+        <div class="border-gray-400 text-black font-bold">{{data?.intl_Predict120_noOfFlight_InBound}}</div>
+        <div class="text-black font-bold">{{data?.intl_Predict120_noOfPax_InBound}}</div>
       </div>
     </div>
 
@@ -85,16 +85,16 @@
         </div>
 
         <div class="border-b border-gray-400 text-white">出境</div>
-        <div class="border-b border-gray-400 text-black font-bold">100</div>
-        <div class="border-b border-gray-400 text-black font-bold">200</div>
-        <div class="border-b border-gray-400 text-black font-bold">300</div>
-        <div class="border-b border-gray-400 text-black font-bold">400</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict60_noOfFlight_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict60_noOfPax_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict120_noOfFlight_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict120_noOfPax_OutBound }}</div>
 
         <div class="border-gray-400 text-white">入境</div>
-        <div class="border-gray-400 text-black font-bold">110</div>
-        <div class="border-gray-400 text-black font-bold">210</div>
-        <div class="border-gray-400 text-black font-bold">310</div>
-        <div class="text-black font-bold">510</div>
+        <div class="border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict60_noOfFlight_InBound }}</div>
+        <div class="border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict60_noOfPax_InBound }}</div>
+        <div class="border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict120_noOfFlight_InBound }}</div>
+        <div class="text-black font-bold">{{ data?.crossStrait_Predict120_noOfPax_InBound }}</div>
       </div>
     </div>
 
@@ -141,16 +141,16 @@
         </div>
 
         <div class="border-b border-gray-400 text-white">到站</div>
-        <div class="border-b border-gray-400 text-black font-bold">100</div>
-        <div class="border-b border-gray-400 text-black font-bold">200</div>
-        <div class="border-b border-gray-400 text-black font-bold">300</div>
-        <div class="border-b border-gray-400 text-black font-bold">400</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.domestic_Predict30_noOfFlight_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.domestic_Predict30_noOfPax_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.domestic_Predict60_noOfFlight_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">{{ data?.domestic_Predict60_noOfPax_OutBound }}</div>
 
         <div class="border-gray-400 text-white">離站</div>
-        <div class="border-gray-400 text-black font-bold">110</div>
-        <div class="border-gray-400 text-black font-bold">210</div>
-        <div class="border-gray-400 text-black font-bold">310</div>
-        <div class="text-black font-bold">510</div>
+        <div class="border-gray-400 text-black font-bold">{{ data?.domestic_Predict30_noOfFlight_InBound }}</div>
+        <div class="border-gray-400 text-black font-bold">{{ data?.domestic_Predict30_noOfPax_InBound }}</div>
+        <div class="border-gray-400 text-black font-bold">{{ data?.domestic_Predict60_noOfFlight_InBound }}</div>
+        <div class="text-black font-bold">{{ data?.domestic_Predict60_noOfPax_InBound }}</div>
       </div>
     </div>
   </div>
