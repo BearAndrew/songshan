@@ -4,7 +4,7 @@ import { DailyFlightAnalysisFlightCardComponent } from './components/daily-fligh
 import { DailyFlightAnalysisDelayCardComponent } from './components/daily-flight-analysis-delay-card/daily-flight-analysis-delay-card.component';
 import { DailyFlightAnalysisDelayPieChartCardComponent } from './components/daily-flight-analysis-delay-pie-chart-card/daily-flight-analysis-delay-pie-chart-card.component';
 import { DailyFlightAnalysisAbnormalCardComponent } from './components/daily-flight-analysis-abnormal-card/daily-flight-analysis-abnormal-card.component';
-import { DailyFlightAnalysisData } from '../../core/interface/daily-flight-analysis.interface';
+import { DailyFlightAnalysisAbnormalData, DailyFlightAnalysisData } from '../../core/interface/daily-flight-analysis.interface';
 import { DailyFlightAnalysisBarlineChartCardComponent } from './components/daily-flight-analysis-barline-chart-card/daily-flight-analysis-barline-chart-card.component';
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
@@ -527,6 +527,9 @@ export class DailyFlightAnalysisComponent {
   outboundBarData: DataSetWithDataArray[] = [];
   outboundLineData: DataSetWithDataArray[] = [];
 
+  abnormalInData: DailyFlightAnalysisAbnormalData = {info: [], top3: []};
+  abnormalOutData: DailyFlightAnalysisAbnormalData = {info: [], top3: []};
+
   constructor(
     private apiService: ApiService,
     private commonService: CommonService
@@ -845,15 +848,7 @@ export class DailyFlightAnalysisComponent {
         return;
       }
 
-      this.data[0].abnormalData.info.push({
-        flightNumber: item.flightNo,
-        destination: item.airportName,
-        scheduledTime: item.schTime,
-        affectedPeople: +item.pax,
-        status: item.reason,
-      });
-
-      this.data[2].abnormalData.info.push({
+      this.abnormalOutData.info.push({
         flightNumber: item.flightNo,
         destination: item.airportName,
         scheduledTime: item.schTime,
@@ -866,15 +861,7 @@ export class DailyFlightAnalysisComponent {
         return;
       }
 
-      this.data[1].abnormalData.info.push({
-        flightNumber: item.flightNo,
-        destination: item.airportName,
-        scheduledTime: item.schTime,
-        affectedPeople: +item.pax,
-        status: item.reason,
-      });
-
-      this.data[2].abnormalData.info.push({
+      this.abnormalInData.info.push({
         flightNumber: item.flightNo,
         destination: item.airportName,
         scheduledTime: item.schTime,
@@ -888,20 +875,7 @@ export class DailyFlightAnalysisComponent {
         return;
       }
 
-      this.data[0].abnormalData.top3.push({
-        city: item.name_zhTW,
-        airport: item.iata,
-        forecast: {
-          flightCount: item.estimateFlight,
-          passengerCount: item.estimatePax,
-        },
-        actual: {
-          flightCount: item.actualFlight,
-          passengerCount: item.actualPax,
-        },
-      });
-
-      this.data[2].abnormalData.top3.push({
+      this.abnormalOutData.top3.push({
         city: item.name_zhTW,
         airport: item.iata,
         forecast: {
@@ -920,20 +894,7 @@ export class DailyFlightAnalysisComponent {
         return;
       }
 
-      this.data[1].abnormalData.top3.push({
-        city: item.name_zhTW,
-        airport: item.iata,
-        forecast: {
-          flightCount: item.estimateFlight,
-          passengerCount: item.estimatePax,
-        },
-        actual: {
-          flightCount: item.actualFlight,
-          passengerCount: item.actualPax,
-        },
-      });
-
-      this.data[2].abnormalData.top3.push({
+      this.abnormalInData.top3.push({
         city: item.name_zhTW,
         airport: item.iata,
         forecast: {

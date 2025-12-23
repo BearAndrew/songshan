@@ -16,25 +16,27 @@ export interface DailyFlightAnalysisData {
       delayTime: number;
     }[];
   };
-  abnormalData: {
-    info: {
-      flightNumber: string;
-      destination: string;
-      scheduledTime: string;
-      affectedPeople: number;
-      status: string;
-    }[];
-    top3: {
-      city: string;
-      airport: string;
-      forecast: {
-        flightCount: number;
-        passengerCount: number;
-      };
-      actual: {
-        flightCount: number;
-        passengerCount: number;
-      }
-    }[];
-  };
+  abnormalData: DailyFlightAnalysisAbnormalData;
+}
+
+export interface DailyFlightAnalysisAbnormalData {
+  info: {
+    flightNumber: string;
+    destination: string;
+    scheduledTime: string;
+    affectedPeople: number;
+    status: string;
+  }[];
+  top3: {
+    city: string;
+    airport: string;
+    forecast: {
+      flightCount: number;
+      passengerCount: number;
+    };
+    actual: {
+      flightCount: number;
+      passengerCount: number;
+    };
+  }[];
 }

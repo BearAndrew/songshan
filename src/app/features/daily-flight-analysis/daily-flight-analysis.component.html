@@ -15,7 +15,7 @@
     }
   </div>
 
-  <div class="flex flex-1 gap-2 w-full h-full">
+  <div class="flex flex-1 gap-2 w-full min-h-0">
     <div class="flex flex-col flex-1 gap-2 min-w-0 h-full">
       <div class="flex gap-2 w-full">
         <!-- 航班狀況 -->
@@ -34,7 +34,7 @@
       </div>
 
       <!-- 航班延誤數據 -->
-      <app-daily-flight-analysis-delay-pie-chart-card [inboundData]="inboundData" [outboundData]="outboundData" [pieCharData]="pieCharData" 
+      <app-daily-flight-analysis-delay-pie-chart-card [inboundData]="inboundData" [outboundData]="outboundData" [pieCharData]="pieCharData"
         class="card flex flex-col flex-1 gap-2 p-4 min-w-0 h-fit"
       ></app-daily-flight-analysis-delay-pie-chart-card>
     </div>
@@ -44,7 +44,8 @@
       <app-daily-flight-analysis-abnormal-card
         class="card flex flex-col flex-1 gap-2 p-4 w-full min-h-0"
         [activeIndex]="activeIndex"
-        [data]="data"
+        [inData]="abnormalInData"
+        [outData]="abnormalOutData"
       ></app-daily-flight-analysis-abnormal-card>
       <app-daily-flight-analysis-barline-chart-card
         class="card flex flex-col flex-1 gap-2 p-4 w-full min-h-0"
@@ -57,7 +58,7 @@
         class="card flex flex-col flex-1 gap-2 p-4 w-full min-h-0"
         [activeIndex]="activeIndex"
         [barData]="inboundBarData"
-        [lineData]="inboundLineData"  
+        [lineData]="inboundLineData"
         [title]="'逐時入境統計'"
       ></app-daily-flight-analysis-barline-chart-card>
     </div>

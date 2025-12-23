@@ -4,21 +4,21 @@
     <button
       class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"
       [ngClass]="toggleIndex == 0 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
-      (click)="toggleIndex = 0"
+      (click)="onIndexChange(0)"
     >
       出境
     </button>
     <button
       class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"
       [ngClass]="toggleIndex == 1 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
-      (click)="toggleIndex = 1"
+      (click)="onIndexChange(1)"
     >
       入境
     </button>
     <button
       class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"
       [ngClass]="toggleIndex == 2 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
-      (click)="toggleIndex = 2"
+      (click)="onIndexChange(2)"
     >
       全部
     </button>
@@ -39,7 +39,7 @@
     </div>
 
     <div class="overflow-y-auto flex-1">
-      @for (item of data[activeIndex].abnormalData.info; let i = $index; track
+      @for (item of displayData.info; let i = $index; track
       item) {
       <div
         class="grid grid-cols-5 h-6 items-center text-sm text-center"
@@ -69,8 +69,8 @@
 
         <div class="grid grid-cols-[40px_60px_1fr_1.5fr] w-full h-full py-0.5 items-stretch">
           <div class="text-lg leading-none flex items-center">
-            {{ data[activeIndex].abnormalData.top3[i]?.city }}
-            {{ data[activeIndex].abnormalData.top3[i]?.airport }}
+            {{ displayData.top3[i]?.city }}
+            {{ displayData.top3[i]?.airport }}
           </div>
 
           <div
@@ -87,7 +87,7 @@
           <div class="flex flex-col h-full text-center justify-between">
             <div class="flex-1 flex gap-1 items-end justify-center">
               <span class="text-xl leading-none">{{
-                data[activeIndex].abnormalData.top3[i]?.forecast?.flightCount
+                displayData.top3[i]?.forecast?.flightCount
               }}</span>
               <span class="text-[10px]">架次</span>
             </div>
@@ -95,7 +95,7 @@
               class="flex-1 flex gap-1 items-end justify-center bg-[#535353]"
             >
               <span class="text-xl leading-none">{{
-                data[activeIndex].abnormalData.top3[i]?.actual?.flightCount
+                displayData.top3[i]?.actual?.flightCount
               }}</span>
               <span class="text-[10px]">架次</span>
             </div>
@@ -104,7 +104,7 @@
           <div class="flex flex-col h-full text-center justify-between">
             <div class="flex-1 flex items-end justify-center">
               <span class="text-xl leading-none pr-4">{{
-                data[activeIndex].abnormalData.top3[i]?.forecast?.passengerCount
+                displayData.top3[i]?.forecast?.passengerCount
                   | number
               }}</span>
               <span class="text-[10px]">人數</span>
@@ -113,7 +113,7 @@
               class="flex-1 flex items-end justify-center bg-[#535353] rounded-r-sm"
             >
               <span class="text-xl leading-none pr-4">{{
-                data[activeIndex].abnormalData.top3[i]?.actual?.passengerCount
+                displayData.top3[i]?.actual?.passengerCount
                   | number
               }}</span>
               <span class="text-[10px]">人數</span>

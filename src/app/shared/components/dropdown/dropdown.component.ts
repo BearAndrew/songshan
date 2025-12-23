@@ -11,10 +11,12 @@ import {
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonService } from '../../../core/services/common.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
+  imports: [CommonModule],
 })
 export class DropdownComponent {
   @Input() options: { label: string; value: any }[] = [];
