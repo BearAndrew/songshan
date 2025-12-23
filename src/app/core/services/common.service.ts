@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -8,9 +8,9 @@ import { Subject } from 'rxjs';
 })
 export class CommonService {
   constructor(private http: HttpClient) {}
-  
+
   airportList: {'label':string, 'value':number, code:string}[] = [];
-  selectedAirport: Subject<number> = new Subject<number>();
+  selectedAirport: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   realAirportValue: number = -1;
 
   setAirportList(data: {'label':string, 'value':number, code:string}[]) {

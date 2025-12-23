@@ -10,10 +10,10 @@ export interface StandbyWeather {
 export interface StandbyAirlineSummary {
   airlineIATA: string;
   airlineName: string;
-  standby_Reg: number;
-  standby_FlightRemain: number;
-  pax_Departed: number;
-  standby_OK: number;
+  standby_Reg: number | string;
+  standby_FlightRemain: number | string;
+  pax_Departed: number | string;
+  standby_OK: number | string;
 }
 
 /** GetStandbySummary/{Airport} 單一目的地 */

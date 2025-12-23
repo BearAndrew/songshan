@@ -4,7 +4,10 @@ import { FlightRow } from '../../core/interface/daily-domestic-standby-analysis.
 import { RouterModule } from '@angular/router';
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
-import { StandbySummaryItem } from '../../models/standby.model';
+import {
+  StandbyAirlineSummary,
+  StandbySummaryItem,
+} from '../../models/standby.model';
 
 @Component({
   selector: 'app-daily-domestic-standby-analysis',
@@ -52,6 +55,7 @@ export class DailyDomesticStandbyAnalysisComponent {
   }
 
   setTableData(data: StandbySummaryItem[]) {
+    this.tableData = [];
     data.forEach((item, index) => {
       this.tableData.push({
         route: item.destinationName,
@@ -65,7 +69,21 @@ export class DailyDomesticStandbyAnalysisComponent {
         details: [],
       });
 
-      item.airlines.forEach(
+      const airlines = [...item.airlines].slice(0, 3);
+
+      const emptyDetail: StandbyAirlineSummary = {
+        airlineIATA: '',
+        airlineName: '',
+        standby_Reg: '.',
+        standby_FlightRemain: '.',
+        pax_Departed: '.',
+        standby_OK: '.',
+      };
+      while (airlines.length < 3) {
+        airlines.push(emptyDetail);
+      }
+
+      airlines.forEach(
         (detail: {
           airlineName: any;
           standby_Reg: any;
