@@ -15,6 +15,7 @@ import { TaxiModuleComponent } from './features/taxi-module/taxi-module.componen
 import { DailyDomesticStandbyAnalysisDetailComponent } from './features/daily-domestic-standby-analysis/components/daily-domestic-standby-analysis-detail/daily-domestic-standby-analysis-detail.component';
 import { RealtimePassengerVehicleComponent } from './features/realtime-passenger-vehicle/realtime-passenger-vehicle.component';
 import { RealtimePassengerVehicleTaxiComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-taxi/realtime-passenger-vehicle-taxi.component';
+import { RealtimePassengerVehicleBaggageComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-baggage/realtime-passenger-vehicle-baggage.component';
 
 export const routes: Routes = [
   {
@@ -92,6 +93,11 @@ export const routes: Routes = [
           {
             path: 'taxi',
             component: RealtimePassengerVehicleTaxiComponent,
+            data: { title: '即時人車流', theme: 'dark' },
+          },
+           {
+            path: 'baggage',
+            component: RealtimePassengerVehicleBaggageComponent,
             data: { title: '即時人車流', theme: 'dark' },
           },
         ],

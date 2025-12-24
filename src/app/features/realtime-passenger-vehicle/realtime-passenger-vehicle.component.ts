@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-realtime-passenger-vehicle',
@@ -13,15 +13,33 @@ export class RealtimePassengerVehicleComponent {
   data = [
     {
       label: '國際線',
-      routerLink: '/realtime-passenger-vehicle/international'
+      routerLink: '/realtime-passenger-vehicle/international',
     },
     {
       label: '國內線',
-      routerLink: '/realtime-passenger-vehicle/domestic'
+      routerLink: '/realtime-passenger-vehicle/domestic',
     },
     {
       label: '計程車',
-      routerLink: '/realtime-passenger-vehicle/taxi'
+      routerLink: '/realtime-passenger-vehicle/taxi',
+    },
+    {
+      label: '國際線入境行李',
+      routerLink: '/realtime-passenger-vehicle/baggage',
     },
   ];
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    const currentUrl = this.router.url;
+
+    const index = this.data.findIndex((item) =>
+      currentUrl.startsWith(item.routerLink)
+    );
+
+    if (index !== -1) {
+      this.activeIndex = index;
+    }
+  }
 }

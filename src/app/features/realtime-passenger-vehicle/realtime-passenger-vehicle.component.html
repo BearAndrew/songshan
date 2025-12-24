@@ -1,13 +1,14 @@
 <div class="flex flex-col gap-4 w-full h-full">
-  <div class="flex items-center justify-center gap-4">
+  <div class="flex items-center gap-4">
     <div class="flex flex-col items-end justify-between h-full">
-      <div class="flex gap-2 h-fit">
+      <div class="grid grid-cols-3 gap-2 h-fit w-110">
         @for(button of data; track button.label; let i = $index) {
         <a
-          class="text-xl text-white text-center rounded-md w-36 px-2 py-0.5 cursor-pointer"
+          class="text-xl text-white text-center rounded-md px-2 py-0.5 cursor-pointer"
           [ngClass]="{
             'bg-[#b2b2b2]': activeIndex !== i,
-            'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
+            'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i,
+            'col-span-3': i === data.length - 1
           }"
           type="button"
           (click)="activeIndex = i"
@@ -18,39 +19,49 @@
         }
       </div>
 
+      @if(activeIndex !== data.length - 1) {
       <div class="p-2 text-2xl text-[#04cdda]">資料更新時間：08:23</div>
+      }
     </div>
 
+    @if(activeIndex !== data.length - 1) {
     <div class="flex-1 grid grid-cols-4 gap-2 bg-black p-2 h-full">
       <div class="relative">
-        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black">報到櫃檯</label>
-        <img src="img/fake-camera.png" alt="camera">
-        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon">
+        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black"
+          >報到櫃檯</label
+        >
+        <img src="img/fake-camera.png" alt="camera" />
+        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon" />
       </div>
 
-       <div class="relative">
-        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black">安檢</label>
-        <img src="img/fake-camera.png" alt="camera">
-        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon">
+      <div class="relative">
+        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black"
+          >安檢</label
+        >
+        <img src="img/fake-camera.png" alt="camera" />
+        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon" />
       </div>
 
-       <div class="relative">
-        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black">出境查驗</label>
-        <img src="img/fake-camera.png" alt="camera">
-        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon">
+      <div class="relative">
+        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black"
+          >出境查驗</label
+        >
+        <img src="img/fake-camera.png" alt="camera" />
+        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon" />
       </div>
 
-       <div class="relative">
-        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black">入境查驗</label>
-        <img src="img/fake-camera.png" alt="camera">
-        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon">
+      <div class="relative">
+        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black"
+          >入境查驗</label
+        >
+        <img src="img/fake-camera.png" alt="camera" />
+        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon" />
       </div>
     </div>
+    }
   </div>
 
-  <div class="flex-1">
-     <router-outlet></router-outlet>
+  <div class="flex-1 overflow-hidden">
+    <router-outlet></router-outlet>
   </div>
-
 </div>
-
