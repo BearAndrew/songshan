@@ -9,7 +9,7 @@
           'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
         }"
         type="button"
-        (click)="activeIndex = i"
+        (click)="onTabClick(i)"
       >
         {{ button.label }}
       </button>
@@ -25,7 +25,7 @@
           'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': dayActiveIndex === i
         }"
         type="button"
-        (click)="dayActiveIndex = i"
+        (click)="onDayTabClick(i)"
       >
         {{ button.label }}
       </button>
@@ -37,13 +37,13 @@
     <app-traffic-forecast-table
       class="flex-1 min-h-0"
       [title]="'出境'"
-      [table]="table1"
+      [table]="tableOut"
     ></app-traffic-forecast-table>
 
     <app-traffic-forecast-table
       class="flex-1 min-h-0"
       [title]="'入境'"
-      [table]="table2"
+      [table]="tableIn"
     ></app-traffic-forecast-table>
   </div>
 
@@ -87,19 +87,19 @@
     <div class="card flex-1 grid grid-cols-2 p-4 w-full h-full">
       <div class="flex flex-col items-center justify-around gap-2">
         <div class="text-3xl font-bold text-[#5dc7c7]">明日預報航班數</div>
-        <div class="text-5xl font-bold">26</div>
+        <div class="text-5xl font-bold">{{tomorrowFlight | number}}</div>
       </div>
       <div class="flex flex-col items-center justify-around gap-2">
         <div  class="text-3xl font-bold text-[#5dc7c7]">明日預報旅客數</div>
-        <div class="text-5xl font-bold">{{ 26000 | number}}</div>
+        <div class="text-5xl font-bold">{{ tomorrowPax | number}}</div>
       </div>
       <div class="flex flex-col items-center justify-around gap-2">
         <div class="text-3xl font-bold text-[#fbb441]">後日預報航班數</div>
-        <div class="text-5xl font-bold">26</div>
+        <div class="text-5xl font-bold">{{ twoDayFlight | number}}</div>
       </div>
       <div class="flex flex-col items-center justify-around gap-2">
         <div class="text-3xl font-bold text-[#fbb441]">後日預報旅客數</div>
-        <div class="text-5xl font-bold">{{ 26000 | number}}</div>
+        <div class="text-5xl font-bold">{{ twoDayPax | number}}</div>
       </div>
     </div>
   </div>

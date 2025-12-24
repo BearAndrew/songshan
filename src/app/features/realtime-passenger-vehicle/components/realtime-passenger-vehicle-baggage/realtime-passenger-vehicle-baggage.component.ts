@@ -1,5 +1,7 @@
+import { ApiService } from './../../../../core/services/api-service.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { BaggageTimeItem } from '../../../../models/baggage-time.model';
 
 interface FlightInfo {
   flight: string;
@@ -28,92 +30,48 @@ interface FlightInfo {
   styleUrl: './realtime-passenger-vehicle-baggage.component.scss',
 })
 export class RealtimePassengerVehicleBaggageComponent {
-  items: FlightInfo[] = [
-    {
-      flight: 'CI223',
-      from: '羽田',
-      scheduledTime: '10:55',
-      actualArrival: '10:54',
-      flightArrival: '10:54',
-      firstBaggage: '11:10',
-      lastBaggage: '11:30',
-      baggageDetails: [
-        {
-          subtitle: '第一件行李時間',
-          downTime: '11:10',
-          toCarousel: '11:20',
-          onCarousel: '11:23',
-          xrayIn: '11:25',
-          xrayOut: '11:27',
-        },
-        {
-          subtitle: '最後一件行李時間',
-          downTime: '11:10',
-          toCarousel: '11:20',
-          onCarousel: '11:23',
-          xrayIn: '11:25',
-          xrayOut: '11:27',
-        },
-      ],
-      isOpen: false,
-    },
-    {
-      flight: 'CI224',
-      from: '成田',
-      scheduledTime: '11:20',
-      actualArrival: '11:25',
-      flightArrival: '11:25',
-      firstBaggage: '11:40',
-      lastBaggage: '12:05',
-      baggageDetails: [
-        {
-          subtitle: '第一件行李時間',
-          downTime: '11:40',
-          toCarousel: '11:50',
-          onCarousel: '11:53',
-          xrayIn: '11:55',
-          xrayOut: '11:57',
-        },
-        {
-          subtitle: '最後一件行李時間',
-          downTime: '11:40',
-          toCarousel: '11:50',
-          onCarousel: '11:53',
-          xrayIn: '11:55',
-          xrayOut: '11:57',
-        },
-      ],
-      isOpen: false,
-    },
-    {
-      flight: 'CI225',
-      from: '香港',
-      scheduledTime: '12:00',
-      actualArrival: '12:05',
-      flightArrival: '12:05',
-      firstBaggage: '12:20',
-      lastBaggage: '12:45',
-      baggageDetails: [
-        {
-          subtitle: '第一件行李時間',
-          downTime: '12:20',
-          toCarousel: '12:30',
-          onCarousel: '12:33',
-          xrayIn: '12:35',
-          xrayOut: '12:37',
-        },
-        {
-          subtitle: '最後一件行李時間',
-          downTime: '12:20',
-          toCarousel: '12:30',
-          onCarousel: '12:33',
-          xrayIn: '12:35',
-          xrayOut: '12:37',
-        },
-      ],
-      isOpen: false,
-    },
-  ];
+  items: FlightInfo[] = [];
+
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.apiService.getBaggageTime().subscribe((res: BaggageTimeItem[]) => {
+      this.items = res.map((b) => {
+        const baggageDetails = [
+          {
+            subtitle: '第一件行李時間',
+            downTime: b.firstBagDeplane,
+            toCarousel: b.firstBagArriveCarousel,
+            onCarousel: b.firstBagOnCarousel,
+            xrayIn: b.firstBagInXray,
+            xrayOut: b.firstBagOutXray,
+          },
+          {
+            subtitle: '最後一件行李時間',
+            downTime: b.lastBagDeplane,
+            toCarousel: b.lastBagArriveCarousel,
+            onCarousel: b.lastBagOnCarousel,
+            xrayIn: b.lastBagInXray,
+            xrayOut: b.lastBagOutXray,
+          },
+        ];
+
+        const flightInfo: FlightInfo = {
+          flight: b.flightNo,
+          from: b.departurePort,
+          scheduledTime: b.sta,
+          actualArrival: b.ata,
+          flightArrival: b.ata,
+          firstBaggage: b.firstBagDeplane,
+          lastBaggage: b.lastBagDeplane,
+          baggageDetails,
+          isOpen: false,
+        };
+
+        return flightInfo;
+      });
+    });
+  }
 
   toggle(item: FlightInfo) {
     item.isOpen = !item.isOpen;

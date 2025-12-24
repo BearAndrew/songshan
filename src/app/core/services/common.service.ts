@@ -34,8 +34,9 @@ export class CommonService {
     return this.realAirportValue;
   }
 
-  getAirportCodeById(airportId: number): string | null {
+  getAirportCodeById(airportId: number): string {
     const airport = this.airportList.find(a => a.value === airportId);
-    return airport ? airport.code : null;
+    console.log(this.airportList);
+    return airport ? airport.code : '';
   }
 }

@@ -5,18 +5,24 @@ import { Airline } from '../../models/airline.model';
 import { Airport } from '../../models/airport.model';
 import { FlightTrafficAnalysisRequest } from '../../models/flight-traffic-analysis.model';
 import { FlightTrafficPredictResponse } from '../../models/flight-traffic-predict.model';
-import { IrregularFlightItem, IrregularInboundFlight } from '../../models/irregular-inbound-flight.model';
+import {
+  IrregularFlightItem,
+  IrregularInboundFlight,
+} from '../../models/irregular-inbound-flight.model';
 import { RealTimeTrafficFlowItem } from '../../models/real-time-traffic-flow.model';
-import { StandbySummaryItem, StandbyListItem } from '../../models/standby.model';
+import {
+  StandbySummaryItem,
+  StandbyListItem,
+} from '../../models/standby.model';
 import { TodayDelayStat } from '../../models/today-delay-stat.model';
 import { TodayPredict } from '../../models/today-predict.model';
 import { TodayStatus } from '../../models/today-status.model';
 import { HttpHeaders } from '@angular/common/http';
 import { FlightUpdateWebhookRequest } from '../../models/webhook-flight-update.model';
-
+import { BaggageTimeItem } from '../../models/baggage-time.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
   constructor(private http: HttpClient) {}
@@ -41,7 +47,7 @@ export class ApiService {
   }
 
   /** 指定機場今日狀態 */
-  getTodayStatusByAirport(airport: string|null): Observable<TodayStatus> {
+  getTodayStatusByAirport(airport: string | null): Observable<TodayStatus> {
     return this.http.get<TodayStatus>(`GetTodayStatusByAirport/${airport}`);
   }
 
@@ -80,13 +86,22 @@ export class ApiService {
    * 不正常入境航班
    * @param type 依 API 定義的分類 (例如: "ALL", "DIVERT", "CANCEL"… 若後端有定義)
    */
-  getIrregularInboundFlight(type: string | null): Observable<IrregularInboundFlight> {
-    return this.http.get<IrregularInboundFlight>(`IrregularInboundFlight/${type}`);
+  getIrregularInboundFlight(
+    type: string | null
+  ): Observable<IrregularInboundFlight> {
+    return this.http.get<IrregularInboundFlight>(
+      `IrregularInboundFlight/${type}`
+    );
   }
 
   /** 即時人流資訊 */
   getRealTimeTrafficFlow(): Observable<RealTimeTrafficFlowItem[]> {
     return this.http.get<RealTimeTrafficFlowItem[]>('RealTimeTrafficFlow');
+  }
+
+  /** 即時人流（行李） */
+  getBaggageTime(): Observable<BaggageTimeItem[]> {
+    return this.http.get<BaggageTimeItem[]>('BaggageTime');
   }
 
   // ========= 未來流量預測 =========
@@ -118,25 +133,20 @@ export class ApiService {
   }
 
   /**
- * Webhook - Flight Update
- *
- * @param payload webhook request body
- * @param signature X-signature header value
- */
-postWebhookFlightUpdate(
-  payload: FlightUpdateWebhookRequest,
-  signature: string
-): Observable<any> {
-  const headers = new HttpHeaders({
-    'X-signature': signature,
-    'Content-Type': 'application/json'
-  });
+   * Webhook - Flight Update
+   *
+   * @param payload webhook request body
+   * @param signature X-signature header value
+   */
+  postWebhookFlightUpdate(
+    payload: FlightUpdateWebhookRequest,
+    signature: string
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      'X-signature': signature,
+      'Content-Type': 'application/json',
+    });
 
-  return this.http.post<any>(
-    'webhook/flightUpdate',
-    payload,
-    { headers }
-  );
-}
-
+    return this.http.post<any>('webhook/flightUpdate', payload, { headers });
+  }
 }
