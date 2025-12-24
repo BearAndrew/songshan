@@ -26,37 +26,34 @@
 
     @if(activeIndex !== data.length - 1) {
     <div class="flex-1 grid grid-cols-4 gap-2 bg-black p-2 h-full">
-      <div class="relative">
-        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black"
-          >報到櫃檯</label
+      @for (group of locationGroups; track group.locationName) {
+
+      <div class="relative bg-black">
+        <!-- 左上：locationName -->
+        <label
+          class="absolute left-0 top-0 z-10 px-1 text-xs text-[#ccc] bg-black"
         >
-        <img src="img/fake-camera.png" alt="camera" />
-        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon" />
+          {{ group.locationName }}
+        </label>
+
+        <!-- 當前圖片 -->
+        @if (getCurrentImage(group)) {
+        <img
+          class="w-full h-auto"
+          [src]="'data:image/png;base64,' + getCurrentImage(group)"
+          alt="camera"
+        />
+        }
+
+        <!-- 左下角 icon -->
+        <img
+          class="absolute left-0 bottom-0 w-4 h-4"
+          src="img/camera-icon.png"
+          alt="camera-icon"
+        />
       </div>
 
-      <div class="relative">
-        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black"
-          >安檢</label
-        >
-        <img src="img/fake-camera.png" alt="camera" />
-        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon" />
-      </div>
-
-      <div class="relative">
-        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black"
-          >出境查驗</label
-        >
-        <img src="img/fake-camera.png" alt="camera" />
-        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon" />
-      </div>
-
-      <div class="relative">
-        <label class="absolute left-0 top-0 w-25 text-xs text-[#ccc] bg-black"
-          >入境查驗</label
-        >
-        <img src="img/fake-camera.png" alt="camera" />
-        <img class="absolute left-0 bottom-0 w-4 h-4" alt="camera-icon" />
-      </div>
+      }
     </div>
     }
   </div>

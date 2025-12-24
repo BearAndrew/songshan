@@ -1,7 +1,7 @@
 <div class="w-full">
   <div
     #dropdownTrigger
-    class="flex items-center bg-black border border-[#3372bd] px-2 py-1 rounded cursor-pointer select-none"
+    class="flex items-center bg-black border border-[#3372bd] min-h-8 pl-2 pr-3 py-0.5 rounded cursor-pointer select-none"
     (click)="toggle()"
   >
     @if(showIcon) {
@@ -11,7 +11,7 @@
     }
     <span>{{ selectedLabel || placeholder }}</span>
     <img
-      class="ml-auto w-6 h-3"
+      class="ml-auto w-3"
       src="icons/white-down-arrow.png"
       alt="arrow-down"
     />
