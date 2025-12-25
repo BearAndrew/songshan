@@ -2,7 +2,7 @@
   <div class="w-full overflow-x-hidden overflow-y-auto">
     <!-- Header -->
     <div
-      class="fixed w-[calc(100%-5rem)] grid grid-cols-8 bg-[#00c4ce] text-2xl font-semibold text-center mb-4 z-10"
+      class="fixed w-[calc(100%-5rem)] grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-2xl font-semibold text-center mb-4 z-10"
     >
       <div class="p-2">航點</div>
       <div class="p-2">對站天氣</div>
@@ -20,16 +20,18 @@
       <div class="py-1 border-b text-[#baeaff] hover:bg-[#494746]">
         <!-- 明細 -->
         @for (detail of group.details; let i = $index; track detail;) {
-        <div class="grid grid-cols-8 text-center">
+        <div class="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] text-center">
           <!-- 航點 / 天氣 -->
           @if (i === 0) {
           <div
             class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
           >
             <span
-              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-bold"
-              >{{ group.route }}</span
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-30 text-center text-2xl font-bold break-words"
+              style="text-wrap: balance"
             >
+              {{ group.route }}
+            </span>
           </div>
           <div
             class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
@@ -45,19 +47,31 @@
               </div>
               <div class="flex flex-col gap-1 text-xl">
                 <div class="flex gap-1">
-                  <img class="w-6 h-6" src="img/daily-domestic-standby-analysis/icon-1.png" alt="visibility" />
+                  <img
+                    class="w-6 h-6"
+                    src="img/daily-domestic-standby-analysis/icon-1.png"
+                    alt="visibility"
+                  />
                   <div class="whitespace-nowrap">
                     {{ group.weather.visibility }}
                   </div>
                 </div>
                 <div class="flex gap-1">
-                  <img class="w-6 h-6" src="img/daily-domestic-standby-analysis/icon-2.png" alt="visibility" />
+                  <img
+                    class="w-6 h-6"
+                    src="img/daily-domestic-standby-analysis/icon-2.png"
+                    alt="visibility"
+                  />
                   <div class="whitespace-nowrap">
                     {{ group.weather.altitude }}
                   </div>
                 </div>
                 <div class="flex gap-1">
-                  <img class="w-6 h-6" src="img/daily-domestic-standby-analysis/icon-3.png" alt="visibility" />
+                  <img
+                    class="w-6 h-6"
+                    src="img/daily-domestic-standby-analysis/icon-3.png"
+                    alt="visibility"
+                  />
                   <div class="whitespace-nowrap">
                     {{ group.weather.windSpeed }}
                   </div>

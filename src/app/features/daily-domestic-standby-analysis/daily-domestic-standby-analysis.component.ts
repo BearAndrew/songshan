@@ -57,10 +57,12 @@ export class DailyDomesticStandbyAnalysisComponent {
   setTableData(data: StandbySummaryItem[]) {
     this.tableData = [];
     data.forEach((item, index) => {
+      const rawTemp = item.currWeather.temperature;
+      const tempValue = Number(String(rawTemp).match(/-?\d+/)?.[0] ?? 0);
       this.tableData.push({
         route: item.destinationName,
         weather: {
-          temperature: item.currWeather.temperature + '°C',
+          temperature: tempValue + '°C',
           description: item.currWeather.weatherStatus,
           visibility: item.currWeather.visibility,
           altitude: item.currWeather.cloudLevel,

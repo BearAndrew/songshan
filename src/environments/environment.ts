@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://172.16.24.124/backend/api'
+  apiBaseUrl: 'http://jasonpolaristw.ddns.net:9025/api'
 };

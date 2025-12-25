@@ -5,7 +5,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { routes } from '../../../app.routes';
 import { MainLayoutComponent } from '../main-layout/main-layout.component';
 import { filter } from 'rxjs';
-import { DropdownComponent } from "../../components/dropdown/dropdown.component";
+import { DropdownComponent, Option } from '../../components/dropdown/dropdown.component';
 import { ApiService } from '../../../core/services/api-service.service';
 import { Airport } from '../../../models/airport.model';
 import { CommonService } from '../../../core/services/common.service';
@@ -19,22 +19,50 @@ import { CommonService } from '../../../core/services/common.service';
 export class HeaderComponent {
   @Input() theme: 'light' | 'dark' = 'light';
 
+  currentUrl: string = '';
   menuOpen = false;
   menuRoutes: Array<{ path: string; title: string; theme: string }> = [];
   title: string = '';
   airportListData: Airport[] = [];
-  airportList: {'label':string, 'value':number, code:string}[] = [];
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private apiService: ApiService, private commonService: CommonService) {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.getCurrentRouteTitle();
-    });
+  airportList: { label: string; value: number; code: string }[] = [];
+  flightTypeList: { label: string; value: string }[] = [
+    { label: 'ALL', value: 'ALL' },
+    { label: 'SCHEDULE', value: 'SCHEDULE' },
+    { label: 'COMM', value: 'COMM' },
+    { label: 'OTHER', value: 'OTHER' },
+  ];
+
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private apiService: ApiService,
+    private commonService: CommonService
+  ) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.getCurrentRouteTitle();
+      });
 
     this.loadRoutes();
     this.getCurrentRouteTitle();
-    this.airportList.push({'label': '所有機場', 'value': -1, code: ''});
+    this.airportList.push({ label: '所有機場', value: -1, code: '' });
     this.loadAirportList();
+  }
+
+  ngOnInit(): void {
+    // 取得當前 URL
+    this.currentUrl = this.router.url;
+
+    // 若路由會改變，也可以訂閱
+    this.router.events.subscribe(() => {
+      this.currentUrl = this.router.url;
+    });
+  }
+
+  // 判斷是否在 /traffic-analysis
+  isTrafficAnalysisRoute(): boolean {
+    return this.currentUrl.startsWith('/traffic-analysis');
   }
 
   /** 讀取 app.routes.ts 的路由資訊 */
@@ -79,12 +107,21 @@ export class HeaderComponent {
   }
 
   loadAirportList() {
-    this.apiService.getAirportList().subscribe(res => {
+    this.apiService.getAirportList().subscribe((res) => {
       this.airportListData = res;
-      this.airportListData.forEach((airport,index) => {
-      this.airportList.push({'label': airport.name_zhTW, 'value': index, code: airport.iata});
+      this.airportListData.forEach((airport, index) => {
+        this.airportList.push({
+          label: airport.name_zhTW,
+          value: index,
+          code: airport.iata,
+        });
+      });
+      this.commonService.setAirportList(this.airportList);
     });
-    this.commonService.setAirportList(this.airportList);
-    });
+  }
+
+  /** 下拉選單更新 */
+  onFlightTypeChange(selected: Option) {
+    this.commonService.setSelectedFlightType(selected.value);
   }
 }

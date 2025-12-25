@@ -8,7 +8,7 @@
         'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
       }"
       type="button"
-      (click)="activeIndex = i"
+      (click)="onScopeChange(i)"
     >
       {{ button.label }}
     </button>
@@ -16,39 +16,117 @@
   </div>
 
   <div class="flex items-center justify-between text-[#aaa]">
+    <!-- 指定期間 -->
     <div class="flex items-center gap-2">
       <label>指定期間</label>
-      <app-dropdown class="w-30"></app-dropdown>
+
+      <!-- 起始年份 -->
+      <app-dropdown
+        class="w-30"
+        [options]="yearOptions"
+        [value]="formData.startYear"
+        (selectionChange)="
+          onSelectionChange('startYear', $event.value);
+          onMonthOrYearChange('start', $event.value, formData.startMonth)
+        "
+      ></app-dropdown>
       <span>年</span>
-      <app-dropdown class="w-20"></app-dropdown>
+
+      <!-- 起始月份 -->
+      <app-dropdown
+        class="w-20"
+        [options]="monthOptions"
+        [value]="formData.startMonth"
+        (selectionChange)="
+          onSelectionChange('startMonth', $event.value);
+          onMonthOrYearChange('start', formData.startYear, $event.value)
+        "
+      ></app-dropdown>
       <span>月</span>
-      <app-dropdown class="w-20"></app-dropdown>
+
+      <!-- 起始日期 -->
+      <app-dropdown
+        class="w-20"
+        [options]="startDayOptions"
+        [value]="formData.startDay"
+        (selectionChange)="onSelectionChange('startDay', $event.value)"
+      ></app-dropdown>
       <span>日</span>
 
       <span>~</span>
 
-      <app-dropdown class="w-30"></app-dropdown>
+      <!-- 結束年份 -->
+      <app-dropdown
+        class="w-30"
+        [options]="yearOptions"
+        [value]="formData.endYear"
+        (selectionChange)="
+          onSelectionChange('endYear', $event.value);
+          onMonthOrYearChange('end', $event.value, formData.endMonth)
+        "
+      ></app-dropdown>
       <span>年</span>
-      <app-dropdown class="w-20"></app-dropdown>
+
+      <!-- 結束月份 -->
+      <app-dropdown
+        class="w-20"
+        [options]="monthOptions"
+        [value]="formData.endMonth"
+        (selectionChange)="
+          onSelectionChange('endMonth', $event.value);
+          onMonthOrYearChange('end', formData.endYear, $event.value)
+        "
+      ></app-dropdown>
       <span>月</span>
-      <app-dropdown class="w-20"></app-dropdown>
+
+      <!-- 結束日期 -->
+      <app-dropdown
+        class="w-20"
+        [options]="endDayOptions"
+        [value]="formData.endDay"
+        (selectionChange)="onSelectionChange('endDay', $event.value)"
+      ></app-dropdown>
       <span>日</span>
     </div>
 
+    <!-- 航點、航班類別、航空公司、飛航類型 -->
     <div class="flex items-center gap-2">
       <label>航點</label>
-      <app-dropdown class="w-30"></app-dropdown>
+      <app-dropdown
+        class="w-30"
+        [options]="routeOptions"
+        (selectionChange)="onSelectionChange('route', $event)"
+      >
+      </app-dropdown>
 
       <label>航班類別</label>
-      <app-dropdown class="w-30"></app-dropdown>
+      <app-dropdown
+        class="w-30"
+        [options]="flightClassOptions"
+        (selectionChange)="onSelectionChange('flightClass', $event)"
+      >
+      </app-dropdown>
 
       <label>航空公司</label>
-      <app-dropdown class="w-30"></app-dropdown>
+      <app-dropdown
+        class="w-30"
+        [options]="airlineOptions"
+        (selectionChange)="onSelectionChange('airline', $event)"
+      >
+      </app-dropdown>
 
       <label>飛航類型</label>
-      <app-dropdown class="w-20"></app-dropdown>
+      <app-dropdown
+        class="w-20"
+        [options]="flightTypeOptions"
+        (selectionChange)="onSelectionChange('flightType', $event)"
+      >
+      </app-dropdown>
 
-      <button class="px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer">
+      <button
+        class="px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
+        (click)="onConfirm()"
+      >
         確認
       </button>
     </div>
@@ -74,10 +152,14 @@
       }
     </div>
 
-
     <div class="flex flex-1 items-center gap-2 w-full relative">
       <div class="text-xl [writing-mode:vertical-rl]">架次</div>
-      <app-bar-line-chart class="flex-1 h-full" [barData]="barData" [lineData]="lineData" [showLegend]="false"></app-bar-line-chart>
+      <app-bar-line-chart
+        class="flex-1 h-full"
+        [barData]="barData"
+        [lineData]="lineData"
+        [showLegend]="false"
+      ></app-bar-line-chart>
       <div class="text-xl [writing-mode:vertical-rl]">人數</div>
     </div>
 
@@ -134,7 +216,6 @@
         </div>
       </div>
 
-
       <div
         class="flex-1 mx-8 w-full h-full max-w-150 border-4 border-[#3372bd] rounded-lg relative"
       >
@@ -160,7 +241,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>

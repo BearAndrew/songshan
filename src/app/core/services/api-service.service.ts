@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Airline } from '../../models/airline.model';
 import { Airport } from '../../models/airport.model';
-import { FlightTrafficAnalysisRequest } from '../../models/flight-traffic-analysis.model';
+import { FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse } from '../../models/flight-traffic-analysis.model';
 import { FlightTrafficPredictResponse } from '../../models/flight-traffic-predict.model';
 import {
   IrregularFlightItem,
@@ -128,8 +128,8 @@ export class ApiService {
    */
   postFlightTrafficAnalysis(
     payload: FlightTrafficAnalysisRequest
-  ): Observable<any> {
-    return this.http.post<any>('FlightTrafficAnalysis', payload);
+  ): Observable<FlightTrafficAnalysisResponse> {
+    return this.http.post<FlightTrafficAnalysisResponse>('FlightTrafficAnalysis', payload);
   }
 
   /**

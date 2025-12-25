@@ -11,3 +11,17 @@ export interface FlightTrafficAnalysisRequest {
   peer: string; // e.g. 3碼IATA code;
   flightType: FlightType; // e.g. "intl" ...
 }
+
+
+
+export interface FlightTrafficAnalysisResponse {
+  statByHour: StatByHour[];
+  totalFlight: number;
+  totalPax: number;
+}
+
+export interface StatByHour {
+  hour: string;       // 例如 "08:00"
+  numOfFlight: number;
+  numOfPax: number;
+}

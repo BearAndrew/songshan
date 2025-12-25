@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommonService {
   constructor(private http: HttpClient) {}
 
-  airportList: {'label':string, 'value':number, code:string}[] = [];
+  airportList: { label: string; value: number; code: string }[] = [];
   selectedAirport: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  selectedFlightType: BehaviorSubject<string> = new BehaviorSubject<string>('');
   realAirportValue: number = -1;
 
-  setAirportList(data: {'label':string, 'value':number, code:string}[]) {
+  setAirportList(data: { label: string; value: number; code: string }[]) {
     this.airportList = data;
   }
 
@@ -30,12 +30,20 @@ export class CommonService {
     return this.selectedAirport.asObservable();
   }
 
+  setSelectedFlightType(flightType: string) {
+    this.selectedFlightType.next(flightType);
+  }
+
+  getSelectedFlightType() {
+    return this.selectedFlightType.asObservable();
+  }
+
   getSelectedAirportValue() {
     return this.realAirportValue;
   }
 
   getAirportCodeById(airportId: number): string {
-    const airport = this.airportList.find(a => a.value === airportId);
+    const airport = this.airportList.find((a) => a.value === airportId);
     console.log(this.airportList);
     return airport ? airport.code : '';
   }

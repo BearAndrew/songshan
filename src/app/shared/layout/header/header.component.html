@@ -36,7 +36,23 @@
       </div>
     </ng-template>
 
-    <h1 class="text-[50px] font-bold leading-none">{{ title}}</h1>
+    <h1 class="text-[50px] font-bold leading-none">{{ title }}</h1>
   </div>
-  <app-dropdown class="w-60 z-20" [options]="airportList" [value]="-1" [showIcon]="true"></app-dropdown>
+
+  @if (isTrafficAnalysisRoute()) {
+  <app-dropdown
+    class="w-60 z-20"
+    [options]="flightTypeList"
+    [value]="'ALL'"
+    [showIcon]="true"
+    (selectionChange)="onFlightTypeChange($event)"
+  ></app-dropdown>
+  } @else {
+  <app-dropdown
+    class="w-60 z-20"
+    [options]="airportList"
+    [value]="-1"
+    [showIcon]="true"
+  ></app-dropdown>
+  }
 </div>

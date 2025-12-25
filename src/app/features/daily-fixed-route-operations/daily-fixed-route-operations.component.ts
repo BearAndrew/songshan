@@ -34,32 +34,10 @@ export class DailyFixedRouteOperationsComponent {
   domesticLineData: DailyFixedRouteOperationData[] = [];
 
   /** 圓餅圖 */
-  flightData: DataSetWithData[] = [
-    {
-      label: '國內線',
-      data: { value: 17 },
-      colors: ['#fdde8d'],
-    },
-    {
-      label: '國際兩岸線',
-      data: { value: 23 },
-      colors: ['#989898'],
-    },
-  ];
+  flightData: DataSetWithData[] = [];
 
   /** 圓餅圖 */
-  passengerData: DataSetWithData[] = [
-    {
-      label: '國內線',
-      data: { value: 21 },
-      colors: ['#aa7946'],
-    },
-    {
-      label: '國際兩岸線',
-      data: { value: 39 },
-      colors: ['#989898'],
-    },
-  ];
+  passengerData: DataSetWithData[] = [];
 
   flightTotal: number = 0;
   passengerTotal: number = 0;

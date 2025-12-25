@@ -7,11 +7,17 @@ import {
   ElementRef,
   TemplateRef,
   ViewContainerRef,
+  SimpleChanges,
 } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonService } from '../../../core/services/common.service';
 import { CommonModule } from '@angular/common';
+
+export interface Option {
+  label: string;
+  value: any;
+}
 
 @Component({
   selector: 'app-dropdown',
@@ -19,11 +25,11 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
 })
 export class DropdownComponent {
-  @Input() options: { label: string; value: any }[] = [];
+  @Input() options: Option[] = [];
   @Input() value: any;
   @Input() placeholder = ' ';
   @Input() showIcon: boolean = false;
-  @Output() selectionChange = new EventEmitter<{ label: string; value: any }>();
+  @Output() selectionChange = new EventEmitter<Option>();
 
   @ViewChild('dropdownTrigger') trigger!: ElementRef;
   @ViewChild('dropdownMenu') dropdownMenu!: TemplateRef<any>;
@@ -34,6 +40,16 @@ export class DropdownComponent {
   constructor(private overlay: Overlay, private vcr: ViewContainerRef, private commonService: CommonService) {}
 
   ngOnInit(): void {
+    this.selectedLabel = this.options.find(item => item.value == this.value)?.label || '';
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['value']) {
+      this.updateSelectedLabel();
+    }
+  }
+
+  private updateSelectedLabel() {
     this.selectedLabel = this.options.find(item => item.value == this.value)?.label || '';
   }
 
