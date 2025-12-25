@@ -3542,7 +3542,8 @@ class PieFactory extends BasicFactory {
             .innerRadius(this.radialState.radius);
         const offset = this.radialConfig.labelOffset;
         const data = this.dataSetWithData.map((d) => Number(d.data.value));
-        const pieData = pie(data);
+        const isAllZero = data.every(v => v === 0);
+        const pieData = isAllZero ? pie([1]) : pie(data);
         // ----------- Pie slices -------------
         const slices = this.pieGroup
             .selectAll('path.pie-slice')
@@ -3553,18 +3554,22 @@ class PieFactory extends BasicFactory {
             .attr('class', 'pie-slice')
             .attr('d', arc)
             .attr('fill', (d, i) => {
-            const colors = this.dataSetWithData?.[i]?.colors;
-            return colors?.[0] ?? DefaultDataColorArray[i % 10][0].color;
-        })
+              if (isAllZero) {
+                return '#e0e0e0'; // 灰色底
+              }
+              const colors = this.dataSetWithData?.[i]?.colors;
+              return colors?.[0] ?? DefaultDataColorArray[i % 10][0].color;
+            })
             .style('opacity', 0), (update) => update, (exit) => exit.transition().duration(300).style('opacity', 0).remove())
             .transition()
             .duration(useAnimation ? 500 : 0)
             .attr('d', arc)
             .style('opacity', 1);
         // ----------- Labels -------------
+        const labelData = isAllZero ? [] : pieData;
         const labels = this.pieGroup
             .selectAll('text.label')
-            .data(pieData);
+            .data(labelData);
         labels
             .join((enter) => enter.append('text').attr('class', 'label').style('opacity', 0), (update) => update, (exit) => exit.transition().duration(300).style('opacity', 0).remove())
             .text((d, i) => {

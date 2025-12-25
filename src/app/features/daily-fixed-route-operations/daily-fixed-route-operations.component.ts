@@ -7,6 +7,12 @@ import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
 import { TodayStatus } from '../../models/today-status.model';
 
+interface DailyFixedRouteOperationData {
+  type: string;
+  out: number;
+  in: number;
+}
+
 @Component({
   selector: 'app-daily-fixed-route-operations',
   imports: [
@@ -19,22 +25,13 @@ import { TodayStatus } from '../../models/today-status.model';
 })
 export class DailyFixedRouteOperationsComponent {
   /** 國際線 */
-  foreignLineData = [
-    { type: '航班數', out: 3, in: 5 },
-    { type: '遊客數', out: 627, in: 556 },
-  ];
+  foreignLineData: DailyFixedRouteOperationData[] = [];
 
   /** 兩岸航線 */
-  crossStraitLineData = [
-    { type: '航班數', out: 4, in: 5 },
-    { type: '遊客數', out: 587, in: 512 },
-  ];
+  crossStraitLineData: DailyFixedRouteOperationData[] = [];
 
   /** 國內線 */
-  domesticLineData = [
-    { type: '航班數', out: 3, in: 5 },
-    { type: '遊客數', out: 627, in: 556 },
-  ];
+  domesticLineData: DailyFixedRouteOperationData[] = [];
 
   /** 圓餅圖 */
   flightData: DataSetWithData[] = [
@@ -102,7 +99,7 @@ export class DailyFixedRouteOperationsComponent {
 
     this.flightTotal = res.totalFlight_Total;
     this.passengerTotal = res.totalPax_Total;
-    
+
     this.passengerData[0].data.value = res.domestic.noOfPax_Total;
     this.passengerData[1].data.value = res.crossStrait.noOfPax_Total;
 
@@ -111,7 +108,7 @@ export class DailyFixedRouteOperationsComponent {
       { type: '航班數', out: res.intl.noOfFlight_Outbound, in: res.intl.noOfFlight_Inbound },
       { type: '遊客數', out: res.intl.noOfPax_Outbound, in: res.intl.noOfPax_Inbound },
     ];
-    
+
     //crossStraitLineData
     this.crossStraitLineData = [
       { type: '航班數', out: res.crossStrait.noOfFlight_Outbound, in: res.crossStrait.noOfFlight_Inbound },

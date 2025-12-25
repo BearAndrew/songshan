@@ -15,8 +15,6 @@ export interface DailyFixedRouteOperationsTableData {
 export class DailyFixedRouteOperationsTableComponent {
   @Input() header: string[] = ['出境', '入境', '總數'];
   @Input() data: DailyFixedRouteOperationsTableData[] = [
-    { out: 3, in: 5 },
-    { out: 627, in: 556 },
   ];
   @Input() isShowSideHeader: boolean = false;
 }

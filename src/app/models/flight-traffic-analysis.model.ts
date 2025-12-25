@@ -1,5 +1,6 @@
-export type FlightTrafficType = 'ALL' | 'SCHEDULED' | 'COMM' | 'OTHER';
+export type FlightTrafficType = 'ALL' | 'SCHEDULE' | 'COMM' | 'OTHER';
 export type FlightDirection = 'INBOUND' | 'OUTBOUND';
+export type FlightType = 'nondomestic' | 'intl' | 'crossstrait' | 'domestic' | 'all'
 
 export interface FlightTrafficAnalysisRequest {
   dateFrom: string;    // e.g. "2025-12-10 10:00:00"
@@ -8,5 +9,5 @@ export interface FlightTrafficAnalysisRequest {
   airline: string;     // e.g. "CI"
   direction: FlightDirection; // "INBOUND" | "OUTBOUND"
   peer: string; // e.g. 3碼IATA code;
-  flightType: string; // e.g. "intl" ...
+  flightType: FlightType; // e.g. "intl" ...
 }

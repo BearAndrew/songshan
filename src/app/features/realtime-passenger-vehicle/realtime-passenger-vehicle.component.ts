@@ -41,6 +41,7 @@ export class RealtimePassengerVehicleComponent {
       value: '',
     },
   ];
+  now = new Date();
 
   locationGroups: LocationImageGroup[] = [];
   private timerId?: number | null;
@@ -92,27 +93,29 @@ export class RealtimePassengerVehicleComponent {
           // 資料更新完成後再啟動輪播
           this.startRotation();
         });
+
+      this.now = new Date();
     }
   }
 
   /** 將 API 資料依 location 分組並攤平 images */
-private buildLocationGroups(items: RealTimeTrafficFlowItem[]) {
-  this.locationGroups = items.map((location) => {
-    // 將每個 point 的圖片攤平，每張圖片保留對應 label
-    const images = location.data.flatMap((point) =>
-      (point.image ?? []).map((img) => ({
-        src: img,
-        label: point.label,
-      }))
-    );
+  private buildLocationGroups(items: RealTimeTrafficFlowItem[]) {
+    this.locationGroups = items.map((location) => {
+      // 將每個 point 的圖片攤平，每張圖片保留對應 label
+      const images = location.data.flatMap((point) =>
+        (point.image ?? []).map((img) => ({
+          src: img,
+          label: point.label,
+        }))
+      );
 
-    return {
-      locationName: location.locationName,
-      images,
-      currentIndex: 0,
-    };
-  });
-}
+      return {
+        locationName: location.locationName,
+        images,
+        currentIndex: 0,
+      };
+    });
+  }
 
   /** 每 10 秒全部 location 一起切換圖片 */
   private startRotation() {
