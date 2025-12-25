@@ -73,13 +73,13 @@ export class DailyFixedRouteOperationsComponent {
     // 在這裡處理 API 回傳的資料
     // 圓餅圖資料設定
     this.flightData[0].data.value = res.domestic.noOfFlight_Total;
-    this.flightData[1].data.value = res.crossStrait.noOfFlight_Total;
+    this.flightData[1].data.value = res.crossStrait.noOfFlight_Total + res.intl.noOfFlight_Total;
 
     this.flightTotal = res.totalFlight_Total;
     this.passengerTotal = res.totalPax_Total;
 
     this.passengerData[0].data.value = res.domestic.noOfPax_Total;
-    this.passengerData[1].data.value = res.crossStrait.noOfPax_Total;
+    this.passengerData[1].data.value = res.crossStrait.noOfPax_Total + res.intl.noOfPax_Total;
 
     //foreignLineData
     this.foreignLineData = [

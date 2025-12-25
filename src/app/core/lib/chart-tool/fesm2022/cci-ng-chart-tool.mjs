@@ -877,7 +877,10 @@ class GridFactory extends BasicFactory {
         for (const [i, axisValue] of axisValues.entries()) {
             const minValue = Math.min(axisValue.minValue, stackAxisIndex == i ? stacksMaxNegetive : 0, this.gridConfig.settingMin[i]);
             const maxValue = Math.max(axisValue.maxValue, stackAxisIndex == i ? stacksMaxPositive : 0, this.gridConfig.settingMax[i]);
-            const [modifiedMin, modifiedMax] = getPrettyMinMax(minValue, maxValue, this.gridConfig.stepsCount);
+            let [modifiedMin, modifiedMax] = getPrettyMinMax(minValue, maxValue, this.gridConfig.stepsCount);
+            if ((modifiedMin === 0 || modifiedMin === -0) && (modifiedMax === 0 || modifiedMax === -0)) {
+              modifiedMax = 10;
+            }
             this.axisValues[i] = { minValue: modifiedMin, maxValue: modifiedMax };
         }
     }

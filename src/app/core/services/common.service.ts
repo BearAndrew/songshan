@@ -44,7 +44,6 @@ export class CommonService {
 
   getAirportCodeById(airportId: number): string {
     const airport = this.airportList.find((a) => a.value === airportId);
-    console.log(this.airportList);
     return airport ? airport.code : '';
   }
 }

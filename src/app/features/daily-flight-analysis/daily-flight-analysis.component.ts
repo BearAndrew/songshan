@@ -518,19 +518,19 @@ export class DailyFlightAnalysisComponent {
         label: '0~30m',
         data: { value: res.delayStat.inBound0 },
         colors: ['#00c4ce'],
-        unitText: '%',
+        // unitText: '%',
       },
       {
         label: '30~60m',
         data: { value: res.delayStat.inBound30 },
         colors: ['#a4dd46'],
-        unitText: '%',
+        // unitText: '%',
       },
       {
         label: '60m',
         data: { value: res.delayStat.inBound60 },
         colors: ['#ceedfe'],
-        unitText: '%',
+        // unitText: '%',
       },
     ];
 
@@ -540,19 +540,19 @@ export class DailyFlightAnalysisComponent {
         label: '0~30m',
         data: { value: res.delayStat.outBound0 },
         colors: ['#00c4ce'],
-        unitText: '%',
+        // unitText: '%',
       },
       {
         label: '30~60m',
         data: { value: res.delayStat.outBound30 },
         colors: ['#a4dd46'],
-        unitText: '%',
+        // unitText: '%',
       },
       {
         label: '60m',
         data: { value: res.delayStat.outBound60 },
         colors: ['#ceedfe'],
-        unitText: '%',
+        // unitText: '%',
       },
     ];
 
