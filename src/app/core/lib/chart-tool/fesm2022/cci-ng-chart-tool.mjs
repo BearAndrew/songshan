@@ -3552,22 +3552,44 @@ class PieFactory extends BasicFactory {
             .selectAll('path.pie-slice')
             .data(pieData);
         slices
-            .join((enter) => enter
-            .append('path')
-            .attr('class', 'pie-slice')
-            .attr('d', arc)
-            .attr('fill', (d, i) => {
-              if (isAllZero) {
-                return '#e0e0e0'; // 灰色底
-              }
-              const colors = this.dataSetWithData?.[i]?.colors;
-              return colors?.[0] ?? DefaultDataColorArray[i % 10][0].color;
-            })
-            .style('opacity', 0), (update) => update, (exit) => exit.transition().duration(300).style('opacity', 0).remove())
-            .transition()
-            .duration(useAnimation ? 500 : 0)
-            .attr('d', arc)
-            .style('opacity', 1);
+        .join(
+          (enter) =>
+            enter
+              .append('path')
+              .attr('class', 'pie-slice')
+              .attr('d', arc)
+              .attr('fill', (d, i) => {
+                // 判斷資料是否全為零，若是則設定為灰色
+                if (isAllZero) {
+                  return '#e0e0e0'; // 灰色底
+                }
+                const colors = this.dataSetWithData?.[i]?.colors;
+                return colors?.[0] ?? DefaultDataColorArray[i % 10][0].color;
+              })
+              .style('opacity', 0),
+          (update) =>
+            update
+              .attr('fill', (d, i) => {
+                // 更新顏色，若資料全為零則顯示灰色
+                if (isAllZero) {
+                  return '#e0e0e0'; // 灰色底
+                }
+                const colors = this.dataSetWithData?.[i]?.colors;
+                return colors?.[0] ?? DefaultDataColorArray[i % 10][0].color;
+              })
+              .attr('d', arc)
+              .style('opacity', 1),
+          (exit) =>
+            exit
+              .transition()
+              .duration(300)
+              .style('opacity', 0)
+              .remove()
+        )
+        .transition()
+        .duration(useAnimation ? 500 : 0)
+        .attr('d', arc)
+        .style('opacity', 1);
         // ----------- Labels -------------
         const labelData = isAllZero ? [] : pieData;
         const labels = this.pieGroup
@@ -3695,6 +3717,8 @@ class RadialFactory extends BasicFactory {
         // Define the radius of the pie chart
         this.radialState.radius = Math.min(this.chart.size.width / 2 - maxWidth - this.radialConfig.labelOffset, this.chart.size.height / 2 - textHeight - this.radialConfig.labelOffset);
         this.radialState.labelSize = { height: textHeight, width: maxWidth };
+
+        this.radialGroup.attr('transform', `translate(${this.chart.size.width / 2},${this.chart.size.height / 2 + 5})`) // 暫時補正5點，之後調整
         this.isFirstUpdate = false;
     }
     clear(useAnimation = false) { }
@@ -3729,10 +3753,12 @@ class PieChart extends RootChart {
         return this.pieFactory;
     }
     drawChart(useAnimation) {
-        this.radialFactory.draw();
+        setTimeout(() => {
+          this.radialFactory.draw();
+        }, 0);
         setTimeout(() => {
             this.pieFactory.draw();
-        }, 0);
+        }, 20);
     }
 }
 

@@ -64,6 +64,7 @@ export class PieChartComponent {
   }
 
   draw() {
+    console.log(this.data)
     this.colorArray = this.data.map((item, index) => {
       let colors: Color;
       if (item.colors) {
@@ -73,6 +74,7 @@ export class PieChartComponent {
       }
       return colors;
     });
+    this.pieChart.setDataSets(this.data);
     this.pieChart.drawChart();
   }
 }

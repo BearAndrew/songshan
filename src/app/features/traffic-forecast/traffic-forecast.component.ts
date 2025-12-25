@@ -322,44 +322,44 @@ export class TrafficForecastComponent {
         // --- Mapping barData ---
         this.barData = [
           {
-            label: '出境預報人數',
-            data: (res.twoDayStatByHour ?? []).map((s: PredictStatByHour) => ({
+            label: '明日預報人數',
+            data: (res.tomorrowStatByHour ?? []).map((s: PredictStatByHour) => ({
               key: s.hour,
               value: s.numOfPax,
             })),
             colors: ['#00d6c8'],
           },
           {
-            label: '入境預報人數',
-            data: (res.tomorrowStatByHour ?? []).map(
+            label: '後日預報人數',
+            data: (res.twoDayStatByHour ?? []).map(
               (s: PredictStatByHour) => ({
                 key: s.hour,
                 value: s.numOfPax,
               })
             ),
-            colors: ['#0279ce'],
+            colors: ['#fbb441'],
           },
         ];
 
         // --- Mapping lineData (實際人數) ---
         this.lineData = [
           {
-            label: '出境實際人數',
-            data: (res.twoDayStatByHour ?? []).map((s: PredictStatByHour) => ({
+            label: '明日預報架次',
+            data: (res.tomorrowStatByHour ?? []).map((s: PredictStatByHour) => ({
               key: s.hour,
-              value: s.numOfPax, // 如果有實際人數欄位，可改成實際
+              value: s.numOfFlight, // 如果有實際人數欄位，可改成實際
             })),
             colors: ['#00d6c8'],
           },
           {
-            label: '入境實際人數',
-            data: (res.tomorrowStatByHour ?? []).map(
+            label: '後日預報架次',
+            data: (res.twoDayStatByHour ?? []).map(
               (s: PredictStatByHour) => ({
                 key: s.hour,
-                value: s.numOfPax,
+                value: s.numOfFlight,
               })
             ),
-            colors: ['#0279ce'],
+            colors: ['#fbb441'],
           },
         ];
 
