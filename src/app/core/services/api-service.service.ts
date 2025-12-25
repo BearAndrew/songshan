@@ -95,8 +95,8 @@ export class ApiService {
   }
 
   /** 即時人流資訊 */
-  getRealTimeTrafficFlow(): Observable<RealTimeTrafficFlowItem[]> {
-    return this.http.get<RealTimeTrafficFlowItem[]>('RealTimeTrafficFlow');
+  getRealTimeTrafficFlow(type: string): Observable<RealTimeTrafficFlowItem[]> {
+    return this.http.get<RealTimeTrafficFlowItem[]>(`RealTimeTrafficFlow/${type}`);
   }
 
   /** 即時人流（行李） */

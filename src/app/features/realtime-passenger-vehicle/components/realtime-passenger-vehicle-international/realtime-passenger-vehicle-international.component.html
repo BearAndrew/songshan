@@ -5,11 +5,12 @@
       @for(checkin of checkinData; track checkin) {
       <ng-container>
         <div class="flex items-end justify-between border-b border-[#888]">
-          <div
-            class="flex items-center justify-center mb-2 w-18 h-10 text-4xl border-2 border-[#298ce1] rounded-xl"
+          <button
+            class="flex items-center justify-center mb-2 w-18 h-10 text-4xl border-2 border-[#298ce1] rounded-xl cursor-pointer"
+            (click)="onItemClick(0, $index)"
           >
-            {{ $index + 1 }}
-          </div>
+            {{ checkin.label }}
+          </button>
           <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
             <span class="text-right text-5xl">{{ checkin.people }}</span>
             <span class="text-center text-xl">人</span>
@@ -28,8 +29,8 @@
       <div class="flex items-center justify-end pr-8 bg-[#3faafc]">
         現場人數
       </div>
-      <div class="flex items-center justify-center bg-[#3faafc]">
-        <img class="w-4 h-4" alt="timer" />
+      <div class="flex items-center justify-center gap-1 bg-[#3faafc]">
+        <img class="w-4 h-4" src="img/real-time/timer.png" alt="timer" />
         <span>平均等候時間</span>
       </div>
     </div>
@@ -42,11 +43,12 @@
         @for(security of securityData; track security) {
         <ng-container>
           <div class="flex items-end justify-between border-b border-[#888]">
-            <div
-              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl"
+            <button
+              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
+              (click)="onItemClick(1, $index)"
             >
               {{ security.label }}
-            </div>
+            </button>
             <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
               <span class="text-right text-5xl">{{ security.people }}</span>
               <span class="text-center text-xl">人</span>
@@ -87,8 +89,8 @@
         <div class="flex items-center justify-end pr-8 bg-[#3faafc]">
           現場人數
         </div>
-        <div class="flex items-center justify-center bg-[#3faafc]">
-          <img class="w-4 h-4" alt="timer" />
+        <div class="flex items-center justify-center gap-1 bg-[#3faafc]">
+          <img class="w-4 h-4" src="img/real-time/timer.png" alt="timer" />
           <span>平均等候時間</span>
         </div>
       </div>
@@ -102,11 +104,12 @@
         @for(departure of departureData; track departure) {
         <ng-container>
           <div class="flex items-end justify-between border-b border-[#888]">
-            <div
-              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl"
+            <button
+              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
+              (click)="onItemClick(3, $index)"
             >
               {{ departure.label }}
-            </div>
+            </button>
             <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
               <span class="text-right text-5xl">{{ departure.people }}</span>
               <span class="text-center text-xl">人</span>
@@ -128,11 +131,12 @@
         @for(arrival of arrivalData; track arrival) {
         <ng-container>
           <div class="flex items-end justify-between border-b border-[#888]">
-            <div
-              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl"
+            <button
+              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
+              (click)="onItemClick(4, $index)"
             >
               {{ arrival.label }}
-            </div>
+            </button>
             <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
               <span class="text-right text-5xl">{{ arrival.people }}</span>
               <span class="text-center text-xl">人</span>
@@ -151,8 +155,8 @@
         <div class="flex items-center justify-end pr-8 bg-[#3faafc]">
           現場人數
         </div>
-        <div class="flex items-center justify-center bg-[#3faafc]">
-          <img class="w-4 h-4" alt="timer" />
+        <div class="flex items-center justify-center gap-1 bg-[#3faafc]">
+          <img class="w-4 h-4" src="img/real-time/timer.png" alt="timer" />
           <span>平均等候時間</span>
         </div>
       </div>

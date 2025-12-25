@@ -3,7 +3,7 @@
     <div class="flex flex-col items-end justify-between h-full">
       <div class="grid grid-cols-3 gap-2 h-fit w-110">
         @for(button of data; track button.label; let i = $index) {
-        <a
+        <button
           class="text-xl text-white text-center rounded-md px-2 py-0.5 cursor-pointer"
           [ngClass]="{
             'bg-[#b2b2b2]': activeIndex !== i,
@@ -11,11 +11,10 @@
             'col-span-3': i === data.length - 1
           }"
           type="button"
-          (click)="activeIndex = i"
-          [routerLink]="button.routerLink"
+          (click)="onTabChange(i)"
         >
           {{ button.label }}
-        </a>
+        </button>
         }
       </div>
 
@@ -25,30 +24,30 @@
     </div>
 
     @if(activeIndex !== data.length - 1) {
-    <div class="flex-1 grid grid-cols-4 gap-2 bg-black p-2 h-full">
+    <div class="flex-1 grid grid-cols-5 gap-2 bg-black p-2 h-full max-h-50 min-h-50">
       @for (group of locationGroups; track group.locationName) {
 
-      <div class="relative bg-black">
+      <div class="relative bg-blackl h-46">
         <!-- 左上：locationName -->
         <label
           class="absolute left-0 top-0 z-10 px-1 text-xs text-[#ccc] bg-black"
         >
-          {{ group.locationName }}
+          {{ group.locationName }} {{ group.images[group.currentIndex]?.label }}
         </label>
 
         <!-- 當前圖片 -->
         @if (getCurrentImage(group)) {
         <img
-          class="w-full h-auto"
-          [src]="'data:image/png;base64,' + getCurrentImage(group)"
+          class="w-full h-full object-cover"
+          [src]="getCurrentImage(group)"
           alt="camera"
         />
         }
 
         <!-- 左下角 icon -->
         <img
-          class="absolute left-0 bottom-0 w-4 h-4"
-          src="img/camera-icon.png"
+          class="absolute left-1 bottom-1 w-6"
+          src="img/real-time/camera.png"
           alt="camera-icon"
         />
       </div>

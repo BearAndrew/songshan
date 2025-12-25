@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { RealTimeTrafficFlowItem, RealTimeTrafficPoint } from '../../../../models/real-time-traffic-flow.model';
+import { Subject, takeUntil } from 'rxjs';
+import { RealTimeService } from '../../services/real-time.service';
 
 @Component({
   selector: 'app-realtime-passenger-vehicle-domestic',
@@ -7,5 +10,43 @@ import { Component } from '@angular/core';
   styleUrl: './realtime-passenger-vehicle-domestic.component.scss',
 })
 export class RealtimePassengerVehicleDomesticComponent {
+  data1 = [{ label: '', people: 11, time: 1.7 }];
 
+  data2 = [{ label: '', people: 11, time: 1.7 }];
+
+  data3 = [{ label: '', people: 11, time: 1.7 }];
+
+  private destroy$ = new Subject<void>();
+
+  constructor(private realTimeService: RealTimeService) {}
+
+  ngOnInit(): void {
+    this.realTimeService.realTimeData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items) => {
+        if (!items || items.length < 3) return;
+        this.mapRealTimeToViewData(items);
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private mapRealTimeToViewData(items: RealTimeTrafficFlowItem[]) {
+    const safe = (i: number) => items[i]?.data ?? [];
+
+    this.data1 = this.mapPoints(safe(0));
+    this.data2 = this.mapPoints(safe(1));
+    this.data3 = this.mapPoints(safe(2));
+  }
+
+  private mapPoints(points: RealTimeTrafficPoint[]) {
+    return points.map((p) => ({
+      label: p.label ?? '',
+      people: p.population ??  0,
+      time: p.waitTime ?? 0,
+    }));
+  }
 }
