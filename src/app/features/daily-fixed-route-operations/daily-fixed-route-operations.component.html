@@ -1,60 +1,58 @@
-<div class="flex flex-col gap-4 w-full h-full">
-  <div class="card flex flex-1 gap-2 p-4 w-full h-0">
-    <div class="flex flex-col gap-2 w-full">
+<div class="flex flex-col gap-4 w-full h-fit sm:h-full">
+  <div class="card flex flex-col sm:flex-row flex-1 gap-6 p-3 sm:p-4 w-full h-auto sm:h-0">
+    <div class="flex flex-col gap-4 w-full sm:w-1/2">
       <div class="flex items-center gap-2">
-        <h2 class="text-3xl">國際航線</h2>
-        <img class="h-10" src="img/daily-fixed-route-operations/icon-1.png">
+        <h2 class="text-xl sm:text-3xl">國際航線</h2>
+        <img class="h-8 sm:h-10" src="img/daily-fixed-route-operations/icon-1.png">
       </div>
 
       <app-daily-fixed-route-operations-table
-        class="flex-1 pr-5"
+        class="flex-1 w-full pr-0 sm:pr-5"
         [header]="['出境', '入境', '總數']"
         [data]="foreignLineData"
         [isShowSideHeader]="true"
       ></app-daily-fixed-route-operations-table>
     </div>
 
-    <div class="flex flex-col gap-2 w-full">
+    <div class="flex flex-col gap-4 w-full sm:w-1/2">
       <div class="flex items-center gap-2">
-        <h2 class="text-3xl">兩岸航線</h2>
-        <img class="h-10" src="img/daily-fixed-route-operations/icon-2.png">
+        <h2 class="text-xl sm:text-3xl">兩岸航線</h2>
+        <img class="h-8 sm:h-10" src="img/daily-fixed-route-operations/icon-2.png">
       </div>
 
       <app-daily-fixed-route-operations-table
-        class="flex-1"
+        class="flex-1 w-full"
         [header]="['出境', '入境', '總數']"
         [data]="crossStraitLineData"
-        [isShowSideHeader]="false"
+        [isShowSideHeader]="isMobile"
       ></app-daily-fixed-route-operations-table>
     </div>
   </div>
 
-  <div class="flex flex-1 items-center gap-4 w-full h-0">
-    <div class="card flex flex-1 flex-col gap-2 p-4 w-full h-full">
+  <div class="flex flex-col sm:flex-row flex-1 items-start sm:items-center gap-4 w-full h-auto sm:h-0">
+    <div class="card flex flex-col flex-1 gap-4 p-3 sm:p-4 w-full h-auto sm:h-full">
       <div class="flex items-center gap-2">
-        <h2 class="text-3xl">國內航線</h2>
-        <img class="h-10" src="img/daily-fixed-route-operations/icon-3.png">
+        <h2 class="text-xl sm:text-3xl">國內航線</h2>
+        <img class="h-8 sm:h-10" src="img/daily-fixed-route-operations/icon-3.png">
       </div>
 
       <app-daily-fixed-route-operations-table
-        class="flex-1"
+        class="flex-1 w-full"
         [header]="['到站', '離站', '總數']"
         [data]="domesticLineData"
         [isShowSideHeader]="true"
       ></app-daily-fixed-route-operations-table>
     </div>
 
-    <div
-      class="card flex flex-1 items-center gap-2 p-4 w-full h-full"
-    >
-      <div class="flex flex-1 flex-col items-center gap-2 h-full">
-        <h2 class="text-3xl">當日總航班數</h2>
-        <app-pie-chart class="flex-1 min-h-0 w-full" [data]="flightData" [centerLabel]="flightTotal"></app-pie-chart>
+    <div class="card flex flex-col sm:flex-row flex-1 gap-2 p-3 sm:p-4 w-full sm:w-0 h-auto sm:h-full">
+      <div class="flex flex-col items-center gap-2 w-full sm:flex-1 h-auto sm:h-full">
+        <h2 class="text-xl sm:text-3xl">當日總航班數</h2>
+        <app-pie-chart class="flex-1 min-h-[180px] min-h-0 w-full" [data]="flightData" [centerLabel]="flightTotal"></app-pie-chart>
       </div>
 
-      <div class="flex flex-1 flex-col items-center gap-2 h-full">
-        <h2 class="text-3xl">當日總遊客數</h2>
-        <app-pie-chart class="flex-1 min-h-0 w-full" [data]="passengerData" [centerLabel]="passengerTotal"></app-pie-chart>
+      <div class="flex flex-col items-center gap-2 w-full sm:flex-1 h-auto sm:h-full">
+        <h2 class="text-xl sm:text-3xl">當日總遊客數</h2>
+        <app-pie-chart class="flex-1 min-h-[180px] min-h-0 w-full" [data]="passengerData" [centerLabel]="passengerTotal"></app-pie-chart>
       </div>
     </div>
   </div>

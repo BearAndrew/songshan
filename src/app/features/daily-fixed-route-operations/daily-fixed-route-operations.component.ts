@@ -42,12 +42,18 @@ export class DailyFixedRouteOperationsComponent {
   flightTotal: number = 0;
   passengerTotal: number = 0;
 
+  isMobile = false;
+
   constructor(
     private apiService: ApiService,
     private commonService: CommonService
   ) {
     //預設取得不分機場總數
     this.getTodayStatus();
+
+    this.commonService.observeScreenSize().subscribe((size) => {
+      this.isMobile = size == 'sm';
+    });
 
     // this.commonService.getSelectedAirport().subscribe(airportId => {
     //   // 根據選擇的機場ID執行相應的操作，例如重新載入資料

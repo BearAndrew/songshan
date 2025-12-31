@@ -3,7 +3,9 @@
 </div> -->
 
 <div class="header flex items-center justify-between p-4" [ngClass]="theme">
-  <div class="flex items-center gap-2 relative z-10">
+  <div
+    class="flex flex-row-reverse sm:flex-row items-center justify-between gap-2 relative w-full sm:w-fit z-10"
+  >
     <!-- 按鈕 -->
     <button
       #menuTrigger="cdkOverlayOrigin"
@@ -36,12 +38,24 @@
       </div>
     </ng-template>
 
-    <h1 class="text-[50px] font-bold leading-none">{{ title }}</h1>
+    <h1 class="text-2xl sm:!text-[50px] font-bold leading-none">{{ title }}</h1>
   </div>
 
+  <div class="hidden sm:block w-60 z-20">
+    <ng-container [ngTemplateOutlet]="dropdown"></ng-container>
+  </div>
+</div>
+
+<div class="flex w-full bg-[#191919] px-4 pt-2 sm:hidden">
+  <div class="self-end ml-auto w-60 z-20">
+    <ng-container [ngTemplateOutlet]="dropdown"></ng-container>
+  </div>
+</div>
+
+<ng-template #dropdown>
   @if (isTrafficAnalysisRoute()) {
   <app-dropdown
-    class="w-60 z-20"
+    class=""
     [options]="flightTypeList"
     [value]="'ALL'"
     [showIcon]="true"
@@ -49,10 +63,10 @@
   ></app-dropdown>
   } @else {
   <app-dropdown
-    class="w-60 z-20"
+    class=""
     [options]="airportList"
     [value]="-1"
     [showIcon]="true"
   ></app-dropdown>
   }
-</div>
+</ng-template>

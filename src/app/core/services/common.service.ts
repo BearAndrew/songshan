@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, fromEvent, map, startWith } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +45,24 @@ export class CommonService {
   getAirportCodeById(airportId: number): string {
     const airport = this.airportList.find((a) => a.value === airportId);
     return airport ? airport.code : '';
+  }
+
+  observeScreenSize() {
+    return fromEvent(window, 'resize').pipe(
+      startWith(null),
+      map(() => {
+        const width = window.innerWidth;
+
+        if (width < 640) {
+          return 'sm';
+        }
+
+        if (width >= 1024) {
+          return 'lg';
+        }
+
+        return 'md';
+      })
+    );
   }
 }

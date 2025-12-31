@@ -4,7 +4,7 @@
 /* 外層容器：左邊橘色（背景）、右邊黑色區塊容器 */
 .header {
   /* pl-[56px] → 左內距 56px（黑色區域內文向右偏移）*/
-  @apply w-full h-fit relative overflow-hidden bg-orange-400 pl-[80px];
+  @apply w-full h-fit relative overflow-hidden bg-orange-400 pl-12 sm:pl-[80px];
 
   /* dark 模式 */
   &.dark {

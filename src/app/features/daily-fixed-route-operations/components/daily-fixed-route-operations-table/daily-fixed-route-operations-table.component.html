@@ -1,4 +1,4 @@
-<div class="flex items-center gap-4 w-full h-full pl-20">
+<div class="flex items-center gap-4 w-full h-full sm:pl-20">
   @if (isShowSideHeader) {
   <div class="flex flex-col h-full pt-12 justify-around items-center text-xl">
     <span>航班數</span>
@@ -8,7 +8,7 @@
 
   <div class="flex flex-col flex-1 h-full">
     <div
-      class="grid grid-cols-3 items-center h-12 bg-[#334f8a] rounded-xl text-2xl text-center font-semibold"
+      class="grid grid-cols-3 items-center h-9 sm:h-12 bg-[#334f8a] rounded-xl text-lg sm:text-2xl text-center font-semibold"
     >
       @for (item of header; track $index) {
       <div>{{ item }}</div>
@@ -17,7 +17,7 @@
 
     @for (item of data; track item; let i = $index) {
     <div
-      class="flex-1 items-center grid grid-cols-3 text-[50px] font-bold leading-none text-center"
+      class="flex-1 items-center grid grid-cols-3 text-4xl sm:text-[50px] py-2 sm:py-0 font-bold leading-none text-center"
       [ngClass]="{ 'border-b border-gray-300': i !== data.length - 1 }"
     >
       <div>{{ item.out }}</div>
