@@ -42,7 +42,7 @@
       @for (item of displayData.info; let i = $index; track
       item) {
       <div
-        class="grid grid-cols-5 h-6 items-center text-sm text-center"
+        class="grid grid-cols-5 items-center text-sm text-center"
         [ngClass]="i % 2 === 1 ? 'bg-[#535353]' : 'bg-transparent'"
       >
         <div class="p-0.5">{{ item.flightNumber }}</div>

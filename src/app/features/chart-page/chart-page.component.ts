@@ -49,98 +49,79 @@ export class ChartPageComponent {
 
   barData: DataSetWithDataArray[] = [
     {
-      label: '出境預報人數',
-      data: [
-        { key: '0600', value: 120 },
-        { key: '0700', value: 340 },
-        { key: '0800', value: 220 },
-        { key: '0900', value: 480 },
-        { key: '1000', value: 150 },
-        { key: '1100', value: 390 },
-        { key: '1200', value: 560 },
-        { key: '1300', value: 310 },
-        { key: '1400', value: 420 },
-        { key: '1500', value: 260 },
-        { key: '1600', value: 500 },
-        { key: '1700', value: 180 },
-        { key: '1800', value: 600 },
-        { key: '1900', value: 270 },
-        { key: '2000', value: 430 },
-        { key: '2100', value: 350 },
-        { key: '2200', value: 290 },
-      ],
-      colors: ['#00d6c8'],
-    },
-    {
       label: '入境預報人數',
       data: [
-        { key: '0600', value: 80 },
-        { key: '0700', value: 260 },
-        { key: '0800', value: 310 },
-        { key: '0900', value: 450 },
-        { key: '1000', value: 190 },
-        { key: '1100', value: 420 },
-        { key: '1200', value: 530 },
-        { key: '1300', value: 280 },
-        { key: '1400', value: 390 },
-        { key: '1500', value: 240 },
-        { key: '1600', value: 470 },
-        { key: '1700', value: 210 },
-        { key: '1800', value: 580 },
-        { key: '1900', value: 300 },
-        { key: '2000', value: 410 },
-        { key: '2100', value: 360 },
-        { key: '2200', value: 250 },
+        { key: 'Jan', value: 320 },
+        { key: 'Feb', value: 280 },
+        { key: 'Mar', value: 350 },
+        { key: 'Apr', value: 420 },
+        { key: 'May', value: 460 },
+        { key: 'Jun', value: 510 },
+        { key: 'Jul', value: 580 },
+        { key: 'Aug', value: 600 },
+        { key: 'Sep', value: 470 },
+        { key: 'Oct', value: 430 },
+        { key: 'Nov', value: 390 },
+        { key: 'Dec', value: 410 },
       ],
       colors: ['#0279ce'],
     },
-  ];
-  lineData: DataSetWithDataArray[] = [
     {
-      label: '出境實際人數',
+      label: '2019年人數',
       data: [
-        { key: '0600', value: 140 },
-        { key: '0700', value: 320 },
-        { key: '0800', value: 200 },
-        { key: '0900', value: 510 },
-        { key: '1000', value: 170 },
-        { key: '1100', value: 360 },
-        { key: '1200', value: 600 },
-        { key: '1300', value: 330 },
-        { key: '1400', value: 450 },
-        { key: '1500', value: 290 },
-        { key: '1600', value: 520 },
-        { key: '1700', value: 160 },
-        { key: '1800', value: 590 },
-        { key: '1900', value: 260 },
-        { key: '2000', value: 440 },
-        { key: '2100', value: 380 },
-        { key: '2200', value: 310 },
+        { key: 'Jan', value: 300 },
+        { key: 'Feb', value: 260 },
+        { key: 'Mar', value: 330 },
+        { key: 'Apr', value: 400 },
+        { key: 'May', value: 440 },
+        { key: 'Jun', value: 490 },
+        { key: 'Jul', value: 560 },
+        { key: 'Aug', value: 590 },
+        { key: 'Sep', value: 450 },
+        { key: 'Oct', value: 420 },
+        { key: 'Nov', value: 370 },
+        { key: 'Dec', value: 390 },
       ],
-      colors: ['#00d6c8'],
+      colors: ['#f08622'],
     },
+  ];
+
+  lineData: DataSetWithDataArray[] = [
     {
       label: '入境實際人數',
       data: [
-        { key: '0600', value: 60 },
-        { key: '0700', value: 300 },
-        { key: '0800', value: 250 },
-        { key: '0900', value: 470 },
-        { key: '1000', value: 130 },
-        { key: '1100', value: 410 },
-        { key: '1200', value: 540 },
-        { key: '1300', value: 290 },
-        { key: '1400', value: 400 },
-        { key: '1500', value: 230 },
-        { key: '1600', value: 490 },
-        { key: '1700', value: 200 },
-        { key: '1800', value: 570 },
-        { key: '1900', value: 280 },
-        { key: '2000', value: 420 },
-        { key: '2100', value: 340 },
-        { key: '2200', value: 270 },
+        { key: 'Jan', value: 300 },
+        { key: 'Feb', value: 270 },
+        { key: 'Mar', value: 340 },
+        { key: 'Apr', value: 410 },
+        { key: 'May', value: 450 },
+        { key: 'Jun', value: 500 },
+        { key: 'Jul', value: 570 },
+        { key: 'Aug', value: 590 },
+        { key: 'Sep', value: 460 },
+        { key: 'Oct', value: 430 },
+        { key: 'Nov', value: 380 },
+        { key: 'Dec', value: 400 },
       ],
       colors: ['#0279ce'],
+    },
+    {
+      label: '2019年架次',
+      data: [
+        { key: 'Jan', value: 280 },
+        { key: 'Feb', value: 250 },
+        { key: 'Mar', value: 320 },
+        { key: 'Apr', value: 390 },
+        { key: 'May', value: 430 },
+        { key: 'Jun', value: 480 },
+        { key: 'Jul', value: 550 },
+        { key: 'Aug', value: 580 },
+        { key: 'Sep', value: 440 },
+        { key: 'Oct', value: 410 },
+        { key: 'Nov', value: 360 },
+        { key: 'Dec', value: 380 },
+      ],
+      colors: ['#f08622'],
     },
   ];
 
@@ -299,10 +280,13 @@ export class ChartPageComponent {
       .filter(([_, val]) => val === null)
       .map(([key]) => key);
 
-    if (emptyFields.length > 0) {
-      console.warn('請填寫完整資料', emptyFields);
-      return;
-    }
+    // if (emptyFields.length > 0) {
+    //   console.warn('請填寫完整資料', emptyFields);
+    //   return;
+    // }
+
+    this.fakeData();
+    return;
 
     // 組裝 API payload
     const payload: FlightTrafficAnalysisRequest = {
@@ -334,17 +318,17 @@ export class ChartPageComponent {
         this.barData = [
           {
             label: '出境預報人數',
-            data: res.statByHour.map(item => ({
-              key: item.hour.replace(':', ''), // 轉成 '0600' 格式
-              value: item.numOfPax, // 假設預報人數用 numOfPax
+            data: res.statByHour.map((item) => ({
+              key: item.hour.replace(':', ''),
+              value: item.numOfPax,
             })),
             colors: ['#00d6c8'],
           },
           {
             label: '入境預報人數',
-            data: res.statByHour.map(item => ({
+            data: res.statByHour.map((item) => ({
               key: item.hour.replace(':', ''),
-              value: item.numOfPax, // 如果有區分 inbound/outbound，這裡要分
+              value: item.numOfPax,
             })),
             colors: ['#0279ce'],
           },
@@ -354,25 +338,53 @@ export class ChartPageComponent {
         this.lineData = [
           {
             label: '出境實際人數',
-            data: res.statByHour.map(item => ({
+            data: res.statByHour.map((item) => ({
               key: item.hour.replace(':', ''),
-              value: item.numOfPax, // 如果有實際人數字段，就用實際人數
+              value: item.numOfPax,
             })),
             colors: ['#00d6c8'],
           },
           {
             label: '入境實際人數',
-            data: res.statByHour.map(item => ({
+            data: res.statByHour.map((item) => ({
               key: item.hour.replace(':', ''),
-              value: item.numOfPax, // 同上
+              value: item.numOfPax,
             })),
             colors: ['#0279ce'],
           },
         ];
       },
-      error: err => {
+      error: (err) => {
         console.error('取得資料失敗', err);
       },
+    });
+  }
+
+  fakeData() {
+    const fakeKeys = Array.from(
+      { length: 12 },
+      (_, i) => `2019/${(i + 1).toString().padStart(2, '0')}`
+    );
+
+    // ===== BAR DATA =====
+    this.barData.forEach((dataset) => {
+      const fakeItems = fakeKeys.map((key) => ({
+        key,
+        value: Math.floor(Math.random() * 500) + 100, // 100~600
+      }));
+
+      // 用 unshift 加到最前面
+      dataset.data.unshift(...fakeItems);
+    });
+
+    // ===== LINE DATA =====
+    this.lineData.forEach((dataset) => {
+      const fakeItems = fakeKeys.map((key) => ({
+        key,
+        value: Math.floor(Math.random() * 470) + 80, // 80~550
+      }));
+
+      dataset.data.unshift(...fakeItems);
     });
   }
 }
