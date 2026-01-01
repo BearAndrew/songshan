@@ -1,7 +1,7 @@
-<h3 class="text-xl">航班狀況</h3>
+<h3 class="text-lg sm:text-xl">航班狀況</h3>
 <div class="flex flex-col gap-2 h-full">
   <div class="flex gap-2 items-center w-full h-full">
-    <h4 class="text-xl [writing-mode:vertical-rl]">
+    <h4 class="hidden sm:block text-xl [writing-mode:vertical-rl]">
       {{
         activeIndex !== data.length - 1
           ? data[activeIndex].label.slice(0, -1)
@@ -17,7 +17,7 @@
     ></app-css-bar-chart>
   </div>
   <div class="flex gap-2 items-center w-full h-full">
-    <h4 class="text-xl [writing-mode:vertical-rl]">
+    <h4 class="hidden sm:block text-xl [writing-mode:vertical-rl]">
       {{
         activeIndex !== data.length - 1
           ? data[activeIndex].label.slice(0, -1)

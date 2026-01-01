@@ -1,7 +1,7 @@
-<div class="flex relative">
-  <h3 class="text-xl">航班延誤數據</h3>
+<div class="flex flex-col sm:flex-row gap-y-4 relative">
+  <h3 class="text-lg sm:text-xl">航班延誤數據</h3>
   <div
-    class="flex justify-center gap-2 absolute left-1/2 -translate-x-1/2"
+    class="flex justify-center gap-2 sm:absolute sm:left-1/2 sm:-translate-x-1/2"
   >
     @for(item of outboundData; track $index;) {
     <div class="flex items-center gap-2">
@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div class="flex flex-1 gap-4 min-h-0">
+<div class="flex flex-1 flex-col sm:flex-row gap-4 min-h-0">
   <div class="flex flex-col flex-1 min-w-0">
     @if(outboundData.length > 0) {
     <app-pie-chart

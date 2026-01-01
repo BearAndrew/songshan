@@ -4,7 +4,10 @@ import { DailyFlightAnalysisFlightCardComponent } from './components/daily-fligh
 import { DailyFlightAnalysisDelayCardComponent } from './components/daily-flight-analysis-delay-card/daily-flight-analysis-delay-card.component';
 import { DailyFlightAnalysisDelayPieChartCardComponent } from './components/daily-flight-analysis-delay-pie-chart-card/daily-flight-analysis-delay-pie-chart-card.component';
 import { DailyFlightAnalysisAbnormalCardComponent } from './components/daily-flight-analysis-abnormal-card/daily-flight-analysis-abnormal-card.component';
-import { DailyFlightAnalysisAbnormalData, DailyFlightAnalysisData } from '../../core/interface/daily-flight-analysis.interface';
+import {
+  DailyFlightAnalysisAbnormalData,
+  DailyFlightAnalysisData,
+} from '../../core/interface/daily-flight-analysis.interface';
 import { DailyFlightAnalysisBarlineChartCardComponent } from './components/daily-flight-analysis-barline-chart-card/daily-flight-analysis-barline-chart-card.component';
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
@@ -14,6 +17,8 @@ import {
   DataSetWithData,
   DataSetWithDataArray,
 } from '../../core/lib/chart-tool';
+import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
+import { Option } from '../../shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-daily-flight-analysis',
@@ -24,6 +29,7 @@ import {
     DailyFlightAnalysisDelayPieChartCardComponent,
     DailyFlightAnalysisAbnormalCardComponent,
     DailyFlightAnalysisBarlineChartCardComponent,
+    DropdownComponent,
   ],
   templateUrl: './daily-flight-analysis.component.html',
   styleUrl: './daily-flight-analysis.component.scss',
@@ -102,6 +108,29 @@ export class DailyFlightAnalysisComponent {
     },
   ];
 
+  mobileOptions: Option[] = [
+    {
+      label: '國際兩岸線',
+      value: 0,
+    },
+    {
+      label: '國際線',
+      value: 1,
+    },
+    {
+      label: '兩岸線',
+      value: 2,
+    },
+    {
+      label: '國內線',
+      value: 3,
+    },
+    {
+      label: '總數',
+      value: 4,
+    },
+  ];
+
   // 圓餅圖下方資訊
   pieCharData: {
     inFlight: number;
@@ -131,8 +160,8 @@ export class DailyFlightAnalysisComponent {
   outboundBarData: DataSetWithDataArray[] = [];
   outboundLineData: DataSetWithDataArray[] = [];
 
-  abnormalInData: DailyFlightAnalysisAbnormalData = {info: [], top3: []};
-  abnormalOutData: DailyFlightAnalysisAbnormalData = {info: [], top3: []};
+  abnormalInData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
+  abnormalOutData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
 
   constructor(
     private apiService: ApiService,
