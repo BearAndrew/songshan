@@ -29,6 +29,7 @@ export class DropdownComponent {
   @Input() value: any;
   @Input() placeholder = ' ';
   @Input() showIcon: boolean = false;
+  @Input() disabeld: boolean = false;
   @Output() selectionChange = new EventEmitter<Option>();
 
   @ViewChild('dropdownTrigger') trigger!: ElementRef;
@@ -54,6 +55,7 @@ export class DropdownComponent {
   }
 
   toggle() {
+    if(this.disabeld) return;
     this.overlayRef ? this.close() : this.open();
   }
 

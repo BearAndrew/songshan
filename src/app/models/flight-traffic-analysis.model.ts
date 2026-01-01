@@ -13,7 +13,6 @@ export interface FlightTrafficAnalysisRequest {
 }
 
 
-
 export interface FlightTrafficAnalysisResponse {
   statByHour: StatByHour[];
   totalFlight: number;

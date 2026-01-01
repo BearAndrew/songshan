@@ -48,81 +48,81 @@ export class ChartPageComponent {
   ];
 
   barData: DataSetWithDataArray[] = [
-    {
-      label: '入境預報人數',
-      data: [
-        { key: 'Jan', value: 320 },
-        { key: 'Feb', value: 280 },
-        { key: 'Mar', value: 350 },
-        { key: 'Apr', value: 420 },
-        { key: 'May', value: 460 },
-        { key: 'Jun', value: 510 },
-        { key: 'Jul', value: 580 },
-        { key: 'Aug', value: 600 },
-        { key: 'Sep', value: 470 },
-        { key: 'Oct', value: 430 },
-        { key: 'Nov', value: 390 },
-        { key: 'Dec', value: 410 },
-      ],
-      colors: ['#0279ce'],
-    },
-    {
-      label: '2019年人數',
-      data: [
-        { key: 'Jan', value: 300 },
-        { key: 'Feb', value: 260 },
-        { key: 'Mar', value: 330 },
-        { key: 'Apr', value: 400 },
-        { key: 'May', value: 440 },
-        { key: 'Jun', value: 490 },
-        { key: 'Jul', value: 560 },
-        { key: 'Aug', value: 590 },
-        { key: 'Sep', value: 450 },
-        { key: 'Oct', value: 420 },
-        { key: 'Nov', value: 370 },
-        { key: 'Dec', value: 390 },
-      ],
-      colors: ['#f08622'],
-    },
+    // {
+    //   label: '年人數',
+    //   data: [
+    //     { key: 'Jan', value: 320 },
+    //     { key: 'Feb', value: 280 },
+    //     { key: 'Mar', value: 350 },
+    //     { key: 'Apr', value: 420 },
+    //     { key: 'May', value: 460 },
+    //     { key: 'Jun', value: 510 },
+    //     { key: 'Jul', value: 580 },
+    //     { key: 'Aug', value: 600 },
+    //     { key: 'Sep', value: 470 },
+    //     { key: 'Oct', value: 430 },
+    //     { key: 'Nov', value: 390 },
+    //     { key: 'Dec', value: 410 },
+    //   ],
+    //   colors: ['#0279ce'],
+    // },
+    // {
+    //   label: '2019年人數',
+    //   data: [
+    //     { key: 'Jan', value: 300 },
+    //     { key: 'Feb', value: 260 },
+    //     { key: 'Mar', value: 330 },
+    //     { key: 'Apr', value: 400 },
+    //     { key: 'May', value: 440 },
+    //     { key: 'Jun', value: 490 },
+    //     { key: 'Jul', value: 560 },
+    //     { key: 'Aug', value: 590 },
+    //     { key: 'Sep', value: 450 },
+    //     { key: 'Oct', value: 420 },
+    //     { key: 'Nov', value: 370 },
+    //     { key: 'Dec', value: 390 },
+    //   ],
+    //   colors: ['#f08622'],
+    // },
   ];
 
   lineData: DataSetWithDataArray[] = [
-    {
-      label: '入境實際人數',
-      data: [
-        { key: 'Jan', value: 300 },
-        { key: 'Feb', value: 270 },
-        { key: 'Mar', value: 340 },
-        { key: 'Apr', value: 410 },
-        { key: 'May', value: 450 },
-        { key: 'Jun', value: 500 },
-        { key: 'Jul', value: 570 },
-        { key: 'Aug', value: 590 },
-        { key: 'Sep', value: 460 },
-        { key: 'Oct', value: 430 },
-        { key: 'Nov', value: 380 },
-        { key: 'Dec', value: 400 },
-      ],
-      colors: ['#0279ce'],
-    },
-    {
-      label: '2019年架次',
-      data: [
-        { key: 'Jan', value: 280 },
-        { key: 'Feb', value: 250 },
-        { key: 'Mar', value: 320 },
-        { key: 'Apr', value: 390 },
-        { key: 'May', value: 430 },
-        { key: 'Jun', value: 480 },
-        { key: 'Jul', value: 550 },
-        { key: 'Aug', value: 580 },
-        { key: 'Sep', value: 440 },
-        { key: 'Oct', value: 410 },
-        { key: 'Nov', value: 360 },
-        { key: 'Dec', value: 380 },
-      ],
-      colors: ['#f08622'],
-    },
+    // {
+    //   label: '年架次',
+    //   data: [
+    //     { key: 'Jan', value: 300 },
+    //     { key: 'Feb', value: 270 },
+    //     { key: 'Mar', value: 340 },
+    //     { key: 'Apr', value: 410 },
+    //     { key: 'May', value: 450 },
+    //     { key: 'Jun', value: 500 },
+    //     { key: 'Jul', value: 570 },
+    //     { key: 'Aug', value: 590 },
+    //     { key: 'Sep', value: 460 },
+    //     { key: 'Oct', value: 430 },
+    //     { key: 'Nov', value: 380 },
+    //     { key: 'Dec', value: 400 },
+    //   ],
+    //   colors: ['#0279ce'],
+    // },
+    // {
+    //   label: '2019年架次',
+    //   data: [
+    //     { key: 'Jan', value: 280 },
+    //     { key: 'Feb', value: 250 },
+    //     { key: 'Mar', value: 320 },
+    //     { key: 'Apr', value: 390 },
+    //     { key: 'May', value: 430 },
+    //     { key: 'Jun', value: 480 },
+    //     { key: 'Jul', value: 550 },
+    //     { key: 'Aug', value: 580 },
+    //     { key: 'Sep', value: 440 },
+    //     { key: 'Oct', value: 410 },
+    //     { key: 'Nov', value: 360 },
+    //     { key: 'Dec', value: 380 },
+    //   ],
+    //   colors: ['#f08622'],
+    // },
   ];
 
   // 年、月、日 options
@@ -137,8 +137,10 @@ export class ChartPageComponent {
   airlineOptions: Option[] = [];
 
   flightClassOptions: Option[] = [
-    { label: '商務艙', value: 'business' },
-    { label: '經濟艙', value: 'economy' },
+    { label: '定航', value: 'SCHEDULE' },
+    { label: '商務機', value: 'BJ' },
+    { label: '軍機', value: 'MILITARY' },
+    { label: '其他', value: 'OTHER' },
   ];
 
   flightTypeOptions: Option[] = [
@@ -147,6 +149,9 @@ export class ChartPageComponent {
   ];
 
   type: string = '';
+  totalFlight: number = 0;
+  totalPax: number = 0;
+  dateRangeLabel = '';
 
   // 目前表單值
   formData: {
@@ -285,23 +290,18 @@ export class ChartPageComponent {
     //   return;
     // }
 
-    this.fakeData();
-    return;
-
     // 組裝 API payload
     const payload: FlightTrafficAnalysisRequest = {
-      dateFrom: `${this.formData.startYear}-${String(
-        this.formData.startMonth
-      ).padStart(2, '0')}-${String(this.formData.startDay).padStart(
-        2,
-        '0'
-      )} 00:00:00`,
-      dateTo: `${this.formData.endYear}-${String(
-        this.formData.endMonth
-      ).padStart(2, '0')}-${String(this.formData.endDay).padStart(
-        2,
-        '0'
-      )} 23:59:59`,
+      dateFrom: this.formatDate(
+        this.formData.startYear,
+        this.formData.startMonth,
+        this.formData.startDay
+      ),
+      dateTo: this.formatDate(
+        this.formData.endYear,
+        this.formData.endMonth,
+        this.formData.endDay
+      ),
       type: this.type as FlightTrafficType,
       airline: this.formData.airline!,
       direction: this.formData.flightType as FlightDirection,
@@ -309,50 +309,58 @@ export class ChartPageComponent {
       flightType: this.formData.flightType as FlightType,
     };
 
+    console.log(payload);
+
+    // this.fakeData();
+    // return;
+
     // 呼叫 API
     this.apiService.postFlightTrafficAnalysis(payload).subscribe({
       next: (res: FlightTrafficAnalysisResponse) => {
         console.log('取得資料成功', res);
 
-        // -------- 對應 barData --------
+        this.dateRangeLabel = this.buildDateRangeLabel();
+
         this.barData = [
           {
-            label: '出境預報人數',
-            data: res.statByHour.map((item) => ({
-              key: item.hour.replace(':', ''),
-              value: item.numOfPax,
-            })),
-            colors: ['#00d6c8'],
-          },
-          {
-            label: '入境預報人數',
+            label: `${this.dateRangeLabel}（人數）`,
             data: res.statByHour.map((item) => ({
               key: item.hour.replace(':', ''),
               value: item.numOfPax,
             })),
             colors: ['#0279ce'],
+          },
+          {
+            label: '2019年人數',
+            data: res.statByHour.map((item) => ({
+              key: item.hour.replace(':', ''),
+              value: item.numOfPax,
+            })),
+            colors: ['#f08622'],
           },
         ];
 
-        // -------- 對應 lineData --------
         this.lineData = [
           {
-            label: '出境實際人數',
-            data: res.statByHour.map((item) => ({
-              key: item.hour.replace(':', ''),
-              value: item.numOfPax,
-            })),
-            colors: ['#00d6c8'],
-          },
-          {
-            label: '入境實際人數',
+            label: `${this.dateRangeLabel}（架次）`,
             data: res.statByHour.map((item) => ({
               key: item.hour.replace(':', ''),
               value: item.numOfPax,
             })),
             colors: ['#0279ce'],
           },
+          {
+            label: '2019年架次',
+            data: res.statByHour.map((item) => ({
+              key: item.hour.replace(':', ''),
+              value: item.numOfPax,
+            })),
+            colors: ['#f08622'],
+          },
         ];
+
+        this.totalFlight = res.totalFlight;
+        this.totalPax = res.totalPax;
       },
       error: (err) => {
         console.error('取得資料失敗', err);
@@ -360,31 +368,122 @@ export class ChartPageComponent {
     });
   }
 
-  fakeData() {
-    const fakeKeys = Array.from(
-      { length: 12 },
-      (_, i) => `2019/${(i + 1).toString().padStart(2, '0')}`
+  private formatDisplayDate(
+    year?: number|null,
+    month?: number|null,
+    day?: number|null
+  ): string {
+    if (!year) return '';
+
+    // 年
+    let result = `${year}年`;
+
+    // 月
+    if (month) {
+      result += `${month}月`;
+    } else {
+      return result;
+    }
+
+    // 日
+    if (day) {
+      result += `${day}日`;
+    }
+    console.log(result);
+    return result;
+  }
+
+  private buildDateRangeLabel(): string {
+    const start = this.formatDisplayDate(
+      this.formData.startYear,
+      this.formData.startMonth,
+      this.formData.startDay
     );
 
-    // ===== BAR DATA =====
-    this.barData.forEach((dataset) => {
-      const fakeItems = fakeKeys.map((key) => ({
-        key,
-        value: Math.floor(Math.random() * 500) + 100, // 100~600
-      }));
+    const end = this.formatDisplayDate(
+      this.formData.endYear,
+      this.formData.endMonth,
+      this.formData.endDay
+    );
 
-      // 用 unshift 加到最前面
-      dataset.data.unshift(...fakeItems);
-    });
+    if (start && end) {
+      return `${start}～${end}`;
+    }
 
-    // ===== LINE DATA =====
-    this.lineData.forEach((dataset) => {
-      const fakeItems = fakeKeys.map((key) => ({
-        key,
-        value: Math.floor(Math.random() * 470) + 80, // 80~550
-      }));
+    return start || end || '';
+  }
 
-      dataset.data.unshift(...fakeItems);
-    });
+  private formatDate(
+    year?: number | null,
+    month?: number | null,
+    day?: number | null
+  ): string {
+    const y = year ?? 0;
+    const m = month ? String(month).padStart(2, '0') : '0';
+    const d = day ? String(day).padStart(2, '0') : '0';
+
+    return `${y}-${m}-${d}`;
+  }
+
+  fakeData() {
+    const randomValue = () => Math.floor(Math.random() * 501); // 0 ~ 500
+
+    this.dateRangeLabel = this.buildDateRangeLabel();
+
+    // 模擬 statByHour（24 小時）
+    const fakeStatByHour = Array.from({ length: 24 }, (_, i) => ({
+      hour: `${i.toString().padStart(2, '0')}:00`,
+      numOfPax: randomValue(),
+    }));
+
+    // -------- BAR DATA --------
+    this.barData = [
+      {
+        label: `${this.dateRangeLabel}人數`,
+        data: fakeStatByHour.map((item) => ({
+          key: item.hour.replace(':', ''),
+          value: randomValue(),
+        })),
+        colors: ['#0279ce'],
+      },
+      {
+        label: '2019年人數',
+        data: fakeStatByHour.map((item) => ({
+          key: item.hour.replace(':', ''),
+          value: randomValue(),
+        })),
+        colors: ['#f08622'],
+      },
+    ];
+
+    // -------- LINE DATA --------
+    this.lineData = [
+      {
+        label: `${this.dateRangeLabel}架次`,
+        data: fakeStatByHour.map((item) => ({
+          key: item.hour.replace(':', ''),
+          value: randomValue(),
+        })),
+        colors: ['#0279ce'],
+      },
+      {
+        label: '2019年架次',
+        data: fakeStatByHour.map((item) => ({
+          key: item.hour.replace(':', ''),
+          value: randomValue(),
+        })),
+        colors: ['#f08622'],
+      },
+    ];
+
+    // 模擬總數
+    this.totalFlight = fakeStatByHour.reduce(
+      (sum, item) => sum + item.numOfPax,
+      0
+    );
+    this.totalPax = this.totalFlight;
+
+    console.log('FAKE barData', this.barData);
+    console.log('FAKE lineData', this.lineData);
   }
 }
