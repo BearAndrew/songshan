@@ -57,9 +57,9 @@ export class DailyAbnormalFlightInfoComponent {
     scheduledArrival: string;
     actualArrival: string;
     delayTime: string;
-    issue: string;
-    plannedAction: string;
-    actualAction: string;
+    status: string;
+    reason: string;
+    handle: string;
   }[] = [];
 
   actualFlight: number = 0;
@@ -103,9 +103,9 @@ export class DailyAbnormalFlightInfoComponent {
         scheduledArrival: item.sta,
         actualArrival: item.ata,
         delayTime: item.delay,
-        issue: item.reason,
-        plannedAction: item.estHandle,
-        actualAction: item.actualHandle,
+        status: item.status,
+        reason: item.reason,
+        handle: item.handle,
       });
     });
 

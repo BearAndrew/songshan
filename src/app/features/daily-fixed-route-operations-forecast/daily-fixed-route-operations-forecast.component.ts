@@ -109,6 +109,7 @@ export class DailyFixedRouteOperationsForecastComponent {
   predictPassenger: number = 0;
   forecastInput!: ForecastInput;
 
+  res!: TodayPredict;
   isMobile = false;
 
   constructor(
@@ -116,11 +117,11 @@ export class DailyFixedRouteOperationsForecastComponent {
     private commonService: CommonService
   ) {
     //預設取得不分機場總數
-    this.getTodayPredict();
+    // this.getTodayPredict();
     this.commonService.getSelectedAirport().subscribe((airportId) => {
       // 根據選擇的機場ID執行相應的操作，例如重新載入資料
       if (airportId === -1) {
-        this.getTodayPredict();
+        // this.getTodayPredict();
         return;
       }
       this.getTodayPredictByCode(airportId);
@@ -145,6 +146,7 @@ export class DailyFixedRouteOperationsForecastComponent {
   }
 
   setPredictData(res: TodayPredict) {
+    this.res = res;
     // 在這裡處理 API 回傳的資料
     //0, 國際兩岸線
 
@@ -263,12 +265,6 @@ export class DailyFixedRouteOperationsForecastComponent {
       res.intl_Predict.noOfFlight_Outbound +
       res.domestic_Predict.noOfFlight_Outbound;
 
-    //設定總數顯示
-    this.realFlight = res.totalFlight_Arrived;
-    this.predictFlight = res.totalFlight_Predict;
-    this.realPassenger = res.totalPax_Arrived;
-    this.predictPassenger = res.totalPax_Predict;
-
     //設定60分鐘預測資料
     this.forecastInput = {
       intl_Predict60_noOfFlight_InBound: res.intl_Predict60.noOfFlight_Inbound,
@@ -315,5 +311,84 @@ export class DailyFixedRouteOperationsForecastComponent {
       domestic_Predict30_noOfPax_OutBound:
         res.domestic_Predict30.noOfPax_Outbound,
     };
+
+    this.setTotalData();
+  }
+
+  setTotalData(): void {
+    const res = this.res;
+    // 設定總數顯示（依 activeIndex）
+    switch (this.activeIndex) {
+      case 1:
+        // 國際線
+        this.realFlight = res.intl_Arrived.noOfFlight_Total;
+        this.predictFlight = res.intl_Predict.noOfFlight_Total;
+        this.realPassenger = res.intl_Arrived.noOfPax_Total;
+        this.predictPassenger = res.intl_Predict.noOfPax_Total;
+        break;
+
+      case 2:
+        // 兩岸線
+        this.realFlight = res.crossStrait_Arrived.noOfFlight_Total;
+        this.predictFlight = res.crossStrait_Predict.noOfFlight_Total;
+        this.realPassenger = res.crossStrait_Arrived.noOfPax_Total;
+        this.predictPassenger = res.crossStrait_Predict.noOfPax_Total;
+        break;
+
+      case 3:
+        // 國內線
+        this.realFlight = res.domestic_Arrived.noOfFlight_Total;
+        this.predictFlight = res.domestic_Predict.noOfFlight_Total;
+        this.realPassenger = res.domestic_Arrived.noOfPax_Total;
+        this.predictPassenger = res.domestic_Predict.noOfPax_Total;
+        break;
+
+      case 0:
+        // 國際 + 兩岸
+        this.realFlight =
+          res.intl_Arrived.noOfFlight_Total +
+          res.crossStrait_Arrived.noOfFlight_Total;
+
+        this.predictFlight =
+          res.intl_Predict.noOfFlight_Total +
+          res.crossStrait_Predict.noOfFlight_Total;
+
+        this.realPassenger =
+          res.intl_Arrived.noOfPax_Total +
+          res.crossStrait_Arrived.noOfPax_Total;
+
+        this.predictPassenger =
+          res.intl_Predict.noOfPax_Total +
+          res.crossStrait_Predict.noOfPax_Total;
+        break;
+
+      case 4:
+        // 國際 + 兩岸 + 國內（新規則）
+        this.realFlight =
+          res.intl_Arrived.noOfFlight_Total +
+          res.crossStrait_Arrived.noOfFlight_Total +
+          res.domestic_Arrived.noOfFlight_Total;
+
+        this.predictFlight =
+          res.intl_Predict.noOfFlight_Total +
+          res.crossStrait_Predict.noOfFlight_Total +
+          res.domestic_Predict.noOfFlight_Total;
+
+        this.realPassenger =
+          res.intl_Arrived.noOfPax_Total +
+          res.crossStrait_Arrived.noOfPax_Total +
+          res.domestic_Arrived.noOfPax_Total;
+
+        this.predictPassenger =
+          res.intl_Predict.noOfPax_Total +
+          res.crossStrait_Predict.noOfPax_Total +
+          res.domestic_Predict.noOfPax_Total;
+        break;
+    }
+  }
+
+  onTabChange(index: number) {
+    this.activeIndex = index;
+    this.setTotalData();
   }
 }

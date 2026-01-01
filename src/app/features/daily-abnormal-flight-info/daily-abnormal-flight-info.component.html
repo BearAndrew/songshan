@@ -50,8 +50,8 @@
         <div class="p-2">實際抵達</div>
         <div class="p-2">延誤時間</div>
         <div class="p-2">異常狀況</div>
-        <div class="p-2">預計處理方式</div>
-        <div class="p-2">實際處理方式</div>
+        <div class="p-2">異常原因</div>
+        <div class="p-2">處理方式</div>
       </div>
 
       <div class="mt-11 py-1 text-xl">
@@ -71,9 +71,9 @@
           <div class="p-2">{{ row.scheduledArrival }}</div>
           <div class="p-2">{{ row.actualArrival }}</div>
           <div class="p-2">{{ row.delayTime }}</div>
-          <div class="p-2 text-[#be985b]">{{ row.issue }}</div>
-          <div class="p-2 text-[#27c4a9]">{{ row.plannedAction }}</div>
-          <div class="p-2 text-[#27c4a9]">{{ row.actualAction }}</div>
+          <div class="p-2 text-[#be985b]">{{ row.status }}</div>
+          <div class="p-2 text-[#27c4a9]">{{ row.reason }}</div>
+          <div class="p-2 text-[#27c4a9]">{{ row.handle }}</div>
         </div>
         }
       </div>

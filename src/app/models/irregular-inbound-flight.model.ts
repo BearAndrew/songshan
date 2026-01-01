@@ -5,9 +5,9 @@ export interface IrregularFlightItem {
   sta: string;
   ata: string;
   delay: string;
+  status: string;
   reason: string;
-  estHandle: string;
-  actualHandle: string;
+  handle: string;
 }
 
 // Wrapper matching the provided JSON shape

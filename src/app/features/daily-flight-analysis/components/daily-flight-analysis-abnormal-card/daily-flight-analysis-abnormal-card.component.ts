@@ -13,6 +13,7 @@ export class DailyFlightAnalysisAbnormalCardComponent extends DailyFlightAnalysi
   toggleIndex: number = 0;
   @Input() inData!: DailyFlightAnalysisAbnormalData;
   @Input() outData!: DailyFlightAnalysisAbnormalData;
+  @Input() allData!: DailyFlightAnalysisAbnormalData;
 
   displayData!: DailyFlightAnalysisAbnormalData;
 
@@ -189,10 +190,7 @@ export class DailyFlightAnalysisAbnormalCardComponent extends DailyFlightAnalysi
         this.displayData = this.inData;
         break;
       case 2:
-        this.displayData = {
-          info: [...this.outData.info, ...this.inData.info],
-          top3: [...this.outData.top3, ...this.inData.top3],
-        };
+        this.displayData = this.allData;
         break;
     }
   }

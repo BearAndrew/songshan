@@ -198,6 +198,7 @@ export class DailyFlightAnalysisComponent {
 
   abnormalInData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
   abnormalOutData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
+  abnormalAllData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
 
   constructor(
     private apiService: ApiService,
@@ -583,6 +584,21 @@ export class DailyFlightAnalysisComponent {
       });
     });
 
+    res.allDelayFlights.forEach((item) => {
+      if (item === null) {
+        return;
+      }
+
+      this.abnormalAllData.info.push({
+        flightNumber: item.flightNo,
+        destination: item.airportName,
+        scheduledTime: item.schTime,
+        affectedPeople: +item.pax,
+        status: item.reason,
+      });
+    });
+
+
     res.outTop3Airport?.forEach((item) => {
       if (item === null) {
         return;
@@ -608,6 +624,25 @@ export class DailyFlightAnalysisComponent {
       }
 
       this.abnormalInData.top3.push({
+        city: item.name_zhTW,
+        airport: item.iata,
+        forecast: {
+          flightCount: item.estimateFlight,
+          passengerCount: item.estimatePax,
+        },
+        actual: {
+          flightCount: item.actualFlight,
+          passengerCount: item.actualPax,
+        },
+      });
+    });
+
+    res.allTop3Airport.forEach((item) => {
+      if (item === null) {
+        return;
+      }
+
+      this.abnormalAllData.top3.push({
         city: item.name_zhTW,
         airport: item.iata,
         forecast: {
