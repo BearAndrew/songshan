@@ -293,21 +293,23 @@ export class ChartPageComponent {
 
     // 組裝 API payload
     const payload: FlightTrafficAnalysisRequest = {
-      dateFrom: this.formatDate(
-        this.formData.startYear,
-        this.formData.startMonth,
-        this.formData.startDay
-      ),
-      dateTo: this.formatDate(
-        this.formData.endYear,
-        this.formData.endMonth,
-        this.formData.endDay
-      ),
-      type: this.type as FlightTrafficType,
-      airline: this.formData.airline!,
-      direction: this.formData.flightType as FlightDirection,
-      peer: this.formData.route!,
-      flightType: this.formData.flightType as TabType,
+      dateFrom:
+        this.formatDate(
+          this.formData.startYear,
+          this.formData.startMonth,
+          this.formData.startDay
+        ) || '',
+      dateTo:
+        this.formatDate(
+          this.formData.endYear,
+          this.formData.endMonth,
+          this.formData.endDay
+        ) || '',
+      type: (this.type as FlightTrafficType) || '',
+      airline: this.formData.airline! || '',
+      direction: (this.formData.flightType as FlightDirection) || '',
+      peer: this.formData.route! || '',
+      flightType: (this.formData.flightType as TabType) || '',
     };
 
     console.log(payload);

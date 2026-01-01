@@ -119,6 +119,7 @@ export class HeaderComponent {
       });
       this.airportList = [...this.airportList];
       this.commonService.setAirportList(this.airportList);
+      this.commonService.setSelectedAirport(this.airportDefault);
     });
   }
 

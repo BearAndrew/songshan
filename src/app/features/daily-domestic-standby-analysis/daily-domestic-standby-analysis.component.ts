@@ -49,7 +49,6 @@ export class DailyDomesticStandbyAnalysisComponent {
   getStandbySummary(value: number) {
     const code = this.commonService.getAirportCodeById(value);
     this.apiService.getStandbySummary(code).subscribe((res) => {
-      console.log('getStandbySummary', res);
       this.setTableData(res);
     });
   }
@@ -69,6 +68,7 @@ export class DailyDomesticStandbyAnalysisComponent {
           windSpeed: item.currWeather.windspeed,
         },
         details: [],
+        routerParam: item.currWeather.iata
       });
 
       const airlines = [...item.airlines].slice(0, 3);

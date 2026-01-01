@@ -23,4 +23,5 @@ export interface FlightRow {
   maxNextFlights?: number;
   maxFlown?: number;
   maxFilled?: number;
+  routerParam: string;
 }

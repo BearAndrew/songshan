@@ -17,9 +17,23 @@
     </div>
 
     <div class="flex items-center gap-2">
+      <label class="text-[#aaa]">異常狀態</label>
+      <app-dropdown
+        class="w-25"
+        [options]="dropdownOptions"
+        [value]="0"
+      ></app-dropdown>
       <label class="text-[#aaa]">飛航類型</label>
-      <app-dropdown class="w-25" [options]="dropdownOptions" [value]="0"></app-dropdown>
-      <button class="w-30 px-2 py-1 rounded-xs bg-gradient-to-r from-[#44b59b] to-[#008abf] cursor-pointer">匯出(列印)</button>
+      <app-dropdown
+        class="w-25"
+        [options]="dropdownOptions"
+        [value]="0"
+      ></app-dropdown>
+      <button
+        class="w-30 px-2 py-1 rounded-xs bg-gradient-to-r from-[#44b59b] to-[#008abf] cursor-pointer"
+      >
+        匯出(列印)
+      </button>
     </div>
   </div>
 

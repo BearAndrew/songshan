@@ -9,7 +9,7 @@ export class CommonService {
   constructor(private http: HttpClient) {}
 
   airportList: { label: string; value: number; code: string }[] = [];
-  selectedAirport: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  selectedAirport: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
   selectedFlightType: BehaviorSubject<string> = new BehaviorSubject<string>('');
   realAirportValue: number = -1;
 
