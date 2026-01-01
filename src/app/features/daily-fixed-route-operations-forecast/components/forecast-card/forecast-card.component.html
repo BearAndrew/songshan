@@ -1,24 +1,30 @@
 <div class="card flex flex-2 flex-col gap-2 p-4 w-full h-full">
   <div class="flex items-center gap-2">
-    <h2 class="text-2xl font-bold text-[#06e5ff]">後續預報</h2>
+    <h2 class="text-lg sm:text-2xl font-bold text-[#06e5ff]">後續預報</h2>
   </div>
 
-  <div class="flex flex-col h-full text-xl">
+  <div class="flex flex-col h-full text-sm sm:text-xl">
     <!-- 國際標題列 -->
     <div
-      class="grid [grid-template-columns:60px_repeat(5,1fr)] text-center mb-2"
+      class="grid [grid-template-columns:30px_repeat(5,1fr)] sm:[grid-template-columns:60px_repeat(5,1fr)] text-center mb-2"
     >
       <div></div>
       <div></div>
       <div
-        class="flex items-center justify-center col-span-2 text-[#06e5ff] font-bold"
+        class="flex flex-col sm:flex-row items-center justify-center col-span-2 text-[#06e5ff] font-bold"
       >
-        <span class="text-4xl">60</span>分鐘預報架次/人數
+        <div class="flex items-center">
+          <span class="text-xl sm:text-4xl">60</span>分鐘
+        </div>
+        <div>預報架次/人數</div>
       </div>
       <div
-        class="flex items-center justify-center col-span-2 text-[#06e5ff] font-bold"
+        class="flex flex-col sm:flex-row items-center justify-center col-span-2 text-[#06e5ff] font-bold"
       >
-        <span class="text-4xl">120</span>分鐘預報架次/人數
+        <div class="flex items-center">
+          <span class="text-xl sm:text-4xl">120</span>分鐘
+        </div>
+        <div>預報架次/人數</div>
       </div>
     </div>
 
@@ -28,7 +34,7 @@
     >
       <!-- 背景層 -->
       <div
-        class="absolute inset-0 grid [grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
+        class="absolute inset-0 grid [grid-template-columns:30px_repeat(5,1fr)] sm:[grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
       >
         <div></div>
         <div></div>
@@ -38,7 +44,7 @@
 
       <!-- 內容 -->
       <div
-        class="h-full relative grid [grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
+        class="h-full relative grid [grid-template-columns:30px_repeat(5,1fr)] sm:[grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
       >
         <div
           class="row-span-2 flex items-center justify-center border-r border-gray-400 text-white font-bold [writing-mode:vertical-rl]"
@@ -47,16 +53,32 @@
         </div>
 
         <div class="border-b border-gray-400 text-white">出境</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.intl_Predict60_noOfFlight_OutBound }}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{data?.intl_Predict60_noOfPax_OutBound}}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{data?.intl_Predict120_noOfFlight_OutBound}}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{data?.intl_Predict120_noOfPax_OutBound}}</div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.intl_Predict60_noOfFlight_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.intl_Predict60_noOfPax_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.intl_Predict120_noOfFlight_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.intl_Predict120_noOfPax_OutBound }}
+        </div>
 
         <div class="border-gray-400 text-white">入境</div>
-        <div class="border-gray-400 text-black font-bold">{{data?.intl_Predict60_noOfFlight_InBound}}</div>
-        <div class="border-gray-400 text-black font-bold">{{data?.intl_Predict60_noOfPax_InBound}}</div>
-        <div class="border-gray-400 text-black font-bold">{{data?.intl_Predict120_noOfFlight_InBound}}</div>
-        <div class="text-black font-bold">{{data?.intl_Predict120_noOfPax_InBound}}</div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.intl_Predict60_noOfFlight_InBound }}
+        </div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.intl_Predict60_noOfPax_InBound }}
+        </div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.intl_Predict120_noOfFlight_InBound }}
+        </div>
+        <div class="text-black font-bold">
+          {{ data?.intl_Predict120_noOfPax_InBound }}
+        </div>
       </div>
     </div>
 
@@ -66,7 +88,7 @@
     >
       <!-- 背景層 -->
       <div
-        class="absolute inset-0 grid [grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
+        class="absolute inset-0 grid [grid-template-columns:30px_repeat(5,1fr)] sm:[grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
       >
         <div></div>
         <div></div>
@@ -76,7 +98,7 @@
 
       <!-- 內容 -->
       <div
-        class="h-full relative grid [grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
+        class="h-full relative grid [grid-template-columns:30px_repeat(5,1fr)] sm:[grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
       >
         <div
           class="row-span-2 flex items-center justify-center border-r border-gray-400 text-white font-bold [writing-mode:vertical-rl]"
@@ -85,34 +107,56 @@
         </div>
 
         <div class="border-b border-gray-400 text-white">出境</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict60_noOfFlight_OutBound }}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict60_noOfPax_OutBound }}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict120_noOfFlight_OutBound }}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict120_noOfPax_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.crossStrait_Predict60_noOfFlight_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.crossStrait_Predict60_noOfPax_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.crossStrait_Predict120_noOfFlight_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.crossStrait_Predict120_noOfPax_OutBound }}
+        </div>
 
         <div class="border-gray-400 text-white">入境</div>
-        <div class="border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict60_noOfFlight_InBound }}</div>
-        <div class="border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict60_noOfPax_InBound }}</div>
-        <div class="border-gray-400 text-black font-bold">{{ data?.crossStrait_Predict120_noOfFlight_InBound }}</div>
-        <div class="text-black font-bold">{{ data?.crossStrait_Predict120_noOfPax_InBound }}</div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.crossStrait_Predict60_noOfFlight_InBound }}
+        </div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.crossStrait_Predict60_noOfPax_InBound }}
+        </div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.crossStrait_Predict120_noOfFlight_InBound }}
+        </div>
+        <div class="text-black font-bold">
+          {{ data?.crossStrait_Predict120_noOfPax_InBound }}
+        </div>
       </div>
     </div>
 
     <!-- 國內標題列 -->
     <div
-      class="grid [grid-template-columns:60px_repeat(5,1fr)] text-center my-2"
+      class="grid [grid-template-columns:30px_repeat(5,1fr)] sm:[grid-template-columns:60px_repeat(5,1fr)] text-center my-2"
     >
       <div></div>
       <div></div>
       <div
-        class="flex items-center justify-center col-span-2 text-[#06e5ff] font-bold"
+        class="flex flex-col sm:flex-row items-center justify-center col-span-2 text-[#06e5ff] font-bold"
       >
-        <span class="text-4xl">30</span>分鐘預報架次/人數
+        <div class="flex items-center">
+          <span class="text-xl sm:text-4xl">30</span>分鐘
+        </div>
+        <div>預報架次/人數</div>
       </div>
       <div
-        class="flex items-center justify-center col-span-2 text-[#06e5ff] font-bold"
+        class="flex flex-col sm:flex-row items-center justify-center col-span-2 text-[#06e5ff] font-bold"
       >
-        <span class="text-4xl">60</span>分鐘預報架次/人數
+        <div class="flex items-center">
+          <span class="text-xl sm:text-4xl">60</span>分鐘
+        </div>
+        <div>預報架次/人數</div>
       </div>
     </div>
 
@@ -122,7 +166,7 @@
     >
       <!-- 背景層 -->
       <div
-        class="absolute inset-0 grid [grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
+        class="absolute inset-0 grid [grid-template-columns:30px_repeat(5,1fr)] sm:[grid-template-columns:80px_repeat(5,1fr)] pointer-events-none"
       >
         <div></div>
         <div></div>
@@ -132,7 +176,7 @@
 
       <!-- 內容 -->
       <div
-        class="h-full relative grid [grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
+        class="h-full relative grid [grid-template-columns:30px_repeat(5,1fr)] sm:[grid-template-columns:80px_repeat(5,1fr)] text-center [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:p-2"
       >
         <div
           class="row-span-2 flex items-center justify-center border-r border-gray-400 text-white [writing-mode:vertical-rl]"
@@ -141,16 +185,32 @@
         </div>
 
         <div class="border-b border-gray-400 text-white">到站</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.domestic_Predict30_noOfFlight_OutBound }}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.domestic_Predict30_noOfPax_OutBound }}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.domestic_Predict60_noOfFlight_OutBound }}</div>
-        <div class="border-b border-gray-400 text-black font-bold">{{ data?.domestic_Predict60_noOfPax_OutBound }}</div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.domestic_Predict30_noOfFlight_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.domestic_Predict30_noOfPax_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.domestic_Predict60_noOfFlight_OutBound }}
+        </div>
+        <div class="border-b border-gray-400 text-black font-bold">
+          {{ data?.domestic_Predict60_noOfPax_OutBound }}
+        </div>
 
         <div class="border-gray-400 text-white">離站</div>
-        <div class="border-gray-400 text-black font-bold">{{ data?.domestic_Predict30_noOfFlight_InBound }}</div>
-        <div class="border-gray-400 text-black font-bold">{{ data?.domestic_Predict30_noOfPax_InBound }}</div>
-        <div class="border-gray-400 text-black font-bold">{{ data?.domestic_Predict60_noOfFlight_InBound }}</div>
-        <div class="text-black font-bold">{{ data?.domestic_Predict60_noOfPax_InBound }}</div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.domestic_Predict30_noOfFlight_InBound }}
+        </div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.domestic_Predict30_noOfPax_InBound }}
+        </div>
+        <div class="border-gray-400 text-black font-bold">
+          {{ data?.domestic_Predict60_noOfFlight_InBound }}
+        </div>
+        <div class="text-black font-bold">
+          {{ data?.domestic_Predict60_noOfPax_InBound }}
+        </div>
       </div>
     </div>
   </div>

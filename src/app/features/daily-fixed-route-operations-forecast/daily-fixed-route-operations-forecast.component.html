@@ -1,84 +1,89 @@
+<div class="fixed top-14 sm:hidden mb-2 w-[calc(100vw-15.5rem)] z-50">
+  <app-dropdown class="pl-4 w-full" [value]="0" [options]="mobileOptions" (selectionChange)="activeIndex = $event.value"></app-dropdown>
+</div>
+
 <div class="flex flex-col gap-4 w-full h-full">
-  <div class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-fit">
-    <div class="flex gap-8 h-fit">
-      @for(button of chartData; track button.label; let i = $index) {
-      <button
-        class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
-        [ngClass]="{
-          'bg-[#b2b2b2]': activeIndex !== i,
-          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
-        }"
-        type="button"
-        (click)="activeIndex = i"
-      >
-        {{ button.label }}
-      </button>
-      }
+  <div class="card flex flex-col flex-shrink-0 gap-2 p-4 pr-2 sm:pr-4 w-full h-fit">
+    <div class="hidden sm:flex gap-8 h-fit">
+      <ng-container [ngTemplateOutlet]="tabGroup"></ng-container>
     </div>
 
-    <div class="flex gap-2">
+    <div class="flex flex-col sm:flex-row gap-2">
       <app-css-bar-chart
-        class="flex-1 px-12"
+        class="flex-1 sm:px-12"
         [labels]="['實際架次', '預報架次']"
         [chartData]="chartData[activeIndex].flightData"
         [colorClass]="'bg-gradient-to-r from-[#fd9c44] to-[#ffb029]'"
+        [size]="isMobile ? 'sm' : 'lg'"
       ></app-css-bar-chart>
       <app-css-bar-chart
-        class="flex-1 px-12"
+        class="flex-1 sm:px-12"
         [labels]="['實際人數', '預報人數']"
         [chartData]="chartData[activeIndex].passengerData"
         [colorClass]="'bg-[#02b3e5]'"
+        [size]="isMobile ? 'sm' : 'lg'"
       ></app-css-bar-chart>
     </div>
   </div>
 
-  <div class="flex flex-2 items-center gap-4 w-full h-0">
-  <app-forecast-card class="flex-2 w-full h-full" [data]="forecastInput"></app-forecast-card>
+  <div class="flex flex-2 flex-col sm:flex-row items-center gap-4 w-full h-0">
+    <app-forecast-card
+      class="flex-2 w-full h-full"
+      [data]="forecastInput"
+    ></app-forecast-card>
     <div
-      class="card flex flex-1 flex-col items-center gap-8 px-8 pt-8 pb-4 w-full h-full"
+      class="card flex flex-1 flex-col items-center gap-8 px-4 sm:px-8 pt-8 pb-4 w-full h-full"
     >
-      <div class="flex-1 w-full border-4 border-[#3372bd] rounded-lg relative">
+      <div
+        class="flex-1 w-full min-h-28 border-4 border-[#3372bd] rounded-lg relative"
+      >
         <div
-          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
+          class="absolute left-1/2 w-fit mx-auto px-4 sm:px-8 sm:px-12 -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
         >
           實際總數
         </div>
         <div class="flex items-center h-full">
           <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總架次</div>
             <div
-              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+              class="text-[30px] sm:text-[60px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
             >
               {{ realFlight | number }}
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-3xl text-[#a5a5a5]">總人數</div>
-            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總人數</div>
+            <div
+              class="text-[30px] sm:text-[60px] text-[#02b3e7] font-bold leading-none"
+            >
               {{ realPassenger | number }}
             </div>
           </div>
         </div>
       </div>
 
-      <div class="flex-1 w-full border-4 border-[#3372bd] rounded-lg relative">
+      <div
+        class="flex-1 w-full min-h-28 border-4 border-[#3372bd] rounded-lg relative"
+      >
         <div
-          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
+          class="absolute left-1/2 w-fit mx-auto px-4 sm:px-8 sm:px-12 -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
         >
           預報總數
         </div>
         <div class="flex items-center h-full">
           <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總架次</div>
             <div
-              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+              class="text-[30px] sm:text-[60px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
             >
               {{ predictFlight | number }}
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-3xl text-[#a5a5a5]">總人數</div>
-            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總人數</div>
+            <div
+              class="text-[30px] sm:text-[60px] text-[#02b3e7] font-bold leading-none"
+            >
               {{ predictPassenger | number }}
             </div>
           </div>
@@ -87,3 +92,19 @@
     </div>
   </div>
 </div>
+
+<ng-template #tabGroup>
+  @for(button of chartData; track button.label; let i = $index) {
+  <button
+    class="text-sm sm:text-xl text-white sm:rounded-md flex-1 sm:flex-none sm:w-36 sm:px-2 py-0.5 cursor-pointer"
+    [ngClass]="{
+      'bg-[#b2b2b2]': activeIndex !== i,
+      'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
+    }"
+    type="button"
+    (click)="activeIndex = i"
+  >
+    {{ button.label }}
+  </button>
+  }
+</ng-template>

@@ -2,7 +2,7 @@
   <h1 class="text-[50px] font-bold relative z-10">Header Title</h1>
 </div> -->
 
-<div class="header flex items-center justify-between p-4" [ngClass]="theme">
+<div class="header flex items-center justify-between p-4 max-h-18" [ngClass]="theme">
   <div
     class="flex flex-row-reverse sm:flex-row items-center justify-between gap-2 relative w-full sm:w-fit z-10"
   >
@@ -26,7 +26,6 @@
       (detach)="closeMenu()"
     >
       <div class="bg-white shadow-xl rounded p-1 w-72">
-        <!-- 🔥 自動產生 menu -->
         <ng-container *ngFor="let item of menuRoutes">
           <button
             class="w-full text-left p-2 hover:bg-gray-100"
@@ -46,8 +45,8 @@
   </div>
 </div>
 
-<div class="flex w-full bg-[#191919] px-4 pt-2 sm:hidden">
-  <div class="self-end ml-auto w-60 z-20">
+<div class="flex w-full bg-[#191919] px-4 pt-2 pb-4 sm:hidden">
+  <div class="self-end ml-auto w-50 z-20">
     <ng-container [ngTemplateOutlet]="dropdown"></ng-container>
   </div>
 </div>
