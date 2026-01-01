@@ -20,6 +20,7 @@ import { TodayStatus } from '../../models/today-status.model';
 import { HttpHeaders } from '@angular/common/http';
 import { FlightUpdateWebhookRequest } from '../../models/webhook-flight-update.model';
 import { BaggageTimeItem } from '../../models/baggage-time.model';
+import { TabType } from '../enums/tab-type.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -64,8 +65,8 @@ export class ApiService {
   // ========= 延誤統計 =========
 
   /** 今日延誤統計 */
-  getTodayDelayStat(): Observable<TodayDelayStat> {
-    return this.http.get<TodayDelayStat>('GetTodayDelayStat');
+  getTodayDelayStat(type: TabType): Observable<TodayDelayStat> {
+    return this.http.get<TodayDelayStat>(`GetTodayDelayStat/${type}`);
   }
 
   // ========= 候補旅客 =========

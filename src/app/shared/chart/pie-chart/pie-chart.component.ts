@@ -64,7 +64,7 @@ export class PieChartComponent {
   }
 
   draw() {
-    console.log(this.data)
+    // console.log(this.data)
     this.colorArray = this.data.map((item, index) => {
       let colors: Color;
       if (item.colors) {

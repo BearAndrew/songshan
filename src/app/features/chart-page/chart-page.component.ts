@@ -11,10 +11,10 @@ import {
   FlightTrafficAnalysisRequest,
   FlightTrafficAnalysisResponse,
   FlightTrafficType,
-  FlightType,
 } from '../../models/flight-traffic-analysis.model';
 import { Airport } from '../../models/airport.model';
 import { Airline } from '../../models/airline.model';
+import { TabType } from '../../core/enums/tab-type.enum';
 
 @Component({
   selector: 'app-chart-page',
@@ -27,23 +27,23 @@ export class ChartPageComponent {
   data = [
     {
       label: '國際兩岸線',
-      value: 'nondomestic',
+      value: TabType.NONDOMESTIC,
     },
     {
       label: '國際線',
-      value: 'intl',
+      value: TabType.INTL,
     },
     {
       label: '兩岸線',
-      value: 'crossstrait',
+      value: TabType.CROSSSTRAIT,
     },
     {
       label: '國內線',
-      value: 'domestic',
+      value: TabType.DOMESTIC,
     },
     {
       label: '總數',
-      value: 'all',
+      value: TabType.ALL,
     },
   ];
 
@@ -177,7 +177,7 @@ export class ChartPageComponent {
     flightClass: null,
     airline: null,
     flightType: null,
-    flightScope: 'nondomestic',
+    flightScope: TabType.NONDOMESTIC,
   };
 
   constructor(
@@ -306,7 +306,7 @@ export class ChartPageComponent {
       airline: this.formData.airline!,
       direction: this.formData.flightType as FlightDirection,
       peer: this.formData.route!,
-      flightType: this.formData.flightType as FlightType,
+      flightType: this.formData.flightType as TabType,
     };
 
     console.log(payload);
@@ -321,46 +321,52 @@ export class ChartPageComponent {
 
         this.dateRangeLabel = this.buildDateRangeLabel();
 
+        const query = res.queryData;
+        const compare = res.compareData;
+
+        // === Bar：人數 ===
         this.barData = [
           {
             label: `${this.dateRangeLabel}（人數）`,
-            data: res.statByHour.map((item) => ({
-              key: item.hour.replace(':', ''),
+            data: query.stat.map((item) => ({
+              key: item.label,
               value: item.numOfPax,
             })),
             colors: ['#0279ce'],
           },
           {
-            label: '2019年人數',
-            data: res.statByHour.map((item) => ({
-              key: item.hour.replace(':', ''),
+            label: '比較區間（人數）',
+            data: compare.stat.map((item) => ({
+              key: item.label,
               value: item.numOfPax,
             })),
             colors: ['#f08622'],
           },
         ];
 
+        // === Line：架次 ===
         this.lineData = [
           {
             label: `${this.dateRangeLabel}（架次）`,
-            data: res.statByHour.map((item) => ({
-              key: item.hour.replace(':', ''),
-              value: item.numOfPax,
+            data: query.stat.map((item) => ({
+              key: item.label,
+              value: item.numOfFlight,
             })),
             colors: ['#0279ce'],
           },
           {
-            label: '2019年架次',
-            data: res.statByHour.map((item) => ({
-              key: item.hour.replace(':', ''),
-              value: item.numOfPax,
+            label: '比較區間（架次）',
+            data: compare.stat.map((item) => ({
+              key: item.label,
+              value: item.numOfFlight,
             })),
             colors: ['#f08622'],
           },
         ];
 
-        this.totalFlight = res.totalFlight;
-        this.totalPax = res.totalPax;
+        // === 總計 ===
+        this.totalFlight = query.totalFlight;
+        this.totalPax = query.totalPax;
       },
       error: (err) => {
         console.error('取得資料失敗', err);
@@ -369,9 +375,9 @@ export class ChartPageComponent {
   }
 
   private formatDisplayDate(
-    year?: number|null,
-    month?: number|null,
-    day?: number|null
+    year?: number | null,
+    month?: number | null,
+    day?: number | null
   ): string {
     if (!year) return '';
 

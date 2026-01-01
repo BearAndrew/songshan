@@ -19,6 +19,7 @@ import {
 } from '../../core/lib/chart-tool';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
+import { TabType } from '../../core/enums/tab-type.enum';
 
 @Component({
   selector: 'app-daily-flight-analysis',
@@ -39,11 +40,18 @@ export class DailyFlightAnalysisComponent {
   data: DailyFlightAnalysisData[] = [
     {
       label: '國際兩岸線',
+      value: TabType.NONDOMESTIC,
       passengerData: [],
       flightData: [],
       delayData: {
-        out: [],
-        in: [],
+        airline: {
+          out: [],
+          in: [],
+        },
+        airport: {
+          out: [],
+          in: [],
+        },
       },
       abnormalData: {
         info: [],
@@ -53,11 +61,18 @@ export class DailyFlightAnalysisComponent {
 
     {
       label: '國際線',
+      value: TabType.INTL,
       passengerData: [],
       flightData: [],
       delayData: {
-        out: [],
-        in: [],
+        airline: {
+          out: [],
+          in: [],
+        },
+        airport: {
+          out: [],
+          in: [],
+        },
       },
       abnormalData: {
         info: [],
@@ -67,11 +82,18 @@ export class DailyFlightAnalysisComponent {
 
     {
       label: '兩岸線',
+      value: TabType.CROSSSTRAIT,
       passengerData: [],
       flightData: [],
       delayData: {
-        out: [],
-        in: [],
+        airline: {
+          out: [],
+          in: [],
+        },
+        airport: {
+          out: [],
+          in: [],
+        },
       },
       abnormalData: {
         info: [],
@@ -81,11 +103,18 @@ export class DailyFlightAnalysisComponent {
 
     {
       label: '國內線',
+      value: TabType.DOMESTIC,
       passengerData: [],
       flightData: [],
       delayData: {
-        out: [],
-        in: [],
+        airline: {
+          out: [],
+          in: [],
+        },
+        airport: {
+          out: [],
+          in: [],
+        },
       },
       abnormalData: {
         info: [],
@@ -95,11 +124,18 @@ export class DailyFlightAnalysisComponent {
 
     {
       label: '總數',
+      value: TabType.ALL,
       passengerData: [],
       flightData: [],
       delayData: {
-        out: [],
-        in: [],
+        airline: {
+          out: [],
+          in: [],
+        },
+        airport: {
+          out: [],
+          in: [],
+        },
       },
       abnormalData: {
         info: [],
@@ -180,6 +216,12 @@ export class DailyFlightAnalysisComponent {
     this.getTodayDelayStat();
   }
 
+  /** 切換分頁重新呼叫 api */
+  onTabChange(index: number) {
+    this.activeIndex = index;
+    this.getTodayDelayStat();
+  }
+
   getTodayPredict() {
     this.apiService.getTodayPredict().subscribe((res) => {
       this.setPredictData(res);
@@ -194,10 +236,12 @@ export class DailyFlightAnalysisComponent {
   }
 
   getTodayDelayStat() {
-    this.apiService.getTodayDelayStat().subscribe((res) => {
-      console.log('今日延誤統計資料', res);
-      this.setDelayData(res);
-    });
+    this.apiService
+      .getTodayDelayStat(this.data[this.activeIndex].value)
+      .subscribe((res) => {
+        console.log('今日延誤統計資料', res);
+        this.setDelayData(res);
+      });
   }
 
   setPredictData(res: TodayPredict) {
@@ -447,13 +491,14 @@ export class DailyFlightAnalysisComponent {
     // delayData
     // 不分線，只分出入境,
     this.clearDelayData();
+    // ===== Inbound Airline Delay =====
     res.inDelayAirlines.forEach((item) => {
-      if (item === null) {
+      if (!item) {
         return;
       }
 
       for (let i = 0; i < 5; i++) {
-        this.data[i].delayData.in.push({
+        this.data[i].delayData.airline.in.push({
           flightCode: item.iata,
           flightCount: item.numOfFlight,
           passengerCount: item.numOfPax,
@@ -461,12 +506,47 @@ export class DailyFlightAnalysisComponent {
         });
       }
     });
+
+    // ===== Outbound Airline Delay =====
     res.outDelayAirlines.forEach((item) => {
-      if (item === null) {
+      if (!item) {
         return;
       }
+
       for (let i = 0; i < 5; i++) {
-        this.data[i].delayData.out.push({
+        this.data[i].delayData.airline.out.push({
+          flightCode: item.iata,
+          flightCount: item.numOfFlight,
+          passengerCount: item.numOfPax,
+          delayTime: item.avgDelay,
+        });
+      }
+    });
+
+    // ===== Inbound Airport Delay =====
+    res.inDelayAirport.forEach((item) => {
+      if (!item) {
+        return;
+      }
+
+      for (let i = 0; i < 5; i++) {
+        this.data[i].delayData.airport.in.push({
+          flightCode: item.iata,
+          flightCount: item.numOfFlight,
+          passengerCount: item.numOfPax,
+          delayTime: item.avgDelay,
+        });
+      }
+    });
+
+    // ===== Outbound Airport Delay =====
+    res.outDelayAirport.forEach((item) => {
+      if (!item) {
+        return;
+      }
+
+      for (let i = 0; i < 5; i++) {
+        this.data[i].delayData.airport.out.push({
           flightCode: item.iata,
           flightCount: item.numOfFlight,
           passengerCount: item.numOfPax,
@@ -675,8 +755,10 @@ export class DailyFlightAnalysisComponent {
 
   clearDelayData() {
     for (let i = 0; i < 5; i++) {
-      this.data[i].delayData.in = [];
-      this.data[i].delayData.out = [];
+      this.data[i].delayData.airline.in = [];
+      this.data[i].delayData.airline.out = [];
+      this.data[i].delayData.airport.in = [];
+      this.data[i].delayData.airport.out = [];
       this.data[i].abnormalData.info = [];
       this.data[i].abnormalData.top3 = [];
     }

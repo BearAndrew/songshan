@@ -4,14 +4,14 @@
     <button
       class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"
       [ngClass]="toggleIndex == 0 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
-      (click)="toggleIndex = 0"
+      (click)="onTabChange(0)"
     >
       航空公司
     </button>
     <button
       class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"
       [ngClass]="toggleIndex == 1 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
-      (click)="toggleIndex = 1"
+      (click)="onTabChange(1)"
     >
       航點
     </button>
@@ -22,7 +22,7 @@
   <div class="flex-1 py-1 relative">
     @for (i of [0,1,2]; track i) {
     <div
-      class="grid grid-cols-[24px_1fr_100px] items-center gap-1 mx-4 px-1 py-0.5 relative"
+      class="grid grid-cols-[40px_1fr_100px] items-center gap-1 mx-4 px-1 py-0.5 relative"
       [ngClass]="i % 2 === 1 ? 'bg-[#535353]' : ''"
     >
       <div
@@ -32,19 +32,19 @@
       </div>
 
       <div class="text-lg whitespace-nowrap">
-        @if(data[activeIndex].delayData?.out?.[i]?.flightCode) {
-        {{ data[activeIndex].delayData.out[i].flightCode }}
+        @if(displayData?.out?.[i]?.flightCode) {
+        {{ displayData.out[i].flightCode }}
         } @else { <span class="text-[#7d7d7d]">無延誤</span> }
       </div>
 
       <div class="flex items-end gap-1 whitespace-nowrap">
-        @if(data[activeIndex].delayData?.out?.[i]?.flightCount) {
+        @if(displayData?.out?.[i]?.flightCount) {
         <span class="text-xs">架次/人數</span>
         <span class="text-2xl leading-none">
           {{
-            data[activeIndex].delayData.out[i].flightCount +
+            displayData.out[i].flightCount +
               " / " +
-              (data[activeIndex].delayData.out[i].passengerCount | number)
+              (displayData.out[i].passengerCount | number)
           }}
         </span>
         }
@@ -58,7 +58,7 @@
         <span
           class="flex-1 min-w-10 px-1 py-2 text-right text-xl leading-none bg-[#c2ae97] text-black rounded-sm"
         >
-          {{ data[activeIndex].delayData?.out?.[i]?.delayTime ?? '&nbsp;' }}
+          {{ displayData?.out?.[i]?.delayTime ?? '&nbsp;' }}
         </span>
       </div>
     </div>
@@ -76,7 +76,7 @@
   <div class="flex-1 py-1 relative">
     @for (i of [0,1,2]; track i) {
     <div
-      class="grid grid-cols-[24px_1fr_100px] items-center gap-1 mx-4 px-1 py-0.5 relative"
+      class="grid grid-cols-[40px_1fr_100px] items-center gap-1 mx-4 px-1 py-0.5 relative"
       [ngClass]="i % 2 === 1 ? 'bg-[#535353]' : ''"
     >
       <!-- index 圓形 -->
@@ -87,19 +87,19 @@
       </div>
 
       <div class="text-lg whitespace-nowrap">
-        @if(data[activeIndex].delayData.in[i]?.flightCode) {
-        {{ data[activeIndex].delayData.in[i].flightCode }}
+        @if(displayData.in[i]?.flightCode) {
+        {{ displayData.in[i].flightCode }}
         } @else { <span class="text-[#7d7d7d]">無延誤</span> }
       </div>
 
       <div class="flex items-end gap-1 whitespace-nowrap">
-        @if(data[activeIndex].delayData?.in?.[i]?.flightCount) {
+        @if(displayData?.in?.[i]?.flightCount) {
         <span class="text-xs">架次/人數</span>
         <span class="text-2xl leading-none">
           {{
-            data[activeIndex].delayData.in[i].flightCount +
+            displayData.in[i].flightCount +
               " / " +
-              (data[activeIndex].delayData.in[i].passengerCount | number)
+              (displayData.in[i].passengerCount | number)
           }}
         </span>
         }
@@ -113,7 +113,7 @@
         <span
           class="flex-1 min-w-10 px-1 py-2 text-right text-xl leading-none bg-[#c2ae97] text-black rounded-sm"
         >
-          {{ data[activeIndex].delayData.in[i]?.delayTime ?? '&nbsp;' }}
+          {{ displayData.in[i]?.delayTime ?? '&nbsp;' }}
         </span>
       </div>
     </div>

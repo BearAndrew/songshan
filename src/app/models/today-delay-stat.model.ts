@@ -48,20 +48,38 @@ export interface StatByHour {
 }
 
 export interface TodayDelayStat {
+  // ===== 航線即時 / 預測彙總 =====
   intl_Arrived: TrafficSummary;
   intl_Predict: TrafficSummary;
 
+  cS_Arrived: TrafficSummary;
+  cS_Predict: TrafficSummary;
+
+  domestic_Arrived: TrafficSummary;
+  domestic_Predict: TrafficSummary;
+
+  // ===== 延誤航空公司 =====
   inDelayAirlines: DelayAirline[];
   outDelayAirlines: DelayAirline[];
 
+  // ===== 延誤機場 =====
+  inDelayAirport: DelayAirline[];
+  outDelayAirport: DelayAirline[];
+
+  // ===== 延誤航班 =====
   inDelayFlights: DelayFlight[];
   outDelayFlights: DelayFlight[];
+  allDelayFlights: DelayFlight[];
 
+  // ===== Top 3 機場 =====
   inTop3Airport: TopDelayAirport[];
   outTop3Airport: TopDelayAirport[];
+  allTop3Airport: TopDelayAirport[];
 
+  // ===== 延誤統計 =====
   delayStat: DelayStat;
 
+  // ===== 小時統計 =====
   inBoundStatByHour: StatByHour[];
   outBoundStatByHour: StatByHour[];
 

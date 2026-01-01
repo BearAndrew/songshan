@@ -11,6 +11,7 @@ import {
 } from '../../models/flight-traffic-predict.model';
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
+import { TabType } from '../../core/enums/tab-type.enum';
 
 @Component({
   selector: 'app-traffic-forecast',
@@ -23,23 +24,23 @@ export class TrafficForecastComponent {
   data = [
     {
       label: '國際兩岸線',
-      value: 'nondomestic',
+      value: TabType.NONDOMESTIC,
     },
     {
       label: '國際線',
-      value: 'intl',
+      value: TabType.INTL,
     },
     {
       label: '兩岸線',
-      value: 'crossstrait',
+      value: TabType.CROSSSTRAIT,
     },
     {
       label: '國內線',
-      value: 'domestic',
+      value: TabType.DOMESTIC,
     },
     {
       label: '總數',
-      value: 'all',
+      value: TabType.ALL,
     },
   ];
 

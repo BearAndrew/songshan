@@ -1,0 +1,24 @@
+{
+  "queryData": {
+    "stat": [
+      {
+        "label": "0600",
+        "numOfFlight": 0,
+        "numOfPax": 0
+      }
+    ],
+    "totalFlight": 0,
+    "totalPax": 0
+  },
+  "compareData": {
+    "stat": [
+      {
+        "label": "string",
+        "numOfFlight": 0,
+        "numOfPax": 0
+      }
+    ],
+    "totalFlight": 0,
+    "totalPax": 0
+  }
+}
