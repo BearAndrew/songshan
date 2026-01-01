@@ -9,7 +9,7 @@
           'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
         }"
         type="button"
-        (click)="activeIndex = i"
+        (click)="onTabClick(i)"
       >
         {{ button.label }}
       </button>
@@ -19,21 +19,24 @@
     <div class="flex items-center gap-2">
       <label class="text-[#aaa]">異常狀態</label>
       <app-dropdown
-        class="w-25"
-        [options]="dropdownOptions"
+        class="w-40"
+        [options]="flightStatusOptions"
         [value]="0"
+        (selectionChange)="onFlightStatusChange($event)"
       ></app-dropdown>
       <label class="text-[#aaa]">飛航類型</label>
       <app-dropdown
         class="w-25"
-        [options]="dropdownOptions"
-        [value]="0"
+        [options]="flightDirectionOptions"
+        [value]="'all'"
+        (selectionChange)="onFlightDirectionChange($event)"
       ></app-dropdown>
-      <button
+      <a
         class="w-30 px-2 py-1 rounded-xs bg-gradient-to-r from-[#44b59b] to-[#008abf] cursor-pointer"
+        [href]="csvUrl"
       >
         匯出(列印)
-      </button>
+      </a>
     </div>
   </div>
 

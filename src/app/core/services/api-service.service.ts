@@ -24,6 +24,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { FlightUpdateWebhookRequest } from '../../models/webhook-flight-update.model';
 import { BaggageTimeItem } from '../../models/baggage-time.model';
 import { TabType } from '../enums/tab-type.enum';
+import { FlightStatus } from '../../models/flight-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,11 @@ export class ApiService {
   /** 取得航空公司清單 */
   getAirlineList(): Observable<Airline[]> {
     return this.http.get<Airline[]>('GetAirlineList');
+  }
+
+  /** 取得飛航異常狀態清單 */
+  getFlightStatus(): Observable<FlightStatus[]> {
+    return this.http.get<FlightStatus[]>('GetFlightStatus');
   }
 
   // ========= 今日狀態 / 預測 =========
@@ -96,11 +102,12 @@ export class ApiService {
    * @param type 依 API 定義的分類 (例如: "ALL", "DIVERT", "CANCEL"… 若後端有定義)
    */
   getIrregularInboundFlight(
-    type: string | null
+    type: string,
+    direction: string,
+    delayCode: string | null
   ): Observable<IrregularInboundFlight> {
-    return this.http.get<IrregularInboundFlight>(
-      `IrregularInboundFlight/${type}`
-    );
+    const url = `IrregularInboundFlight/${type}/${direction}` + (delayCode ? `/${delayCode}` : '');
+    return this.http.get<IrregularInboundFlight>(url);
   }
 
   /** 即時人流資訊 */

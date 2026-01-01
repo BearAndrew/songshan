@@ -2,9 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { ApiService } from '../../core/services/api-service.service';
-import { CommonService } from '../../core/services/common.service';
-import { IrregularFlightItem, IrregularInboundFlight } from '../../models/irregular-inbound-flight.model';
+import {
+  IrregularFlightItem,
+  IrregularInboundFlight,
+} from '../../models/irregular-inbound-flight.model';
 import { TabType } from '../../core/enums/tab-type.enum';
+import { Option } from '../../shared/components/dropdown/dropdown.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-daily-abnormal-flight-info',
@@ -25,7 +29,7 @@ export class DailyAbnormalFlightInfoComponent {
     if (this._activeIndex === value) return;
     this._activeIndex = value;
     // when activeIndex changes, reload data for that index
-    this.getIrregularInboundFlight(this._activeIndex);
+    this.getIrregularInboundFlight();
   }
   data = [
     {
@@ -67,18 +71,46 @@ export class DailyAbnormalFlightInfoComponent {
   estFlight: number = 0;
   estPax: number = 0;
 
-  dropdownOptions = [{ label: '全部', value: 0 }];
+  /** 下載 CSV */
+  baseUrl = environment.apiBaseUrl + '/IrregularInboundFlightExport';
+  csvUrl = '';
 
-  constructor(
-    private apiService: ApiService, ) {
+  /** 異常狀態下拉選單 */
+  flightStatusOptions: Option[] = [];
+
+  /** 飛航類型下拉選單 */
+  flightDirectionOptions = [
+    { label: '全部', value: 'all' },
+    { label: '離站', value: 'outbound' },
+    { label: '到站', value: 'inbound' },
+  ];
+
+  /** Get 請求用的參數：異常狀態 */
+  paramDelayCode = null;
+  /** Get 請求用的參數：飛航類型 */
+  paramDirection = 'all';
+
+  constructor(private apiService: ApiService) {
     // initial load
-    this.getIrregularInboundFlight(this.activeIndex);
+    this.getIrregularInboundFlight();
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.apiService.getFlightStatus().subscribe((res) => {
+      this.flightStatusOptions = res.map((item) => ({
+        label: item.title,
+        value: item.id,
+        normal: item.normal, // 保留額外資訊（可選）
+      }));
+    });
   }
 
   // note: ngOnChanges won't fire for internal property assignment
   // (it's only for @Input() changes). We use the setter above instead.
 
-  getIrregularInboundFlight(activeIndex: number) {
+  getIrregularInboundFlight() {
     // clear previous table rows before loading new data
     this.table = [];
 
@@ -88,10 +120,16 @@ export class DailyAbnormalFlightInfoComponent {
     this.estPax = 0;
 
     this.apiService
-      .getIrregularInboundFlight(this.data[activeIndex].value)
+      .getIrregularInboundFlight(
+        this.data[this.activeIndex].value,
+        this.paramDirection,
+        this.paramDelayCode
+      )
       .subscribe((res) => {
         this.setTableData(res);
       });
+
+    this.setCSVUrl();
   }
 
   setTableData(data: IrregularInboundFlight) {
@@ -115,8 +153,27 @@ export class DailyAbnormalFlightInfoComponent {
     this.estPax = data.estPax;
   }
 
+  setCSVUrl() {
+    this.csvUrl =
+      this.baseUrl +
+      `/${this.data[this._activeIndex].value}/${this.paramDirection}` +
+      (this.paramDelayCode ? `/${this.paramDelayCode}` : '');
+  }
+
   onTabClick(newIndex: number) {
     this.activeIndex = newIndex;
-    this.getIrregularInboundFlight(newIndex);
+    this.getIrregularInboundFlight();
+  }
+
+  /** 異常狀態選擇 */
+  onFlightStatusChange(option: Option) {
+    this.paramDelayCode = option.value;
+    this.getIrregularInboundFlight();
+  }
+
+  /** 異常狀態選擇 */
+  onFlightDirectionChange(option: Option) {
+    this.paramDirection = option.value;
+    this.getIrregularInboundFlight();
   }
 }
