@@ -3,7 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Airline } from '../../models/airline.model';
 import { Airport } from '../../models/airport.model';
-import { FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse } from '../../models/flight-traffic-analysis.model';
+import {
+  FlightTrafficAnalysisRequest,
+  FlightTrafficAnalysisResponse,
+} from '../../models/flight-traffic-analysis.model';
 import { FlightTrafficPredictResponse } from '../../models/flight-traffic-predict.model';
 import {
   IrregularFlightItem,
@@ -33,6 +36,11 @@ export class ApiService {
   /** 取得機場清單 */
   getAirportList(): Observable<Airport[]> {
     return this.http.get<Airport[]>('GetAirportList');
+  }
+
+  /** 取得台灣機場清單 */
+  GetAirportListTaiwan(): Observable<Airport[]> {
+    return this.http.get<Airport[]>('GetAirportListTaiwan');
   }
 
   /** 取得航空公司清單 */
@@ -97,7 +105,9 @@ export class ApiService {
 
   /** 即時人流資訊 */
   getRealTimeTrafficFlow(type: string): Observable<RealTimeTrafficFlowItem[]> {
-    return this.http.get<RealTimeTrafficFlowItem[]>(`RealTimeTrafficFlow/${type}`);
+    return this.http.get<RealTimeTrafficFlowItem[]>(
+      `RealTimeTrafficFlow/${type}`
+    );
   }
 
   /** 即時人流（行李） */
@@ -130,7 +140,10 @@ export class ApiService {
   postFlightTrafficAnalysis(
     payload: FlightTrafficAnalysisRequest
   ): Observable<FlightTrafficAnalysisResponse> {
-    return this.http.post<FlightTrafficAnalysisResponse>('FlightTrafficAnalysis', payload);
+    return this.http.post<FlightTrafficAnalysisResponse>(
+      'FlightTrafficAnalysis',
+      payload
+    );
   }
 
   /**

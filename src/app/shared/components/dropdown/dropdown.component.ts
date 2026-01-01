@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 export interface Option {
   label: string;
   value: any;
-  [key:string]: any;
+  [key: string]: any;
 }
 
 @Component({
@@ -39,24 +39,30 @@ export class DropdownComponent {
   overlayRef!: OverlayRef;
   selectedLabel: string = '';
 
-  constructor(private overlay: Overlay, private vcr: ViewContainerRef, private commonService: CommonService) {}
+  constructor(
+    private overlay: Overlay,
+    private vcr: ViewContainerRef,
+    private commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
-    this.selectedLabel = this.options.find(item => item.value == this.value)?.label || '';
+    this.selectedLabel =
+      this.options.find((item) => item.value == this.value)?.label || '';
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['value']) {
+    if (changes) {
       this.updateSelectedLabel();
     }
   }
 
   private updateSelectedLabel() {
-    this.selectedLabel = this.options.find(item => item.value == this.value)?.label || '';
+    this.selectedLabel =
+      this.options.find((item) => item.value === this.value)?.label || '';
   }
 
   toggle() {
-    if(this.disabeld) return;
+    if (this.disabeld) return;
     this.overlayRef ? this.close() : this.open();
   }
 

@@ -25,6 +25,7 @@ export class HeaderComponent {
   title: string = '';
   airportListData: Airport[] = [];
   airportList: { label: string; value: number; code: string }[] = [];
+  airportDefault = 15;
   flightTypeList: { label: string; value: string }[] = [
     { label: 'ALL', value: 'ALL' },
     { label: 'SCHEDULE', value: 'SCHEDULE' },
@@ -107,7 +108,7 @@ export class HeaderComponent {
   }
 
   loadAirportList() {
-    this.apiService.getAirportList().subscribe((res) => {
+    this.apiService.GetAirportListTaiwan().subscribe((res) => {
       this.airportListData = res;
       this.airportListData.forEach((airport, index) => {
         this.airportList.push({
@@ -116,12 +117,18 @@ export class HeaderComponent {
           code: airport.iata,
         });
       });
+      this.airportList = [...this.airportList];
       this.commonService.setAirportList(this.airportList);
     });
   }
 
   /** 下拉選單更新 */
   onFlightTypeChange(selected: Option) {
+    console.log(selected);
     this.commonService.setSelectedFlightType(selected.value);
+  }
+
+  onAirportChange(selected: Option) {
+    console.log(selected);
   }
 }

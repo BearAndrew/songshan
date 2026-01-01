@@ -15,6 +15,7 @@ import {
 import { Airport } from '../../models/airport.model';
 import { Airline } from '../../models/airline.model';
 import { TabType } from '../../core/enums/tab-type.enum';
+import { fakeData } from './fake-data';
 
 @Component({
   selector: 'app-chart-page',
@@ -318,58 +319,10 @@ export class ChartPageComponent {
     this.apiService.postFlightTrafficAnalysis(payload).subscribe({
       next: (res: FlightTrafficAnalysisResponse) => {
         console.log('取得資料成功', res);
-
-        this.dateRangeLabel = this.buildDateRangeLabel();
-
-        const query = res.queryData;
-        const compare = res.compareData;
-
-        // === Bar：人數 ===
-        this.barData = [
-          {
-            label: `${this.dateRangeLabel}（人數）`,
-            data: query.stat.map((item) => ({
-              key: item.label,
-              value: item.numOfPax,
-            })),
-            colors: ['#0279ce'],
-          },
-          {
-            label: '比較區間（人數）',
-            data: compare.stat.map((item) => ({
-              key: item.label,
-              value: item.numOfPax,
-            })),
-            colors: ['#f08622'],
-          },
-        ];
-
-        // === Line：架次 ===
-        this.lineData = [
-          {
-            label: `${this.dateRangeLabel}（架次）`,
-            data: query.stat.map((item) => ({
-              key: item.label,
-              value: item.numOfFlight,
-            })),
-            colors: ['#0279ce'],
-          },
-          {
-            label: '比較區間（架次）',
-            data: compare.stat.map((item) => ({
-              key: item.label,
-              value: item.numOfFlight,
-            })),
-            colors: ['#f08622'],
-          },
-        ];
-
-        // === 總計 ===
-        this.totalFlight = query.totalFlight;
-        this.totalPax = query.totalPax;
+        this.handleFlightTrafficAnalysis(res);
       },
       error: (err) => {
-        console.error('取得資料失敗', err);
+        this.handleFlightTrafficAnalysis(fakeData);
       },
     });
   }
@@ -431,65 +384,55 @@ export class ChartPageComponent {
     return `${y}-${m}-${d}`;
   }
 
-  fakeData() {
-    const randomValue = () => Math.floor(Math.random() * 501); // 0 ~ 500
+  private handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
+    console.log('處理資料', res);
 
     this.dateRangeLabel = this.buildDateRangeLabel();
 
-    // 模擬 statByHour（24 小時）
-    const fakeStatByHour = Array.from({ length: 24 }, (_, i) => ({
-      hour: `${i.toString().padStart(2, '0')}:00`,
-      numOfPax: randomValue(),
-    }));
+    const query = res.queryData;
+    const compare = res.compareData;
 
-    // -------- BAR DATA --------
+    // === Bar：人數 ===
     this.barData = [
       {
         label: `${this.dateRangeLabel}人數`,
-        data: fakeStatByHour.map((item) => ({
-          key: item.hour.replace(':', ''),
-          value: randomValue(),
+        data: query.stat.map((item) => ({
+          key: item.label,
+          value: item.numOfPax,
         })),
         colors: ['#0279ce'],
       },
       {
         label: '2019年人數',
-        data: fakeStatByHour.map((item) => ({
-          key: item.hour.replace(':', ''),
-          value: randomValue(),
+        data: compare.stat.map((item) => ({
+          key: item.label,
+          value: item.numOfPax,
         })),
         colors: ['#f08622'],
       },
     ];
 
-    // -------- LINE DATA --------
+    // === Line：架次 ===
     this.lineData = [
       {
         label: `${this.dateRangeLabel}架次`,
-        data: fakeStatByHour.map((item) => ({
-          key: item.hour.replace(':', ''),
-          value: randomValue(),
+        data: query.stat.map((item) => ({
+          key: item.label,
+          value: item.numOfFlight,
         })),
         colors: ['#0279ce'],
       },
       {
         label: '2019年架次',
-        data: fakeStatByHour.map((item) => ({
-          key: item.hour.replace(':', ''),
-          value: randomValue(),
+        data: compare.stat.map((item) => ({
+          key: item.label,
+          value: item.numOfFlight,
         })),
         colors: ['#f08622'],
       },
     ];
 
-    // 模擬總數
-    this.totalFlight = fakeStatByHour.reduce(
-      (sum, item) => sum + item.numOfPax,
-      0
-    );
-    this.totalPax = this.totalFlight;
-
-    console.log('FAKE barData', this.barData);
-    console.log('FAKE lineData', this.lineData);
+    this.totalFlight = query.totalFlight;
+    this.totalPax = query.totalPax;
   }
 }

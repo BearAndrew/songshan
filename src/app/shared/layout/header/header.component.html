@@ -64,8 +64,9 @@
   <app-dropdown
     class=""
     [options]="airportList"
-    [value]="-1"
+    [value]="airportDefault"
     [showIcon]="true"
+    (selectionChange)="onAirportChange($event)"
   ></app-dropdown>
   }
 </ng-template>
