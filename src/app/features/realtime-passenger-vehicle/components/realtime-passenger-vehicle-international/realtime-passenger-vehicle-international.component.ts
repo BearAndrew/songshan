@@ -81,8 +81,10 @@ export class RealtimePassengerVehicleInternationalComponent {
       type: 'IMAGE_SELECT',
       payload: {
         locationIndex,
-        imageIndex: itemIndex,
+        imageIndex: 0,
+        pointIndex: itemIndex
       },
     });
+    // console.log(`locationIndex: ${locationIndex}, imageIndex: ${itemIndex}`)
   }
 }

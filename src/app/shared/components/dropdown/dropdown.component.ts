@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 export interface Option {
   label: string;
   value: any;
+  [key:string]: any;
 }
 
 @Component({

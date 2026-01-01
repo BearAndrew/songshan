@@ -5,8 +5,9 @@ import { BehaviorSubject, Subject } from 'rxjs';
 export interface RealTimeEvent {
   type: 'IMAGE_SELECT';
   payload: {
-    locationIndex: number; // 0~4
-    imageIndex: number; // 要顯示哪一張
+    locationIndex: number;
+    pointIndex: number;
+    imageIndex: number;
   };
 }
 

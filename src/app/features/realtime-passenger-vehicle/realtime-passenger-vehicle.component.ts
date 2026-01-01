@@ -4,16 +4,24 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { RealTimeTrafficFlowItem } from '../../models/real-time-traffic-flow.model';
+import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 
-interface LocationImageGroup {
+export interface LocationImage {
+  src: string;
+  label: string;
+  pointIndex: number; // 大項目
+  imageIndex: number; // 小項目
+}
+
+export interface LocationImageGroup {
   locationName: string;
-  images: { src: string; label: string }[]; // 每張圖片對應一個 label
-  currentIndex: number; // 目前顯示第幾張
+  images: LocationImage[];
+  currentIndex: number;
 }
 
 @Component({
   selector: 'app-realtime-passenger-vehicle',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, DropdownComponent],
   templateUrl: './realtime-passenger-vehicle.component.html',
   styleUrl: './realtime-passenger-vehicle.component.scss',
 })
@@ -41,6 +49,7 @@ export class RealtimePassengerVehicleComponent {
       value: '',
     },
   ];
+
   now = new Date();
 
   locationGroups: LocationImageGroup[] = [];
@@ -101,11 +110,12 @@ export class RealtimePassengerVehicleComponent {
   /** 將 API 資料依 location 分組並攤平 images */
   private buildLocationGroups(items: RealTimeTrafficFlowItem[]) {
     this.locationGroups = items.map((location) => {
-      // 將每個 point 的圖片攤平，每張圖片保留對應 label
-      const images = location.data.flatMap((point) =>
-        (point.image ?? []).map((img) => ({
+      const images = location.data.flatMap((point, pointIndex) =>
+        (point.image ?? []).map((img, imageIndex) => ({
           src: img,
           label: point.label,
+          pointIndex,
+          imageIndex,
         }))
       );
 
@@ -141,8 +151,13 @@ export class RealtimePassengerVehicleComponent {
   }
 
   /** 切換按鈕 */
-  onTabChange(index: number) {
-    this.activeIndex = index;
+  onTabChange(index: number | string) {
+    if (typeof index === 'number') {
+      this.activeIndex = index;
+    } else {
+      const foundIndex = this.data.findIndex((item) => item.value === index);
+      this.activeIndex = foundIndex !== -1 ? foundIndex : 0;
+    }
     this.getData();
     this.router.navigateByUrl(this.data[this.activeIndex].routerLink);
   }
@@ -150,13 +165,20 @@ export class RealtimePassengerVehicleComponent {
   /** 輪播切換 */
   private onImageSelected(payload: {
     locationIndex: number;
+    pointIndex: number;
     imageIndex: number;
   }) {
     const group = this.locationGroups[payload.locationIndex];
+    if (!group) return;
 
-    if (!group || group.images.length === 0) return;
+    // 找到對應的 flat index
+    const flatIndex = group.images.findIndex(
+      (img) =>
+        img.pointIndex === payload.pointIndex &&
+        img.imageIndex === payload.imageIndex
+    );
 
-    // 防止 index 超界
-    group.currentIndex = payload.imageIndex % group.images.length;
+    if (flatIndex === -1) return;
+    group.currentIndex = flatIndex;
   }
 }
