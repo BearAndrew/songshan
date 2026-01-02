@@ -126,11 +126,13 @@ export class DailyAbnormalFlightInfoComponent {
 
   ngOnInit(): void {
     this.apiService.getFlightStatus().subscribe((res) => {
-      this.flightStatusOptions = res.map((item) => ({
-        label: item.title,
-        value: item.id,
-        normal: item.normal, // 保留額外資訊（可選）
-      }));
+      this.flightStatusOptions = res
+        .filter((item) => item.normal === 0)
+        .map((item) => ({
+          label: item.title,
+          value: item.id,
+          normal: item.normal, // 保留額外資訊（可選）
+        }));
     });
   }
 
