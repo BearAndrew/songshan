@@ -90,7 +90,7 @@
           </div>
           <div
             class="p-1 leading-none flex items-center justify-center {{
-              detail.waitlist === group.maxWaitlist
+              detail.waitlist === group.maxWaitlist && detail.airline === ''
                 ? 'text-3xl text-orange-400 font-bold'
                 : ''
             }}"
@@ -116,7 +116,7 @@
           <!-- nextFlights -->
           <div
             class="p-1 leading-none flex items-center justify-center {{
-              detail.nextFlights === group.maxNextFlights
+              detail.nextFlights === group.maxNextFlights && detail.airline === ''
                 ? 'text-3xl text-orange-400 font-bold'
                 : ''
             }}"
@@ -127,7 +127,7 @@
           <!-- flown -->
           <div
             class="p-1 leading-none flex items-center justify-center {{
-              detail.flown === group.maxFlown
+              detail.flown === group.maxFlown && detail.airline === ''
                 ? 'text-3xl text-orange-400 font-bold'
                 : ''
             }}"
@@ -139,7 +139,7 @@
           <div class="grid grid-cols-[1fr_2rem]">
             <div
               class="p-1 leading-none flex items-center justify-center {{
-                detail.filled === group.maxFilled
+                detail.filled === group.maxFilled && detail.airline === ''
                   ? 'text-3xl text-orange-400 font-bold'
                   : ''
               }}"

@@ -240,7 +240,6 @@ export class DailyFlightAnalysisComponent {
     this.apiService
       .getTodayDelayStat(this.data[this.activeIndex].value)
       .subscribe((res) => {
-        console.log('今日延誤統計資料', res);
         this.setDelayData(res);
       });
   }
@@ -796,6 +795,12 @@ export class DailyFlightAnalysisComponent {
       this.data[i].delayData.airport.out = [];
       this.data[i].abnormalData.info = [];
       this.data[i].abnormalData.top3 = [];
+      this.abnormalAllData.info = [];
+      this.abnormalAllData.top3 = [];
+      this.abnormalInData.info = [];
+      this.abnormalInData.top3 = [];
+      this.abnormalOutData.info = [];
+      this.abnormalOutData.top3 = [];
     }
   }
 }

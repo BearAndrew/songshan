@@ -17,20 +17,8 @@ import { environment } from '../../../environments/environment';
   styleUrl: './daily-abnormal-flight-info.component.scss',
 })
 export class DailyAbnormalFlightInfoComponent {
-  // use a private backing field and a setter so assignments like
-  // (click)="activeIndex = i" will run our change logic automatically
-  private _activeIndex = 0;
+  activeIndex: number = 0;
 
-  get activeIndex(): number {
-    return this._activeIndex;
-  }
-
-  set activeIndex(value: number) {
-    if (this._activeIndex === value) return;
-    this._activeIndex = value;
-    // when activeIndex changes, reload data for that index
-    this.getIrregularInboundFlight();
-  }
   data = [
     {
       label: '國際兩岸線',
@@ -90,14 +78,53 @@ export class DailyAbnormalFlightInfoComponent {
   /** Get 請求用的參數：飛航類型 */
   paramDirection = 'all';
 
+  MOCK_IRREGULAR_INBOUND: IrregularInboundFlight = {
+    flightinfo: [
+      {
+        flightNo: 'CI123',
+        departurePort: '東京成田',
+        gate: 'A12',
+        sta: '2026-01-02 08:30',
+        ata: '2026-01-02 09:10',
+        delay: '40 分鐘',
+        status: '延誤',
+        reason: '天候不佳',
+        handle: '已通知旅客',
+      },
+      {
+        flightNo: 'BR807',
+        departurePort: '香港',
+        gate: 'B5',
+        sta: '2026-01-02 10:00',
+        ata: '2026-01-02 10:45',
+        delay: '45 分鐘',
+        status: '延誤',
+        reason: '機務檢修',
+        handle: '安排餐點',
+      },
+      {
+        flightNo: 'JL809',
+        departurePort: '大阪關西',
+        gate: 'C3',
+        sta: '2026-01-02 11:20',
+        ata: '2026-01-02 11:20',
+        delay: '準點',
+        status: '已到達',
+        reason: '—',
+        handle: '正常作業',
+      },
+    ],
+    actualFlight: 3,
+    actualPax: 420,
+    estFlight: 4,
+    estPax: 560,
+  };
+
   constructor(private apiService: ApiService) {
-    // initial load
     this.getIrregularInboundFlight();
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.apiService.getFlightStatus().subscribe((res) => {
       this.flightStatusOptions = res.map((item) => ({
         label: item.title,
@@ -107,17 +134,10 @@ export class DailyAbnormalFlightInfoComponent {
     });
   }
 
-  // note: ngOnChanges won't fire for internal property assignment
-  // (it's only for @Input() changes). We use the setter above instead.
-
   getIrregularInboundFlight() {
-    // clear previous table rows before loading new data
-    this.table = [];
-
-    this.actualFlight = 0;
-    this.actualPax = 0;
-    this.estFlight = 0;
-    this.estPax = 0;
+    // console.trace();
+    // this.setTableData(this.MOCK_IRREGULAR_INBOUND);
+    // return;
 
     this.apiService
       .getIrregularInboundFlight(
@@ -133,6 +153,12 @@ export class DailyAbnormalFlightInfoComponent {
   }
 
   setTableData(data: IrregularInboundFlight) {
+    this.table = [];
+    this.actualFlight = 0;
+    this.actualPax = 0;
+    this.estFlight = 0;
+    this.estPax = 0;
+
     data.flightinfo.forEach((item: IrregularFlightItem, index: number) => {
       this.table.push({
         flightNumber: item.flightNo,
@@ -156,7 +182,7 @@ export class DailyAbnormalFlightInfoComponent {
   setCSVUrl() {
     this.csvUrl =
       this.baseUrl +
-      `/${this.data[this._activeIndex].value}/${this.paramDirection}` +
+      `/${this.data[this.activeIndex].value}/${this.paramDirection}` +
       (this.paramDelayCode ? `/${this.paramDelayCode}` : '');
   }
 

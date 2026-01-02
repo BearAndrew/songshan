@@ -1,6 +1,6 @@
 export interface StandbyWeather {
   iata: string;
-  temperature: number;
+  temperature: string;
   weatherStatus: string;
   visibility: string;
   cloudLevel: string;

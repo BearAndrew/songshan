@@ -24,8 +24,7 @@ export class RealtimePassengerVehicleTaxiComponent {
     this.realTimeService.realTimeData$
       .pipe(takeUntil(this.destroy$))
       .subscribe((items) => {
-        if (!items || items.length < 3) return;
-        this.mapRealTimeToViewData(items);
+        this.mapRealTimeToViewData(items[0]);
       });
   }
 
@@ -34,8 +33,8 @@ export class RealtimePassengerVehicleTaxiComponent {
     this.destroy$.complete();
   }
 
-  private mapRealTimeToViewData(items: RealTimeTrafficFlowItem[]) {
-    const safe = (i: number) => items[i]?.data ?? [];
+  private mapRealTimeToViewData(item: RealTimeTrafficFlowItem) {
+    const safe = (i: number) => item?.data?.[i] ? [item.data[i]] : [];
 
     this.data1 = this.mapPoints(safe(0));
     this.data2 = this.mapPoints(safe(1));

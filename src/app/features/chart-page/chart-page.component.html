@@ -138,7 +138,7 @@
   </div>
 
   <div class="card flex flex-col flex-1 gap-2 items-center p-4 min-h-0">
-    @if(barData.length > 0) {
+    @if(barData.length > 0 && !isNoData) {
     <div class="flex items-center gap-4">
       @for(bar of barData; let i = $index; track bar;) {
       <div class="flex items-center gap-1">
@@ -169,8 +169,11 @@
       <div class="text-xl [writing-mode:vertical-rl]">人數</div>
     </div>
     }
-    @else {
+    @else if (!isNoData) {
       <div class="flex flex-1 items-center justify-center text-[30px]">請輸入查詢條件</div>
+    }
+    @else {
+      <div class="flex flex-1 items-center justify-center text-[30px]">查無資料</div>
     }
 
     <div class="flex items-center justify-center w-full h-50 mt-8">
@@ -188,13 +191,13 @@
             <div
               class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
             >
-              {{ 25 | number }}
+              {{ compareTotalFlight | number }}
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center justify-center">
             <div class="text-3xl text-[#a5a5a5]">總人數</div>
             <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
-              {{ 7838 | number }}
+              {{ compareTotalPax | number }}
             </div>
           </div>
         </div>

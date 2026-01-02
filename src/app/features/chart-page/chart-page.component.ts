@@ -150,9 +150,11 @@ export class ChartPageComponent {
   ];
 
   type: string = '';
+  dateRangeLabel = '';
   totalFlight: number = 0;
   totalPax: number = 0;
-  dateRangeLabel = '';
+  compareTotalFlight: number = 0;
+  compareTotalPax: number = 0;
 
   // 目前表單值
   formData: {
@@ -181,6 +183,8 @@ export class ChartPageComponent {
     flightScope: TabType.NONDOMESTIC,
   };
 
+  isNoData: boolean = false;
+
   constructor(
     private apiService: ApiService,
     private commonService: CommonService
@@ -191,9 +195,11 @@ export class ChartPageComponent {
   }
 
   ngOnInit(): void {
-    // 年份 2015 ~ 2025 倒序
-    this.yearOptions = Array.from({ length: 2025 - 2015 + 1 }, (_, i) => {
-      const year = 2025 - i;
+    const currentYear = new Date().getFullYear();
+
+    // 今年 ~ 往回 10 年（共 11 年）
+    this.yearOptions = Array.from({ length: 11 }, (_, i) => {
+      const year = currentYear - i;
       return { label: year.toString(), value: year };
     });
 
@@ -313,9 +319,8 @@ export class ChartPageComponent {
     };
 
     console.log(payload);
-
-    // this.fakeData();
-    // return;
+    this.handleFlightTrafficAnalysis(fakeData);
+    return;
 
     // 呼叫 API
     this.apiService.postFlightTrafficAnalysis(payload).subscribe({
@@ -386,55 +391,88 @@ export class ChartPageComponent {
     return `${y}-${m}-${d}`;
   }
 
-  private handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
-    console.log('處理資料', res);
+private handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
+  console.log('處理資料', res);
 
-    this.dateRangeLabel = this.buildDateRangeLabel();
+  const query = res?.queryData;
+  const compare = res?.compareData;
 
-    const query = res.queryData;
-    const compare = res.compareData;
+  const queryStat = Array.isArray(query?.stat) ? query.stat : [];
+  const compareStat = Array.isArray(compare?.stat) ? compare.stat : [];
 
-    // === Bar：人數 ===
-    this.barData = [
-      {
-        label: `${this.dateRangeLabel}人數`,
-        data: query.stat.map((item) => ({
-          key: item.label,
-          value: item.numOfPax,
-        })),
-        colors: ['#0279ce'],
-      },
-      {
-        label: '2019年人數',
-        data: compare.stat.map((item) => ({
-          key: item.label,
-          value: item.numOfPax,
-        })),
-        colors: ['#f08622'],
-      },
-    ];
+  const hasAnyData = queryStat.length > 0 || compareStat.length > 0;
 
-    // === Line：架次 ===
-    this.lineData = [
-      {
-        label: `${this.dateRangeLabel}架次`,
-        data: query.stat.map((item) => ({
-          key: item.label,
-          value: item.numOfFlight,
-        })),
-        colors: ['#0279ce'],
-      },
-      {
-        label: '2019年架次',
-        data: compare.stat.map((item) => ({
-          key: item.label,
-          value: item.numOfFlight,
-        })),
-        colors: ['#f08622'],
-      },
-    ];
-
-    this.totalFlight = query.totalFlight;
-    this.totalPax = query.totalPax;
+  // === 兩邊都沒資料 ===
+  if (!hasAnyData) {
+    this.barData = [];
+    this.lineData = [];
+    this.totalFlight = 0;
+    this.totalPax = 0;
+    this.isNoData = true;
+    return;
   }
+
+  this.isNoData = false;
+  this.dateRangeLabel = this.buildDateRangeLabel();
+
+  // ================= Bar：人數 =================
+  const barSeries: any[] = [];
+
+  if (queryStat.length > 0) {
+    barSeries.push({
+      label: `${this.dateRangeLabel}人數`,
+      data: queryStat.map((item) => ({
+        key: item.label,
+        value: item.numOfPax,
+      })),
+      colors: ['#0279ce'],
+    });
+  }
+
+  if (compareStat.length > 0) {
+    barSeries.push({
+      label: '2019年人數',
+      data: compareStat.map((item) => ({
+        key: item.label,
+        value: item.numOfPax,
+      })),
+      colors: ['#f08622'],
+    });
+  }
+
+  this.barData = barSeries;
+
+  // ================= Line：架次 =================
+  const lineSeries: any[] = [];
+
+  if (queryStat.length > 0) {
+    lineSeries.push({
+      label: `${this.dateRangeLabel}架次`,
+      data: queryStat.map((item) => ({
+        key: item.label,
+        value: item.numOfFlight,
+      })),
+      colors: ['#0279ce'],
+    });
+  }
+
+  if (compareStat.length > 0) {
+    lineSeries.push({
+      label: '2019年架次',
+      data: compareStat.map((item) => ({
+        key: item.label,
+        value: item.numOfFlight,
+      })),
+      colors: ['#f08622'],
+    });
+  }
+
+  this.lineData = lineSeries;
+
+  this.totalFlight = query?.totalFlight ?? 0;
+  this.totalPax = query?.totalPax ?? 0;
+  this.compareTotalFlight = compare?.totalFlight ?? 0;
+  this.compareTotalPax = compare?.totalPax ?? 0;
+}
+
 }
