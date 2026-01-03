@@ -9,6 +9,7 @@ import { DropdownComponent, Option } from '../../components/dropdown/dropdown.co
 import { ApiService } from '../../../core/services/api-service.service';
 import { Airport } from '../../../models/airport.model';
 import { CommonService } from '../../../core/services/common.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -32,6 +33,7 @@ export class HeaderComponent {
     { label: 'COMM', value: 'COMM' },
     { label: 'OTHER', value: 'OTHER' },
   ];
+  isProd = environment.production;
 
   constructor(
     private router: Router,

@@ -1,13 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 @use "tailwindcss";
 
-html,
-body {
+html,body {
   height: 100%;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: auto;
 }
 
+@media (min-width: 641px) {
+html,body {
+    min-width: 1670px;
+  }
+}
 
 .light {
   @apply bg-blue-100;

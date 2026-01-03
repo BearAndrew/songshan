@@ -2,10 +2,14 @@
   <h1 class="text-[50px] font-bold relative z-10">Header Title</h1>
 </div> -->
 
-<div class="header flex items-center justify-between p-4 max-h-18" [ngClass]="theme">
+<div
+  class="header flex items-center justify-between p-4 max-h-18"
+  [ngClass]="theme"
+>
   <div
     class="flex flex-row-reverse sm:flex-row items-center justify-between gap-2 relative w-full sm:w-fit z-10"
   >
+    @if(!isProd) {
     <!-- 按鈕 -->
     <button
       #menuTrigger="cdkOverlayOrigin"
@@ -36,6 +40,7 @@
         </ng-container>
       </div>
     </ng-template>
+    }
 
     <h1 class="text-2xl sm:!text-[50px] font-bold leading-none">{{ title }}</h1>
   </div>

@@ -318,9 +318,9 @@ export class ChartPageComponent {
       flightType: (this.formData.flightType as TabType) || '',
     };
 
-    console.log(payload);
-    this.handleFlightTrafficAnalysis(fakeData);
-    return;
+    // console.log(payload);
+    // this.handleFlightTrafficAnalysis(fakeData);
+    // return;
 
     // 呼叫 API
     this.apiService.postFlightTrafficAnalysis(payload).subscribe({
