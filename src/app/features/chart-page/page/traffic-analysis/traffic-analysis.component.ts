@@ -1,29 +1,24 @@
-import { CommonService } from './../../core/services/common.service';
-import { ApiService } from './../../core/services/api-service.service';
+import { CommonService } from './../../../../core/services/common.service';
+import { ApiService } from './../../../../core/services/api-service.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
-import { DataSetWithDataArray } from '../../core/lib/chart-tool';
-import { BarLineChartComponent } from '../../shared/chart/bar-line-chart/bar-line-chart.component';
-import { Option } from '../../shared/components/dropdown/dropdown.component';
-import {
-  FlightDirection,
-  FlightTrafficAnalysisRequest,
-  FlightTrafficAnalysisResponse,
-  FlightTrafficType,
-} from '../../models/flight-traffic-analysis.model';
-import { Airport } from '../../models/airport.model';
-import { Airline } from '../../models/airline.model';
-import { TabType } from '../../core/enums/tab-type.enum';
-import { fakeData } from './page/traffic-analysis/fake-data';
+import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
+import { BarLineChartComponent } from '../../../../shared/chart/bar-line-chart/bar-line-chart.component';
+import { TabType } from '../../../../core/enums/tab-type.enum';
+import { DataSetWithDataArray } from '../../../../core/lib/chart-tool';
+import { Option } from '../../../../shared/components/dropdown/dropdown.component';
+import { Airport } from '../../../../models/airport.model';
+import { Airline } from '../../../../models/airline.model';
+import { FlightDirection, FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse, FlightTrafficType } from '../../../../models/flight-traffic-analysis.model';
+import { fakeData } from './fake-data';
 
 @Component({
-  selector: 'app-chart-page',
+  selector: 'app-traffic-analysis',
   imports: [CommonModule, DropdownComponent, BarLineChartComponent],
-  templateUrl: './chart-page.component.html',
-  styleUrl: './chart-page.component.scss',
+  templateUrl: './traffic-analysis.component.html',
+  styleUrl: './traffic-analysis.component.scss',
 })
-export class ChartPageComponent {
+export class TrafficAnalysisComponent {
   activeIndex: number = 0;
   data = [
     {
@@ -48,83 +43,9 @@ export class ChartPageComponent {
     },
   ];
 
-  barData: DataSetWithDataArray[] = [
-    // {
-    //   label: '年人數',
-    //   data: [
-    //     { key: 'Jan', value: 320 },
-    //     { key: 'Feb', value: 280 },
-    //     { key: 'Mar', value: 350 },
-    //     { key: 'Apr', value: 420 },
-    //     { key: 'May', value: 460 },
-    //     { key: 'Jun', value: 510 },
-    //     { key: 'Jul', value: 580 },
-    //     { key: 'Aug', value: 600 },
-    //     { key: 'Sep', value: 470 },
-    //     { key: 'Oct', value: 430 },
-    //     { key: 'Nov', value: 390 },
-    //     { key: 'Dec', value: 410 },
-    //   ],
-    //   colors: ['#0279ce'],
-    // },
-    // {
-    //   label: '2019年人數',
-    //   data: [
-    //     { key: 'Jan', value: 300 },
-    //     { key: 'Feb', value: 260 },
-    //     { key: 'Mar', value: 330 },
-    //     { key: 'Apr', value: 400 },
-    //     { key: 'May', value: 440 },
-    //     { key: 'Jun', value: 490 },
-    //     { key: 'Jul', value: 560 },
-    //     { key: 'Aug', value: 590 },
-    //     { key: 'Sep', value: 450 },
-    //     { key: 'Oct', value: 420 },
-    //     { key: 'Nov', value: 370 },
-    //     { key: 'Dec', value: 390 },
-    //   ],
-    //   colors: ['#f08622'],
-    // },
-  ];
+  barData: DataSetWithDataArray[] = [];
 
-  lineData: DataSetWithDataArray[] = [
-    // {
-    //   label: '年架次',
-    //   data: [
-    //     { key: 'Jan', value: 300 },
-    //     { key: 'Feb', value: 270 },
-    //     { key: 'Mar', value: 340 },
-    //     { key: 'Apr', value: 410 },
-    //     { key: 'May', value: 450 },
-    //     { key: 'Jun', value: 500 },
-    //     { key: 'Jul', value: 570 },
-    //     { key: 'Aug', value: 590 },
-    //     { key: 'Sep', value: 460 },
-    //     { key: 'Oct', value: 430 },
-    //     { key: 'Nov', value: 380 },
-    //     { key: 'Dec', value: 400 },
-    //   ],
-    //   colors: ['#0279ce'],
-    // },
-    // {
-    //   label: '2019年架次',
-    //   data: [
-    //     { key: 'Jan', value: 280 },
-    //     { key: 'Feb', value: 250 },
-    //     { key: 'Mar', value: 320 },
-    //     { key: 'Apr', value: 390 },
-    //     { key: 'May', value: 430 },
-    //     { key: 'Jun', value: 480 },
-    //     { key: 'Jul', value: 550 },
-    //     { key: 'Aug', value: 580 },
-    //     { key: 'Sep', value: 440 },
-    //     { key: 'Oct', value: 410 },
-    //     { key: 'Nov', value: 360 },
-    //     { key: 'Dec', value: 380 },
-    //   ],
-    //   colors: ['#f08622'],
-    // },
-  ];
+  lineData: DataSetWithDataArray[] = [];
 
   // 年、月、日 options
   yearOptions: Option[] = [];
@@ -292,11 +213,6 @@ export class ChartPageComponent {
       .filter(([_, val]) => val === null)
       .map(([key]) => key);
 
-    // if (emptyFields.length > 0) {
-    //   console.warn('請填寫完整資料', emptyFields);
-    //   return;
-    // }
-
     // 組裝 API payload
     const payload: FlightTrafficAnalysisRequest = {
       dateFrom:
@@ -391,88 +307,87 @@ export class ChartPageComponent {
     return `${y}-${m}-${d}`;
   }
 
-private handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
-  console.log('處理資料', res);
+  private handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
+    console.log('處理資料', res);
 
-  const query = res?.queryData;
-  const compare = res?.compareData;
+    const query = res?.queryData;
+    const compare = res?.compareData;
 
-  const queryStat = Array.isArray(query?.stat) ? query.stat : [];
-  const compareStat = Array.isArray(compare?.stat) ? compare.stat : [];
+    const queryStat = Array.isArray(query?.stat) ? query.stat : [];
+    const compareStat = Array.isArray(compare?.stat) ? compare.stat : [];
 
-  const hasAnyData = queryStat.length > 0 || compareStat.length > 0;
+    const hasAnyData = queryStat.length > 0 || compareStat.length > 0;
 
-  // === 兩邊都沒資料 ===
-  if (!hasAnyData) {
-    this.barData = [];
-    this.lineData = [];
-    this.totalFlight = 0;
-    this.totalPax = 0;
-    this.isNoData = true;
-    return;
+    // === 兩邊都沒資料 ===
+    if (!hasAnyData) {
+      this.barData = [];
+      this.lineData = [];
+      this.totalFlight = 0;
+      this.totalPax = 0;
+      this.isNoData = true;
+      return;
+    }
+
+    this.isNoData = false;
+    this.dateRangeLabel = this.buildDateRangeLabel();
+
+    // ================= Bar：人數 =================
+    const barSeries: any[] = [];
+
+    if (queryStat.length > 0) {
+      barSeries.push({
+        label: `${this.dateRangeLabel}人數`,
+        data: queryStat.map((item) => ({
+          key: item.label,
+          value: item.numOfPax,
+        })),
+        colors: ['#0279ce'],
+      });
+    }
+
+    if (compareStat.length > 0) {
+      barSeries.push({
+        label: '2019年人數',
+        data: compareStat.map((item) => ({
+          key: item.label,
+          value: item.numOfPax,
+        })),
+        colors: ['#f08622'],
+      });
+    }
+
+    this.barData = barSeries;
+
+    // ================= Line：架次 =================
+    const lineSeries: any[] = [];
+
+    if (queryStat.length > 0) {
+      lineSeries.push({
+        label: `${this.dateRangeLabel}架次`,
+        data: queryStat.map((item) => ({
+          key: item.label,
+          value: item.numOfFlight,
+        })),
+        colors: ['#0279ce'],
+      });
+    }
+
+    if (compareStat.length > 0) {
+      lineSeries.push({
+        label: '2019年架次',
+        data: compareStat.map((item) => ({
+          key: item.label,
+          value: item.numOfFlight,
+        })),
+        colors: ['#f08622'],
+      });
+    }
+
+    this.lineData = lineSeries;
+
+    this.totalFlight = query?.totalFlight ?? 0;
+    this.totalPax = query?.totalPax ?? 0;
+    this.compareTotalFlight = compare?.totalFlight ?? 0;
+    this.compareTotalPax = compare?.totalPax ?? 0;
   }
-
-  this.isNoData = false;
-  this.dateRangeLabel = this.buildDateRangeLabel();
-
-  // ================= Bar：人數 =================
-  const barSeries: any[] = [];
-
-  if (queryStat.length > 0) {
-    barSeries.push({
-      label: `${this.dateRangeLabel}人數`,
-      data: queryStat.map((item) => ({
-        key: item.label,
-        value: item.numOfPax,
-      })),
-      colors: ['#0279ce'],
-    });
-  }
-
-  if (compareStat.length > 0) {
-    barSeries.push({
-      label: '2019年人數',
-      data: compareStat.map((item) => ({
-        key: item.label,
-        value: item.numOfPax,
-      })),
-      colors: ['#f08622'],
-    });
-  }
-
-  this.barData = barSeries;
-
-  // ================= Line：架次 =================
-  const lineSeries: any[] = [];
-
-  if (queryStat.length > 0) {
-    lineSeries.push({
-      label: `${this.dateRangeLabel}架次`,
-      data: queryStat.map((item) => ({
-        key: item.label,
-        value: item.numOfFlight,
-      })),
-      colors: ['#0279ce'],
-    });
-  }
-
-  if (compareStat.length > 0) {
-    lineSeries.push({
-      label: '2019年架次',
-      data: compareStat.map((item) => ({
-        key: item.label,
-        value: item.numOfFlight,
-      })),
-      colors: ['#f08622'],
-    });
-  }
-
-  this.lineData = lineSeries;
-
-  this.totalFlight = query?.totalFlight ?? 0;
-  this.totalPax = query?.totalPax ?? 0;
-  this.compareTotalFlight = compare?.totalFlight ?? 0;
-  this.compareTotalPax = compare?.totalPax ?? 0;
-}
-
 }

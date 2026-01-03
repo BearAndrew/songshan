@@ -16,6 +16,7 @@ import { DailyDomesticStandbyAnalysisDetailComponent } from './features/daily-do
 import { RealtimePassengerVehicleComponent } from './features/realtime-passenger-vehicle/realtime-passenger-vehicle.component';
 import { RealtimePassengerVehicleTaxiComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-taxi/realtime-passenger-vehicle-taxi.component';
 import { RealtimePassengerVehicleBaggageComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-baggage/realtime-passenger-vehicle-baggage.component';
+import { TrafficAnalysisComponent } from './features/chart-page/page/traffic-analysis/traffic-analysis.component';
 
 export const routes: Routes = [
   {
@@ -109,7 +110,7 @@ export const routes: Routes = [
       },
       {
         path: 'traffic-analysis',
-        component: ChartPageComponent,
+        component: TrafficAnalysisComponent,
         data: { title: '運量分析', theme: 'dark' },
       },
       {
