@@ -3,6 +3,7 @@ import { DailyFlightAnalysisChildComponent } from '../daily-flight-analysis.chil
 import { DataSetWithData } from '../../../../core/lib/chart-tool';
 import { PieChartComponent } from '../../../../shared/chart/pie-chart/pie-chart.component';
 import { CommonModule } from '@angular/common';
+import { CommonService } from '../../../../core/services/common.service';
 
 @Component({
   selector: 'app-daily-flight-analysis-delay-pie-chart-card',
@@ -12,9 +13,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './daily-flight-analysis-delay-pie-chart-card.component.scss',
 })
 export class DailyFlightAnalysisDelayPieChartCardComponent extends DailyFlightAnalysisChildComponent {
-@Input() inboundData: DataSetWithData[] = [];
-@Input() outboundData: DataSetWithData[] = [];
-@Input() pieCharData: {
+  @Input() inboundData: DataSetWithData[] = [];
+  @Input() outboundData: DataSetWithData[] = [];
+  @Input() pieCharData: {
     inFlight: number;
     inPax: number;
     inTime: number;
@@ -30,46 +31,12 @@ export class DailyFlightAnalysisDelayPieChartCardComponent extends DailyFlightAn
     outTime: 0,
   };
 
-  // flightData: DataSetWithData[] = [
-  //   {
-  //     label: '0~30m',
-  //     data: { value: 45 },
-  //     colors: ['#00c4ce'],
-  //     unitText: '%',
-  //   },
-  //   {
-  //     label: '30~60m',
-  //     data: { value: 20 },
-  //     colors: ['#a4dd46'],
-  //     unitText: '%',
-  //   },
-  //   {
-  //     label: '60m',
-  //     data: { value: 35 },
-  //     colors: ['#ceedfe'],
-  //     unitText: '%',
-  //   },
-  // ];
+  isMobile = false;
 
-  // /** 圓餅圖 */
-  // passengerData: DataSetWithData[] = [
-  //  {
-  //     label: '0~30m',
-  //     data: { value: 45 },
-  //     colors: ['#00c4ce'],
-  //     unitText: '%',
-  //   },
-  //   {
-  //     label: '30~60m',
-  //     data: { value: 20 },
-  //     colors: ['#a4dd46'],
-  //     unitText: '%',
-  //   },
-  //   {
-  //     label: '60m',
-  //     data: { value: 35 },
-  //     colors: ['#ceedfe'],
-  //     unitText: '%',
-  //   },
-  // ];
+  constructor(private commonService: CommonService) {
+    super();
+    this.commonService.observeScreenSize().subscribe((size) => {
+      this.isMobile = size == 'sm';
+    });
+  }
 }
