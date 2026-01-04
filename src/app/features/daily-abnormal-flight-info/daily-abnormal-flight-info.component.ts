@@ -66,6 +66,9 @@ export class DailyAbnormalFlightInfoComponent {
   /** 異常狀態下拉選單 */
   flightStatusOptions: Option[] = [];
 
+  flightStatusDefault = '';
+
+
   /** 飛航類型下拉選單 */
   flightDirectionOptions = [
     { label: '全部', value: 'all' },
@@ -133,6 +136,8 @@ export class DailyAbnormalFlightInfoComponent {
           value: item.id,
           normal: item.normal, // 保留額外資訊（可選）
         }));
+
+        this.flightStatusOptions.unshift({ label: '全部', value: '', normal: 0});
     });
   }
 
