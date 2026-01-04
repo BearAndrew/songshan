@@ -148,36 +148,38 @@
       <div class="flex items-center gap-1">
         <div
           class="w-4 h-4 rounded-full"
-          [ngStyle]="{ 'background-color': bar.colors?.[0] }"
+          [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
         ></div>
-        <div>{{ bar.label }}</div>
+        <div>{{ lineData[i].label }}</div>
       </div>
       <div class="flex items-center gap-1">
         <div
           class="w-4 h-2"
-          [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
+          [ngStyle]="{ 'background-color': bar.colors?.[0] }"
         ></div>
-        <div>{{ lineData[i].label }}</div>
+        <div>{{ bar.label }}</div>
       </div>
       }
     </div>
 
     <div class="flex flex-1 items-center gap-2 w-full min-h-0 relative">
-      <div class="text-xl [writing-mode:vertical-rl]">架次</div>
+      <div class="text-xl [writing-mode:vertical-rl]">人數</div>
       <app-bar-line-chart
         class="flex-1 h-full"
         [barData]="barData"
         [lineData]="lineData"
         [showLegend]="false"
       ></app-bar-line-chart>
-      <div class="text-xl [writing-mode:vertical-rl]">人數</div>
+      <div class="text-xl [writing-mode:vertical-rl]">架次</div>
     </div>
-    }
-    @else if (!isNoData) {
-      <div class="flex flex-1 items-center justify-center text-[30px]">請輸入查詢條件</div>
-    }
-    @else {
-      <div class="flex flex-1 items-center justify-center text-[30px]">查無資料</div>
+    } @else if (!isNoData) {
+    <div class="flex flex-1 items-center justify-center text-[30px]">
+      請輸入查詢條件
+    </div>
+    } @else {
+    <div class="flex flex-1 items-center justify-center text-[30px]">
+      查無資料
+    </div>
     }
 
     <div class="flex items-center justify-center w-full h-55 mt-4">
