@@ -19,6 +19,7 @@ export class PieChartComponent {
   @Input() data: DataSetWithData[] = [];
   @Input() centerLabel: string | number = '';
   @Input() textColor: string = '';
+  @Input() fontSize: string = '32px';
   @Input() flexDirection: 'v' | 'h' = 'v';
   @Input() showLegend: boolean = true;
   id: string;

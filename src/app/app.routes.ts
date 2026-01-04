@@ -8,7 +8,6 @@ import { DailyAbnormalFlightInfoComponent } from './features/daily-abnormal-flig
 import { RealtimePassengerVehicleDomesticComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-domestic/realtime-passenger-vehicle-domestic.component';
 import { RealtimePassengerVehicleInternationalComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-international/realtime-passenger-vehicle-international.component';
 import { TrafficForecastComponent } from './features/traffic-forecast/traffic-forecast.component';
-import { ChartPageComponent } from './features/chart-page/chart-page.component';
 import { DomesticRouteStandbyAnalysisComponent } from './features/domestic-route-standby-analysis/domestic-route-standby-analysis.component';
 import { IntlCheckinCounterComponent } from './features/intl-checkin-counter/intl-checkin-counter.component';
 import { TaxiModuleComponent } from './features/taxi-module/taxi-module.component';
@@ -17,6 +16,11 @@ import { RealtimePassengerVehicleComponent } from './features/realtime-passenger
 import { RealtimePassengerVehicleTaxiComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-taxi/realtime-passenger-vehicle-taxi.component';
 import { RealtimePassengerVehicleBaggageComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-baggage/realtime-passenger-vehicle-baggage.component';
 import { TrafficAnalysisComponent } from './features/chart-page/page/traffic-analysis/traffic-analysis.component';
+import { FixedRouteTrafficAnalysisComponent } from './features/chart-page/page/fixed-route-traffic-analysis/fixed-route-traffic-analysis.component';
+import { TrafficComparisonComponent } from './features/chart-page/page/traffic-comparison/traffic-comparison.component';
+import { FixedRouteTrafficComparisonComponent } from './features/chart-page/page/fixed-route-traffic-comparison/fixed-route-traffic-comparison.component';
+import { OnTimePerformanceComponent } from './features/chart-page/page/on-time-performance/on-time-performance.component';
+import { FlightAbnormalComponent } from './features/chart-page/page/flight-abnormal/flight-abnormal.component';
 
 export const routes: Routes = [
   {
@@ -115,27 +119,27 @@ export const routes: Routes = [
       },
       {
         path: 'fixed-route-traffic-analysis',
-        component: ChartPageComponent,
+        component: FixedRouteTrafficAnalysisComponent,
         data: { title: '定航運量分析', theme: 'dark' },
       },
       {
-        path: 'traffic-comparison-data',
-        component: ChartPageComponent,
+        path: 'traffic-comparison',
+        component: TrafficComparisonComponent,
         data: { title: '運量對比資料', theme: 'dark' },
       },
       {
-        path: 'fixed-route-traffic-comparison-data',
-        component: ChartPageComponent,
+        path: 'fixed-route-traffic-comparison',
+        component: FixedRouteTrafficComparisonComponent,
         data: { title: '定航運量對比資料', theme: 'dark' },
       },
       {
-        path: 'on-time-performance-analysis',
-        component: ChartPageComponent,
+        path: 'on-time-performance',
+        component: OnTimePerformanceComponent,
         data: { title: '準點率分析', theme: 'dark' },
       },
       {
-        path: 'flight-abnormal-analysis',
-        component: ChartPageComponent,
+        path: 'flight-abnormal',
+        component: FlightAbnormalComponent,
         data: { title: '航班異常分析', theme: 'dark' },
       },
       {
