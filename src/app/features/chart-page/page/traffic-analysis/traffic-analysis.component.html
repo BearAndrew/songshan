@@ -26,7 +26,7 @@
         [options]="yearOptions"
         [value]="formData.startYear"
         (selectionChange)="
-          onSelectionChange('startYear', $event.value);
+          onSelectionChange('startYear', $event);
           onMonthOrYearChange('start', $event.value, formData.startMonth)
         "
       ></app-dropdown>
@@ -39,7 +39,7 @@
         [value]="formData.startMonth"
         [disabeld]="formData.startYear == null"
         (selectionChange)="
-          onSelectionChange('startMonth', $event.value);
+          onSelectionChange('startMonth', $event);
           onMonthOrYearChange('start', formData.startYear, $event.value)
         "
       ></app-dropdown>
@@ -51,7 +51,7 @@
         [options]="startDayOptions"
         [value]="formData.startDay"
         [disabeld]="formData.startMonth == null"
-        (selectionChange)="onSelectionChange('startDay', $event.value)"
+        (selectionChange)="onSelectionChange('startDay', $event)"
       ></app-dropdown>
       <span>日</span>
 
@@ -64,7 +64,7 @@
         [value]="formData.endYear"
         [disabeld]="formData.startYear == null"
         (selectionChange)="
-          onSelectionChange('endYear', $event.value);
+          onSelectionChange('endYear', $event);
           onMonthOrYearChange('end', $event.value, formData.endMonth)
         "
       ></app-dropdown>
@@ -77,7 +77,7 @@
         [value]="formData.endMonth"
         [disabeld]="formData.endYear == null"
         (selectionChange)="
-          onSelectionChange('endMonth', $event.value);
+          onSelectionChange('endMonth', $event);
           onMonthOrYearChange('end', formData.endYear, $event.value)
         "
       ></app-dropdown>
@@ -89,7 +89,7 @@
         [options]="endDayOptions"
         [value]="formData.endDay"
         [disabeld]="formData.endMonth == null"
-        (selectionChange)="onSelectionChange('endDay', $event.value)"
+        (selectionChange)="onSelectionChange('endDay', $event)"
       ></app-dropdown>
       <span>日</span>
     </div>
@@ -112,7 +112,7 @@
         [value]="optionDefaultValue"
         (selectionChange)="onSelectionChange('flightClass', $event)"
       >
-      </app-dropdown> 
+      </app-dropdown>
 
       <label>航點</label>
       <app-dropdown
@@ -128,7 +128,7 @@
         class="w-20"
         [options]="flightTypeOptions"
         [value]="optionDefaultValue"
-        (selectionChange)="onSelectionChange('flightType', $event)"
+        (selectionChange)="onSelectionChange('direction', $event)"
       >
       </app-dropdown>
 

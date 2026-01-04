@@ -92,8 +92,8 @@ export class TrafficAnalysisComponent {
     route: string | null;
     flightClass: string | null;
     airline: string | null;
+    direction: string | null;
     flightType: string | null;
-    flightScope: string | null;
   } = {
     startYear: null,
     startMonth: null,
@@ -104,8 +104,8 @@ export class TrafficAnalysisComponent {
     route: null,
     flightClass: null,
     airline: null,
-    flightType: null,
-    flightScope: TabType.NONDOMESTIC,
+    direction: null,
+    flightType: TabType.NONDOMESTIC,
   };
 
   isNoData: boolean = false;
@@ -154,8 +154,8 @@ export class TrafficAnalysisComponent {
   }
 
   // 選擇事件
-  onSelectionChange(field: keyof typeof this.formData, value: any) {
-    this.formData[field] = value;
+  onSelectionChange(field: keyof typeof this.formData, option: Option) {
+    this.formData[field] = option.value;
   }
 
   // 計算某年某月的天數
@@ -209,7 +209,7 @@ export class TrafficAnalysisComponent {
   // 當切換按鈕時更新 formData
   onScopeChange(index: number) {
     this.activeIndex = index;
-    this.formData.flightScope = this.data[index].value;
+    this.formData.flightType = this.data[index].value;
   }
 
   // 確認按鈕
@@ -235,7 +235,7 @@ export class TrafficAnalysisComponent {
         ) || '',
       type: (this.type as FlightTrafficType) || '',
       airline: this.formData.airline! || '',
-      direction: (this.formData.flightType as FlightDirection) || '',
+      direction: (this.formData.direction as FlightDirection) || '',
       peer: this.formData.route! || '',
       flightType: (this.formData.flightType as TabType) || '',
     };

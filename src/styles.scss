@@ -3,7 +3,6 @@
 
 html,body {
   height: 100%;
-  min-height: 800px;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: auto;
 }
@@ -11,7 +10,6 @@ html,body {
 @media (min-width: 641px) {
 html,body {
     min-width: 1670px;
-    min-height: 0px;
   }
 }
 
