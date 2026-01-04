@@ -9,7 +9,6 @@ import { RealtimePassengerVehicleDomesticComponent } from './features/realtime-p
 import { RealtimePassengerVehicleInternationalComponent } from './features/realtime-passenger-vehicle/components/realtime-passenger-vehicle-international/realtime-passenger-vehicle-international.component';
 import { TrafficForecastComponent } from './features/traffic-forecast/traffic-forecast.component';
 import { DomesticRouteStandbyAnalysisComponent } from './features/domestic-route-standby-analysis/domestic-route-standby-analysis.component';
-import { IntlCheckinCounterComponent } from './features/intl-checkin-counter/intl-checkin-counter.component';
 import { TaxiModuleComponent } from './features/taxi-module/taxi-module.component';
 import { DailyDomesticStandbyAnalysisDetailComponent } from './features/daily-domestic-standby-analysis/components/daily-domestic-standby-analysis-detail/daily-domestic-standby-analysis-detail.component';
 import { RealtimePassengerVehicleComponent } from './features/realtime-passenger-vehicle/realtime-passenger-vehicle.component';
@@ -22,6 +21,8 @@ import { FixedRouteTrafficComparisonComponent } from './features/chart-page/page
 import { OnTimePerformanceComponent } from './features/chart-page/page/on-time-performance/on-time-performance.component';
 import { FlightAbnormalComponent } from './features/chart-page/page/flight-abnormal/flight-abnormal.component';
 import { DomesticRouteStandbyAnalysisDetailComponent } from './features/domestic-route-standby-analysis/components/domestic-route-standby-analysis/domestic-route-standby-analysis.component';
+import { IntlCheckinCounterUserComponent } from './features/intl-checkin-counter/intl-checkin-counter-user/intl-checkin-counter-user.component';
+import { IntlCheckinCounterAdminComponent } from './features/intl-checkin-counter/intl-checkin-counter-admin/intl-checkin-counter-admin.component';
 
 export const routes: Routes = [
   {
@@ -154,8 +155,13 @@ export const routes: Routes = [
         data: { title: '國內航線候補分析', theme: 'dark' },
       },
       {
+        path: 'intl-checkin-counter-user',
+        component: IntlCheckinCounterUserComponent,
+        data: { title: '國際線報到櫃檯模組', theme: 'dark' },
+      },
+      {
         path: 'intl-checkin-counter',
-        component: IntlCheckinCounterComponent,
+        component: IntlCheckinCounterAdminComponent,
         data: { title: '國際線報到櫃檯模組', theme: 'dark' },
       },
       {
