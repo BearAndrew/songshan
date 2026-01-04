@@ -59,6 +59,7 @@ export class TrafficAnalysisComponent {
   airlineOptions: Option[] = [];
 
   flightClassOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '定航', value: 'SCHEDULE' },
     { label: '商務機', value: 'BJ' },
     { label: '軍機', value: 'MILITARY' },
@@ -66,9 +67,12 @@ export class TrafficAnalysisComponent {
   ];
 
   flightTypeOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '出境', value: 'OUTBOUND' },
     { label: '入境', value: 'INBOUND' },
   ];
+
+  optionDefaultValue = '';
 
   type: string = '';
   dateRangeLabel = '';
@@ -136,6 +140,7 @@ export class TrafficAnalysisComponent {
         label: airport.name_zhTW,
         value: airport.iata,
       }));
+      this.routeOptions.unshift({ label: '全部', value: '' });
     });
 
     // 取得航空公司清單
@@ -144,6 +149,7 @@ export class TrafficAnalysisComponent {
         label: airline.name_zhTW,
         value: airline.iata,
       }));
+      this.airlineOptions.unshift({ label: '全部', value: '' });
     });
   }
 

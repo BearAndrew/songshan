@@ -100,6 +100,7 @@
       <app-dropdown
         class="w-30"
         [options]="airlineOptions"
+        [value]="optionDefaultValue"
         (selectionChange)="onSelectionChange('airline', $event)"
       >
       </app-dropdown>
@@ -108,14 +109,16 @@
       <app-dropdown
         class="w-30"
         [options]="flightClassOptions"
+        [value]="optionDefaultValue"
         (selectionChange)="onSelectionChange('flightClass', $event)"
       >
-      </app-dropdown>
+      </app-dropdown> 
 
       <label>航點</label>
       <app-dropdown
         class="w-30"
         [options]="routeOptions"
+        [value]="optionDefaultValue"
         (selectionChange)="onSelectionChange('route', $event)"
       >
       </app-dropdown>
@@ -124,6 +127,7 @@
       <app-dropdown
         class="w-20"
         [options]="flightTypeOptions"
+        [value]="optionDefaultValue"
         (selectionChange)="onSelectionChange('flightType', $event)"
       >
       </app-dropdown>
