@@ -22,12 +22,12 @@
         }
       </div>
 
-      @if(activeIndex !== data.length - 1 && activeIndex !== data.length - 2) {
+      @if(activeIndex !== data.length - 1) {
       <div class="p-2 text-2xl text-[#04cdda]">資料更新時間：{{ now | date: 'HH:mm'}}</div>
       }
     </div>
 
-    @if(activeIndex !== data.length - 1 && activeIndex !== data.length - 2) {
+    @if(activeIndex !== data.length - 1) {
     <div class="flex-1 grid-cols-1 sm:grid grid-cols-5 gap-2 bg-black p-2 h-full sm:max-h-50 min-h-50">
       @for (group of locationGroups; track group.locationName) {
 
