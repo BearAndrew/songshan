@@ -21,6 +21,7 @@ import { TrafficComparisonComponent } from './features/chart-page/page/traffic-c
 import { FixedRouteTrafficComparisonComponent } from './features/chart-page/page/fixed-route-traffic-comparison/fixed-route-traffic-comparison.component';
 import { OnTimePerformanceComponent } from './features/chart-page/page/on-time-performance/on-time-performance.component';
 import { FlightAbnormalComponent } from './features/chart-page/page/flight-abnormal/flight-abnormal.component';
+import { DomesticRouteStandbyAnalysisDetailComponent } from './features/domestic-route-standby-analysis/components/domestic-route-standby-analysis/domestic-route-standby-analysis.component';
 
 export const routes: Routes = [
   {
@@ -100,7 +101,7 @@ export const routes: Routes = [
             component: RealtimePassengerVehicleTaxiComponent,
             data: { title: '即時人車流', theme: 'dark' },
           },
-           {
+          {
             path: 'baggage',
             component: RealtimePassengerVehicleBaggageComponent,
             data: { title: '即時人車流', theme: 'dark' },
@@ -145,6 +146,11 @@ export const routes: Routes = [
       {
         path: 'domestic-route-standby-analysis',
         component: DomesticRouteStandbyAnalysisComponent,
+        data: { title: '國內航線候補分析', theme: 'dark' },
+      },
+      {
+        path: 'domestic-route-standby-analysis/detail',
+        component: DomesticRouteStandbyAnalysisDetailComponent,
         data: { title: '國內航線候補分析', theme: 'dark' },
       },
       {

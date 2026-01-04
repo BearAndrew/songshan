@@ -1,0 +1,62 @@
+<div class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative">
+  <div class="flex items-center justify-between gap-2">
+    <div class="flex items-center gap-2">
+      <span class="text-[#777]">補上明細</span>
+      <div class="flex relative mr-2">
+        <img
+          class="w-4 -rotate-90"
+          src="icons/white-down-arrow.png"
+          alt="arrow"
+        />
+        <img
+          class="absolute left-2 w-4 -rotate-90"
+          src="icons/white-down-arrow.png"
+          alt="arrow"
+        />
+      </div>
+      <span class="text-[#ddd]">候補資訊</span>
+    </div>
+
+    <a
+      class="flex items-center gap-2 px-2 py-1 rounded-md bg-[#318dce] cursor-pointer"
+      routerLink="/domestic-route-standby-analysis"
+    >
+      <span>回上一頁</span>
+      <img
+        class="w-4 -rotate-90"
+        src="icons/white-down-arrow.png"
+        alt="arrow"
+      />
+    </a>
+  </div>
+
+  <div class="w-full overflow-auto">
+    <div
+      class="fixed w-[calc(100%-5rem)] grid grid-cols-6 bg-[#00c4ce] text-2xl font-semibold text-center mb-4 z-10"
+    >
+      <div class="p-2">日期</div>
+      <div class="p-2">航班</div>
+      <div class="p-2">航空公司</div>
+      <div class="p-2">起飛時間</div>
+      <div class="p-2">航機動態</div>
+      <div class="p-2">補上人數</div>
+    </div>
+
+    <div class="mt-11 py-1 text-xl">
+      <!-- 明細 -->
+      @for (row of table; let i = $index; track row;) {
+      <div
+        class="grid grid-cols-6 text-center hover:bg-[#494746]"
+        [ngClass]="{ 'bg-[#333333]': i % 2 === 1 }"
+      >
+        <div class="p-2"> 2022/8/23</div>
+        <div class="p-2">{{ row.flightNumber }}</div>
+        <div class="p-2">{{ row.airline }}</div>
+        <div class="p-2">{{ row.departureTime }}</div>
+        <div class="p-2">{{ row.flightStatus }}</div>
+        <div class="p-2">{{ row.waitlistCount }}</div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
