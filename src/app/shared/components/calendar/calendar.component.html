@@ -1,0 +1,91 @@
+<div class="default calendar-container shadow-[0_0_10px_rgba(0,0,0,0.15)] rounded-md" [ngStyle]="{'zoom' : zoom}">
+  <div class="relative">
+    <h1 class="text-center text-[18px] sm:text-[20px] font-noto-sans-tc font-bold">{{title}}</h1>
+    <button class="absolute top-1 right-1 cursor-pointer" (click)="close()">
+      <img src="img/common/close.svg" alt="close" class="w-5 h-5 pointer-events-none select-none" />
+    </button>
+  </div>
+  <div class="calendar-header max-w-[250px] sm:max-w-full mx-auto my-4">
+    <button (click)="prevMonth($event)" class="cursor-pointer" type="button" [ngClass]="{'invisible pointer-events-none': isStartMonth()}">
+      &#8249;
+    </button>
+    <div class="text-[14px] sm:text-[16px] text-[#777] font-noto-sans-tc font-medium">
+      <select
+        class="appearance-none outline-none"
+        [ngModel]="currentDate.getFullYear()"
+        (ngModelChange)="onYearChange($event)"
+      >
+        @for (year of years; track year) {
+        <option [value]="year">{{ year }}年</option>
+        }
+      </select>
+      {{ currentDate | date : "MM月" : undefined : "zh-TW" }}
+    </div>
+    <button (click)="nextMonth($event)" class="cursor-pointer" type="button" [ngClass]="{'invisible pointer-events-none': isEndMonth()}">
+      &#8250;
+    </button>
+  </div>
+
+  <div class="calendar-body">
+    @for (day of weekdays; track day) {
+    <div class="calendar-weekday aspect-[1.5/1] text-[14px] sm:text-[16px]">{{ day }}</div>
+    } @for (week of weeks; track week) {
+    <div class="calendar-date">
+      @for (date of week; track date) {
+      <div class="calendar-date-cell">
+        <div
+          class="calendar-date-cell-content aspect-square text-[14px] sm:text-[16px] max-w-8 sm:max-w-10 max-h-8 sm:max-h-10 rounded-full"
+          [class.outside-month]="date.getMonth() !== currentDate.getMonth()"
+          [class.active]="isActive(date)"
+          [ngClass]="[
+            isSameDate(date, today) ? 'border border-solid border-primary' : '',
+            isDisabled(date) ? 'cursor-not-allowed text-[#ddd]' : 'cursor-pointer'
+          ]"
+          (click)="selectDate(date)"
+        >
+          <span>{{ date.getDate() }}</span>
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  <!-- 客製化 -->
+  @if (enabledTimeSelect) {
+    <div class="flex items-center justify-center gap-2 mt-2 text-[14px] sm:text-[16px]">
+      <button
+        class="flex flex-1 flex-col items-center justify-center p-2 border border-solid border-gray-300 rounded-sm *:leading-none"
+        [ngClass]="{
+          'bg-gray-100 cursor-not-allowed': !activeDate || !isShiftEnabled('morning'),
+          'border-primary': activeTime === 'morning',
+          'cursor-pointer': activeDate && isShiftEnabled('morning')
+        }"
+        type="button"
+        [disabled]="!activeDate || !isShiftEnabled('morning')"
+        (click)="selectTime(SHIFT_TIME_OPTIONS[0])"
+      >
+        <span>上午診</span>
+        <span>{{SHIFT_TIME_OPTIONS[0].label}}</span>
+      </button>
+      <button
+        class="flex flex-1 flex-col items-center justify-center p-2 border border-solid border-gray-300 rounded-sm *:leading-none"
+        [ngClass]="{
+          'bg-gray-100 cursor-not-allowed': !activeDate || !isShiftEnabled('afternoon'),
+          'border-primary': activeTime === 'afternoon',
+          'cursor-pointer': activeDate && isShiftEnabled('afternoon')
+        }"
+        type="button"
+        [disabled]="!activeDate || !isShiftEnabled('afternoon')"
+        (click)="selectTime(SHIFT_TIME_OPTIONS[1])"
+      >
+        <span>下午診</span>
+        <span>{{SHIFT_TIME_OPTIONS[1].label}}</span>
+      </button>
+    </div>
+  }
+
+  <button class="primary-btn text-[14px] sm:text-[16px] w-full my-6 sm:mb-0 p-2 rounded-lg"
+    [disabled]="checkDisabled()"
+    (click)="submit()">確定</button>
+</div>

@@ -1,5 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { DropdownSecondaryComponent } from '../../../shared/components/dropdown-secondary/dropdown-secondary.component';
+import { Option } from '../../../shared/components/dropdown/dropdown.component';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CalendarTriggerComponent } from "../../../shared/components/calendar-trigger/calendar-trigger.component";
 
 interface ScheduleItem {
   date: string; // YYYY-MM-DD
@@ -10,7 +21,13 @@ interface ScheduleItem {
 
 @Component({
   selector: 'app-intl-checkin-counter-user',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DropdownSecondaryComponent,
+    CalendarTriggerComponent
+],
   templateUrl: './intl-checkin-counter-user.component.html',
   styleUrl: './intl-checkin-counter-user.component.scss',
 })
@@ -37,17 +54,69 @@ export class IntlCheckinCounterUserComponent {
   ];
 
   /** 申請內容 */
-  seasonType: 'all' | 'other' | null = null;
-  islandList: string[] = [];
+  form!: FormGroup;
+  formData = {
+    flightInfo: '',
+    departureTime: '',
+    applyTimeStart: '',
+    applyTimeEnd: '',
+    islands: [] as string[],
+    seasonType: '' as 'all' | 'other' | '',
+    applyDateStart: '',
+    applyDateEnd: '',
+  };
+  get islandList(): FormArray {
+    return this.form.get('islands') as FormArray;
+  }
+  islandOptions: Option[] = [
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
+    { label: '3', value: '3' },
+    { label: '4', value: '4' },
+    { label: '5', value: '5' },
+    { label: '6', value: '6' },
+    { label: '7', value: '7' },
+    { label: '8', value: '8' },
+    { label: '9', value: '9' },
+  ];
+
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
     this.weeks = this.buildWeeks(this.rawData);
     this.setCurrentWeek(0);
+
+    /** 申請內容 */
+    this.form = this.fb.group({
+      flightInfo: [''],
+      departureTime: [''],
+      applyTimeStart: [''],
+      applyTimeEnd: [''],
+      islands: this.fb.array([]),
+      seasonType: [''],
+      applyDateStart: [''],
+      applyDateEnd: [''],
+    });
+
+    // 至少加入一筆
+    this.addIsland();
+
+    this.form.valueChanges.subscribe((value) => {
+      this.formData = {
+        flightInfo: value.flightInfo,
+        departureTime: value.departureTime,
+        applyTimeStart: value.applyTimeStart,
+        applyTimeEnd: value.applyTimeEnd,
+        islands: value.islands,
+        seasonType: value.seasonType,
+        applyDateStart: value.applyDateStart,
+        applyDateEnd: value.applyDateEnd,
+      };
+    });
   }
 
   private buildWeeks(data: ScheduleItem[]): ScheduleItem[][][] {
     const weekMap = new Map<string, ScheduleItem[][]>();
-
     for (const item of data) {
       const date = new Date(item.date);
       const monday = this.getMonday(date).toISOString().slice(0, 10);
@@ -135,12 +204,21 @@ export class IntlCheckinCounterUserComponent {
     return `${y}/${m}/${d}`;
   }
 
-
-  /** 申請內容 */
+  /** ===== 申請內容 ===== */
   setSeasonType(type: 'all' | 'other') {
-    this.seasonType = type;
+    this.form.get('seasonType')?.setValue(type);
   }
+
   addIsland() {
-    this.islandList.push(`島櫃資料 ${this.islandList.length + 1}`);
+    this.islandList.push(this.fb.control(''));
+  }
+
+  reomveIsland(index: number) {
+    if (this.islandList.length <= 1) return;
+    this.islandList.removeAt(index);
+  }
+
+  updateIsland(index: number, value: string) {
+    this.islandList.at(index).setValue(value);
   }
 }

@@ -1,0 +1,86 @@
+:host {
+  @apply w-full;
+}
+
+.calendar-container {
+  width: 100%;
+  padding: 1rem;
+  background: white;
+
+  & > * {
+    user-select: none;
+  }
+}
+
+.default {
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25rem;
+
+    & > button {
+      font-size: 1.5rem;
+      line-height: 1;
+      padding: 0 0.5rem;
+    }
+  }
+
+
+  .calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); // 每週 7 天
+    text-align: center;
+    gap: 4px;
+  }
+
+  .calendar-weekday {
+    font-weight: bold;
+  }
+
+  .calendar-date {
+    display: contents;
+
+    &-cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      padding: 0.25rem;
+
+      &-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    div.outside-month {
+      color: #aaa;
+    }
+
+    div.active {
+      background-color: var(--color-primary);
+      color: white;
+      border-radius: 50%;
+    }
+
+    div.disabled {
+      color: #ccc;
+      pointer-events: none;
+    }
+  }
+}
+
+@keyframes activeFadeIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
