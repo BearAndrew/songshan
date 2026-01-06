@@ -112,9 +112,9 @@ export class DailyDomesticStandbyAnalysisComponent {
   getStandbySummary(value: number) {
     const code = this.commonService.getAirportCodeById(value);
 
-    // console.log(this.MOCK_STANDBY_SUMMARY);
-    // this.setTableData(this.MOCK_STANDBY_SUMMARY);
-    // return;
+    console.log(this.MOCK_STANDBY_SUMMARY);
+    this.setTableData(this.MOCK_STANDBY_SUMMARY);
+    return;
     this.apiService.getStandbySummary(code).subscribe({
       next: (res) => {
         this.setTableData(res);

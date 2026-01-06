@@ -19,10 +19,41 @@ export class DailyDomesticStandbyAnalysisDetailComponent {
     waitlistCount: number;
   }[] = [];
 
-  constructor(
-    private apiService: ApiService,
-    private route: ActivatedRoute
-  ) {
+  mockStandbyList: StandbyListItem[] = [
+    {
+      flightNo: 'CI123',
+      airlineName: '中華航空',
+      departureTime: '08:30',
+      status: 'On Time',
+      standbyOK: 5,
+    },
+    {
+      flightNo: 'BR456',
+      airlineName: '長榮航空',
+      departureTime: '10:15',
+      status: 'Delayed',
+      standbyOK: 2,
+    },
+    {
+      flightNo: 'JX789',
+      airlineName: '星宇航空',
+      departureTime: '13:45',
+      status: 'Boarding',
+      standbyOK: 0,
+    },
+    {
+      flightNo: 'CI888',
+      airlineName: '中華航空',
+      departureTime: '16:20',
+      status: 'Cancelled',
+      standbyOK: 10,
+    },
+  ];
+
+  constructor(private apiService: ApiService, private route: ActivatedRoute) {
+    const mockData: StandbyListItem[] = this.mockStandbyList;
+    this.setTableData(mockData);
+    return;
     // 直接訂閱 queryParams
     this.route.queryParams.subscribe((params) => {
       const iata = params['iata']; // 從 URL ?iata=XXX 取得

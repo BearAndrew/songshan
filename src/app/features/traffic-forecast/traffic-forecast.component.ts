@@ -12,10 +12,17 @@ import {
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
 import { TabType } from '../../core/enums/tab-type.enum';
+import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
+import { Option } from '../../shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-traffic-forecast',
-  imports: [CommonModule, TrafficForecastTableComponent, BarLineChartComponent],
+  imports: [
+    CommonModule,
+    TrafficForecastTableComponent,
+    BarLineChartComponent,
+    DropdownComponent,
+  ],
   templateUrl: './traffic-forecast.component.html',
   styleUrl: './traffic-forecast.component.scss',
 })
@@ -41,6 +48,29 @@ export class TrafficForecastComponent {
     {
       label: '總數',
       value: TabType.ALL,
+    },
+  ];
+
+  mobileOptions: Option[] = [
+    {
+      label: '國際兩岸線',
+      value: 0,
+    },
+    {
+      label: '國際線',
+      value: 1,
+    },
+    {
+      label: '兩岸線',
+      value: 2,
+    },
+    {
+      label: '國內線',
+      value: 3,
+    },
+    {
+      label: '總數',
+      value: 4,
     },
   ];
 
@@ -324,20 +354,20 @@ export class TrafficForecastComponent {
         this.barData = [
           {
             label: '明日預報人數',
-            data: (res.tomorrowStatByHour ?? []).map((s: PredictStatByHour) => ({
-              key: s.hour,
-              value: s.numOfPax,
-            })),
-            colors: ['#00d6c8'],
-          },
-          {
-            label: '後日預報人數',
-            data: (res.twoDayStatByHour ?? []).map(
+            data: (res.tomorrowStatByHour ?? []).map(
               (s: PredictStatByHour) => ({
                 key: s.hour,
                 value: s.numOfPax,
               })
             ),
+            colors: ['#00d6c8'],
+          },
+          {
+            label: '後日預報人數',
+            data: (res.twoDayStatByHour ?? []).map((s: PredictStatByHour) => ({
+              key: s.hour,
+              value: s.numOfPax,
+            })),
             colors: ['#fbb441'],
           },
         ];
@@ -346,25 +376,25 @@ export class TrafficForecastComponent {
         this.lineData = [
           {
             label: '明日預報架次',
-            data: (res.tomorrowStatByHour ?? []).map((s: PredictStatByHour) => ({
-              key: s.hour,
-              value: s.numOfFlight, // 如果有實際人數欄位，可改成實際
-            })),
+            data: (res.tomorrowStatByHour ?? []).map(
+              (s: PredictStatByHour) => ({
+                key: s.hour,
+                value: s.numOfFlight, // 如果有實際人數欄位，可改成實際
+              })
+            ),
             colors: ['#00d6c8'],
           },
           {
             label: '後日預報架次',
-            data: (res.twoDayStatByHour ?? []).map(
-              (s: PredictStatByHour) => ({
-                key: s.hour,
-                value: s.numOfFlight,
-              })
-            ),
+            data: (res.twoDayStatByHour ?? []).map((s: PredictStatByHour) => ({
+              key: s.hour,
+              value: s.numOfFlight,
+            })),
             colors: ['#fbb441'],
           },
         ];
 
-        console.log(this.barData)
+        console.log(this.barData);
 
         this.tomorrowFlight = res.tomorrowFlight;
         this.twoDayFlight = res.twoDayFlight;

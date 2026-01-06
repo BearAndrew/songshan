@@ -63,11 +63,33 @@ export class DailyAbnormalFlightInfoComponent {
   baseUrl = environment.apiBaseUrl + '/IrregularInboundFlightExport';
   csvUrl = '';
 
+  mobileOptions: Option[] = [
+    {
+      label: '國際兩岸線',
+      value: 0,
+    },
+    {
+      label: '國際線',
+      value: 1,
+    },
+    {
+      label: '兩岸線',
+      value: 2,
+    },
+    {
+      label: '國內線',
+      value: 3,
+    },
+    {
+      label: '總數',
+      value: 4,
+    },
+  ];
+
   /** 異常狀態下拉選單 */
   flightStatusOptions: Option[] = [];
 
   flightStatusDefault = '';
-
 
   /** 飛航類型下拉選單 */
   flightDirectionOptions = [
@@ -137,14 +159,14 @@ export class DailyAbnormalFlightInfoComponent {
           normal: item.normal, // 保留額外資訊（可選）
         }));
 
-        this.flightStatusOptions.unshift({ label: '全部', value: '', normal: 0});
+      this.flightStatusOptions.unshift({ label: '全部', value: '', normal: 0 });
     });
   }
 
   getIrregularInboundFlight() {
-    // console.trace();
-    // this.setTableData(this.MOCK_IRREGULAR_INBOUND);
-    // return;
+    console.trace();
+    this.setTableData(this.MOCK_IRREGULAR_INBOUND);
+    return;
 
     this.apiService
       .getIrregularInboundFlight(

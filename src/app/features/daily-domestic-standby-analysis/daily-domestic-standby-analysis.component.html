@@ -1,8 +1,8 @@
-<div class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative">
-  <div class="w-full overflow-x-hidden overflow-y-auto">
+<div class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative overflow-hidden">
+  <div class="w-full h-full sm:overflow-x-hidden overflow-y-auto">
     <!-- Header -->
     <div
-      class="fixed w-[calc(100%-5rem)] grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-2xl font-semibold text-center mb-4 z-10"
+      class="sticky w-full min-w-[1000px] sm:min-w-none grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-lg sm:text-2xl font-semibold text-center z-10"
     >
       <div class="p-2">航點</div>
       <div class="p-2">對站天氣</div>
@@ -15,7 +15,7 @@
     </div>
 
     <!-- 航點群組 -->
-    <div class="mt-12 text-2xl">
+    <div class="text-md sm:text-2xl w-full min-w-[1000px] sm:min-w-none">
       @for (group of tableData;track group) {
       <div class="py-1 border-b text-[#baeaff] hover:bg-[#494746]">
         <!-- 明細 -->
@@ -27,7 +27,7 @@
             class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
           >
             <span
-              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-30 text-center text-2xl font-bold break-words"
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-30 text-center font-bold break-words"
               style="text-wrap: balance"
             >
               {{ group.route }}
@@ -40,25 +40,25 @@
               class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-between gap-2 text-white"
             >
               <div class="flex flex-col gap-2">
-                <div class="text-4xl">{{ group.weather.temperature }}</div>
-                <div class="text-2xl whitespace-nowrap">
+                <div class="text-xl sm:text-4xl">{{ group.weather.temperature }}</div>
+                <div class="whitespace-nowrap">
                   {{ group.weather.description }}
                 </div>
               </div>
-              <div class="flex flex-col gap-1 text-xl">
+              <div class="flex flex-col gap-1 text-sm sm:text-xl">
                 <div class="flex gap-1">
                   <img
-                    class="w-6 h-6"
+                    class="w-4 h-4 sm:w-6 sm:h-6"
                     src="img/daily-domestic-standby-analysis/icon-1.png"
                     alt="visibility"
                   />
-                  <div class="whitespace-nowrap">
+                  <div class="whitespace-nowrap ">
                     {{ group.weather.visibility }}
                   </div>
                 </div>
                 <div class="flex gap-1">
                   <img
-                    class="w-6 h-6"
+                    class="w-4 h-4 sm:w-6 sm:h-6"
                     src="img/daily-domestic-standby-analysis/icon-2.png"
                     alt="visibility"
                   />
@@ -68,7 +68,7 @@
                 </div>
                 <div class="flex gap-1">
                   <img
-                    class="w-6 h-6"
+                    class="w-4 h-4 sm:w-6 sm:h-6"
                     src="img/daily-domestic-standby-analysis/icon-3.png"
                     alt="visibility"
                   />
@@ -85,13 +85,13 @@
           }
 
           <!-- 明細資料 -->
-          <div class="p-1 text-2xl flex items-center justify-center">
+          <div class="p-1 text-md sm:text-2xl flex items-center justify-center">
             {{ detail.airline }}
           </div>
           <div
             class="p-1 leading-none flex items-center justify-center {{
               detail.waitlist === group.maxWaitlist && detail.airline === ''
-                ? 'text-3xl text-orange-400 font-bold'
+                ? 'text-lg sm:text-3xl text-orange-400 font-bold'
                 : ''
             }}"
           >
@@ -104,7 +104,7 @@
             class="relative p-1 h-[300%] text-orange-400 flex items-center justify-center"
           >
             <div
-              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold"
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg sm:text-3xl font-bold"
             >
               {{ detail.onsite }}
             </div>
@@ -117,7 +117,7 @@
           <div
             class="p-1 leading-none flex items-center justify-center {{
               detail.nextFlights === group.maxNextFlights && detail.airline === ''
-                ? 'text-3xl text-orange-400 font-bold'
+                ? 'text-lg sm:text-3xl text-orange-400 font-bold'
                 : ''
             }}"
           >
@@ -128,7 +128,7 @@
           <div
             class="p-1 leading-none flex items-center justify-center {{
               detail.flown === group.maxFlown && detail.airline === ''
-                ? 'text-3xl text-orange-400 font-bold'
+                ? 'text-lg sm:text-3xl text-orange-400 font-bold'
                 : ''
             }}"
           >
@@ -140,7 +140,7 @@
             <div
               class="p-1 leading-none flex items-center justify-center {{
                 detail.filled === group.maxFilled && detail.airline === ''
-                  ? 'text-3xl text-orange-400 font-bold'
+                  ? 'text-lg sm:text-3xl text-orange-400 font-bold'
                   : ''
               }}"
             >
@@ -152,7 +152,7 @@
               class="relative row-span-3 flex items-center justify-center h-[300%]"
             >
               <a
-                class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 flex flex-col items-start px-3 py-1 text-sm text-[#999] cursor-pointer hover:text-[#eee]"
+                class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 flex flex-col items-start px-3 py-1 text-xs sm:text-sm text-[#999] cursor-pointer hover:text-[#eee]"
                 routerLink="detail"
                 [queryParams]="{iata: group.routerParam}"
               >

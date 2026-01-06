@@ -1,7 +1,7 @@
 <div
-  class="flex flex-col p-4 sm:p-8 pr-0 sm:pr-3 h-full min-h-0 bg-[#1e293a] rounded-sm relative overflow-hidden"
+  class="flex flex-col p-4 sm:p-8 pr-0 sm:pr-3 h-full min-h-0 bg-[#1e293a] rounded-sm relative overflow-x-auto sm:overflow-hidden"
 >
-  <div class="flex-1 min-h-0 w-full pr-5 space-y-8 overflow-y-auto">
+  <div class="flex-1 min-h-0 w-full min-w-[1200px] pr-5 space-y-8 overflow-y-auto">
     @for (item of items; track $index) {
 
     <div class="flex rounded-md border border-white overflow-hidden">
@@ -10,44 +10,44 @@
         <!-- 上方：7x2 Grid -->
         <div class="grid grid-cols-7">
           <!-- Row1: title -->
-          <div class="text-xl text-center py-2 border border-white">航班</div>
-          <div class="text-xl text-center py-2 border border-white">來自</div>
-          <div class="text-xl text-center py-2 border border-white">
+          <div class="text-md sm:text-xl text-center py-2 border border-white">航班</div>
+          <div class="text-md sm:text-xl text-center py-2 border border-white">來自</div>
+          <div class="text-md sm:text-xl text-center py-2 border border-white">
             表定時間
           </div>
-          <div class="text-xl text-center py-2 border border-white">
+          <div class="text-md sm:text-xl text-center py-2 border border-white">
             實際抵達時間
           </div>
-          <div class="text-xl text-center py-2 border border-white">
+          <div class="text-md sm:text-xl text-center py-2 border border-white">
             航班抵達
           </div>
-          <div class="text-xl text-center py-2 border border-white">
+          <div class="text-md sm:text-xl text-center py-2 border border-white">
             第一件行李時間
           </div>
-          <div class="text-xl text-center py-2 border border-white">
+          <div class="text-md sm:text-xl text-center py-2 border border-white">
             最後一件行李時間
           </div>
 
           <!-- Row2: data -->
-          <div class="text-3xl text-center py-4 border border-white">
+          <div class="text-lg sm:text-3xl text-center py-2 sm:py-4 border border-white">
             {{ item.flight }}
           </div>
-          <div class="text-3xl text-center py-4 border border-white">
+          <div class="text-lg sm:text-3xl text-center py-2 sm:py-4 border border-white">
             {{ item.from }}
           </div>
-          <div class="text-3xl text-center py-4 border border-white">
+          <div class="text-lg sm:text-3xl text-center py-2 sm:py-4 border border-white">
             {{ item.scheduledTime }}
           </div>
-          <div class="text-3xl text-center py-4 border border-white">
+          <div class="text-lg sm:text-3xl text-center py-2 sm:py-4 border border-white">
             {{ item.actualArrival }}
           </div>
-          <div class="text-3xl text-center py-4 border border-white">
+          <div class="text-lg sm:text-3xl text-center py-2 sm:py-4 border border-white">
             {{ item.flightArrival }}
           </div>
-          <div class="text-3xl text-center py-4 border border-white">
+          <div class="text-lg sm:text-3xl text-center py-2 sm:py-4 border border-white">
             {{ item.firstBaggage }}
           </div>
-          <div class="text-3xl text-center py-4 border border-white">
+          <div class="text-lg sm:text-3xl text-center py-2 sm:py-4 border border-white">
             {{ item.lastBaggage }}
           </div>
         </div>
@@ -60,42 +60,42 @@
             'max-h-[600px] opacity-100': item.isOpen
           }"
         >
-          <div class="grid grid-cols-6 bg-white text-2xl text-gray-400">
+          <div class="grid grid-cols-6 bg-white text-md sm:text-2xl text-gray-400">
             <div class="border border-t-0 border-gray-300"></div>
-            <div class="text-center py-2 border border-t-0 border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-t-0 border-gray-300">
               行李下機時間
             </div>
-            <div class="text-center py-2 border border-t-0 border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-t-0 border-gray-300">
               行李到轉盤時間
             </div>
-            <div class="text-center py-2 border border-t-0 border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-t-0 border-gray-300">
               行李上轉盤時間
             </div>
-            <div class="text-center py-2 border border-t-0 border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-t-0 border-gray-300">
               行李進X光機時間
             </div>
-            <div class="text-center py-2 border border-t-0 border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-t-0 border-gray-300">
               行李出X光機時間
             </div>
 
             <!-- Row2 & Row3: 從 baggageDetails 填充 -->
             @for (detail of item.baggageDetails; track detail.subtitle) {
-            <div class="text-center py-2 border border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-gray-300">
               {{ detail.subtitle }}
             </div>
-            <div class="text-center py-2 border border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-gray-300">
               {{ detail.downTime }}
             </div>
-            <div class="text-center py-2 border border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-gray-300">
               {{ detail.toCarousel }}
             </div>
-            <div class="text-center py-2 border border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-gray-300">
               {{ detail.onCarousel }}
             </div>
-            <div class="text-center py-2 border border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-gray-300">
               {{ detail.xrayIn }}
             </div>
-            <div class="text-center py-2 border border-gray-300">
+            <div class="text-center py-1 sm:py-2 border border-gray-300">
               {{ detail.xrayOut }}
             </div>
             }
@@ -106,7 +106,7 @@
       <!-- 右側按鈕 -->
       <button
         (click)="toggle(item)"
-        class="w-12 py-4 flex items-end justify-center bg-white text-black cursor-pointer hover:bg-gray-200 transition"
+        class="w-12 py-2 sm:py-4 flex items-end justify-center bg-white text-black cursor-pointer hover:bg-gray-200 transition"
       >
         <span
           class="transform transition-transform duration-300"

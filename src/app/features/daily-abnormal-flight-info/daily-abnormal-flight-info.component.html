@@ -1,6 +1,15 @@
+<div class="fixed top-14 sm:hidden mb-2 w-[calc(50vw-1.25rem)] z-50">
+  <app-dropdown
+    class="pl-4 w-full"
+    [value]="0"
+    [options]="mobileOptions"
+    (selectionChange)="onTabClick($event.value)"
+  ></app-dropdown>
+</div>
+
 <div class="flex flex-col gap-4 w-full h-full">
   <div class="flex justify-between">
-    <div class="flex gap-8 h-fit">
+    <div class="hidden sm:flex gap-8 h-fit">
       @for(button of data; track button.label; let i = $index) {
       <button
         class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
@@ -16,23 +25,29 @@
       }
     </div>
 
-    <div class="flex items-center gap-2">
-      <label class="text-[#aaa]">異常狀態</label>
-      <app-dropdown
-        class="w-40"
-        [options]="flightStatusOptions"
-        [value]="flightStatusDefault"
-        (selectionChange)="onFlightStatusChange($event)"
-      ></app-dropdown>
-      <label class="text-[#aaa]">飛航類型</label>
-      <app-dropdown
-        class="w-25"
-        [options]="flightDirectionOptions"
-        [value]="'all'"
-        (selectionChange)="onFlightDirectionChange($event)"
-      ></app-dropdown>
+    <div class="grid grid-cols-2 sm:flex items-center gap-x-2 gap-y-4 w-full sm:w-fit">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+        <label class="text-[#aaa]">異常狀態</label>
+        <app-dropdown
+          class="w-full sm:w-40"
+          [options]="flightStatusOptions"
+          [value]="flightStatusDefault"
+          (selectionChange)="onFlightStatusChange($event)"
+        ></app-dropdown>
+      </div>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+        <label class="text-[#aaa]">飛航類型</label>
+        <app-dropdown
+          class="w-full sm:w-25"
+          [options]="flightDirectionOptions"
+          [value]="'all'"
+          (selectionChange)="onFlightDirectionChange($event)"
+        ></app-dropdown>
+      </div>
+
       <a
-        class="w-30 px-2 py-1 rounded-xs bg-gradient-to-r from-[#44b59b] to-[#008abf] cursor-pointer"
+        class="col-span-1 col-start-2 ml-auto sm:ml-0 w-full sm:w-30 px-2 py-1 rounded-xs bg-gradient-to-r from-[#44b59b] to-[#008abf] text-center cursor-pointer"
         [href]="csvUrl"
       >
         匯出(列印)
@@ -44,7 +59,7 @@
     <!-- table -->
     <div class="flex-1 w-full min-h-0 mb-12 overflow-auto">
       <div
-        class="fixed w-[calc(100%-5rem)] grid grid-cols-9 bg-[#00b2ee] text-2xl font-semibold text-center mb-4 z-10"
+        class="sticky w-full min-w-[1440px] sm:min-w-none grid grid-cols-9 bg-[#00b2ee] text-lg sm:text-2xl font-semibold text-center z-10"
       >
         <div class="p-2">航班編號</div>
         <div class="p-2">出發地</div>
@@ -57,7 +72,7 @@
         <div class="p-2">處理方式</div>
       </div>
 
-      <div class="mt-11 py-1 text-xl">
+      <div class="min-w-[1440px] sm:min-w-none py-1 text-md sm:text-xl">
         <!-- 明細 -->
         @for (row of table; let i = $index; track row;) {
         <div
@@ -67,8 +82,8 @@
           <div class="p-2">{{ row.flightNumber }}</div>
           <div class="p-2">{{ row.origin }}</div>
           <div class="p-2 flex justify-center">
-            <div class="w-8 border border-[#27c4a9] rounded-xs">
-              {{ row.gate }}
+            <div class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border border-[#27c4a9] rounded-xs">
+              <span class="text-sm sm:text-xl">{{ row.gate }}</span>
             </div>
           </div>
           <div class="p-2">{{ row.scheduledArrival }}</div>
@@ -82,27 +97,29 @@
       </div>
     </div>
 
-    <div class="flex items-center gap-4 h-[180px]">
+    <div class="flex flex-col sm:flex-row items-center gap-8">
       <div
-        class="flex-1 mx-8 w-full h-full border-4 border-[#3372bd] rounded-lg relative"
+        class="flex-1 mx-8 w-full h-full min-h-28 sm:min-h-40 border-4 border-[#3372bd] rounded-lg relative"
       >
         <div
-          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
         >
           實際異常總數
         </div>
         <div class="flex items-center h-full">
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總架次</div>
             <div
-              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+              class="text-[30px] sm:text-[60px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
             >
               {{ actualFlight | number }}
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">總人數</div>
-            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總人數</div>
+            <div
+              class="text-[30px] sm:text-[60px] text-[#02b3e7] font-bold leading-none"
+            >
               {{ actualPax | number }}
             </div>
           </div>
@@ -110,25 +127,27 @@
       </div>
 
       <div
-        class="flex-1 mx-8 w-full h-full border-4 border-[#3372bd] rounded-lg relative"
+        class="flex-1 mx-8 w-full h-full min-h-28 border-4 border-[#3372bd] rounded-lg relative"
       >
         <div
-          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525]"
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
         >
           預計異常總數
         </div>
         <div class="flex items-center h-full">
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總架次</div>
             <div
-              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+              class="text-[30px] sm:text-[60px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
             >
               {{ estFlight | number }}
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">總人數</div>
-            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總人數</div>
+            <div
+              class="text-[30px] sm:text-[60px] text-[#02b3e7] font-bold leading-none"
+            >
               {{ estPax | number }}
             </div>
           </div>
