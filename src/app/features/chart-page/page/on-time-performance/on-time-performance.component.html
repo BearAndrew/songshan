@@ -100,6 +100,7 @@
       <app-dropdown
         class="w-30"
         [options]="airlineOptions"
+        [value]="defaultOptionValue"
         (selectionChange)="onSelectionChange('airline', $event)"
       >
       </app-dropdown>
@@ -108,6 +109,7 @@
       <app-dropdown
         class="w-30"
         [options]="flightClassOptions"
+        [value]="defaultOptionValue"
         (selectionChange)="onSelectionChange('flightClass', $event)"
       >
       </app-dropdown>
@@ -116,6 +118,7 @@
       <app-dropdown
         class="w-30"
         [options]="routeOptions"
+        [value]="defaultOptionValue"
         (selectionChange)="onSelectionChange('route', $event)"
       >
       </app-dropdown>
@@ -124,6 +127,7 @@
       <app-dropdown
         class="w-20"
         [options]="flightTypeOptions"
+        [value]="defaultOptionValue"
         (selectionChange)="onSelectionChange('flightType', $event)"
       >
       </app-dropdown>
@@ -192,13 +196,13 @@
             <div
               class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
             >
-              {{ totalFlight | number }}
+              {{ totalPax | number }}
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-3xl text-[#a5a5a5]">準點率</div>
             <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
-              {{ totalPax | number }}
+              {{ totalFlight | number }}
             </div>
           </div>
         </div>

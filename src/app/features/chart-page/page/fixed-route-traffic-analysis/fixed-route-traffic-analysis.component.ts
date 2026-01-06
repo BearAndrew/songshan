@@ -240,7 +240,7 @@ export class FixedRouteTrafficAnalysisComponent  {
     // return;
 
     // 呼叫 API
-    this.apiService.postFlightTrafficAnalysis(payload).subscribe({
+    this.apiService.postFlightTrafficAnalysisSch(payload).subscribe({
       next: (res: FlightTrafficAnalysisResponse) => {
         console.log('取得資料成功', res);
         this.handleFlightTrafficAnalysis(res);

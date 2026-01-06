@@ -8,10 +8,7 @@ import {
   FlightTrafficAnalysisResponse,
 } from '../../models/flight-traffic-analysis.model';
 import { FlightTrafficPredictResponse } from '../../models/flight-traffic-predict.model';
-import {
-  IrregularFlightItem,
-  IrregularInboundFlight,
-} from '../../models/irregular-inbound-flight.model';
+import { IrregularInboundFlight } from '../../models/irregular-inbound-flight.model';
 import { RealTimeTrafficFlowItem } from '../../models/real-time-traffic-flow.model';
 import {
   StandbySummaryItem,
@@ -25,6 +22,26 @@ import { FlightUpdateWebhookRequest } from '../../models/webhook-flight-update.m
 import { BaggageTimeItem } from '../../models/baggage-time.model';
 import { TabType } from '../enums/tab-type.enum';
 import { FlightStatus } from '../../models/flight-status.model';
+import {
+  OtpAnalysisRequest,
+  OtpAnalysisResponse,
+} from '../../models/otp-analysis.model';
+import {
+  YearlyTrafficAnalysisRequest,
+  YearlyTrafficAnalysisResponse,
+} from '../../models/Yearly-Traffic-Analysis.model';
+import {
+  IrregularAnalysisRequest,
+  IrregularAnalysisResponse,
+} from '../../models/irregular-analysis.model';
+import {
+  HistoricStandbySummaryItem,
+  HistoricStandbySummaryRequest,
+} from '../../models/historic-standby-summary.model';
+import {
+  HistoricStandbyListRequest,
+  HistoricStandbyListItem,
+} from '../../models/historic-standby-list.model';
 
 @Injectable({
   providedIn: 'root',
@@ -106,7 +123,9 @@ export class ApiService {
     direction: string,
     delayCode: string | null
   ): Observable<IrregularInboundFlight> {
-    const url = `IrregularInboundFlight/${type}/${direction}` + (delayCode ? `/${delayCode}` : '');
+    const url =
+      `IrregularInboundFlight/${type}/${direction}` +
+      (delayCode ? `/${delayCode}` : '');
     return this.http.get<IrregularInboundFlight>(url);
   }
 
@@ -152,6 +171,96 @@ export class ApiService {
       payload
     );
   }
+
+  /**POST
+   * 定航運量分析. 與9不一樣是能選航點
+   */
+  postFlightTrafficAnalysisSch(
+    payload: FlightTrafficAnalysisRequest
+  ): Observable<FlightTrafficAnalysisResponse> {
+    return this.http.post<FlightTrafficAnalysisResponse>(
+      'FlightTrafficAnalysisSch',
+      payload
+    );
+  }
+
+  /**
+   * 年度運量對比分析
+   * POST {apiBaseUrl}/YearlyTrafficAnalysis
+   */
+  postYearlyTrafficAnalysis(
+    payload: YearlyTrafficAnalysisRequest
+  ): Observable<YearlyTrafficAnalysisResponse[]> {
+    return this.http.post<YearlyTrafficAnalysisResponse[]>(
+      'YearlyTrafficAnalysis',
+      payload
+    );
+  }
+
+  /**
+   * POST api/YearlyTrafficAnalysisSch
+   *定航運量對比資料
+   */
+  postYearlyTrafficAnalysisSch(
+    payload: YearlyTrafficAnalysisRequest
+  ): Observable<YearlyTrafficAnalysisResponse[]> {
+    return this.http.post<YearlyTrafficAnalysisResponse[]>(
+      'YearlyTrafficAnalysisSch',
+      payload
+    );
+  }
+
+  /**
+   * 準點率分析 (OTP)
+   * POST {apiBaseUrl}/OTPAnalysis
+   */
+  postOtpAnalysis(
+    payload: OtpAnalysisRequest
+  ): Observable<OtpAnalysisResponse> {
+    return this.http.post<OtpAnalysisResponse>('OTPAnalysis', payload);
+  }
+
+  /**
+   * 航班異常分析
+   * POST {apiBaseUrl}/IrregularAnalysis
+   */
+  postIrregularAnalysis(
+    payload: IrregularAnalysisRequest
+  ): Observable<IrregularAnalysisResponse> {
+    return this.http.post<IrregularAnalysisResponse>(
+      'IrregularAnalysis',
+      payload
+    );
+  }
+
+  /**
+   * 歷史候補總覽（國內航線候補分析 - 第一畫面）
+   * POST {apiBaseUrl}/GetHistoricStandbySummary
+   */
+  postHistoricStandbySummary(
+    payload: HistoricStandbySummaryRequest
+  ): Observable<HistoricStandbySummaryItem[]> {
+    return this.http.post<HistoricStandbySummaryItem[]>(
+      'GetHistoricStandbySummary',
+      payload
+    );
+  }
+
+  /**
+   * 歷史候補明細（第二畫面）
+   * POST {apiBaseUrl}/GetStandbyHistoricList/{Airport}
+   */
+  postHistoricStandbyList(
+    airport: string,
+    payload: HistoricStandbyListRequest
+  ): Observable<HistoricStandbyListItem[]> {
+    return this.http.post<HistoricStandbyListItem[]>(
+      `GetStandbyHistoricList/${airport}`,
+      payload
+    );
+  }
+
+  // ========= Webhook =========
 
   /**
    * Webhook - Flight Update
