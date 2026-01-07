@@ -39,6 +39,7 @@ export class CalendarTriggerComponent implements OnChanges {
   @Input() title: string = '選擇日期';
   @Input() startDate: Date | null = null; // 用於年份選擇
   @Input() endDate: Date | null = null; // 用於年份選擇
+  @Input() placeholder: string = '';
   @Output() dateChange = new EventEmitter<Date>();
   @Output() timeChange = new EventEmitter<Shift>();
 
@@ -112,7 +113,6 @@ export class CalendarTriggerComponent implements OnChanges {
         hasBackdrop: true,
         backdropClass: 'cdk-custom-backdrop',
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
-        width: rect.width,
       });
     }
 
@@ -134,6 +134,7 @@ export class CalendarTriggerComponent implements OnChanges {
     calendarRef.instance.title = this.title;
     calendarRef.instance.startDate = this.startDate;
     calendarRef.instance.endDate = this.endDate;
+    calendarRef.instance.isAllDay = this.isAllDay;
 
     calendarRef.instance.dateSelected.subscribe((date: Date) => {
       this.selectedDate = date;

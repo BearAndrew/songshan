@@ -62,8 +62,8 @@ export class IntlCheckinCounterUserComponent {
     applyTimeEnd: '',
     islands: [] as string[],
     seasonType: '' as 'all' | 'other' | '',
-    applyDateStart: '',
-    applyDateEnd: '',
+    applyDateStart: null,
+    applyDateEnd: null,
   };
   get islandList(): FormArray {
     return this.form.get('islands') as FormArray;

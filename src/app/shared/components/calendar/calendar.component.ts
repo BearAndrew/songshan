@@ -6,11 +6,12 @@ import { CALENDAR_OVERLAY_REF } from './calendar.inject-token';
 import { CalendarDateType, SHIFT_TIME_OPTIONS, ShiftTime } from './calendar.date-type';
 import { CommonService } from '../../../core/services/common.service';
 import { Subject } from 'rxjs';
+import { DropdownComponent } from "../dropdown/dropdown.component";
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DropdownComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
@@ -63,6 +64,7 @@ export class CalendarComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['enabledDateTypes']) {
       this.generateCalendar();
     }
+    console.log(changes)
   }
 
   ngOnDestroy() {
@@ -109,6 +111,7 @@ export class CalendarComponent implements OnInit, OnChanges, OnDestroy {
   isDisabled(date: Date): boolean {
     // 如果是全天候模式，則所有日期都可選
     if (this.isAllDay) return false;
+    console.log('this.isAllDay: ',this.isAllDay)
 
     // 若 enabledDateTypes 為空，則全部日期都不能選
     // 若非空，則只有 enabledDateTypes 內的日期可選
@@ -142,11 +145,11 @@ export class CalendarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // 下一個月補滿 6 週（42 格）
-    // while (calendar.length < 42) {
-    //   const last = new Date(calendar[calendar.length - 1]);
-    //   last.setDate(last.getDate() + 1);
-    //   calendar.push(last);
-    // }
+    while (calendar.length < 42) {
+      const last = new Date(calendar[calendar.length - 1]);
+      last.setDate(last.getDate() + 1);
+      calendar.push(last);
+    }
 
     this.weeks = [];
     for (let i = 0; i < calendar.length; i += 7) {
@@ -209,9 +212,12 @@ export class CalendarComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   selectDate(date: Date) {
+    console.log(date)
+    console.log(this.isDisabled(date))
     if (this.isDisabled(date)) return;
     this.activeDate = new Date(date);
     this.activeTime = null; // 清除時間選擇
+    this.submit();
     // if (!this.enabledTimeSelect) {
     //   this.dateSelected.emit(this.activeDate);
     //   setTimeout(() => {

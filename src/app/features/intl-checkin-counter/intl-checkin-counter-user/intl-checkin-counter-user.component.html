@@ -232,14 +232,11 @@
       <!-- 最後一 Row：申請日期 -->
       <div class="grid grid-cols-[1fr_2fr_1fr_1fr] gap-4 items-center mt-12">
         <label class="text-[#97e0fb] font-semibold">申請日期</label>
-        <div class="border rounded p-2">
-          <input class="w-full" type="text" formControlName="applyDateStart" />
-          <!-- <app-calendar-trigger></app-calendar-trigger> -->
-        </div>
+        <app-calendar-trigger [selectedDate]="formData.applyDateStart" [isAllDay]="true" [placeholder]="'-- -- --'" [title]="'日期(起)'"></app-calendar-trigger>
 
         <!-- 佔滿兩格 -->
-        <div class="col-span-2 border rounded p-2">
-          <input class="w-full" type="text" formControlName="applyDateEnd" />
+        <div class="col-span-2">
+          <app-calendar-trigger [selectedDate]="formData.applyDateEnd" [isAllDay]="true" [placeholder]="'-- -- --'" [title]="'日期(迄)'"></app-calendar-trigger>
         </div>
       </div>
     </form>

@@ -13,6 +13,10 @@ html,body {
   }
 }
 
+@theme {
+  --color-primary: #193652;
+}
+
 .light {
   @apply bg-blue-100;
 

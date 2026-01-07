@@ -1,9 +1,10 @@
 <button #triggerBtn
-  class="flex items-center justify-between gap-2 w-full h-full px-4 py-2 text-[16px] lg:text-[28px] lg:leading-none text-left bg-white rounded-sm cursor-pointer"
+  class="flex items-center justify-between gap-1 w-full h-full p-1 text-base leading-none text-left text-[#b1b5b4] bg-[#b1b5b4] rounded-sm cursor-pointer"
   type="button"
   [disabled]="disabled"
   [ngClass]="disabled ? '!bg-[#E5E5E5] !text-gray-400 !cursor-not-allowed' : ''"
   (click)="openCalendar()">
-  <span>{{ (selectedDate | date: 'yyyy/MM/dd') || '&nbsp;' }} &nbsp; {{ selectedTimeLabel }}</span>
-  <img src="img/icon/calendar.svg" alt="calendar" class="w-4 h-4 lg:w-6 lg:h-6" />
+  <span class="text-white whitespace-nowrap">{{title}}</span>
+  <span class="flex-1 min-w-0 text-center bg-white py-2 rounded-sm">{{ (selectedDate | date: 'yyyy/MM/dd') || placeholder }} &nbsp; {{ selectedTimeLabel }}</span>
+  <img src="icons/calendar.png" alt="calendar" class="w-4 h-4 lg:w-6 lg:h-6" />
 </button>
