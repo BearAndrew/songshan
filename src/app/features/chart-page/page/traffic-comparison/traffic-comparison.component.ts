@@ -50,6 +50,32 @@ export class TrafficComparisonComponent {
     },
   ];
 
+  mobileOptions: Option[] = [
+    {
+      label: '國際兩岸線',
+      value: 0,
+    },
+    {
+      label: '國際線',
+      value: 1,
+    },
+    {
+      label: '兩岸線',
+      value: 2,
+    },
+    {
+      label: '國內線',
+      value: 3,
+    },
+    {
+      label: '總數',
+      value: 4,
+    },
+  ];
+
+  optionDefaultValue = '';
+
+
   barData: DataSetWithDataArray[] = [];
 
   lineData: DataSetWithDataArray[] = [];
@@ -100,8 +126,8 @@ export class TrafficComparisonComponent {
     route: string | null;
     flightClass: string | null;
     airline: string | null;
+    direction: string | null;
     flightType: string | null;
-    flightScope: string | null;
   } = {
     firstYear: null,
     secondYear: null,
@@ -109,8 +135,8 @@ export class TrafficComparisonComponent {
     route: null,
     flightClass: null,
     airline: null,
-    flightType: null,
-    flightScope: TabType.NONDOMESTIC,
+    direction: null,
+    flightType: TabType.NONDOMESTIC,
   };
 
   isNoData: boolean = false;
@@ -161,8 +187,8 @@ export class TrafficComparisonComponent {
   }
 
   // 選擇事件
-  onSelectionChange(field: keyof typeof this.formData, value: any) {
-    this.formData[field] = value;
+  onSelectionChange(field: keyof typeof this.formData, option: Option) {
+    this.formData[field] = option.value;
   }
 
   // 計算某年某月的天數
@@ -183,7 +209,7 @@ export class TrafficComparisonComponent {
   // 當切換按鈕時更新 formData
   onScopeChange(index: number) {
     this.activeIndex = index;
-    this.formData.flightScope = this.data[index].value;
+    this.formData.flightType = this.data[index].value;
   }
 
   // 確認按鈕
@@ -253,32 +279,7 @@ export class TrafficComparisonComponent {
     if (day) {
       result += `${day}日`;
     }
-    console.log(result);
     return result;
-  }
-
-  private buildDateRangeLabel(): string {
-    const start = this.formatDisplayDate(this.formData.firstYear);
-
-    const end = this.formatDisplayDate(this.formData.secondYear);
-
-    if (start && end) {
-      return `${start}～${end}`;
-    }
-
-    return start || end || '';
-  }
-
-  private formatDate(
-    year?: number | null,
-    month?: number | null,
-    day?: number | null
-  ): string {
-    const y = year ?? 0;
-    const m = month ? String(month).padStart(2, '0') : '0';
-    const d = day ? String(day).padStart(2, '0') : '0';
-
-    return `${y}-${m}-${d}`;
   }
 
   private handleFlightTrafficAnalysis(res: YearlyTrafficAnalysisResponse[]) {
@@ -306,7 +307,6 @@ export class TrafficComparisonComponent {
     }
 
     this.isNoData = false;
-    // this.secondDateRangeLabel = this.buildDateRangeLabel();
 
     // ================= Bar：人數 =================
     const barSeries: any[] = [];
@@ -335,8 +335,8 @@ export class TrafficComparisonComponent {
 
     if (thirdStat.length > 0) {
       barSeries.push({
-        label: '2019年人數',
-        data: secondStat.map((item) => ({
+        label: `${this.thirdDateRangeLabel}人數`,
+        data: thirdStat.map((item) => ({
           key: item.label,
           value: item.numOfPax,
         })),

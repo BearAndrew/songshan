@@ -9,15 +9,23 @@ import { DataSetWithDataArray } from '../../../../core/lib/chart-tool';
 import { Option } from '../../../../shared/components/dropdown/dropdown.component';
 import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
-import { FlightDirection, FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse, FlightTrafficType } from '../../../../models/flight-traffic-analysis.model';
+import {
+  FlightDirection,
+  FlightTrafficAnalysisRequest,
+  FlightTrafficAnalysisResponse,
+  FlightTrafficType,
+} from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
-import { OtpAnalysisRequest, OtpAnalysisResponse } from '../../../../models/otp-analysis.model';
+import {
+  OtpAnalysisRequest,
+  OtpAnalysisResponse,
+} from '../../../../models/otp-analysis.model';
 
 @Component({
   selector: 'app-on-time-performance',
   imports: [CommonModule, DropdownComponent, BarLineChartComponent],
   templateUrl: './on-time-performance.component.html',
-  styleUrl: './on-time-performance.component.scss'
+  styleUrl: './on-time-performance.component.scss',
 })
 export class OnTimePerformanceComponent {
   activeIndex: number = 0;
@@ -43,6 +51,31 @@ export class OnTimePerformanceComponent {
       value: TabType.ALL,
     },
   ];
+
+  mobileOptions: Option[] = [
+    {
+      label: '國際兩岸線',
+      value: 0,
+    },
+    {
+      label: '國際線',
+      value: 1,
+    },
+    {
+      label: '兩岸線',
+      value: 2,
+    },
+    {
+      label: '國內線',
+      value: 3,
+    },
+    {
+      label: '總數',
+      value: 4,
+    },
+  ];
+
+  optionDefaultValue = '';
 
   barData: DataSetWithDataArray[] = [];
 
@@ -77,10 +110,8 @@ export class OnTimePerformanceComponent {
 
   type: string = '';
   dateRangeLabel = '';
+  onTimeRate: number = 0;
   totalFlight: number = 0;
-  totalPax: number = 0;
-  compareTotalFlight: number = 0;
-  compareTotalPax: number = 0;
 
   // 目前表單值
   formData: {
@@ -93,8 +124,8 @@ export class OnTimePerformanceComponent {
     route: string | null;
     flightClass: string | null;
     airline: string | null;
+    direction: string | null;
     flightType: string | null;
-    flightScope: string | null;
   } = {
     startYear: null,
     startMonth: null,
@@ -105,8 +136,8 @@ export class OnTimePerformanceComponent {
     route: null,
     flightClass: null,
     airline: null,
-    flightType: null,
-    flightScope: TabType.NONDOMESTIC,
+    direction: null,
+    flightType: TabType.NONDOMESTIC,
   };
 
   isNoData: boolean = false;
@@ -155,8 +186,8 @@ export class OnTimePerformanceComponent {
   }
 
   // 選擇事件
-  onSelectionChange(field: keyof typeof this.formData, value: any) {
-    this.formData[field] = value;
+  onSelectionChange(field: keyof typeof this.formData, option: Option) {
+    this.formData[field] = option.value;
   }
 
   // 計算某年某月的天數
@@ -210,7 +241,7 @@ export class OnTimePerformanceComponent {
   // 當切換按鈕時更新 formData
   onScopeChange(index: number) {
     this.activeIndex = index;
-    this.formData.flightScope = this.data[index].value;
+    this.formData.flightType = this.data[index].value;
   }
 
   // 確認按鈕
@@ -327,8 +358,8 @@ export class OnTimePerformanceComponent {
     if (!hasAnyData) {
       this.barData = [];
       this.lineData = [];
+      this.onTimeRate = 0;
       this.totalFlight = 0;
-      this.totalPax = 0;
       this.isNoData = true;
       return;
     }
@@ -341,12 +372,13 @@ export class OnTimePerformanceComponent {
 
     if (queryStat.length > 0) {
       barSeries.push({
-        label: `${this.dateRangeLabel}架次`,
+        label: `${this.dateRangeLabel}準點率`,
         data: queryStat.map((item) => ({
           key: item.label,
-          value: item.OnTimeFlight,
+          value: item.OnTimeRate,
         })),
-        colors: ['#0279ce'],
+        colors: ['#f08622'],
+        unitText: '%'
       });
     }
 
@@ -357,18 +389,18 @@ export class OnTimePerformanceComponent {
 
     if (queryStat.length > 0) {
       lineSeries.push({
-        label: `${this.dateRangeLabel}準點率`,
+        label: `${this.dateRangeLabel}架次`,
         data: queryStat.map((item) => ({
           key: item.label,
-          value: item.OnTimeRate,
+          value: item.OnTimeFlight,
         })),
-        colors: ['#f08622'],
+        colors: ['#0279ce'],
       });
     }
 
     this.lineData = lineSeries;
 
-    this.totalFlight = query?.OnTimeRate ?? 0;
-    this.totalPax = query?.totalFlight ?? 0;
+    this.onTimeRate = query?.OnTimeRate ?? 0;
+    this.totalFlight = query?.totalFlight ?? 0;
   }
 }

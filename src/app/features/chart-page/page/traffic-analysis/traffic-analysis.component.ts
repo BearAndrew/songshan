@@ -43,6 +43,29 @@ export class TrafficAnalysisComponent {
     },
   ];
 
+  mobileOptions: Option[] = [
+    {
+      label: '國際兩岸線',
+      value: 0,
+    },
+    {
+      label: '國際線',
+      value: 1,
+    },
+    {
+      label: '兩岸線',
+      value: 2,
+    },
+    {
+      label: '國內線',
+      value: 3,
+    },
+    {
+      label: '總數',
+      value: 4,
+    },
+  ];
+
   barData: DataSetWithDataArray[] = [];
 
   lineData: DataSetWithDataArray[] = [];
@@ -395,5 +418,8 @@ export class TrafficAnalysisComponent {
     this.totalPax = query?.totalPax ?? 0;
     this.compareTotalFlight = compare?.totalFlight ?? 0;
     this.compareTotalPax = compare?.totalPax ?? 0;
+
+    console.log(JSON.stringify(this.barData));
+    console.log(this.lineData);
   }
 }

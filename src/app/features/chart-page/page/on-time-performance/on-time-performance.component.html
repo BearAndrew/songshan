@@ -1,5 +1,14 @@
+<div class="fixed top-14 sm:hidden mb-2 w-[calc(50vw-1.25rem)] z-50">
+  <app-dropdown
+    class="pl-4 w-full"
+    [value]="0"
+    [options]="mobileOptions"
+    (selectionChange)="onScopeChange($event.value)"
+  ></app-dropdown>
+</div>
+
 <div class="flex flex-col gap-4 w-full h-full">
-  <div class="flex gap-8 h-fit">
+  <div class="hidden sm:flex gap-8 h-fit">
     @for(button of data; track button.label; let i = $index) {
     <button
       class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
@@ -15,125 +24,134 @@
     }
   </div>
 
-  <div class="flex items-center justify-between text-[#aaa]">
+  <div
+    class="flex flex-col sm:flex-row gap-y-4 items-center justify-between text-[#aaa]"
+  >
     <!-- 指定期間 -->
-    <div class="flex items-center gap-2">
-      <label>指定期間</label>
+    <div class="flex flex-col sm:flex-row items-center gap-x-2 w-full sm:w-fit">
+      <label class="mb-2 sm:mb-0 w-full sm:w-fit whitespace-nowrap"
+        >指定期間</label
+      >
+      <div class="flex items-center gap-2 w-full sm:fit">
+        <!-- 起始年份 -->
+        <app-dropdown
+          class="flex-1 sm:flex-none min-w-0 sm:w-27"
+          [options]="yearOptions"
+          [value]="formData.startYear"
+          (selectionChange)="
+            onSelectionChange('startYear', $event);
+            onMonthOrYearChange('start', $event.value, formData.startMonth)
+          "
+        ></app-dropdown>
+        <span>年</span>
 
-      <!-- 起始年份 -->
-      <app-dropdown
-        class="w-30"
-        [options]="yearOptions"
-        [value]="formData.startYear"
-        (selectionChange)="
-          onSelectionChange('startYear', $event.value);
-          onMonthOrYearChange('start', $event.value, formData.startMonth)
-        "
-      ></app-dropdown>
-      <span>年</span>
+        <!-- 起始月份 -->
+        <app-dropdown
+          class="w-20"
+          [options]="monthOptions"
+          [value]="formData.startMonth"
+          [disabeld]="formData.startYear == null"
+          (selectionChange)="
+            onSelectionChange('startMonth', $event);
+            onMonthOrYearChange('start', formData.startYear, $event.value)
+          "
+        ></app-dropdown>
+        <span>月</span>
 
-      <!-- 起始月份 -->
-      <app-dropdown
-        class="w-20"
-        [options]="monthOptions"
-        [value]="formData.startMonth"
-        [disabeld]="formData.startYear == null"
-        (selectionChange)="
-          onSelectionChange('startMonth', $event.value);
-          onMonthOrYearChange('start', formData.startYear, $event.value)
-        "
-      ></app-dropdown>
-      <span>月</span>
+        <!-- 起始日期 -->
+        <app-dropdown
+          class="w-20"
+          [options]="startDayOptions"
+          [value]="formData.startDay"
+          [disabeld]="formData.startMonth == null"
+          (selectionChange)="onSelectionChange('startDay', $event)"
+        ></app-dropdown>
+        <span>日</span>
+      </div>
 
-      <!-- 起始日期 -->
-      <app-dropdown
-        class="w-20"
-        [options]="startDayOptions"
-        [value]="formData.startDay"
-        [disabeld]="formData.startMonth == null"
-        (selectionChange)="onSelectionChange('startDay', $event.value)"
-      ></app-dropdown>
-      <span>日</span>
+      <span class="">~</span>
 
-      <span>~</span>
+      <div class="flex items-center gap-2 w-full sm:fit">
+        <!-- 結束年份 -->
+        <app-dropdown
+          class="flex-1 sm:flex-none min-w-0 sm:w-27"
+          [options]="yearOptions"
+          [value]="formData.endYear"
+          [disabeld]="formData.startYear == null"
+          (selectionChange)="
+            onSelectionChange('endYear', $event);
+            onMonthOrYearChange('end', $event.value, formData.endMonth)
+          "
+        ></app-dropdown>
+        <span>年</span>
 
-      <!-- 結束年份 -->
-      <app-dropdown
-        class="w-30"
-        [options]="yearOptions"
-        [value]="formData.endYear"
-        [disabeld]="formData.startYear == null"
-        (selectionChange)="
-          onSelectionChange('endYear', $event.value);
-          onMonthOrYearChange('end', $event.value, formData.endMonth)
-        "
-      ></app-dropdown>
-      <span>年</span>
+        <!-- 結束月份 -->
+        <app-dropdown
+          class="w-20"
+          [options]="monthOptions"
+          [value]="formData.endMonth"
+          [disabeld]="formData.endYear == null"
+          (selectionChange)="
+            onSelectionChange('endMonth', $event);
+            onMonthOrYearChange('end', formData.endYear, $event.value)
+          "
+        ></app-dropdown>
+        <span>月</span>
 
-      <!-- 結束月份 -->
-      <app-dropdown
-        class="w-20"
-        [options]="monthOptions"
-        [value]="formData.endMonth"
-        [disabeld]="formData.endYear == null"
-        (selectionChange)="
-          onSelectionChange('endMonth', $event.value);
-          onMonthOrYearChange('end', formData.endYear, $event.value)
-        "
-      ></app-dropdown>
-      <span>月</span>
-
-      <!-- 結束日期 -->
-      <app-dropdown
-        class="w-20"
-        [options]="endDayOptions"
-        [value]="formData.endDay"
-        [disabeld]="formData.endMonth == null"
-        (selectionChange)="onSelectionChange('endDay', $event.value)"
-      ></app-dropdown>
-      <span>日</span>
+        <!-- 結束日期 -->
+        <app-dropdown
+          class="w-20"
+          [options]="endDayOptions"
+          [value]="formData.endDay"
+          [disabeld]="formData.endMonth == null"
+          (selectionChange)="onSelectionChange('endDay', $event)"
+        ></app-dropdown>
+        <span>日</span>
+      </div>
     </div>
 
     <!-- 航點、航班類別、航空公司、飛航類型 -->
-    <div class="flex items-center gap-2">
+    <div
+      class="grid grid-cols-[65px_1fr_65px_1fr] sm:flex items-center gap-2 w-full sm:w-fit"
+    >
       <label>航空公司</label>
       <app-dropdown
-        class="w-30"
+        class="w-full sm:w-27"
         [options]="airlineOptions"
-        [value]="defaultOptionValue"
+        [value]="optionDefaultValue"
         (selectionChange)="onSelectionChange('airline', $event)"
       >
       </app-dropdown>
 
       <label>航班類別</label>
       <app-dropdown
-        class="w-30"
+        class="w-full sm:w-27"
         [options]="flightClassOptions"
-        [value]="defaultOptionValue"
+        [value]="optionDefaultValue"
         (selectionChange)="onSelectionChange('flightClass', $event)"
       >
       </app-dropdown>
 
-      <label>航點</label>
+      <label class="[text-align-last:justify]">航點</label>
       <app-dropdown
-        class="w-30"
+        class="w-full sm:w-27"
         [options]="routeOptions"
-        [value]="defaultOptionValue"
+        [value]="optionDefaultValue"
         (selectionChange)="onSelectionChange('route', $event)"
       >
       </app-dropdown>
 
       <label>飛航類型</label>
       <app-dropdown
-        class="w-20"
+        class="w-full sm:w-20"
         [options]="flightTypeOptions"
-        [value]="defaultOptionValue"
-        (selectionChange)="onSelectionChange('flightType', $event)"
+        [value]="optionDefaultValue"
+        (selectionChange)="onSelectionChange('direction', $event)"
       >
       </app-dropdown>
 
       <button
-        class="px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
+        class="col-start-4 px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
         (click)="onConfirm()"
       >
         確認
@@ -143,66 +161,110 @@
 
   <div class="card flex flex-col flex-1 gap-2 items-center p-4 min-h-0">
     @if(barData.length > 0 && !isNoData) {
-    <div class="flex items-center gap-4">
-      @for(bar of barData; let i = $index; track bar;) {
-      <div class="flex items-center gap-1">
-        <div
-          class="w-4 h-4 rounded-full"
-          [ngStyle]="{ 'background-color': bar.colors?.[0] }"
-        ></div>
-        <div>{{ bar.label }}</div>
+    <div class="hidden sm:flex flex-1 flex-col items-center gap-2 w-full">
+      <div class="flex items-center gap-4">
+        @for(bar of barData; let i = $index; track bar;) {
+        <div class="flex items-center gap-1">
+          <div
+            class="w-4 h-4 rounded-full"
+            [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
+          ></div>
+          <div>{{ lineData[i].label }}</div>
+        </div>
+        <div class="flex items-center gap-1">
+          <div
+            class="w-4 h-2"
+            [ngStyle]="{ 'background-color': bar.colors?.[0] }"
+          ></div>
+          <div>{{ bar.label }}</div>
+        </div>
+        }
       </div>
-      <div class="flex items-center gap-1">
-        <div
-          class="w-4 h-2"
-          [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
-        ></div>
-        <div>{{ lineData[i].label }}</div>
+
+      <div class="flex flex-1 items-center gap-2 w-full min-h-0 relative">
+        <div class="text-xl [writing-mode:vertical-rl]">比例(%)</div>
+        <app-bar-line-chart
+          class="flex-1 h-full"
+          [barData]="barData"
+          [lineData]="lineData"
+          [showLegend]="false"
+        ></app-bar-line-chart>
+        <div class="text-xl [writing-mode:vertical-rl]">架次</div>
       </div>
-      }
     </div>
 
-    <div class="flex flex-1 items-center gap-2 w-full min-h-0 relative">
-      <div class="text-xl [writing-mode:vertical-rl]">架次</div>
-      <app-bar-line-chart
-        class="flex-1 h-full"
-        [barData]="barData"
-        [lineData]="lineData"
-        [showLegend]="false"
-      ></app-bar-line-chart>
-      <div class="text-xl [writing-mode:vertical-rl]">人數</div>
+    <!-- 手機版 -->
+    <div class="flex flex-col gap-4 sm:hidden w-full max-w-100">
+      <h2
+        class="flex flex-wrap items-center justify-center text-2xl text-center font-semibold"
+      >
+        <span>{{ dateRangeLabel }}</span>
+        <span>架次</span>
+      </h2>
+      <div class="grid grid-cols-3 border border-gray-300">
+        <!-- Header -->
+        <div class="border p-2 text-center font-semibold">日期</div>
+        <div class="border p-2 text-center font-semibold">比例</div>
+        <div class="border p-2 text-center font-semibold">架次</div>
+
+        <!-- Rows -->
+        @for (bar of barData[0]?.data; track $index) {
+
+        <!-- 日期 -->
+        <div class="border p-2 text-center">
+          {{ barData[0].data[$index].key }}
+        </div>
+
+        <!-- bar 數值 -->
+        <div class="border p-2 text-center">
+          {{ barData[0].data[$index].value }} {{ barData[0].unitText }}
+        </div>
+
+        <!-- line 數值 -->
+        <div class="border p-2 text-center">
+          {{ lineData[0].data[$index].value }}
+        </div>
+        }
+      </div>
+
+    </div>
+
+    } @else if (!isNoData) {
+    <div class="flex flex-1 items-center justify-center text-[30px]">
+      請輸入查詢條件
+    </div>
+    } @else {
+    <div class="flex flex-1 items-center justify-center text-[30px]">
+      查無資料
     </div>
     }
-    @else if (!isNoData) {
-      <div class="flex flex-1 items-center justify-center text-[30px]">請輸入查詢條件</div>
-    }
-    @else {
-      <div class="flex flex-1 items-center justify-center text-[30px]">查無資料</div>
-    }
 
-    <div class="flex items-center justify-center w-full h-55 mt-4">
-
+    <div
+      class="flex flex-col sm:flex-row items-center justify-center gap-8 w-full sm:h-55 mt-12 sm:mt-4"
+    >
       <div
-        class="flex-1 mx-8 w-full h-full max-w-200 border-4 border-[#3372bd] rounded-lg relative"
+        class="flex-1 mx-8 w-full h-full min-h-28 max-w-200 border-4 border-[#3372bd] rounded-lg relative"
       >
         <div
-          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
         >
           {{ dateRangeLabel }}
         </div>
         <div class="flex items-center h-full">
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">總架次</div>
             <div
-              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+              class="text-[30px] sm:text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
             >
-              {{ totalPax | number }}
+              {{ totalFlight | number }}
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">準點率</div>
-            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
-              {{ totalFlight | number }}
+            <div class="text-lg sm:text-3xl text-[#a5a5a5]">準點率</div>
+            <div
+              class="text-[30px] sm:text-[70px] text-[#02b3e7] font-bold leading-none"
+            >
+              {{ onTimeRate | number }} %
             </div>
           </div>
         </div>

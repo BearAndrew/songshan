@@ -50,6 +50,31 @@ export class FixedRouteTrafficComparisonComponent {
     },
   ];
 
+  mobileOptions: Option[] = [
+    {
+      label: '國際兩岸線',
+      value: 0,
+    },
+    {
+      label: '國際線',
+      value: 1,
+    },
+    {
+      label: '兩岸線',
+      value: 2,
+    },
+    {
+      label: '國內線',
+      value: 3,
+    },
+    {
+      label: '總數',
+      value: 4,
+    },
+  ];
+
+  optionDefaultValue = '';
+
   barData: DataSetWithDataArray[] = [];
 
   lineData: DataSetWithDataArray[] = [];
@@ -100,8 +125,8 @@ export class FixedRouteTrafficComparisonComponent {
     route: string | null;
     flightClass: string | null;
     airline: string | null;
+    direction: string | null;
     flightType: string | null;
-    flightScope: string | null;
   } = {
     firstYear: null,
     secondYear: null,
@@ -109,8 +134,8 @@ export class FixedRouteTrafficComparisonComponent {
     route: null,
     flightClass: null,
     airline: null,
-    flightType: null,
-    flightScope: TabType.NONDOMESTIC,
+    direction: null,
+    flightType: TabType.NONDOMESTIC,
   };
 
   isNoData: boolean = false;
@@ -161,8 +186,8 @@ export class FixedRouteTrafficComparisonComponent {
   }
 
   // 選擇事件
-  onSelectionChange(field: keyof typeof this.formData, value: any) {
-    this.formData[field] = value;
+  onSelectionChange(field: keyof typeof this.formData, option: Option) {
+    this.formData[field] = option.value;
   }
 
   // 計算某年某月的天數
@@ -183,7 +208,7 @@ export class FixedRouteTrafficComparisonComponent {
   // 當切換按鈕時更新 formData
   onScopeChange(index: number) {
     this.activeIndex = index;
-    this.formData.flightScope = this.data[index].value;
+    this.formData.flightType = this.data[index].value;
   }
 
   // 確認按鈕

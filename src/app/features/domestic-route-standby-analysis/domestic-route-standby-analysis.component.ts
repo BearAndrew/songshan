@@ -225,8 +225,8 @@ export class DomesticRouteStandbyAnalysisComponent {
   }
 
   // 選擇事件
-  onSelectionChange(field: keyof typeof this.formData, value: any) {
-    this.formData[field] = value;
+  onSelectionChange(field: keyof typeof this.formData, option: Option) {
+    this.formData[field] = option.value;
   }
 
   // 當年份或月份改變時更新日選單

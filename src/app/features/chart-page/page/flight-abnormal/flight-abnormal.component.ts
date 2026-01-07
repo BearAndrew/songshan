@@ -58,6 +58,31 @@ export class FlightAbnormalComponent {
     },
   ];
 
+  mobileOptions: Option[] = [
+    {
+      label: '國際兩岸線',
+      value: 0,
+    },
+    {
+      label: '國際線',
+      value: 1,
+    },
+    {
+      label: '兩岸線',
+      value: 2,
+    },
+    {
+      label: '國內線',
+      value: 3,
+    },
+    {
+      label: '總數',
+      value: 4,
+    },
+  ];
+
+  optionDefaultValue = '';
+
   barData1: DataSetWithDataArray[] = [];
 
   lineData1: DataSetWithDataArray[] = [];
@@ -116,8 +141,8 @@ export class FlightAbnormalComponent {
     route: string | null;
     flightClass: string | null;
     airline: string | null;
+    direction: string | null;
     flightType: string | null;
-    flightScope: string | null;
   } = {
     startYear: null,
     startMonth: null,
@@ -128,8 +153,8 @@ export class FlightAbnormalComponent {
     route: null,
     flightClass: null,
     airline: null,
-    flightType: null,
-    flightScope: TabType.NONDOMESTIC,
+    direction: null,
+    flightType: TabType.NONDOMESTIC,
   };
 
   isNoData: boolean = false;
@@ -178,8 +203,8 @@ export class FlightAbnormalComponent {
   }
 
   // 選擇事件
-  onSelectionChange(field: keyof typeof this.formData, value: any) {
-    this.formData[field] = value;
+  onSelectionChange(field: keyof typeof this.formData, option: Option) {
+    this.formData[field] = option.value;
   }
 
   // 計算某年某月的天數
@@ -233,7 +258,7 @@ export class FlightAbnormalComponent {
   // 當切換按鈕時更新 formData
   onScopeChange(index: number) {
     this.activeIndex = index;
-    this.formData.flightScope = this.data[index].value;
+    this.formData.flightType = this.data[index].value;
   }
 
   // 確認按鈕
@@ -263,9 +288,9 @@ export class FlightAbnormalComponent {
       flightType: (this.formData.flightType as TabType) || '',
     };
 
-    // console.log(payload);
-    // this.handleFlightTrafficAnalysis(fakeData);
-    // return;
+    console.log(payload);
+    this.handleFlightTrafficAnalysis(fakeData);
+    return;
 
     // 呼叫 API
     this.apiService.postIrregularAnalysis(payload).subscribe({
@@ -360,7 +385,7 @@ export class FlightAbnormalComponent {
     this.isNoData = false;
     this.dateRangeLabel = this.buildDateRangeLabel();
     this.compareTotalFlight = query.totalFlight;
-    this.compareTotalPax = query.OnTimeRate; 
+    this.compareTotalPax = query.OnTimeRate;
 
     // 左下總架次跟準點率
     this.totalFlight = query?.totalFlight ?? 0;
@@ -415,12 +440,13 @@ export class FlightAbnormalComponent {
 
     if (queryStat.length > 0) {
       barSeries.push({
-        label: `${this.dateRangeLabel}%`,
+        label: `${this.dateRangeLabel}異常比例(%)`,
         data: queryStat.map((item) => ({
           key: item.label,
           value: item.IrregularRate,
         })),
         colors: ['#f08622'],
+        unitText: '%'
       });
     }
 
@@ -431,7 +457,7 @@ export class FlightAbnormalComponent {
 
     if (queryStat.length > 0) {
       lineSeries.push({
-        label: `${this.dateRangeLabel}架`,
+        label: `${this.dateRangeLabel}異常架次`,
         data: queryStat.map((item) => ({
           key: item.label,
           value: item.IrregularFlight,
@@ -448,23 +474,24 @@ export class FlightAbnormalComponent {
 
     if (queryStat.length > 0) {
       barSeries2.push({
-        label: `${this.dateRangeLabel}%`,
+        label: `${this.dateRangeLabel}異常比例(%)`,
         data: queryStat.map((item) => ({
           key: item.label,
           value: item.IrregularPaxRate,
         })),
         colors: ['#61ABF3'],
+        unitText: '%'
       });
     }
 
-    this.barData2 = barSeries;
+    this.barData2 = barSeries2;
 
     // ================= Line：人數 =================
     const lineSeries2: any[] = [];
 
     if (queryStat.length > 0) {
       lineSeries2.push({
-        label: `${this.dateRangeLabel}人`,
+        label: `${this.dateRangeLabel}異常人數`,
         data: queryStat.map((item) => ({
           key: item.label,
           value: item.IrregularPax,
@@ -473,6 +500,6 @@ export class FlightAbnormalComponent {
       });
     }
 
-    this.lineData2 = lineSeries;
+    this.lineData2 = lineSeries2;
 }
 }

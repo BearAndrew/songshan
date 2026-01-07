@@ -11,13 +11,13 @@ export const fakeData ={
         "label": "7",
         "numOfFlight": 9,
         "OnTimeFlight": 1,
-        "OnTimeRate": 11.11
+        "OnTimeRate": 80
       },
       {
         "label": "8",
         "numOfFlight": 2,
         "OnTimeFlight": 5,
-        "OnTimeRate": 250
+        "OnTimeRate": 70
       },
       {
         "label": "9",
@@ -35,7 +35,7 @@ export const fakeData ={
         "label": "11",
         "numOfFlight": 3,
         "OnTimeFlight": 8,
-        "OnTimeRate": 266.67
+        "OnTimeRate": 96.67
       },
       {
         "label": "12",
