@@ -20,6 +20,7 @@ import {
 } from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
 import { PieChartComponent } from '../../../../shared/chart/pie-chart/pie-chart.component';
+import { IrregularAnalysisRequest, IrregularAnalysisResponse } from '../../../../models/irregular-analysis.model';
 
 @Component({
   selector: 'app-flight-abnormal',
@@ -57,49 +58,17 @@ export class FlightAbnormalComponent {
     },
   ];
 
-  barData: DataSetWithDataArray[] = [];
+  barData1: DataSetWithDataArray[] = [];
 
-  lineData: DataSetWithDataArray[] = [];
+  lineData1: DataSetWithDataArray[] = [];
+
+  barData2: DataSetWithDataArray[] = [];
+
+  lineData2: DataSetWithDataArray[] = [];
 
   pieData1: DataSetWithData[] = [
-    {
-      label: '0~30min',
-      data: { value: 20 },
-      colors: ['#03c5ce'],
-      unitText: '%',
-    },
-    {
-      label: '30~60min',
-      data: { value: 35 },
-      colors: ['#e7376a'],
-      unitText: '%',
-    },
-    {
-      label: '60~',
-      data: { value: 45 },
-      colors: ['#a4dd46'],
-      unitText: '%',
-    },
   ];
   pieData2: DataSetWithData[] = [
-    {
-      label: '0~30min',
-      data: { value: 20 },
-      colors: ['#03c5ce'],
-      unitText: '%',
-    },
-    {
-      label: '30~60min',
-      data: { value: 35 },
-      colors: ['#e7376a'],
-      unitText: '%',
-    },
-    {
-      label: '60~',
-      data: { value: 45 },
-      colors: ['#a4dd46'],
-      unitText: '%',
-    },
   ];
 
   // 年、月、日 options
@@ -114,6 +83,7 @@ export class FlightAbnormalComponent {
   airlineOptions: Option[] = [];
 
   flightClassOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '定航', value: 'SCHEDULE' },
     { label: '商務機', value: 'BJ' },
     { label: '軍機', value: 'MILITARY' },
@@ -121,9 +91,12 @@ export class FlightAbnormalComponent {
   ];
 
   flightTypeOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '出境', value: 'OUTBOUND' },
     { label: '入境', value: 'INBOUND' },
   ];
+
+  defaultOptionValue='';
 
   type: string = '';
   dateRangeLabel = '';
@@ -191,6 +164,7 @@ export class FlightAbnormalComponent {
         label: airport.name_zhTW,
         value: airport.iata,
       }));
+      this.routeOptions.unshift({ label: '全部', value: '' });
     });
 
     // 取得航空公司清單
@@ -199,6 +173,7 @@ export class FlightAbnormalComponent {
         label: airline.name_zhTW,
         value: airline.iata,
       }));
+      this.airlineOptions.unshift({ label: '全部', value: '' });
     });
   }
 
@@ -269,7 +244,7 @@ export class FlightAbnormalComponent {
       .map(([key]) => key);
 
     // 組裝 API payload
-    const payload: FlightTrafficAnalysisRequest = {
+    const payload: IrregularAnalysisRequest = {
       dateFrom:
         this.formatDate(
           this.formData.startYear,
@@ -284,7 +259,6 @@ export class FlightAbnormalComponent {
         ) || '',
       type: (this.type as FlightTrafficType) || '',
       airline: this.formData.airline! || '',
-      direction: (this.formData.flightType as FlightDirection) || '',
       peer: this.formData.route! || '',
       flightType: (this.formData.flightType as TabType) || '',
     };
@@ -294,8 +268,8 @@ export class FlightAbnormalComponent {
     // return;
 
     // 呼叫 API
-    this.apiService.postFlightTrafficAnalysis(payload).subscribe({
-      next: (res: FlightTrafficAnalysisResponse) => {
+    this.apiService.postIrregularAnalysis(payload).subscribe({
+      next: (res: IrregularAnalysisResponse) => {
         console.log('取得資料成功', res);
         this.handleFlightTrafficAnalysis(res);
       },
@@ -362,21 +336,21 @@ export class FlightAbnormalComponent {
     return `${y}-${m}-${d}`;
   }
 
-  private handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
+  private handleFlightTrafficAnalysis(res: IrregularAnalysisResponse) {
     console.log('處理資料', res);
 
     const query = res?.queryData;
-    const compare = res?.compareData;
 
     const queryStat = Array.isArray(query?.stat) ? query.stat : [];
-    const compareStat = Array.isArray(compare?.stat) ? compare.stat : [];
 
-    const hasAnyData = queryStat.length > 0 || compareStat.length > 0;
+    const hasAnyData = queryStat.length > 0;
 
     // === 兩邊都沒資料 ===
     if (!hasAnyData) {
-      this.barData = [];
-      this.lineData = [];
+      this.barData1 = [];
+      this.lineData2 = [];
+      this.barData2 = [];
+      this.lineData2 = [];
       this.totalFlight = 0;
       this.totalPax = 0;
       this.isNoData = true;
@@ -385,64 +359,120 @@ export class FlightAbnormalComponent {
 
     this.isNoData = false;
     this.dateRangeLabel = this.buildDateRangeLabel();
+    this.compareTotalFlight = query.totalFlight;
+    this.compareTotalPax = query.OnTimeRate; 
 
-    // ================= Bar：人數 =================
+    // 左下總架次跟準點率
+    this.totalFlight = query?.totalFlight ?? 0;
+    this.totalPax = query?.IrregularPaxRate ?? 0;
+
+    //右下圓餅圖
+    this.pieData1 = [
+    {
+      label: '0~30min',
+      data: { value: query.IrregularFlightRate0 },
+      colors: ['#03c5ce'],
+      unitText: '%',
+    },
+    {
+      label: '30~60min',
+      data: { value: query.IrregularFlightRate30 },
+      colors: ['#e7376a'],
+      unitText: '%',
+    },
+    {
+      label: '60~',
+      data: { value: query.IrregularFlightRate60 },
+      colors: ['#a4dd46'],
+      unitText: '%',
+    },
+  ];
+
+  this.pieData2 = [
+    {
+      label: '0~30min',
+      data: { value: query.IrregularPaxRate0 },
+      colors: ['#03c5ce'],
+      unitText: '%',
+    },
+    {
+      label: '30~60min',
+      data: { value: query.IrregularPaxRate30 },
+      colors: ['#e7376a'],
+      unitText: '%',
+    },
+    {
+      label: '60~',
+      data: { value: query.IrregularPaxRate60 },
+      colors: ['#a4dd46'],
+      unitText: '%',
+    },
+  ];
+
+  //左上圖表
+  // ================= Bar：架次比例 =================
     const barSeries: any[] = [];
 
     if (queryStat.length > 0) {
       barSeries.push({
-        label: `${this.dateRangeLabel}人數`,
+        label: `${this.dateRangeLabel}%`,
         data: queryStat.map((item) => ({
           key: item.label,
-          value: item.numOfPax,
-        })),
-        colors: ['#0279ce'],
-      });
-    }
-
-    if (compareStat.length > 0) {
-      barSeries.push({
-        label: '2019年人數',
-        data: compareStat.map((item) => ({
-          key: item.label,
-          value: item.numOfPax,
+          value: item.IrregularRate,
         })),
         colors: ['#f08622'],
       });
     }
 
-    this.barData = barSeries;
+    this.barData1 = barSeries;
 
     // ================= Line：架次 =================
     const lineSeries: any[] = [];
 
     if (queryStat.length > 0) {
       lineSeries.push({
-        label: `${this.dateRangeLabel}架次`,
+        label: `${this.dateRangeLabel}架`,
         data: queryStat.map((item) => ({
           key: item.label,
-          value: item.numOfFlight,
+          value: item.IrregularFlight,
         })),
         colors: ['#0279ce'],
       });
     }
 
-    if (compareStat.length > 0) {
-      lineSeries.push({
-        label: '2019年架次',
-        data: compareStat.map((item) => ({
+    this.lineData1 = lineSeries;
+
+  //右上圖表
+  // ================= Bar：人數比例 =================
+    const barSeries2: any[] = [];
+
+    if (queryStat.length > 0) {
+      barSeries2.push({
+        label: `${this.dateRangeLabel}%`,
+        data: queryStat.map((item) => ({
           key: item.label,
-          value: item.numOfFlight,
+          value: item.IrregularPaxRate,
         })),
-        colors: ['#f08622'],
+        colors: ['#61ABF3'],
       });
     }
 
-    this.lineData = lineSeries;
+    this.barData2 = barSeries;
 
-    this.totalFlight = query?.totalFlight ?? 0;
-    this.totalPax = query?.totalPax ?? 0;
-    this.compareTotalFlight = compare?.totalFlight ?? 0;
-    this.compareTotalPax = compare?.totalPax ?? 0;
-  }
+    // ================= Line：人數 =================
+    const lineSeries2: any[] = [];
+
+    if (queryStat.length > 0) {
+      lineSeries2.push({
+        label: `${this.dateRangeLabel}人`,
+        data: queryStat.map((item) => ({
+          key: item.label,
+          value: item.IrregularPax,
+        })),
+        colors: ['#B1DC60'],
+      });
+    }
+
+    this.lineData2 = lineSeries;
+}
 }

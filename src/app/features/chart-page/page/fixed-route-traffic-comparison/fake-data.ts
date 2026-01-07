@@ -1,194 +1,209 @@
-export const fakeData = {
-  queryData: {
-    stat: [
-      {
-        label: '1',
-        numOfFlight: 24,
-        numOfPax: 2620,
-      },
-      {
-        label: '2',
-        numOfFlight: 35,
-        numOfPax: 1819,
-      },
-      {
-        label: '3',
-        numOfFlight: 13,
-        numOfPax: 464,
-      },
-      {
-        label: '4',
-        numOfFlight: 26,
-        numOfPax: 2295,
-      },
-      {
-        label: '5',
-        numOfFlight: 33,
-        numOfPax: 1901,
-      },
-      {
-        label: '6',
-        numOfFlight: 48,
-        numOfPax: 4067,
-      },
-      {
-        label: '7',
-        numOfFlight: 36,
-        numOfPax: 1635,
-      },
-      {
-        label: '8',
-        numOfFlight: 18,
-        numOfPax: 4188,
-      },
-      {
-        label: '9',
-        numOfFlight: 16,
-        numOfPax: 2181,
-      },
-      {
-        label: '10',
-        numOfFlight: 18,
-        numOfPax: 3435,
-      },
-      {
-        label: '11',
-        numOfFlight: 2,
-        numOfPax: 1003,
-      },
-      {
-        label: '12',
-        numOfFlight: 11,
-        numOfPax: 4800,
-      },
-      {
-        label: '13',
-        numOfFlight: 7,
-        numOfPax: 2461,
-      },
-      {
-        label: '14',
-        numOfFlight: 35,
-        numOfPax: 4607,
-      },
-      {
-        label: '15',
-        numOfFlight: 7,
-        numOfPax: 2363,
-      },
-      {
-        label: '16',
-        numOfFlight: 26,
-        numOfPax: 4131,
-      },
-      {
-        label: '17',
-        numOfFlight: 48,
-        numOfPax: 1965,
-      },
-      {
-        label: '18',
-        numOfFlight: 9,
-        numOfPax: 2834,
-      },
-      {
-        label: '19',
-        numOfFlight: 13,
-        numOfPax: 240,
-      },
-      {
-        label: '20',
-        numOfFlight: 27,
-        numOfPax: 1836,
-      },
-      {
-        label: '21',
-        numOfFlight: 24,
-        numOfPax: 2424,
-      },
-      {
-        label: '22',
-        numOfFlight: 37,
-        numOfPax: 4612,
-      },
-      {
-        label: '23',
-        numOfFlight: 25,
-        numOfPax: 2384,
-      },
-      {
-        label: '24',
-        numOfFlight: 37,
-        numOfPax: 2702,
-      },
-      {
-        label: '25',
-        numOfFlight: 16,
-        numOfPax: 4443,
-      },
-      {
-        label: '26',
-        numOfFlight: 34,
-        numOfPax: 1113,
-      },
-      {
-        label: '27',
-        numOfFlight: 27,
-        numOfPax: 4462,
-      },
-      {
-        label: '28',
-        numOfFlight: 17,
-        numOfPax: 1793,
-      },
-      {
-        label: '29',
-        numOfFlight: 21,
-        numOfPax: 4881,
-      },
-      {
-        label: '30',
-        numOfFlight: 14,
-        numOfPax: 3129,
-      },
-    ],
-    totalFlight: 704,
-    totalPax: 82788,
+export const fakeData = [
+  {
+    "year": "2024",
+    "data": {
+      "stat": [
+        {
+          "label": "2024/1",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/2",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/3",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/4",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/5",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/6",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/7",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/8",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/9",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/10",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2024/11",
+          "numOfFlight": 0,
+          "numOfPax": 111
+        },
+        {
+          "label": "2024/12",
+          "numOfFlight": 95,
+          "numOfPax": 4199
+        }
+      ],
+      "totalFlight": 95,
+      "totalPax": 4168
+    }
   },
-  compareData: {
-    stat: [
-      { label: '1', numOfFlight: 12, numOfPax: 824 },
-      { label: '2', numOfFlight: 7, numOfPax: 430 },
-      { label: '3', numOfFlight: 18, numOfPax: 1205 },
-      { label: '4', numOfFlight: 22, numOfPax: 1530 },
-      { label: '5', numOfFlight: 15, numOfPax: 1024 },
-      { label: '6', numOfFlight: 9, numOfPax: 650 },
-      { label: '7', numOfFlight: 25, numOfPax: 1780 },
-      { label: '8', numOfFlight: 19, numOfPax: 1400 },
-      { label: '9', numOfFlight: 16, numOfPax: 1325 },
-      { label: '10', numOfFlight: 21, numOfPax: 1600 },
-      { label: '11', numOfFlight: 13, numOfPax: 950 },
-      { label: '12', numOfFlight: 20, numOfPax: 1450 },
-      { label: '13', numOfFlight: 17, numOfPax: 1380 },
-      { label: '14', numOfFlight: 11, numOfPax: 780 },
-      { label: '15', numOfFlight: 24, numOfPax: 1720 },
-      { label: '16', numOfFlight: 14, numOfPax: 1020 },
-      { label: '17', numOfFlight: 18, numOfPax: 1250 },
-      { label: '18', numOfFlight: 23, numOfPax: 1620 },
-      { label: '19', numOfFlight: 15, numOfPax: 1080 },
-      { label: '20', numOfFlight: 9, numOfPax: 620 },
-      { label: '21', numOfFlight: 20, numOfPax: 1470 },
-      { label: '22', numOfFlight: 12, numOfPax: 890 },
-      { label: '23', numOfFlight: 16, numOfPax: 1305 },
-      { label: '24', numOfFlight: 19, numOfPax: 1500 },
-      { label: '25', numOfFlight: 22, numOfPax: 1700 },
-      { label: '26', numOfFlight: 8, numOfPax: 560 },
-      { label: '27', numOfFlight: 21, numOfPax: 1550 },
-      { label: '28', numOfFlight: 17, numOfPax: 1280 },
-      { label: '29', numOfFlight: 14, numOfPax: 970 },
-      { label: '30', numOfFlight: 10, numOfPax: 740 },
-    ],
-    totalFlight: 0,
-    totalPax: 0,
+  {
+    "year": "2025",
+    "data": {
+      "stat": [
+        {
+          "label": "2025/1",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/2",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/3",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/4",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/5",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/6",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/7",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/8",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/9",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/10",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/11",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2025/12",
+          "numOfFlight": 95,
+          "numOfPax": 4168
+        }
+      ],
+      "totalFlight": 95,
+      "totalPax": 4168
+    }
   },
-};
+  {
+    "year": "2026",
+    "data": {
+      "stat": [
+        {
+          "label": "2026/1",
+          "numOfFlight": 24,
+          "numOfPax": 4995
+        },
+        {
+          "label": "2026/2",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/3",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/4",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/5",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/6",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/7",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/8",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/9",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/10",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/11",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        },
+        {
+          "label": "2026/12",
+          "numOfFlight": 0,
+          "numOfPax": 0
+        }
+      ],
+      "totalFlight": 24,
+      "totalPax": 4995
+    }
+  }
+];

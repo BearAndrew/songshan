@@ -1,194 +1,98 @@
-export const fakeData = {
-  queryData: {
-    stat: [
+export const fakeData ={
+  "queryData": {
+    "stat": [
       {
-        label: '1',
-        numOfFlight: 24,
-        numOfPax: 2620,
+        "label": "6",
+        "numOfFlight": 2,
+        "OnTimeFlight": 0,
+        "OnTimeRate": 0
       },
       {
-        label: '2',
-        numOfFlight: 35,
-        numOfPax: 1819,
+        "label": "7",
+        "numOfFlight": 9,
+        "OnTimeFlight": 1,
+        "OnTimeRate": 11.11
       },
       {
-        label: '3',
-        numOfFlight: 13,
-        numOfPax: 464,
+        "label": "8",
+        "numOfFlight": 2,
+        "OnTimeFlight": 5,
+        "OnTimeRate": 250
       },
       {
-        label: '4',
-        numOfFlight: 26,
-        numOfPax: 2295,
+        "label": "9",
+        "numOfFlight": 8,
+        "OnTimeFlight": 5,
+        "OnTimeRate": 62.5
       },
       {
-        label: '5',
-        numOfFlight: 33,
-        numOfPax: 1901,
+        "label": "10",
+        "numOfFlight": 5,
+        "OnTimeFlight": 3,
+        "OnTimeRate": 60
       },
       {
-        label: '6',
-        numOfFlight: 48,
-        numOfPax: 4067,
+        "label": "11",
+        "numOfFlight": 3,
+        "OnTimeFlight": 8,
+        "OnTimeRate": 266.67
       },
       {
-        label: '7',
-        numOfFlight: 36,
-        numOfPax: 1635,
+        "label": "12",
+        "numOfFlight": 5,
+        "OnTimeFlight": 4,
+        "OnTimeRate": 80
       },
       {
-        label: '8',
-        numOfFlight: 18,
-        numOfPax: 4188,
+        "label": "13",
+        "numOfFlight": 8,
+        "OnTimeFlight": 4,
+        "OnTimeRate": 50
       },
       {
-        label: '9',
-        numOfFlight: 16,
-        numOfPax: 2181,
+        "label": "14",
+        "numOfFlight": 5,
+        "OnTimeFlight": 7,
+        "OnTimeRate": 140
       },
       {
-        label: '10',
-        numOfFlight: 18,
-        numOfPax: 3435,
+        "label": "15",
+        "numOfFlight": 7,
+        "OnTimeFlight": 3,
+        "OnTimeRate": 42.86
       },
       {
-        label: '11',
-        numOfFlight: 2,
-        numOfPax: 1003,
+        "label": "16",
+        "numOfFlight": 7,
+        "OnTimeFlight": 9,
+        "OnTimeRate": 128.57
       },
       {
-        label: '12',
-        numOfFlight: 11,
-        numOfPax: 4800,
+        "label": "17",
+        "numOfFlight": 5,
+        "OnTimeFlight": 4,
+        "OnTimeRate": 80
       },
       {
-        label: '13',
-        numOfFlight: 7,
-        numOfPax: 2461,
+        "label": "18",
+        "numOfFlight": 7,
+        "OnTimeFlight": 6,
+        "OnTimeRate": 85.71
       },
       {
-        label: '14',
-        numOfFlight: 35,
-        numOfPax: 4607,
+        "label": "19",
+        "numOfFlight": 2,
+        "OnTimeFlight": 6,
+        "OnTimeRate": 300
       },
       {
-        label: '15',
-        numOfFlight: 7,
-        numOfPax: 2363,
-      },
-      {
-        label: '16',
-        numOfFlight: 26,
-        numOfPax: 4131,
-      },
-      {
-        label: '17',
-        numOfFlight: 48,
-        numOfPax: 1965,
-      },
-      {
-        label: '18',
-        numOfFlight: 9,
-        numOfPax: 2834,
-      },
-      {
-        label: '19',
-        numOfFlight: 13,
-        numOfPax: 240,
-      },
-      {
-        label: '20',
-        numOfFlight: 27,
-        numOfPax: 1836,
-      },
-      {
-        label: '21',
-        numOfFlight: 24,
-        numOfPax: 2424,
-      },
-      {
-        label: '22',
-        numOfFlight: 37,
-        numOfPax: 4612,
-      },
-      {
-        label: '23',
-        numOfFlight: 25,
-        numOfPax: 2384,
-      },
-      {
-        label: '24',
-        numOfFlight: 37,
-        numOfPax: 2702,
-      },
-      {
-        label: '25',
-        numOfFlight: 16,
-        numOfPax: 4443,
-      },
-      {
-        label: '26',
-        numOfFlight: 34,
-        numOfPax: 1113,
-      },
-      {
-        label: '27',
-        numOfFlight: 27,
-        numOfPax: 4462,
-      },
-      {
-        label: '28',
-        numOfFlight: 17,
-        numOfPax: 1793,
-      },
-      {
-        label: '29',
-        numOfFlight: 21,
-        numOfPax: 4881,
-      },
-      {
-        label: '30',
-        numOfFlight: 14,
-        numOfPax: 3129,
-      },
+        "label": "20",
+        "numOfFlight": 2,
+        "OnTimeFlight": 5,
+        "OnTimeRate": 250
+      }
     ],
-    totalFlight: 704,
-    totalPax: 82788,
-  },
-  compareData: {
-    stat: [
-      { label: '1', numOfFlight: 12, numOfPax: 824 },
-      { label: '2', numOfFlight: 7, numOfPax: 430 },
-      { label: '3', numOfFlight: 18, numOfPax: 1205 },
-      { label: '4', numOfFlight: 22, numOfPax: 1530 },
-      { label: '5', numOfFlight: 15, numOfPax: 1024 },
-      { label: '6', numOfFlight: 9, numOfPax: 650 },
-      { label: '7', numOfFlight: 25, numOfPax: 1780 },
-      { label: '8', numOfFlight: 19, numOfPax: 1400 },
-      { label: '9', numOfFlight: 16, numOfPax: 1325 },
-      { label: '10', numOfFlight: 21, numOfPax: 1600 },
-      { label: '11', numOfFlight: 13, numOfPax: 950 },
-      { label: '12', numOfFlight: 20, numOfPax: 1450 },
-      { label: '13', numOfFlight: 17, numOfPax: 1380 },
-      { label: '14', numOfFlight: 11, numOfPax: 780 },
-      { label: '15', numOfFlight: 24, numOfPax: 1720 },
-      { label: '16', numOfFlight: 14, numOfPax: 1020 },
-      { label: '17', numOfFlight: 18, numOfPax: 1250 },
-      { label: '18', numOfFlight: 23, numOfPax: 1620 },
-      { label: '19', numOfFlight: 15, numOfPax: 1080 },
-      { label: '20', numOfFlight: 9, numOfPax: 620 },
-      { label: '21', numOfFlight: 20, numOfPax: 1470 },
-      { label: '22', numOfFlight: 12, numOfPax: 890 },
-      { label: '23', numOfFlight: 16, numOfPax: 1305 },
-      { label: '24', numOfFlight: 19, numOfPax: 1500 },
-      { label: '25', numOfFlight: 22, numOfPax: 1700 },
-      { label: '26', numOfFlight: 8, numOfPax: 560 },
-      { label: '27', numOfFlight: 21, numOfPax: 1550 },
-      { label: '28', numOfFlight: 17, numOfPax: 1280 },
-      { label: '29', numOfFlight: 14, numOfPax: 970 },
-      { label: '30', numOfFlight: 10, numOfPax: 740 },
-    ],
-    totalFlight: 0,
-    totalPax: 0,
-  },
-};
+    "totalFlight": 77,
+    "OnTimeRate": 90.91
+  }
+}

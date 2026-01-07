@@ -9,14 +9,21 @@ import { DataSetWithDataArray } from '../../../../core/lib/chart-tool';
 import { Option } from '../../../../shared/components/dropdown/dropdown.component';
 import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
-import { FlightDirection, FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse, FlightTrafficType } from '../../../../models/flight-traffic-analysis.model';
+import {
+  FlightDirection,
+  FlightTrafficType,
+} from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
+import {
+  YearlyTrafficAnalysisRequest,
+  YearlyTrafficAnalysisResponse,
+} from '../../../../models/Yearly-Traffic-Analysis.model';
 
 @Component({
   selector: 'app-fixed-route-traffic-comparison',
   imports: [CommonModule, DropdownComponent, BarLineChartComponent],
   templateUrl: './fixed-route-traffic-comparison.component.html',
-  styleUrl: './fixed-route-traffic-comparison.component.scss'
+  styleUrl: './fixed-route-traffic-comparison.component.scss',
 })
 export class FixedRouteTrafficComparisonComponent {
   activeIndex: number = 0;
@@ -59,6 +66,7 @@ export class FixedRouteTrafficComparisonComponent {
   airlineOptions: Option[] = [];
 
   flightClassOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '定航', value: 'SCHEDULE' },
     { label: '商務機', value: 'BJ' },
     { label: '軍機', value: 'MILITARY' },
@@ -66,16 +74,23 @@ export class FixedRouteTrafficComparisonComponent {
   ];
 
   flightTypeOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '出境', value: 'OUTBOUND' },
     { label: '入境', value: 'INBOUND' },
   ];
 
+  defaultOptionValue = '';
+
   type: string = '';
-  dateRangeLabel = '';
+  firstDateRangeLabel = '';
+  secondDateRangeLabel = '';
+  thirdDateRangeLabel = '';
   totalFlight: number = 0;
   totalPax: number = 0;
-  compareTotalFlight: number = 0;
-  compareTotalPax: number = 0;
+  secondYearTotalFlight: number = 0;
+  secondYearTotalPax: number = 0;
+  thirdYearTotalFlight: number = 0;
+  thirdYearTotalPax: number = 0;
 
   // 目前表單值
   formData: {
@@ -130,6 +145,8 @@ export class FixedRouteTrafficComparisonComponent {
         label: airport.name_zhTW,
         value: airport.iata,
       }));
+
+      this.routeOptions.unshift({ label: '全部', value: '' });
     });
 
     // 取得航空公司清單
@@ -138,6 +155,8 @@ export class FixedRouteTrafficComparisonComponent {
         label: airline.name_zhTW,
         value: airline.iata,
       }));
+
+      this.airlineOptions.unshift({ label: '全部', value: '' });
     });
   }
 
@@ -169,21 +188,20 @@ export class FixedRouteTrafficComparisonComponent {
 
   // 確認按鈕
   onConfirm() {
+    if (this.formData.firstYear === null || this.formData.secondYear === null) {
+      return;
+    }
+
     // 檢核是否有欄位為 null
     const emptyFields = Object.entries(this.formData)
       .filter(([_, val]) => val === null)
       .map(([key]) => key);
 
     // 組裝 API payload
-    const payload: FlightTrafficAnalysisRequest = {
-      dateFrom:
-        this.formatDate(
-          this.formData.firstYear,
-        ) || '',
-      dateTo:
-        this.formatDate(
-          this.formData.secondYear,
-        ) || '',
+    const payload: YearlyTrafficAnalysisRequest = {
+      year1: this.formData.firstYear?.toString() || '',
+      year2: this.formData.secondYear?.toString() || '',
+      year3: this.formData.thirdYear?.toString() || '',
       type: (this.type as FlightTrafficType) || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.flightType as FlightDirection) || '',
@@ -191,13 +209,21 @@ export class FixedRouteTrafficComparisonComponent {
       flightType: (this.formData.flightType as TabType) || '',
     };
 
+    this.firstDateRangeLabel = this.formData.firstYear?.toString() + '年' || '';
+    this.secondDateRangeLabel =
+      this.formData.secondYear?.toString() + '年' || '';
+    if (this.formData.thirdYear) {
+      this.thirdDateRangeLabel =
+        this.formData.thirdYear?.toString() + '年' || '';
+    }
+
     // console.log(payload);
     // this.handleFlightTrafficAnalysis(fakeData);
     // return;
 
     // 呼叫 API
-    this.apiService.postFlightTrafficAnalysis(payload).subscribe({
-      next: (res: FlightTrafficAnalysisResponse) => {
+    this.apiService.postYearlyTrafficAnalysis(payload).subscribe({
+      next: (res: YearlyTrafficAnalysisResponse[]) => {
         console.log('取得資料成功', res);
         this.handleFlightTrafficAnalysis(res);
       },
@@ -233,13 +259,9 @@ export class FixedRouteTrafficComparisonComponent {
   }
 
   private buildDateRangeLabel(): string {
-    const start = this.formatDisplayDate(
-      this.formData.firstYear,
-    );
+    const start = this.formatDisplayDate(this.formData.firstYear);
 
-    const end = this.formatDisplayDate(
-      this.formData.secondYear,
-    );
+    const end = this.formatDisplayDate(this.formData.secondYear);
 
     if (start && end) {
       return `${start}～${end}`;
@@ -260,16 +282,19 @@ export class FixedRouteTrafficComparisonComponent {
     return `${y}-${m}-${d}`;
   }
 
-  private handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
+  private handleFlightTrafficAnalysis(res: YearlyTrafficAnalysisResponse[]) {
     console.log('處理資料', res);
 
-    const query = res?.queryData;
-    const compare = res?.compareData;
+    const firstYear = res[0]?.data;
+    const secondYear = res[1]?.data;
+    const thirdYear = res[2]?.data;
 
-    const queryStat = Array.isArray(query?.stat) ? query.stat : [];
-    const compareStat = Array.isArray(compare?.stat) ? compare.stat : [];
+    const firstStat = Array.isArray(firstYear?.stat) ? firstYear.stat : [];
+    const secondStat = Array.isArray(secondYear?.stat) ? secondYear.stat : [];
+    const thirdStat = Array.isArray(thirdYear?.stat) ? thirdYear.stat : [];
 
-    const hasAnyData = queryStat.length > 0 || compareStat.length > 0;
+    const hasAnyData =
+      firstStat.length > 0 || secondStat.length > 0 || thirdStat.length > 0;
 
     // === 兩邊都沒資料 ===
     if (!hasAnyData) {
@@ -282,15 +307,15 @@ export class FixedRouteTrafficComparisonComponent {
     }
 
     this.isNoData = false;
-    this.dateRangeLabel = this.buildDateRangeLabel();
+    // this.secondDateRangeLabel = this.buildDateRangeLabel();
 
     // ================= Bar：人數 =================
     const barSeries: any[] = [];
 
-    if (queryStat.length > 0) {
+    if (firstStat.length > 0) {
       barSeries.push({
-        label: `${this.dateRangeLabel}人數`,
-        data: queryStat.map((item) => ({
+        label: `${this.firstDateRangeLabel}人數`,
+        data: firstStat.map((item) => ({
           key: item.label,
           value: item.numOfPax,
         })),
@@ -298,14 +323,25 @@ export class FixedRouteTrafficComparisonComponent {
       });
     }
 
-    if (compareStat.length > 0) {
+    if (secondStat.length > 0) {
       barSeries.push({
-        label: '2019年人數',
-        data: compareStat.map((item) => ({
+        label: `${this.secondDateRangeLabel}人數`,
+        data: secondStat.map((item) => ({
           key: item.label,
           value: item.numOfPax,
         })),
         colors: ['#f08622'],
+      });
+    }
+
+    if (thirdStat.length > 0) {
+      barSeries.push({
+        label: '2019年人數',
+        data: secondStat.map((item) => ({
+          key: item.label,
+          value: item.numOfPax,
+        })),
+        colors: ['#B084A2'],
       });
     }
 
@@ -314,10 +350,10 @@ export class FixedRouteTrafficComparisonComponent {
     // ================= Line：架次 =================
     const lineSeries: any[] = [];
 
-    if (queryStat.length > 0) {
+    if (firstStat.length > 0) {
       lineSeries.push({
-        label: `${this.dateRangeLabel}架次`,
-        data: queryStat.map((item) => ({
+        label: `${this.firstDateRangeLabel}架次`,
+        data: firstStat.map((item) => ({
           key: item.label,
           value: item.numOfFlight,
         })),
@@ -325,10 +361,10 @@ export class FixedRouteTrafficComparisonComponent {
       });
     }
 
-    if (compareStat.length > 0) {
+    if (secondStat.length > 0) {
       lineSeries.push({
-        label: '2019年架次',
-        data: compareStat.map((item) => ({
+        label: `${this.secondDateRangeLabel}架次`,
+        data: secondStat.map((item) => ({
           key: item.label,
           value: item.numOfFlight,
         })),
@@ -336,11 +372,24 @@ export class FixedRouteTrafficComparisonComponent {
       });
     }
 
+    if (thirdStat.length > 0) {
+      lineSeries.push({
+        label: `${this.thirdDateRangeLabel}架次`,
+        data: thirdStat.map((item) => ({
+          key: item.label,
+          value: item.numOfFlight,
+        })),
+        colors: ['#B084A2'],
+      });
+    }
+
     this.lineData = lineSeries;
 
-    this.totalFlight = query?.totalFlight ?? 0;
-    this.totalPax = query?.totalPax ?? 0;
-    this.compareTotalFlight = compare?.totalFlight ?? 0;
-    this.compareTotalPax = compare?.totalPax ?? 0;
+    this.totalFlight = firstYear?.totalFlight ?? 0;
+    this.totalPax = firstYear?.totalPax ?? 0;
+    this.secondYearTotalFlight = secondYear?.totalFlight ?? 0;
+    this.secondYearTotalPax = secondYear?.totalPax ?? 0;
+    this.thirdYearTotalFlight = thirdYear?.totalFlight ?? 0;
+    this.thirdYearTotalPax = thirdYear?.totalPax ?? 0;
   }
 }

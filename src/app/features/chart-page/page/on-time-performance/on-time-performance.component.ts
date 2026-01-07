@@ -11,6 +11,7 @@ import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
 import { FlightDirection, FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse, FlightTrafficType } from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
+import { OtpAnalysisRequest, OtpAnalysisResponse } from '../../../../models/otp-analysis.model';
 
 @Component({
   selector: 'app-on-time-performance',
@@ -59,6 +60,7 @@ export class OnTimePerformanceComponent {
   airlineOptions: Option[] = [];
 
   flightClassOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '定航', value: 'SCHEDULE' },
     { label: '商務機', value: 'BJ' },
     { label: '軍機', value: 'MILITARY' },
@@ -66,9 +68,12 @@ export class OnTimePerformanceComponent {
   ];
 
   flightTypeOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '出境', value: 'OUTBOUND' },
     { label: '入境', value: 'INBOUND' },
   ];
+
+  defaultOptionValue = '';
 
   type: string = '';
   dateRangeLabel = '';
@@ -136,6 +141,7 @@ export class OnTimePerformanceComponent {
         label: airport.name_zhTW,
         value: airport.iata,
       }));
+      this.routeOptions.unshift({ label: '全部', value: '' });
     });
 
     // 取得航空公司清單
@@ -144,6 +150,7 @@ export class OnTimePerformanceComponent {
         label: airline.name_zhTW,
         value: airline.iata,
       }));
+      this.airlineOptions.unshift({ label: '全部', value: '' });
     });
   }
 
@@ -214,7 +221,7 @@ export class OnTimePerformanceComponent {
       .map(([key]) => key);
 
     // 組裝 API payload
-    const payload: FlightTrafficAnalysisRequest = {
+    const payload: OtpAnalysisRequest = {
       dateFrom:
         this.formatDate(
           this.formData.startYear,
@@ -239,8 +246,8 @@ export class OnTimePerformanceComponent {
     // return;
 
     // 呼叫 API
-    this.apiService.postFlightTrafficAnalysis(payload).subscribe({
-      next: (res: FlightTrafficAnalysisResponse) => {
+    this.apiService.postOtpAnalysis(payload).subscribe({
+      next: (res: OtpAnalysisResponse) => {
         console.log('取得資料成功', res);
         this.handleFlightTrafficAnalysis(res);
       },
@@ -307,16 +314,14 @@ export class OnTimePerformanceComponent {
     return `${y}-${m}-${d}`;
   }
 
-  private handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
+  private handleFlightTrafficAnalysis(res: OtpAnalysisResponse) {
     console.log('處理資料', res);
 
     const query = res?.queryData;
-    const compare = res?.compareData;
 
     const queryStat = Array.isArray(query?.stat) ? query.stat : [];
-    const compareStat = Array.isArray(compare?.stat) ? compare.stat : [];
 
-    const hasAnyData = queryStat.length > 0 || compareStat.length > 0;
+    const hasAnyData = queryStat.length > 0;
 
     // === 兩邊都沒資料 ===
     if (!hasAnyData) {
@@ -331,53 +336,31 @@ export class OnTimePerformanceComponent {
     this.isNoData = false;
     this.dateRangeLabel = this.buildDateRangeLabel();
 
-    // ================= Bar：人數 =================
+    // ================= Bar：架次 =================
     const barSeries: any[] = [];
 
     if (queryStat.length > 0) {
       barSeries.push({
-        label: `${this.dateRangeLabel}人數`,
+        label: `${this.dateRangeLabel}架次`,
         data: queryStat.map((item) => ({
           key: item.label,
-          value: item.numOfPax,
+          value: item.OnTimeFlight,
         })),
         colors: ['#0279ce'],
-      });
-    }
-
-    if (compareStat.length > 0) {
-      barSeries.push({
-        label: '2019年人數',
-        data: compareStat.map((item) => ({
-          key: item.label,
-          value: item.numOfPax,
-        })),
-        colors: ['#f08622'],
       });
     }
 
     this.barData = barSeries;
 
-    // ================= Line：架次 =================
+    // ================= Line：準點率 =================
     const lineSeries: any[] = [];
 
     if (queryStat.length > 0) {
       lineSeries.push({
-        label: `${this.dateRangeLabel}架次`,
+        label: `${this.dateRangeLabel}準點率`,
         data: queryStat.map((item) => ({
           key: item.label,
-          value: item.numOfFlight,
-        })),
-        colors: ['#0279ce'],
-      });
-    }
-
-    if (compareStat.length > 0) {
-      lineSeries.push({
-        label: '2019年架次',
-        data: compareStat.map((item) => ({
-          key: item.label,
-          value: item.numOfFlight,
+          value: item.OnTimeRate,
         })),
         colors: ['#f08622'],
       });
@@ -385,9 +368,7 @@ export class OnTimePerformanceComponent {
 
     this.lineData = lineSeries;
 
-    this.totalFlight = query?.totalFlight ?? 0;
-    this.totalPax = query?.totalPax ?? 0;
-    this.compareTotalFlight = compare?.totalFlight ?? 0;
-    this.compareTotalPax = compare?.totalPax ?? 0;
+    this.totalFlight = query?.OnTimeRate ?? 0;
+    this.totalPax = query?.totalFlight ?? 0;
   }
 }

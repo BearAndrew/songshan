@@ -62,6 +62,7 @@
       <app-dropdown
         class="w-30"
         [options]="airlineOptions"
+        [value]="defaultOptionValue"
         (selectionChange)="onSelectionChange('airline', $event)"
       >
       </app-dropdown>
@@ -70,6 +71,7 @@
       <app-dropdown
         class="w-30"
         [options]="flightClassOptions"
+        [value]="defaultOptionValue"
         (selectionChange)="onSelectionChange('flightClass', $event)"
       >
       </app-dropdown>
@@ -78,6 +80,7 @@
       <app-dropdown
         class="w-30"
         [options]="routeOptions"
+        [value]="defaultOptionValue"
         (selectionChange)="onSelectionChange('route', $event)"
       >
       </app-dropdown>
@@ -86,6 +89,7 @@
       <app-dropdown
         class="w-20"
         [options]="flightTypeOptions"
+        [value]="defaultOptionValue"
         (selectionChange)="onSelectionChange('flightType', $event)"
       >
       </app-dropdown>
@@ -147,33 +151,7 @@
         <div
           class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#ea6934] bg-[#252525] whitespace-nowrap"
         >
-          2019年
-        </div>
-        <div class="flex items-center h-full">
-          <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">總架次</div>
-            <div
-              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
-            >
-              {{ compareTotalFlight | number }}
-            </div>
-          </div>
-          <div class="flex-1 flex flex-col items-center justify-center gap-4">
-            <div class="text-3xl text-[#a5a5a5]">總人數</div>
-            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
-              {{ compareTotalPax | number }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="flex-1 mx-3 w-full h-full max-w-200 border-4 border-[#3372bd] rounded-lg relative"
-      >
-        <div
-          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
-        >
-          {{ dateRangeLabel }}
+          {{firstDateRangeLabel}}
         </div>
         <div class="flex items-center h-full">
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
@@ -199,7 +177,7 @@
         <div
           class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
         >
-          {{ dateRangeLabel }}
+          {{ secondDateRangeLabel }}
         </div>
         <div class="flex items-center h-full">
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
@@ -207,13 +185,39 @@
             <div
               class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
             >
-              {{ totalFlight | number }}
+              {{ secondYearTotalFlight | number }}
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center justify-center gap-4">
             <div class="text-3xl text-[#a5a5a5]">總人數</div>
             <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
-              {{ totalPax | number }}
+              {{ secondYearTotalPax | number }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="thirdDateRangeLabel"
+        class="flex-1 mx-3 w-full h-full max-w-200 border-4 border-[#3372bd] rounded-lg relative"
+      >
+        <div
+          class="absolute left-1/2 w-fit mx-auto px-12 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#a898c7] bg-[#252525] whitespace-nowrap"
+        >
+          {{ thirdDateRangeLabel }}
+        </div>
+        <div class="flex items-center h-full">
+          <div class="flex-1 flex flex-col items-center justify-center gap-4">
+            <div class="text-3xl text-[#a5a5a5]">總架次</div>
+            <div
+              class="text-[70px] text-[#f08622] font-bold leading-none w-full text-center border-r-2 border-[#a5a5a5]"
+            >
+              {{ thirdYearTotalFlight | number }}
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center gap-4">
+            <div class="text-3xl text-[#a5a5a5]">總人數</div>
+            <div class="text-[70px] text-[#02b3e7] font-bold leading-none">
+              {{ thirdYearTotalPax | number }}
             </div>
           </div>
         </div>
