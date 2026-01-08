@@ -17,7 +17,7 @@ import { fakeData } from './fake-data';
 import {
   YearlyTrafficAnalysisRequest,
   YearlyTrafficAnalysisResponse,
-} from '../../../../models/Yearly-Traffic-Analysis.model';
+} from '../../../../models/yearly-traffic-analysis.model';
 
 @Component({
   selector: 'app-fixed-route-traffic-comparison',

@@ -1,265 +1,275 @@
-<div
-  class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative overflow-hidden"
->
-  <div class="ml-auto">
+<div>
+  <div class="mb-4 sm:mb-0 sm:ml-auto">
     <!-- 指定期間 -->
-    <div class="flex items-center gap-2">
-      <label>指定期間</label>
-
-      <!-- 起始年份 -->
-      <app-dropdown
-        class="w-30"
-        [options]="yearOptions"
-        [value]="formData.startYear"
-        (selectionChange)="
-          onSelectionChange('startYear', $event);
-          onMonthOrYearChange('start', $event.value, formData.startMonth)
-        "
-      ></app-dropdown>
-      <span>年</span>
-
-      <!-- 起始月份 -->
-      <app-dropdown
-        class="w-20"
-        [options]="monthOptions"
-        [value]="formData.startMonth"
-        [disabeld]="formData.startYear == null"
-        (selectionChange)="
-          onSelectionChange('startMonth', $event);
-          onMonthOrYearChange('start', formData.startYear, $event.value)
-        "
-      ></app-dropdown>
-      <span>月</span>
-
-      <!-- 起始日期 -->
-      <app-dropdown
-        class="w-20"
-        [options]="startDayOptions"
-        [value]="formData.startDay"
-        [disabeld]="formData.startMonth == null"
-        (selectionChange)="onSelectionChange('startDay', $event)"
-      ></app-dropdown>
-      <span>日</span>
-
-      <span>~</span>
-
-      <!-- 結束年份 -->
-      <app-dropdown
-        class="w-30"
-        [options]="yearOptions"
-        [value]="formData.endYear"
-        [disabeld]="formData.startYear == null"
-        (selectionChange)="
-          onSelectionChange('endYear', $event);
-          onMonthOrYearChange('end', $event.value, formData.endMonth)
-        "
-      ></app-dropdown>
-      <span>年</span>
-
-      <!-- 結束月份 -->
-      <app-dropdown
-        class="w-20"
-        [options]="monthOptions"
-        [value]="formData.endMonth"
-        [disabeld]="formData.endYear == null"
-        (selectionChange)="
-          onSelectionChange('endMonth', $event);
-          onMonthOrYearChange('end', formData.endYear, $event.value)
-        "
-      ></app-dropdown>
-      <span>月</span>
-
-      <!-- 結束日期 -->
-      <app-dropdown
-        class="w-20"
-        [options]="endDayOptions"
-        [value]="formData.endDay"
-        [disabeld]="formData.endMonth == null"
-        (selectionChange)="onSelectionChange('endDay', $event)"
-      ></app-dropdown>
-      <span>日</span>
-
-      <button
-        class="px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
-        (click)="onConfirm()"
+    <div class="flex flex-col sm:flex-row items-center gap-x-2 w-full sm:w-fit">
+      <label class="mb-2 sm:mb-0 w-full sm:w-fit whitespace-nowrap"
+        >指定期間</label
       >
-        確認
-      </button>
+      <div class="flex items-center gap-2 w-full sm:fit">
+        <!-- 起始年份 -->
+        <app-dropdown
+          class="flex-1 sm:flex-none min-w-0 sm:w-27"
+          [options]="yearOptions"
+          [value]="formData.startYear"
+          (selectionChange)="
+            onSelectionChange('startYear', $event);
+            onMonthOrYearChange('start', $event.value, formData.startMonth)
+          "
+        ></app-dropdown>
+        <span>年</span>
+
+        <!-- 起始月份 -->
+        <app-dropdown
+          class="w-20"
+          [options]="monthOptions"
+          [value]="formData.startMonth"
+          [disabeld]="formData.startYear == null"
+          (selectionChange)="
+            onSelectionChange('startMonth', $event);
+            onMonthOrYearChange('start', formData.startYear, $event.value)
+          "
+        ></app-dropdown>
+        <span>月</span>
+
+        <!-- 起始日期 -->
+        <app-dropdown
+          class="w-20"
+          [options]="startDayOptions"
+          [value]="formData.startDay"
+          [disabeld]="formData.startMonth == null"
+          (selectionChange)="onSelectionChange('startDay', $event)"
+        ></app-dropdown>
+        <span>日</span>
+      </div>
+
+      <span class="">~</span>
+
+      <div class="flex items-center gap-2 w-full sm:fit">
+        <!-- 結束年份 -->
+        <app-dropdown
+          class="flex-1 sm:flex-none min-w-0 sm:w-27"
+          [options]="yearOptions"
+          [value]="formData.endYear"
+          [disabeld]="formData.startYear == null"
+          (selectionChange)="
+            onSelectionChange('endYear', $event);
+            onMonthOrYearChange('end', $event.value, formData.endMonth)
+          "
+        ></app-dropdown>
+        <span>年</span>
+
+        <!-- 結束月份 -->
+        <app-dropdown
+          class="w-20"
+          [options]="monthOptions"
+          [value]="formData.endMonth"
+          [disabeld]="formData.endYear == null"
+          (selectionChange)="
+            onSelectionChange('endMonth', $event);
+            onMonthOrYearChange('end', formData.endYear, $event.value)
+          "
+        ></app-dropdown>
+        <span>月</span>
+
+        <!-- 結束日期 -->
+        <app-dropdown
+          class="w-20"
+          [options]="endDayOptions"
+          [value]="formData.endDay"
+          [disabeld]="formData.endMonth == null"
+          (selectionChange)="onSelectionChange('endDay', $event)"
+        ></app-dropdown>
+        <span>日</span>
+      </div>
+
+      <div
+        class="grid grid-cols-[65px_1fr_65px_1fr] sm:flex items-center gap-2 w-full sm:w-fit mt-4 sm:mt-0"
+      >
+        <button
+          class="col-start-4 px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
+          (click)="onConfirm()"
+        >
+          確認
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="w-full h-full sm:overflow-x-hidden overflow-y-auto">
-    <!-- Header -->
-    <div
-      class="sticky w-full min-w-[1000px] sm:min-w-none grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-lg sm:text-2xl font-semibold text-center z-10"
-    >
-      <div class="p-2">航點</div>
-      <div class="p-2">對站天氣</div>
-      <div class="p-2">航空公司</div>
-      <div class="p-2">登記候補</div>
-      <div class="p-2">補上人數</div>
-      <div class="p-2">未補上</div>
-      <div class="p-2">過號</div>
-      <div class="p-2">已飛人數/比例</div>
-    </div>
+  <div
+    class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative overflow-hidden"
+  >
+    <div class="w-full h-full sm:overflow-x-hidden overflow-y-auto">
+      <!-- Header -->
+      <div
+        class="sticky w-full min-w-[1200px] sm:min-w-none grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-lg sm:text-2xl font-semibold text-center z-10"
+      >
+        <div class="p-2">航點</div>
+        <div class="p-2">對站天氣</div>
+        <div class="p-2">航空公司</div>
+        <div class="p-2">登記候補</div>
+        <div class="p-2">補上人數</div>
+        <div class="p-2">未補上</div>
+        <div class="p-2">過號</div>
+        <div class="p-2">已飛人數/比例</div>
+      </div>
 
-    <!-- 航點群組 -->
-    <div class="text-md sm:text-2xl w-full min-w-[1000px] sm:min-w-none">
-      @for (group of tableData;track group) {
-      <div class="py-1 border-b text-[#baeaff] hover:bg-[#494746]">
-        <!-- 明細 -->
-        @for (detail of group.details; let i = $index; track detail;) {
-        <div
-          class="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] text-center"
-        >
-          <!-- 航點 / 天氣 -->
-          @if (i === 0) {
+      <!-- 航點群組 -->
+      <div class="text-md sm:text-2xl w-full min-w-[1200px] sm:min-w-none">
+        @for (group of tableData;track group) {
+        <div class="py-1 border-b text-[#baeaff] hover:bg-[#494746]">
+          <!-- 明細 -->
+          @for (detail of group.details; let i = $index; track detail;) {
           <div
-            class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
+            class="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] text-center"
           >
-            <span
-              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-30 text-center font-bold break-words"
-              style="text-wrap: balance"
-            >
-              {{ group.route }}
-            </span>
-          </div>
-          <div
-            class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
-          >
+            <!-- 航點 / 天氣 -->
+            @if (i === 0) {
             <div
-              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-between gap-2 text-white"
+              class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
             >
-              <div class="flex flex-col gap-2">
-                <div class="text-xl sm:text-4xl">
-                  {{ group.weather.temperature }}
-                </div>
-                <div class="whitespace-nowrap">
-                  {{ group.weather.description }}
-                </div>
-              </div>
-              <div class="flex flex-col gap-1 text-sm sm:text-xl">
-                <div class="flex gap-1">
-                  <img
-                    class="w-4 h-4 sm:w-6 sm:h-6"
-                    src="img/daily-domestic-standby-analysis/icon-1.png"
-                    alt="visibility"
-                  />
+              <span
+                class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-30 text-center font-bold break-words"
+                style="text-wrap: balance"
+              >
+                {{ group.route }}
+              </span>
+            </div>
+            <div
+              class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
+            >
+              <div
+                class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-between gap-2 text-white"
+              >
+                <div class="flex flex-col gap-2">
+                  <div class="text-xl sm:text-4xl">
+                    {{ group.weather.temperature }}
+                  </div>
                   <div class="whitespace-nowrap">
-                    {{ group.weather.visibility }}
+                    {{ group.weather.description }}
                   </div>
                 </div>
-                <div class="flex gap-1">
-                  <img
-                    class="w-4 h-4 sm:w-6 sm:h-6"
-                    src="img/daily-domestic-standby-analysis/icon-2.png"
-                    alt="visibility"
-                  />
-                  <div class="whitespace-nowrap">
-                    {{ group.weather.altitude }}
+                <div class="flex flex-col gap-1 text-sm sm:text-xl">
+                  <div class="flex gap-1">
+                    <img
+                      class="w-4 h-4 sm:w-6 sm:h-6"
+                      src="img/daily-domestic-standby-analysis/icon-1.png"
+                      alt="visibility"
+                    />
+                    <div class="whitespace-nowrap">
+                      {{ group.weather.visibility }}
+                    </div>
                   </div>
-                </div>
-                <div class="flex gap-1">
-                  <img
-                    class="w-4 h-4 sm:w-6 sm:h-6"
-                    src="img/daily-domestic-standby-analysis/icon-3.png"
-                    alt="visibility"
-                  />
-                  <div class="whitespace-nowrap">
-                    {{ group.weather.windSpeed }}
+                  <div class="flex gap-1">
+                    <img
+                      class="w-4 h-4 sm:w-6 sm:h-6"
+                      src="img/daily-domestic-standby-analysis/icon-2.png"
+                      alt="visibility"
+                    />
+                    <div class="whitespace-nowrap">
+                      {{ group.weather.altitude }}
+                    </div>
+                  </div>
+                  <div class="flex gap-1">
+                    <img
+                      class="w-4 h-4 sm:w-6 sm:h-6"
+                      src="img/daily-domestic-standby-analysis/icon-3.png"
+                      alt="visibility"
+                    />
+                    <div class="whitespace-nowrap">
+                      {{ group.weather.windSpeed }}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          } @else {
-          <div></div>
-          <div></div>
-          }
+            } @else {
+            <div></div>
+            <div></div>
+            }
 
-          <!-- 明細資料 -->
-          <div class="p-1 text-md sm:text-2xl flex items-center justify-center">
-            {{ detail.airline }}
-          </div>
-          <div
-            class="p-1 leading-none flex items-center justify-center {{
-              detail.waitlist === group.maxWaitlist && detail.airline === ''
-                ? 'text-lg sm:text-3xl text-orange-400 font-bold'
-                : ''
-            }}"
-          >
-            {{ detail.waitlist }}
-          </div>
-
-          <!-- 現場人數：只在第一筆明細顯示 -->
-          @if (i === 0) {
-          <div
-            class="relative p-1 h-[300%] text-orange-400 flex items-center justify-center"
-          >
+            <!-- 明細資料 -->
             <div
-              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg sm:text-3xl font-bold"
+              class="p-1 text-md sm:text-2xl flex items-center justify-center"
             >
-              {{ detail.onsite }}
+              {{ detail.airlineName }}
             </div>
-          </div>
-          } @else {
-          <div></div>
-          }
-
-          <!-- nextFlights -->
-          <div
-            class="p-1 leading-none flex items-center justify-center {{
-              detail.nextFlights === group.maxNextFlights &&
-              detail.airline === ''
-                ? 'text-lg sm:text-3xl text-orange-400 font-bold'
-                : ''
-            }}"
-          >
-            {{ detail.nextFlights }}
-          </div>
-
-          <!-- flown -->
-          <div
-            class="p-1 leading-none flex items-center justify-center {{
-              detail.flown === group.maxFlown && detail.airline === ''
-                ? 'text-lg sm:text-3xl text-orange-400 font-bold'
-                : ''
-            }}"
-          >
-            {{ detail.flown }}
-          </div>
-
-          <!-- filled 欄位：左數值 + 右 button -->
-          <div class="grid grid-cols-[1fr_2rem]">
             <div
               class="p-1 leading-none flex items-center justify-center {{
-                detail.filled === group.maxFilled && detail.airline === ''
+                detail.regtotal === group.maxReg && detail.airlineName === ''
                   ? 'text-lg sm:text-3xl text-orange-400 font-bold'
                   : ''
               }}"
             >
-              {{ detail.filled }}
+              {{ detail.regtotal }}
             </div>
 
-            @if (i === 0) {
+            <!-- 補上人數：只在第一筆明細顯示 -->
             <div
-              class="relative row-span-3 flex items-center justify-center h-[300%]"
+              class="p-1 leading-none flex items-center justify-center {{
+                detail.fetchuptotal === group.maxFetchup &&
+                detail.airlineName === ''
+                  ? 'text-lg sm:text-3xl text-orange-400 font-bold'
+                  : ''
+              }}"
             >
-              <a
-                class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 flex flex-col items-start px-3 py-1 text-xs sm:text-sm text-[#999] cursor-pointer hover:text-[#eee]"
-                routerLink="detail"
-                [queryParams]="{ iata: group.routerParam }"
-              >
-                <span>補上</span>
-                <span>明細>></span>
-              </a>
+              {{ detail.fetchuptotal }}
             </div>
-            }
+
+            <!-- 未補上人數 -->
+            <div
+              class="p-1 leading-none flex items-center justify-center {{
+                detail.passtotal === group.maxPass && detail.airlineName === ''
+                  ? 'text-lg sm:text-3xl text-orange-400 font-bold'
+                  : ''
+              }}"
+            >
+              {{ detail.passtotal }}
+            </div>
+
+            <!-- 過號 -->
+            <div
+              class="p-1 leading-none flex items-center justify-center {{
+                detail.flytotal === group.maxFly && detail.airlineName === ''
+                  ? 'text-lg sm:text-3xl text-orange-400 font-bold'
+                  : ''
+              }}"
+            >
+              {{ detail.flytotal }}
+            </div>
+
+            <!-- filled 欄位：左數值 + 右 button -->
+            <div class="grid grid-cols-[1fr_2rem]">
+              <div
+                class="p-1 leading-none flex items-center justify-center {{
+                  detail.flyRate === group.maxFlyRate &&
+                  detail.airlineName === ''
+                    ? 'text-lg sm:text-3xl text-orange-400 font-bold'
+                    : ''
+                }}"
+              >
+                {{ detail.flyRate }}
+              </div>
+
+              @if (i === 0) {
+              <div
+                class="relative row-span-3 flex items-center justify-center h-[300%]"
+              >
+                <a
+                  class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 flex flex-col items-start px-3 py-1 text-xs sm:text-sm text-[#999] cursor-pointer hover:text-[#eee]"
+                  routerLink="detail"
+                  [queryParams]="{ iata: group.routerParam, dateFrom, dateTo }"
+                >
+                  <span>補上</span>
+                  <span>明細>></span>
+                </a>
+              </div>
+              }
+            </div>
           </div>
+          }
         </div>
         }
       </div>
-      }
     </div>
   </div>
 </div>

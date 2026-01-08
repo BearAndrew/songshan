@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ApiService } from '../../../../core/services/api-service.service';
 import { StandbyListItem } from '../../../../models/standby.model';
+import { HistoricStandbyListRequest } from '../../../../models/historic-standby-list.model';
 
 @Component({
   selector: 'app-domestic-route-standby-analysis',
@@ -26,14 +27,16 @@ export class DomesticRouteStandbyAnalysisDetailComponent {
     // 直接訂閱 queryParams
     this.route.queryParams.subscribe((params) => {
       const iata = params['iata']; // 從 URL ?iata=XXX 取得
+      const dateFrom = params['dateFrom'];
+      const dateTo = params['dateTo'];
       if (iata) {
-        this.getStandbyList(iata);
+        this.getStandbyList(iata, {dateFrom, dateTo});
       }
     });
   }
 
-  getStandbyList(code: string) {
-    this.apiService.getStandbyList(code).subscribe((res) => {
+  getStandbyList(code: string, payload: HistoricStandbyListRequest) {
+    this.apiService.postHistoricStandbyList(code, payload).subscribe((res) => {
       this.setTableData(res);
     });
   }

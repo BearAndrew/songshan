@@ -15,11 +15,11 @@ export interface HistoricStandbyWeather {
 export interface HistoricStandbyAirlineStat {
   airlineIATA: string;
   airlineName: string;
-  regtotal: number;
-  fetchuptotal: number;
-  passtotal: number;
-  flytotal: number;
-  flyRate: number;
+  regtotal: number | string;
+  fetchuptotal: number | string;
+  passtotal: number | string;
+  flytotal: number | string;
+  flyRate: number | string;
 }
 
 export interface HistoricStandbySummaryItem {

@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FlightRow } from '../../core/interface/daily-domestic-standby-analysis.interface';
+import { FlightRow } from '../../core/interface/domestic-route-standby-analysis.interface';
 import { RouterModule } from '@angular/router';
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
-import {
-  StandbyAirlineSummary,
-  StandbySummaryItem,
-} from '../../models/standby.model';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
+import {
+  HistoricStandbyAirlineStat,
+  HistoricStandbySummaryItem,
+} from '../../models/historic-standby-summary.model';
 
 @Component({
   selector: 'app-domestic-route-standby-analysis',
@@ -19,74 +19,88 @@ import { Option } from '../../shared/components/dropdown/dropdown.component';
 })
 export class DomesticRouteStandbyAnalysisComponent {
   tableData: FlightRow[] = [];
-  MOCK_STANDBY_SUMMARY: StandbySummaryItem[] = [
+  MOCK_STANDBY_SUMMARY: HistoricStandbySummaryItem[] = [
     {
-      destinationName: '東京成田',
+      destinationName: 'Tokyo Narita',
+      destinationId: 'NRT',
       currWeather: {
         iata: 'NRT',
-        temperature: '18°C',
-        weatherStatus: '多雲',
-        visibility: '10 公里',
-        cloudLevel: '低雲',
-        windspeed: '每小時 12 公里',
+        temperature: '8', // °C (string)
+        weatherStatus: 'Cloudy',
+        visibility: '10km',
+        cloudLevel: 'Low',
+        windspeed: '12 km/h',
       },
       airlines: [
         {
           airlineIATA: '',
           airlineName: '',
-          standby_Reg: 25,
-          standby_FlightRemain: 5,
-          pax_Departed: 210,
-          standby_OK: 14,
+          regtotal: 220,
+          fetchuptotal: 192,
+          passtotal: 190,
+          flytotal: 185,
+          flyRate: 95.0,
         },
         {
-          airlineIATA: 'JL',
-          airlineName: '日本航空',
-          standby_Reg: 25,
-          standby_FlightRemain: 5,
-          pax_Departed: 120,
-          standby_OK: 8,
+          airlineIATA: 'CI',
+          airlineName: 'China Airlines',
+          regtotal: 120,
+          fetchuptotal: 110,
+          passtotal: 105,
+          flytotal: 98,
+          flyRate: 81.7,
         },
         {
           airlineIATA: 'BR',
-          airlineName: '長榮航空',
-          standby_Reg: 0,
-          standby_FlightRemain: 0,
-          pax_Departed: 90,
-          standby_OK: 6,
+          airlineName: 'EVA Air',
+          regtotal: 100,
+          fetchuptotal: 92,
+          passtotal: 90,
+          flytotal: 85,
+          flyRate: 85.0,
         },
       ],
-      totalStandbyReg: 25,
-      currStandby: 18,
-      total_FlightRemain: 8,
-      total_PaxDeparted: 210,
-      total_StandbyOK: 14,
     },
     {
-      destinationName: '大阪關西',
+      destinationName: 'Hong Kong',
+      destinationId: 'HKG',
       currWeather: {
-        iata: 'KIX',
-        temperature: '22°C',
-        weatherStatus: '晴朗',
-        visibility: '12 公里',
-        cloudLevel: '無雲',
-        windspeed: '每小時 8 公里',
+        iata: 'HKG',
+        temperature: '18',
+        weatherStatus: 'Sunny',
+        visibility: '15km',
+        cloudLevel: 'None',
+        windspeed: '8 km/h',
       },
       airlines: [
         {
+          airlineIATA: '',
+          airlineName: '',
+          regtotal: 220,
+          fetchuptotal: 192,
+          passtotal: 190,
+          flytotal: 185,
+          flyRate: 95.0,
+        },
+        {
           airlineIATA: 'CI',
-          airlineName: '中華航空',
-          standby_Reg: 20,
-          standby_FlightRemain: 6,
-          pax_Departed: 150,
-          standby_OK: 12,
+          airlineName: 'China Airlines',
+          regtotal: 140,
+          fetchuptotal: 135,
+          passtotal: 130,
+          flytotal: 122,
+          flyRate: 87.1,
+        },
+        {
+          airlineIATA: 'CX',
+          airlineName: 'Cathay Pacific',
+          regtotal: 160,
+          fetchuptotal: 150,
+          passtotal: 148,
+          flytotal: 140,
+          flyRate: 87.5,
         },
       ],
-      totalStandbyReg: 20,
-      currStandby: 12,
-      total_FlightRemain: 6,
-      total_PaxDeparted: 150,
-      total_StandbyOK: 12,
     },
   ];
 
@@ -112,101 +126,156 @@ export class DomesticRouteStandbyAnalysisComponent {
     endDay: null,
   };
 
+  dateFrom: string = '';
+  dateTo: string = '';
+
   constructor(
     private apiService: ApiService,
     private commonService: CommonService
   ) {
-    if (this.commonService.realAirportValue !== -1) {
-      this.getStandbySummary(this.commonService.realAirportValue);
-    }
-    //預設取得不分機場總數
-    this.commonService.getSelectedAirport().subscribe((airportId) => {
-      // 根據選擇的機場ID執行相應的操作，例如重新載入資料
-      if (airportId === -1) {
-        return;
-      }
-      this.getStandbySummary(airportId);
-    });
+    // if (this.commonService.realAirportValue !== -1) {
+    //   this.getStandbySummary(this.commonService.realAirportValue);
+    // }
+    // //預設取得不分機場總數
+    // this.commonService.getSelectedAirport().subscribe((airportId) => {
+    //   // 根據選擇的機場ID執行相應的操作，例如重新載入資料
+    //   if (airportId === -1) {
+    //     return;
+    //   }
+    //   this.getStandbySummary(airportId);
+    // });
   }
 
   ngOnInit(): void {
-    this.getStandbySummary(0);
+    const currentYear = new Date().getFullYear();
+
+    // 今年 ~ 往回 10 年（共 11 年）
+    this.yearOptions = Array.from({ length: 11 }, (_, i) => {
+      const year = currentYear - i;
+      return { label: year.toString(), value: year };
+    });
+
+    // 月份 1~12
+    this.monthOptions = Array.from({ length: 12 }, (_, i) => {
+      const month = i + 1;
+      return { label: month.toString().padStart(2, '0'), value: month };
+    });
   }
 
   getStandbySummary(value: number) {
-    const code = this.commonService.getAirportCodeById(value);
+    // const code = this.commonService.getAirportCodeById(value);
+    this.dateFrom =
+      this.formatDate(
+        this.formData.startYear,
+        this.formData.startMonth,
+        this.formData.startDay
+      ) || '';
+    this.dateTo =
+      this.formatDate(
+        this.formData.endYear,
+        this.formData.endMonth,
+        this.formData.endDay
+      ) || '';
+    const payload = {
+      dateFrom: this.dateFrom,
+      dateTo: this.dateTo,
+    };
 
-    console.log(this.MOCK_STANDBY_SUMMARY);
-    this.setTableData(this.MOCK_STANDBY_SUMMARY);
-    return;
-    this.apiService.getStandbySummary(code).subscribe({
+    // console.log('dateFrom: ', payload.dateFrom, ' , dateTo: ', payload.dateTo);
+    // console.log(this.MOCK_STANDBY_SUMMARY);
+    // this.setTableData(this.MOCK_STANDBY_SUMMARY);
+    // return;
+
+    this.apiService.postHistoricStandbySummary(payload).subscribe({
       next: (res) => {
         this.setTableData(res);
       },
     });
   }
 
-  setTableData(data: StandbySummaryItem[]) {
+  setTableData(data: HistoricStandbySummaryItem[]) {
     this.tableData = [];
     data.forEach((item, index) => {
-      const rawTemp = item.currWeather.temperature;
+      const rawTemp = item.currWeather?.temperature;
       const tempValue = Number(String(rawTemp).match(/-?\d+/)?.[0] ?? 0);
       this.tableData.push({
         route: item.destinationName,
         weather: {
           temperature: tempValue + '°C',
-          description: item.currWeather.weatherStatus,
-          visibility: item.currWeather.visibility,
-          altitude: item.currWeather.cloudLevel,
-          windSpeed: item.currWeather.windspeed,
+          description: item.currWeather?.weatherStatus,
+          visibility: item.currWeather?.visibility,
+          altitude: item.currWeather?.cloudLevel,
+          windSpeed: item.currWeather?.windspeed,
         },
         details: [],
-        routerParam: item.currWeather.iata,
+        routerParam: item.currWeather?.iata,
       });
 
       const airlines = [...item.airlines].slice(0, 3);
 
-      const emptyDetail: StandbyAirlineSummary = {
+      const emptyDetail: HistoricStandbyAirlineStat = {
         airlineIATA: '',
         airlineName: '',
-        standby_Reg: '\u00A0',
-        standby_FlightRemain: '\u00A0',
-        pax_Departed: '\u00A0',
-        standby_OK: '\u00A0',
+        regtotal: '\u00A0',
+        fetchuptotal: '\u00A0',
+        passtotal: '\u00A0',
+        flytotal: '\u00A0',
+        flyRate: '\u00A0',
       };
       while (airlines.length < 3) {
         airlines.push(emptyDetail);
       }
 
-      airlines.forEach(
-        (detail: {
-          airlineName: any;
-          standby_Reg: any;
-          standby_FlightRemain: any;
-          pax_Departed: any;
-          standby_OK: any;
-        }) => {
-          this.tableData[index].details.push({
-            airline: detail.airlineName,
-            waitlist: detail.standby_Reg,
-            onsite: item.currStandby,
-            nextFlights: detail.standby_FlightRemain,
-            flown: detail.pax_Departed,
-            filled: detail.standby_OK,
-          });
-        }
-      );
+      airlines.forEach((detail) => {
+        this.tableData[index].details.push({
+          airlineIATA: detail.airlineIATA,
+          airlineName: detail.airlineName,
+          regtotal: detail.regtotal,
+          fetchuptotal: detail.fetchuptotal,
+          passtotal: detail.passtotal,
+          flytotal: detail.flytotal,
+          flyRate: detail.flyRate,
+        });
+      });
     });
 
     // 計算最大值
+    const toNumberOrZero = (value: unknown): number =>
+      typeof value === 'number' ? value : Number(value) || 0;
+
     this.tableData.forEach((group) => {
-      group.maxWaitlist = Math.max(...group.details.map((d) => d.waitlist));
-      group.maxNextFlights = Math.max(
-        ...group.details.map((d) => d.nextFlights)
+      group.maxReg = Math.max(
+        ...group.details.map((d) => toNumberOrZero(d.regtotal))
       );
-      group.maxFlown = Math.max(...group.details.map((d) => d.flown));
-      group.maxFilled = Math.max(...group.details.map((d) => d.filled));
+
+      group.maxFetchup = Math.max(
+        ...group.details.map((d) => toNumberOrZero(d.fetchuptotal))
+      );
+
+      group.maxPass = Math.max(
+        ...group.details.map((d) => toNumberOrZero(d.passtotal))
+      );
+
+      group.maxFly = Math.max(
+        ...group.details.map((d) => toNumberOrZero(d.flytotal))
+      );
+
+      group.maxFlyRate = Math.max(
+        ...group.details.map((d) => toNumberOrZero(d.flyRate))
+      );
     });
+  }
+
+  private formatDate(
+    year?: number | null,
+    month?: number | null,
+    day?: number | null
+  ): string {
+    const y = year ?? 0;
+    const m = month ? String(month).padStart(2, '0') : '0';
+    const d = day ? String(day).padStart(2, '0') : '0';
+
+    return `${y}-${m}-${d}`;
   }
 
   // 計算某年某月的天數
@@ -262,9 +331,8 @@ export class DomesticRouteStandbyAnalysisComponent {
     }
   }
 
-
   /** 確認按鈕，呼叫查詢api */
   onConfirm() {
-
+    this.getStandbySummary(0);
   }
 }

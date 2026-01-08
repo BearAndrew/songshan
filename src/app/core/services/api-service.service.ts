@@ -29,7 +29,7 @@ import {
 import {
   YearlyTrafficAnalysisRequest,
   YearlyTrafficAnalysisResponse,
-} from '../../models/Yearly-Traffic-Analysis.model';
+} from '../../models/yearly-traffic-analysis.model';
 import {
   IrregularAnalysisRequest,
   IrregularAnalysisResponse,
