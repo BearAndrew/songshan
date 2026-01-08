@@ -1,5 +1,5 @@
-<div>
-  <div class="mb-4 sm:mb-0 sm:ml-auto">
+<div class="flex flex-col h-full">
+  <div class="mb-4 sm:ml-auto w-full sm:w-fit">
     <!-- 指定期間 -->
     <div class="flex flex-col sm:flex-row items-center gap-x-2 w-full sm:w-fit">
       <label class="mb-2 sm:mb-0 w-full sm:w-fit whitespace-nowrap"
@@ -83,7 +83,7 @@
       </div>
 
       <div
-        class="grid grid-cols-[65px_1fr_65px_1fr] sm:flex items-center gap-2 w-full sm:w-fit mt-4 sm:mt-0"
+        class="flex-shrink-0 grid-cols-[65px_1fr_65px_1fr] sm:flex items-center self-end gap-2 w-fit mt-4 sm:mt-0"
       >
         <button
           class="col-start-4 px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
@@ -96,12 +96,12 @@
   </div>
 
   <div
-    class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative overflow-hidden"
+    class="card flex flex-1 flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative overflow-hidden"
   >
-    <div class="w-full h-full sm:overflow-x-hidden overflow-y-auto">
+    <div class="w-full h-full sm:overflow-x-hidden overflow-y-auto relative">
       <!-- Header -->
       <div
-        class="sticky w-full min-w-[1200px] sm:min-w-none grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-lg sm:text-2xl font-semibold text-center z-10"
+        class="sticky top-0 w-full min-w-[1200px] sm:min-w-none grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-lg sm:text-2xl font-semibold text-center z-10"
       >
         <div class="p-2">航點</div>
         <div class="p-2">對站天氣</div>

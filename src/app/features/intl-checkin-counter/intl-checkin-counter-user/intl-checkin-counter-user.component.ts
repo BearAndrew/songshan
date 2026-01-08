@@ -10,7 +10,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CalendarTriggerComponent } from "../../../shared/components/calendar-trigger/calendar-trigger.component";
+import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
 
 interface ScheduleItem {
   date: string; // YYYY-MM-DD
@@ -26,8 +26,8 @@ interface ScheduleItem {
     FormsModule,
     ReactiveFormsModule,
     DropdownSecondaryComponent,
-    CalendarTriggerComponent
-],
+    CalendarTriggerComponent,
+  ],
   templateUrl: './intl-checkin-counter-user.component.html',
   styleUrl: './intl-checkin-counter-user.component.scss',
 })
