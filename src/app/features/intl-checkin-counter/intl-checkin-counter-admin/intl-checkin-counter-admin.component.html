@@ -1,85 +1,79 @@
 <div class="card flex flex-col sm:flex-row gap-8 h-full p-4">
-  <div class="flex-4 flex flex-col">
-    <!-- 日期區間 -->
-    <div class="text-sm font-semibold text-right">
-      {{ currentWeekRange }}
-    </div>
-
-    <div class="flex-1 w-full min-h-160 overflow-x-auto">
-      <div class="flex flex-col h-full bg-white min-w-200">
-        <!-- Header -->
-        <div class="sticky top-0 z-10 grid grid-cols-7 bg-[#4a6eb6] border-b">
-          @for (day of weekDays; track $index) {
-          <div
-            class="py-1 text-center font-semibold border-r-2 last:border-r-0 text-white"
-          >
-            {{ day }}
-          </div>
-          }
+  <div class="flex-4 flex flex-col overflow-hidden">
+    <!-- 航班 -->
+    <div class="flex-1 p-2 bg-white">
+      <div class="flex gap-2 pb-2 overflow-auto">
+        @for(infoCard of infoCardList; track $index) {
+        <div class="flex flex-col flex-shrink-0 items-center gap-3 p-2 sm:p-3 border-4 border-[#a99f96] rounded-2xl w-[160px] sm:w-[230px]">
+          <h2 class="mt-3 text-[40px] sm:text-[65px] font-semibold leading-none" [ngClass]="$even ? 'text-[#008743]' : 'text-[#0c77f9]'">{{ infoCard.flightNo }}</h2>
+          <span class="text-2xl sm:text-[35px] text-black leading-none">{{ infoCard.time }}</span>
+          <span class="text-md sm:text-xl text-center text-black">{{ infoCard.date }}</span>
+          <span class="w-full py-1 text-center text-md sm:text-2xl rounded-sm bg-[#c8c8c8]">{{ infoCard.status }}</span>
         </div>
-
-        <!-- Content -->
-        <div class="flex-1 overflow-y-auto grid grid-cols-7">
-          @for (dayItems of currentWeek; track $index) {
-          <div class="p-1 pt-8 border-r-2 last:border-r-0 even:bg-[#eef2f8]">
-            @for (item of dayItems; track $index) {
-            <div
-              class="flex flex-col items-center gap-1 mb-2 rounded-xl bg-white p-2 pt-4 text-sm border-3 border-[#aba196]"
-            >
-              <div class="text-2xl text-[#008540] font-semibold leading-none">
-                {{ item.flightNo }}
-              </div>
-              <div class="text-lg font-semibold text-black">
-                {{ item.time }}
-              </div>
-              <div
-                class="text-sm bg-[#c8c8c8] text-center py-0.5 w-full rounded-sm"
-              >
-                {{ item.status }}
-              </div>
-            </div>
-            }
-          </div>
-          }
-        </div>
+        }
       </div>
     </div>
 
-    <!-- Paginator -->
-    <div class="flex items-center justify-center gap-2 py-3 border-t">
-      <!-- 左箭頭 -->
-      <button
-        class="w-8 h-8 rounded-full bg-[#00ace5] flex items-center justify-center cursor-pointer disabled:opacity-60"
-        (click)="prevWeek()"
-        [disabled]="currentWeekIndex === 0"
-      >
-        <span class="text-3xl -translate-y-0.5">‹</span>
-      </button>
+    <!-- Gantt Chart -->
+    <div class="overflow-x-auto py-2 bg-white relative">
+      <!-- Header Row -->
+      <div class="flex bg-white relative">
+        <!-- 編號 header -->
+        <div class="w-20 shrink-0"></div>
 
-      <!-- 頁碼 -->
-      @for (page of paginatorPages; track page) {
-      <button
-        class="w-8 h-8 rounded-full flex items-center justify-center text-sm cursor-pointer"
-        [ngClass]="{
-          'bg-[#b7b7b7] text-black': page === currentWeekIndex + 1,
-          '': page !== currentWeekIndex + 1,
-          'cursor-default': page === '...'
-        }"
-        (click)="page !== '...' && goToWeek(page - 1)"
-        [disabled]="page === '...'"
+        <!-- 日期 headers -->
+        @for (day of ganttDays; track day.date) {
+        <div
+          class="shrink-0 min-w-[168px] flex items-center font-semibold text-sm text-black pl-2 pr-1 border-l-4 border-black whitespace-nowrap"
+        >
+          {{ day.date }}
+        </div>
+        }
+
+        <!-- filler header -->
+        <div class="flex-1"></div>
+      </div>
+
+      <!-- Data Rows -->
+      @for (row of ganttRows; track row) {
+
+      <!-- 整條 row（灰色背景） -->
+      <div
+        class="flex bg-gray-100 w-fit min-w-full"
+        [ngClass]="{ 'mt-2': $index !== 0 }"
       >
-        {{ page }}
-      </button>
+        <!-- 編號欄 -->
+        <div
+          class="sticky left-0 w-20 shrink-0 h-10 flex items-center justify-center bg-[#00b2ee] text-lg text-white font-semibold"
+        >
+          {{ row }}
+        </div>
+
+        <!-- 日期欄 -->
+        @for (day of ganttDays; track day.date) {
+
+        <div class="shrink-0 min-w-[168px] h-10 pr-1 flex items-center">
+          <div class="flex gap-0.5 px-0.5">
+            @for (item of getItemsByRow(day, row); track $index) {
+            <div
+              class="w-20 h-9 bg-[#b2c8e8] flex flex-col gap-0.25 items-center justify-center rounded"
+            >
+              <h4 class="text-md text-[#2f9e5d] font-bold">
+                {{ item.data.flightNo }}
+              </h4>
+              <span class="text-xs text-black">{{ item.data.time }}</span>
+            </div>
+            }
+          </div>
+        </div>
+
+        }
+
+        <!-- filler column（補滿右側，但背景跟 row） -->
+        <div class="flex-1 h-10"></div>
+      </div>
+
       }
-
-      <!-- 右箭頭 -->
-      <button
-        class="w-8 h-8 rounded-full bg-[#00ace5] flex items-center justify-center cursor-pointer disabled:opacity-60"
-        (click)="nextWeek()"
-        [disabled]="currentWeekIndex === weeks.length - 1"
-      >
-        <span class="text-3xl -translate-y-0.5">›</span>
-      </button>
     </div>
   </div>
 
