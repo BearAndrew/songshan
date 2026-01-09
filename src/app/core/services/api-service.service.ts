@@ -20,6 +20,12 @@ import { TodayStatus } from '../../models/today-status.model';
 import { HttpHeaders } from '@angular/common/http';
 import { FlightUpdateWebhookRequest } from '../../models/webhook-flight-update.model';
 import { BaggageTimeItem } from '../../models/baggage-time.model';
+import {
+  TaxiInfo,
+  TaxiViolation,
+  TaxiStat,
+  TaxiStatusInfo,
+} from '../../models/taxi.model';
 import { TabType } from '../enums/tab-type.enum';
 import { FlightStatus } from '../../models/flight-status.model';
 import {
@@ -279,4 +285,82 @@ export class ApiService {
 
     return this.http.post<any>('webhook/flightUpdate', payload, { headers });
   }
+
+  // ========= Taxi =========
+
+  /** 取得計程車全部列表 */
+  getTaxiList(): Observable<TaxiInfo[]> {
+    return this.http.get<TaxiInfo[]>('api/Taxi');
+  }
+
+  /** 建立新計程車記錄 */
+  postTaxi(payload: TaxiInfo): Observable<TaxiInfo> {
+    return this.http.post<TaxiInfo>('api/Taxi', payload);
+  }
+
+  /** 計程車列表搜索 */
+  searchTaxi(keyword: string): Observable<TaxiInfo[]> {
+    return this.http.get<TaxiInfo[]>(`api/Taxi/search/${keyword}`);
+  }
+
+  /** 更新計程車記錄 */
+  updateTaxi(plate: string, payload: TaxiInfo): Observable<TaxiInfo> {
+    return this.http.put<TaxiInfo>(`api/Taxi/${plate}`, payload);
+  }
+
+  /** 刪除計程車記錄 */
+  deleteTaxi(plate: string): Observable<void> {
+    return this.http.delete<void>(`api/Taxi/${plate}`);
+  }
+
+  /** 匯入計程車資料 (multipart/form-data) */
+  importTaxi(formData: FormData): Observable<any> {
+    return this.http.post<any>('api/Taxi/import', formData);
+  }
+
+  /** 計程車黑/灰名單全部列表 */
+  getTaxiViolationAll(violationType: string): Observable<TaxiViolation[]> {
+    return this.http.get<TaxiViolation[]>(`api/TaxiViolationAll/${violationType}`);
+  }
+
+  /** 取得單筆黑/灰名單記錄 */
+  getTaxiViolation(rid: number): Observable<TaxiViolation> {
+    return this.http.get<TaxiViolation>(`api/TaxiViolation/${rid}`);
+  }
+
+  /** 更新黑/灰名單記錄 */
+  updateTaxiViolation(rid: number, payload: TaxiViolation): Observable<TaxiViolation> {
+    return this.http.put<TaxiViolation>(`api/TaxiViolation/${rid}`, payload);
+  }
+
+  /** 刪除黑/灰名單記錄 */
+  deleteTaxiViolation(rid: number): Observable<void> {
+    return this.http.delete<void>(`api/TaxiViolation/${rid}`);
+  }
+
+  /** 某一台計程車黑/灰名單記錄 */
+  getTaxiViolationByPlate(plate: string): Observable<TaxiViolation[]> {
+    return this.http.get<TaxiViolation[]>(`api/TaxiViolation/filter/${plate}`);
+  }
+
+  /** 新增黑/灰名單記錄 */
+  postTaxiViolation(payload: TaxiViolation): Observable<TaxiViolation> {
+    return this.http.post<TaxiViolation>('api/TaxiViolation', payload);
+  }
+
+  /** 即時車流 */
+  getTaxiStat(): Observable<TaxiStat> {
+    return this.http.get<TaxiStat>('api/Taxi/Stat');
+  }
+
+  /** 最常出現6台車 */
+  getTop6Taxi(sortBy: string, dateFrom: string, dateTo: string): Observable<TaxiStatusInfo[]> {
+    return this.http.get<TaxiStatusInfo[]>(`api/Taxi/Top6Taxi/${sortBy}/${dateFrom}/${dateTo}`);
+  }
+
+  /** 現時在場的車 */
+  getCurrentTaxi(): Observable<TaxiStatusInfo[]> {
+    return this.http.get<TaxiStatusInfo[]>('api/Taxi/CurrentTaxi');
+  }
+
 }
