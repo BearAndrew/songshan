@@ -1,3 +1,5 @@
+import { PostTaxiRequest } from '../../../../../models/taxi.model';
+import { TaxiService } from './../../../service/taxi.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,5 +9,13 @@ import { Component } from '@angular/core';
   styleUrl: './create-display.component.scss'
 })
 export class CreateDisplayComponent {
+
+  data!: PostTaxiRequest;
+
+  constructor(private taxiService: TaxiService) {
+    this.taxiService.createTaxi$.subscribe(res => {
+      this.data = res;
+    })
+  }
 
 }

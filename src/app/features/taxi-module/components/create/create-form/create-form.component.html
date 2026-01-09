@@ -1,44 +1,27 @@
 <div class="flex flex-col items-center gap-4 sm:gap-6 w-full h-full">
-  <div
-    class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] items-center gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full"
+  <!-- 表單 -->
+  <form
+    [formGroup]="form"
+    class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full"
   >
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >車號</label
-    >
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="flightInfo"
-    />
+    <!-- 車牌 -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">車牌</label>
+    <input type="text" class="w-full bg-[#193652] rounded px-2 py-1" formControlName="regPlate" />
 
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >編號</label
-    >
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="flightInfo"
-    />
+    <!-- 駕駛證號 -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">編號</label>
+    <input type="text" class="w-full bg-[#193652] rounded px-2 py-1" formControlName="driverNo" />
 
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >人名</label
-    >
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="flightInfo"
-    />
+    <!-- 駕駛姓名 -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">姓名</label>
+    <input type="text" class="w-full bg-[#193652] rounded px-2 py-1" formControlName="driverName" />
 
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >聯絡電話</label
-    >
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="flightInfo"
-    />
-  </div>
+    <!-- 聯絡電話 -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">聯絡電話</label>
+    <input type="text" class="w-full bg-[#193652] rounded px-2 py-1" formControlName="driverPhone" />
+  </form>
 
+  <!-- 送出按鈕 -->
   <div class="flex-1">
     <button
       class="text-sm sm:text-2xl px-12 py-2 h-fit bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
@@ -48,6 +31,7 @@
     </button>
   </div>
 
+  <!-- 其他按鈕 -->
   <button
     class="text-sm sm:text-2xl px-12 py-3 bg-[#764e9b] rounded-sm cursor-pointer hover:bg-[#f2a020]"
   >
