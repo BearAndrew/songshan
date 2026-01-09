@@ -1,1 +1,112 @@
-<p>read-form works!</p>
+<div class="flex flex-col items-center gap-4 sm:gap-6 w-full h-full">
+  <div
+    class="grid grid-cols-[64px_1fr] auto-rows-min sm:grid-cols-[100px_1fr] items-center gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full"
+  >
+    <label class="mb-4 text-white font-semibold [text-align-last:justify]"
+      >查詢項目</label
+    >
+    <app-dropdown-secondary
+      class="mb-4"
+      [value]="searchCondition"
+      [options]="options"
+      [isSecondTheme]="true"
+      (selectionChange)="searchCondition = $event.value"
+    ></app-dropdown-secondary>
+
+    <ng-container [ngTemplateOutlet]="
+      searchCondition == '0' ? info :
+      searchCondition == '1' ? list :
+      searchCondition == '2' ? list :
+      searchCondition == '3' ? top6 :
+      null
+    "></ng-container>
+  </div>
+
+  <div
+    class="flex-1 flex flex-col gap-6 items-center justify-end w-full sm:px-6"
+  >
+    <button
+      class="text-sm sm:text-2xl mx-auto px-12 py-2 h-fit w-fit bg-[#01a7e7] rounded-sm cursor-pointer hover:bg-[#029cd8]"
+      (click)="onSubmit()"
+    >
+      送出查詢
+    </button>
+
+    <span class="text-lg sm:text-2xl font-semibold">異常事件通知</span>
+
+    <div class="flex gap-4">
+      <button
+        class="px-6 py-1 text-md sm:text-xl font-semibold rounded border border-[#999] bg-[#231716] text-[#4d4c4e] cursor-pointer"
+      >
+        未註冊車牌
+      </button>
+
+      <button
+        class="px-6 py-1 text-md sm:text-xl font-semibold rounded border border-[#999] bg-[#231716] text-[#4d4c4e] cursor-pointer"
+      >
+        違規車牌
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 計程車資訊查詢 -->
+<ng-template #info>
+  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+    >車號</label
+  >
+  <input
+    type="text"
+    class="w-full bg-[#193652] rounded px-2 py-1"
+    formControlName="flightInfo"
+  />
+
+  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+    >編號</label
+  >
+  <input
+    type="text"
+    class="w-full bg-[#193652] rounded px-2 py-1"
+    formControlName="flightInfo"
+  />
+</ng-template>
+
+<!-- 黑/灰名單 -->
+<ng-template #list>
+  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+    >搜尋條件</label
+  >
+  <app-dropdown-secondary
+    [value]="''"
+    [options]="[{ label: '顯示全部', value: '' }]"
+  ></app-dropdown-secondary>
+</ng-template>
+
+<!-- 出勤前六名 -->
+<ng-template #top6>
+  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+    >開始日期</label
+  >
+  <input
+    type="text"
+    class="w-full bg-[#193652] rounded px-2 py-1"
+    formControlName="flightInfo"
+  />
+
+  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+    >結束日期</label
+  >
+  <input
+    type="text"
+    class="w-full bg-[#193652] rounded px-2 py-1"
+    formControlName="flightInfo"
+  />
+
+  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+    >排列方式</label
+  >
+  <app-dropdown-secondary
+    [value]="''"
+    [options]="top6Options"
+  ></app-dropdown-secondary>
+</ng-template>

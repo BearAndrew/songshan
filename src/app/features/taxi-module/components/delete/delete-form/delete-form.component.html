@@ -1,1 +1,38 @@
-<p>delete-form works!</p>
+<div class="flex flex-col items-center gap-4 sm:gap-6 w-full h-full">
+  <div
+    class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] items-center gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full"
+  >
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+      >車號</label
+    >
+    <div class="flex items-center gap-2">
+      <input
+        type="text"
+        class="w-full bg-[#193652] rounded px-2 py-1"
+        formControlName="flightInfo"
+      />
+      <button
+        class="text-sm sm:text-2xl px-8 w-fit h-8 sm:h-10 bg-[#01a7e7] rounded-sm cursor-pointer whitespace-nowrap hover:bg-[#029cd8]"
+        (click)="onSubmit()"
+      >
+        查詢
+      </button>
+    </div>
+
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+      >編號</label
+    >
+    <input
+      type="text"
+      class="w-full bg-[#193652] rounded px-2 py-1"
+      formControlName="flightInfo"
+    />
+  </div>
+
+  <button
+    class="text-sm sm:text-2xl px-12 py-2 h-fit bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+    (click)="onSubmit()"
+  >
+    確定送出
+  </button>
+</div>

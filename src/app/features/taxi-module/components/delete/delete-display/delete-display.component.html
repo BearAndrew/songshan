@@ -1,1 +1,26 @@
-<p>delete-display works!</p>
+<div class="flex items-center justify-center w-full h-full min-h-[300px]">
+  <ng-container [ngTemplateOutlet]="init"></ng-container>
+</div>
+
+
+<ng-template #init>
+  <!-- 初始 -->
+  <div class="flex flex-col gap-8 items-center">
+    <img class="w-16 sm:w-20" src="icons/search.png" alt="search" />
+    <span class="text-xl sm:text-2xl text-[#aaa]"
+      >請輸入車號後點擊查詢按鈕</span
+    >
+  </div>
+</ng-template>
+
+<ng-template #noCar>
+  <!-- 查無車牌 -->
+  <div class="flex flex-col gap-4 items-center">
+    <img class="w-16 sm:w-15" src="icons/error.png" alt="error" />
+    <span class="text-xl sm:text-3xl text-[#fc4886]">查無車牌</span>
+    <div class="flex flex-col gap-1 items-center">
+      <span class="text-xl sm:text-2xl text-[#aaa]">找不到車牌號碼:123</span>
+      <span class="text-md sm:text-xl text-[#aaa]">請確認車牌號碼是否正確</span>
+    </div>
+  </div>
+</ng-template>

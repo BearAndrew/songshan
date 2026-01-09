@@ -1,8 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-update-display',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './update-display.component.html',
   styleUrl: './update-display.component.scss'
 })

@@ -1,21 +1,141 @@
-<div class="grid grid-cols-[100px_1fr] items-center justify-center gap-4 p-4 border border-white rounded-xl">
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >車號</label
-  >
-  <span>123-45</span>
-
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >編號</label
-  >
-  <span>123-45</span>
-
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >人名</label
-  >
-  <span>123-45</span>
-
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >聯絡電話</label
-  >
-  <span>123-45</span>
+<div class="flex items-center justify-center w-full h-full min-h-[300px]">
+  <ng-container [ngTemplateOutlet]="data"></ng-container>
 </div>
+
+<ng-template #init>
+  <!-- 初始 -->
+  <div class="flex flex-col gap-1 items-center">
+    <img class="w-16 sm:w-20" src="icons/edit.png" alt="edit" />
+    <span class="text-xl sm:text-2xl text-[#aaa]"
+      >請輸入車號後點擊查詢按鈕</span
+    >
+    <span class="text-md sm:text-xl text-[#aaa]"
+      >查詢後將顯示修改前後對照資料</span
+    >
+  </div>
+</ng-template>
+
+<ng-template #noCar>
+  <!-- 查無車牌 -->
+  <div class="flex flex-col gap-4 items-center">
+    <img class="w-16 sm:w-15" src="icons/error.png" alt="error" />
+    <span class="text-xl sm:text-3xl text-[#fc4886]">查無車牌</span>
+    <div class="flex flex-col gap-1 items-center">
+      <span class="text-xl sm:text-2xl text-[#aaa]">找不到車牌號碼:123</span>
+      <span class="text-md sm:text-xl text-[#aaa]">請確認車牌號碼是否正確</span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #data>
+  <!-- 資料呈現 -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 w-full">
+    <div class="flex flex-col gap-y-4">
+      <div class="flex border-b-3 border-[#a9a9a9]">
+        <span
+          class="mx-auto px-6 py-1 text-lg sm:text-2xl font-semibold bg-[#a9a9a9] rounded-t-md"
+          >修改前</span
+        >
+      </div>
+      <div
+        class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] items-center gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full px-4"
+      >
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >車號</label
+        >
+        <div class="flex items-center gap-2">
+          <input
+            type="text"
+            class="w-full bg-[#193652] rounded px-2 py-1"
+            formControlName="flightInfo"
+            disabled
+          />
+        </div>
+
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >編號</label
+        >
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          formControlName="flightInfo"
+          disabled
+        />
+
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >修改內容</label
+        >
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          formControlName="flightInfo"
+          disabled
+        />
+
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >修改原因</label
+        >
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          formControlName="flightInfo"
+          disabled
+        />
+
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >停權期間</label
+        >
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          formControlName="flightInfo"
+          disabled
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-y-4">
+      <div class="flex border-b-3 border-[#f5a830]">
+        <span
+          class="mx-auto px-6 py-1 text-lg sm:text-2xl font-semibold bg-[#f5a830] rounded-t-md"
+          >修改前</span
+        >
+      </div>
+      <div
+        class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] items-center gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full px-4"
+      >
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >車號</label
+        >
+        <div class="flex items-center gap-2">
+          <input
+            type="text"
+            class="w-full bg-[#193652] rounded px-2 py-1"
+            formControlName="flightInfo"
+            disabled
+          />
+        </div>
+
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >編號</label
+        >
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          formControlName="flightInfo"
+          disabled
+        />
+
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >修改後</label
+        >
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          formControlName="flightInfo"
+          disabled
+        />
+      </div>
+    </div>
+  </div>
+</ng-template>

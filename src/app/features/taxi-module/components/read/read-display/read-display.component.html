@@ -1,1 +1,203 @@
-<p>read-display works!</p>
+<div class="flex flex-col gap-4 w-full">
+  <ng-container [ngTemplateOutlet]="top6"></ng-container>
+</div>
+
+<!-- 計程車資訊 -->
+<ng-template #info>
+  <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">
+    計程車資訊查詢
+  </h2>
+
+  <ng-container [ngTemplateOutlet]="infoNoData"></ng-container>
+
+  <ng-template #infoInit>
+    <div
+      class="flex items-center justify-center bg-[#303030] rounded-md w-full h-full min-h-[300px]"
+    >
+      <div class="flex flex-col gap-8 items-center">
+        <img class="w-16 sm:w-20" src="icons/search.png" alt="search" />
+        <span class="text-xl sm:text-3xl text-[#aaa]"
+          >請輸入查詢條件後點擊查詢按鈕</span
+        >
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #infoData>
+    <div class="flex items-center w-full h-full min-h-[200px] sm:min-h-[300px]">
+      <div
+        class="grid grid-cols-[auto_1fr] gap-4 sm:gap-8 px-6 sm:px-12 text-md sm:text-2xl"
+      >
+        <label class="text-[#05aeed] [text-align-last:justify]">車號</label>
+        <span>233-7D</span>
+
+        <label class="text-[#05aeed] [text-align-last:justify]">編號</label>
+        <span>233-7D</span>
+
+        <label class="text-[#05aeed] [text-align-last:justify]">姓名</label>
+        <span>233-7D</span>
+
+        <label class="text-[#05aeed] [text-align-last:justify]">手機</label>
+        <span>233-7D</span>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #infoDuplicate>
+    <div class="flex flex-col w-full h-0 min-h-[200px] sm:min-h-[300px]">
+      <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">
+        提示:查詢到多筆相似車號資料
+      </h2>
+
+      <!-- 填滿剩餘高度，滾動 -->
+      <div
+        class="flex-1 overflow-y-auto mt-4 border border-white text-md sm:text-2xl"
+      >
+        @for (item of items; track item.id) {
+        <!-- item 高度固定 -->
+        <div class="border-b mx-8 p-2 h-1/2">
+          <div class="grid grid-cols-2 gap-x-6 gap-y-1 h-full">
+            <div class="flex gap-8 items-center">
+              <span class="text-[#05aeed]">車號</span>
+              <span>{{ item.carNo }}</span>
+            </div>
+            <div class="flex gap-8 items-center">
+              <span class="text-[#05aeed]">姓名</span>
+              <span>{{ item.name }}</span>
+            </div>
+            <div class="flex gap-8 items-center">
+              <span class="text-[#05aeed]">編號</span>
+              <span>{{ item.code }}</span>
+            </div>
+            <div class="flex gap-8 items-center">
+              <span class="text-[#05aeed]">手機</span>
+              <span>{{ item.phone }}</span>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #infoNoData>
+    <div
+      class="flex items-center justify-center bg-[#303030] rounded-md w-full h-full min-h-[300px]"
+    >
+      <div class="flex flex-col gap-8 items-center w-full px-12">
+        <img class="w-16 sm:w-20" src="icons/not-allow.png" alt="not-allow" />
+        <span class="text-xl sm:text-3xl text-[#aaa]">查無資料</span>
+        <div class="w-full h-0.5 bg-[#f5a830]"></div>
+
+        <h2 class="self-start text-xl sm:text-3xl text-[#fc4886] font-semibold">
+          異常事件:未註冊車牌
+        </h2>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>
+
+<!-- 黑名單 -->
+<ng-template #black>
+  <h2 class="text-xl sm:text-3xl text-[#fc4886] font-semibold">黑名單清單</h2>
+
+  <div class="flex flex-col w-full sm:h-0 min-h-[300px] max-h-[800px]">
+    <!-- 滾動容器 -->
+    <div
+      class="flex-1 overflow-auto border border-white text-center rounded px-4"
+    >
+      <!-- sticky header -->
+      <div
+        class="grid grid-cols-[1fr_1fr_1.5fr_2fr_3fr_1fr] gap-4 min-w-250 text-xl font-semibold sticky top-0 z-10 px-2 py-4 border-b border-[#fc4886] text-[#05aeed] bg-[#252525]"
+      >
+        <div>車號</div>
+        <div>駕駛姓名</div>
+        <div>編號</div>
+        <div>原因</div>
+        <div>停權日期(起迄日期)</div>
+        <div>狀態</div>
+      </div>
+
+      <!-- 資料列 -->
+      @for (item of blackList; track item.id) {
+      <div
+        class="grid grid-cols-[1fr_1fr_1.5fr_2fr_3fr_1fr] gap-4 min-w-250 border-b p-2 h-16 items-center text-lg"
+      >
+        <div>{{ item.carNo }}</div>
+        <div>{{ item.name }}</div>
+        <div>{{ item.code }}</div>
+        <div>{{ item.reason }}</div>
+        <div>{{ item.suspension }}</div>
+        <div class="bg-[#fc4886]">{{ item.status }}</div>
+      </div>
+      }
+    </div>
+  </div>
+</ng-template>
+
+<!-- 灰名單 -->
+<ng-template #gray>
+  <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">灰名單清單</h2>
+
+  <div class="flex flex-col w-full sm:h-0 min-h-[300px] max-h-[800px]">
+    <!-- 滾動容器 -->
+    <div
+      class="flex-1 overflow-auto border border-white text-center rounded px-4"
+    >
+      <!-- sticky header -->
+      <div
+        class="grid grid-cols-[1fr_1fr_1.5fr_2fr_3fr] gap-4 min-w-250 text-xl font-semibold sticky top-0 z-10 px-2 py-4 border-b border-[#f5a830] text-[#05aeed] bg-[#252525]"
+      >
+        <div>車號</div>
+        <div>駕駛姓名</div>
+        <div>編號</div>
+        <div>原因</div>
+        <div>警告日期(起迄日期)</div>
+      </div>
+
+      <!-- 資料列 -->
+      @for (item of blackList; track item.id) {
+      <div
+        class="grid grid-cols-[1fr_1fr_1.5fr_2fr_3fr] gap-4 min-w-250 border-b p-2 h-16 items-center text-lg"
+      >
+        <div>{{ item.carNo }}</div>
+        <div>{{ item.name }}</div>
+        <div>{{ item.code }}</div>
+        <div>{{ item.reason }}</div>
+        <div>{{ item.suspension }}</div>
+      </div>
+      }
+    </div>
+  </div>
+</ng-template>
+
+<!-- 出勤前六名 -->
+<ng-template #top6>
+  <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">出勤前六名</h2>
+
+  <div class="flex flex-col w-full sm:h-0 min-h-[300px] max-h-[800px] text-center">
+    <!-- header -->
+    <div
+      class="grid grid-cols-[1fr_2fr_2fr_1fr] sm:grid-cols-4 gap-4 min-w-[250px] text-xl font-semibold px-2 pb-2 border-b border-[#f5a830] text-[#05aeed] bg-[#252525] sticky top-0 z-10"
+    >
+      <div>排名</div>
+      <div>車號</div>
+      <div>駕駛姓名</div>
+      <div>出勤次數</div>
+    </div>
+
+    <!-- 資料列容器：填滿剩餘高度 -->
+    <div class="flex flex-col flex-1">
+      @for (item of top6List.slice(0,6); track item.id) {
+      <div
+        class="grid grid-cols-[1fr_2fr_2fr_1fr] sm:grid-cols-4 gap-4 min-w-[250px] border-b p-2 text-lg h-1/6 items-center"
+      >
+        <div>{{ item.rank }}</div>
+        <div>{{ item.carNo }}</div>
+        <div>{{ item.name }}</div>
+        <div>{{ item.attendance }}</div>
+      </div>
+      }
+    </div>
+  </div>
+</ng-template>

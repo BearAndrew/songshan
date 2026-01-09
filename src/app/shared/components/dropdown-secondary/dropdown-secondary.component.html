@@ -2,7 +2,11 @@
   <div
     #dropdownTrigger
     class="flex items-center min-h-8 sm:min-h-10 pl-2 pr-3 py-0.5 rounded select-none"
-    [ngClass]="disabeld ? 'bg-[#333] cursor-not-allowed' : 'bg-[#193652] cursor-pointer'"
+    [ngClass]="{
+      'bg-[#333] cursor-not-allowed' : disabeld,
+      'bg-[#193652] cursor-pointer' : !disabeld && !isSecondTheme,
+      'bg-[#f5a830] cursor-pointer' : !disabeld && isSecondTheme,
+    }"
     (click)="toggle()"
   >
     @if(showIcon) {
@@ -10,7 +14,8 @@
         class="flex-shrink-0 w-4 h-4 mr-4 rounded-full bg-orange-500 border-2 border-white"
       ></div>
     }
-    <span class="w-full text-md sm:text-lg text-white text-ellipsis overflow-hidden line-clamp-1">{{ selectedLabel || placeholder }}</span>
+    <span class="w-full text-md sm:text-lg text-ellipsis overflow-hidden line-clamp-1"
+    [ngClass]="isSecondTheme ? 'text-black' : 'text-white'">{{ selectedLabel || placeholder }}</span>
     <img
       class="ml-auto w-3"
       src="icons/white-down-arrow.png"

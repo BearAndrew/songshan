@@ -32,6 +32,7 @@ export class DropdownSecondaryComponent {
   @Input() placeholder = ' ';
   @Input() showIcon: boolean = false;
   @Input() disabeld: boolean = false;
+  @Input() isSecondTheme: boolean = false; // 藍色 or 橘色
   @Output() selectionChange = new EventEmitter<Option>();
 
   @ViewChild('dropdownTrigger') trigger!: ElementRef;
