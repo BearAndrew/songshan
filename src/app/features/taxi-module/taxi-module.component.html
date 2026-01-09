@@ -1,1 +1,212 @@
-<p>taxi-module works!</p>
+<div class="flex gap-4 h-full">
+  <div class="flex-1 card flex flex-col p-6 h-full">
+    <!-- Tabs -->
+    <div class="flex justify-between gap-2 mb-4 text-xl">
+      <button
+        class="px-6 py-1 rounded border border-[#f5a830] cursor-pointer"
+        [ngClass]="
+          activeTab === 'create'
+            ? 'bg-[#f5a830] text-white'
+            : 'bg-[#231716] text-[#4d4c4e]'
+        "
+        (click)="setTab('create')"
+      >
+        新增
+      </button>
+
+      <button
+        class="px-6 py-1 rounded border border-[#f5a830] cursor-pointer"
+        [ngClass]="
+          activeTab === 'update'
+            ? 'bg-[#f5a830] text-white'
+            : 'bg-[#231716] text-[#4d4c4e]'
+        "
+        (click)="setTab('update')"
+      >
+        修改
+      </button>
+
+      <button
+        class="px-6 py-1 rounded border border-[#f5a830] cursor-pointer"
+        [ngClass]="
+          activeTab === 'delete'
+            ? 'bg-[#f5a830] text-white'
+            : 'bg-[#231716] text-[#4d4c4e]'
+        "
+        (click)="setTab('delete')"
+      >
+        刪除
+      </button>
+
+      <button
+        class="px-6 py-1 rounded border border-[#f5a830] cursor-pointer"
+        [ngClass]="
+          activeTab === 'read'
+            ? 'bg-[#f5a830] text-white'
+            : 'bg-[#231716] text-[#4d4c4e]'
+        "
+        (click)="setTab('read')"
+      >
+        查詢
+      </button>
+    </div>
+
+    <!-- Form -->
+    <div class="flex-1 rounded shadow p-6">
+      @if (activeTab === 'create') {
+      <app-create-form></app-create-form>
+      } @else if (activeTab === 'update') {
+      <app-update-form></app-update-form>
+      } @else if (activeTab === 'delete') {
+      <app-delete-form></app-delete-form>
+      } @else if (activeTab === 'read') {
+      <app-read-form></app-read-form>
+      }
+    </div>
+  </div>
+
+  <div class="flex-2 card flex flex-col gap-4 p-6">
+    <div class="flex-1">
+      <!-- Content -->
+      @if (activeTab === 'create') {
+      <app-create-display></app-create-display>
+      } @else if (activeTab === 'update') {
+      <app-update-display></app-update-display>
+      } @else if (activeTab === 'delete') {
+      <app-delete-display></app-delete-display>
+      } @else if (activeTab === 'read') {
+      <app-read-display></app-read-display>
+      }
+    </div>
+
+    <!-- 固定內容 -->
+    <div class="flex flex-col gap-3">
+      <div class="flex-1 flex p-4 w-full border border-blue-500 rounded-xl">
+        <div
+          class="flex flex-1 flex-col items-center justify-center gap-4 relative"
+        >
+          <h4 class="text-xl text-[#c5b6d4] font-semibold">目前排班總數</h4>
+          <div class="flex flex-1 items-center gap-x-2">
+            <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+            <span class="text-xl">輛</span>
+          </div>
+          <div
+            class="absolute right-0 bottom-0 h-18 border-r-3 border-[#979896]"
+          ></div>
+        </div>
+
+        <div
+          class="flex flex-1 flex-col items-center justify-center gap-4 relative"
+        >
+          <h4 class="text-xl text-[#c5b6d4] font-semibold">現場人數</h4>
+          <div class="flex flex-1 items-center gap-x-2">
+            <div class="flex flex-col items-center gap-y-2 mr-8">
+              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-xl text-[#9e9f9f]">國際</span>
+            </div>
+            <div class="flex flex-col items-center gap-y-2">
+              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-xl text-[#9e9f9f]">國內</span>
+            </div>
+            <span class="text-xl">人</span>
+          </div>
+          <div
+            class="absolute right-0 bottom-0 h-18 border-r-3 border-[#979896]"
+          ></div>
+        </div>
+
+        <div
+          class="flex flex-1 flex-col items-center justify-center gap-4 relative"
+        >
+          <h4 class="text-xl text-[#c5b6d4] font-semibold">預估等待時間</h4>
+          <div class="flex flex-1 items-center gap-x-2">
+            <div class="flex flex-col items-center gap-y-2 mr-8">
+              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-xl text-[#9e9f9f]">國際</span>
+            </div>
+            <div class="flex flex-col items-center gap-y-2">
+              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-xl text-[#9e9f9f]">國內</span>
+            </div>
+            <span class="text-xl">min</span>
+          </div>
+          <div
+            class="absolute right-0 bottom-0 h-18 border-r-3 border-[#979896]"
+          ></div>
+        </div>
+
+        <div
+          class="flex flex-1 flex-col items-center justify-center gap-4 relative"
+        >
+          <h4 class="text-xl text-[#c5b6d4] font-semibold">今日已服務</h4>
+          <div class="flex flex-1 items-center gap-x-2">
+            <div class="flex flex-col items-center gap-y-2 mr-8">
+              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-xl text-[#9e9f9f]">國際</span>
+            </div>
+            <div class="flex flex-col items-center gap-y-2">
+              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-xl text-[#9e9f9f]">國內</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="flex-1 flex flex-col gap-y-4 p-4 w-full border border-blue-500 rounded-xl"
+      >
+        <h4 class="text-xl text-[#c5b6d4] font-semibold ml-8">營運統計</h4>
+        <div class="flex w-full">
+          <div
+            class="flex flex-1 flex-col items-center justify-center gap-4 relative"
+          >
+            <div class="flex flex-1 items-center gap-x-2">
+              <div class="flex flex-col items-center gap-y-2">
+                <span class="text-5xl text-[#87c8ee] font-bold">32.4</span>
+                <span class="text-xl text-[#9e9f9f]">平均車輛數/時</span>
+              </div>
+            </div>
+            <div
+              class="absolute right-0 bottom-0 h-18 border-r-3 border-[#979896]"
+            ></div>
+          </div>
+
+          <div
+            class="flex flex-1 flex-col items-center justify-center gap-4 relative"
+          >
+            <div class="flex flex-1 items-center gap-x-2">
+              <div class="flex flex-col items-center gap-y-2">
+                <div>
+                  <span class="text-5xl text-[#87c8ee] font-bold mr-4"
+                    >4.3</span
+                  >
+                  <span class="text-xl">min</span>
+                </div>
+                <span class="text-xl text-[#9e9f9f]">平均等候時間/車</span>
+              </div>
+            </div>
+            <div
+              class="absolute right-0 bottom-0 h-18 border-r-3 border-[#979896]"
+            ></div>
+          </div>
+
+          <div
+            class="flex flex-1 flex-col items-center justify-center gap-4 relative"
+          >
+            <div class="flex flex-1 items-center gap-x-2">
+              <div class="flex flex-col items-center gap-y-2">
+                <div>
+                  <span class="text-5xl text-[#87c8ee] font-bold mr-4"
+                    >2.1</span
+                  >
+                  <span class="text-xl">min</span>
+                </div>
+                <span class="text-xl text-[#9e9f9f]">平均等候時間/人</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
