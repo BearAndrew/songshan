@@ -288,9 +288,9 @@ export class FlightAbnormalComponent {
       flightType: (this.formData.flightType as TabType) || '',
     };
 
-    console.log(payload);
+    // console.log(payload);
     // this.handleFlightTrafficAnalysis(fakeData);
-    return;
+    // return;
 
     // 呼叫 API
     this.apiService.postIrregularAnalysis(payload).subscribe({

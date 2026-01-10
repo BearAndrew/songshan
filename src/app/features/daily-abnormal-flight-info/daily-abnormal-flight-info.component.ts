@@ -164,9 +164,9 @@ export class DailyAbnormalFlightInfoComponent {
   }
 
   getIrregularInboundFlight() {
-    console.trace();
-    this.setTableData(this.MOCK_IRREGULAR_INBOUND);
-    return;
+    // console.trace();
+    // this.setTableData(this.MOCK_IRREGULAR_INBOUND);
+    // return;
 
     this.apiService
       .getIrregularInboundFlight(
