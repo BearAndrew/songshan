@@ -72,7 +72,7 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="taxiInfo.modifyContent.label"
+          [value]="taxiInfo.modifyContent?.label"
           disabled
         />
 
@@ -87,7 +87,7 @@
         />
 
         <!-- 黑名單顯示 -->
-        @if(taxiInfo.modifyContent.value == '1') {
+        @if(taxiInfo.modifyContent?.value == '1') {
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
           >停權期間</label
         >

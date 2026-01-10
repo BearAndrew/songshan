@@ -10,7 +10,7 @@
       [value]="searchCondition"
       [options]="options"
       [isSecondTheme]="true"
-      (selectionChange)="searchCondition = $event.value"
+      (selectionChange)="onReadTypeChange($event)"
     ></app-dropdown-secondary>
 
     <ng-container [ngTemplateOutlet]="

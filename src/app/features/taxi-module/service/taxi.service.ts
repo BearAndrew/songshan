@@ -26,4 +26,14 @@ export class TaxiService {
   afterSearchTaxi(taxiInfoList: SearchTaxiData) {
     this.searchTaxiSubject.next(taxiInfoList);
   }
+
+
+  // 建立 Subject
+  private readTypeSubject = new Subject<string>();
+  // 暴露 Observable 給其他元件訂閱
+  readType$ = this.readTypeSubject.asObservable();
+  // 發送查詢事件
+  afterReadType(readType: string) {
+    this.readTypeSubject.next(readType);
+  }
 }

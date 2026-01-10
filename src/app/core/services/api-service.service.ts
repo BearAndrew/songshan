@@ -289,9 +289,9 @@ export class ApiService {
   // ========= Taxi =========
 
   /** 取得計程車全部列表 */
-  // getTaxiList(): Observable<TaxiInfo[]> {
-  //   return this.http.get<TaxiInfo[]>('Taxi');
-  // }
+  getTaxiList(): Observable<TaxiInfo[]> {
+    return this.http.get<TaxiInfo[]>('Taxi');
+  }
 
   /** 建立新計程車記錄 */
   postTaxi(payload: TaxiInfo): Observable<Object> {
@@ -318,25 +318,27 @@ export class ApiService {
     return this.http.post<any>('Taxi/import', formData);
   }
 
-  /** 計程車黑/灰名單全部列表 */
-  // getTaxiViolationAll(violationType: string): Observable<TaxiViolation[]> {
-  //   return this.http.get<TaxiViolation[]>(`TaxiViolationAll/${violationType}`);
-  // }
+  /** 計程車黑/灰名單全部列表
+   * violationType = BLACKLIST | GREYLIST
+   */
+  getTaxiViolationAll(violationType: string): Observable<TaxiViolation[]> {
+    return this.http.get<TaxiViolation[]>(`TaxiViolationAll/${violationType}`);
+  }
 
   /** 取得單筆黑/灰名單記錄 */
-  // getTaxiViolation(rid: number): Observable<TaxiViolation> {
-  //   return this.http.get<TaxiViolation>(`TaxiViolation/${rid}`);
-  // }
+  getTaxiViolation(rid: number): Observable<TaxiViolation> {
+    return this.http.get<TaxiViolation>(`TaxiViolation/${rid}`);
+  }
 
   /** 更新黑/灰名單記錄 */
-  // updateTaxiViolation(rid: number, payload: TaxiViolation): Observable<TaxiViolation> {
-  //   return this.http.put<TaxiViolation>(`TaxiViolation/${rid}`, payload);
-  // }
+  updateTaxiViolation(rid: number, payload: TaxiViolation): Observable<TaxiViolation> {
+    return this.http.put<TaxiViolation>(`TaxiViolation/${rid}`, payload);
+  }
 
   /** 刪除黑/灰名單記錄 */
-  // deleteTaxiViolation(rid: number): Observable<void> {
-  //   return this.http.delete<void>(`TaxiViolation/${rid}`);
-  // }
+  deleteTaxiViolation(rid: number): Observable<void> {
+    return this.http.delete<void>(`TaxiViolation/${rid}`);
+  }
 
   /** 某一台計程車黑/灰名單記錄 */
   // getTaxiViolationByPlate(plate: string): Observable<TaxiViolation[]> {

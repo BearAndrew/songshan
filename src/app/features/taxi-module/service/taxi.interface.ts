@@ -8,7 +8,7 @@ export interface SearchTaxiData {
 
 export interface SearchTaxiInfo extends TaxiInfo {
   /** 修改內容 */
-  modifyContent: Option;
+  modifyContent?: Option;
   /** 停權時間 */
-  suspensionPeriod: string;
+  suspensionPeriod?: string;
 }

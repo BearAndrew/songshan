@@ -12,15 +12,29 @@ export interface TaxiInfo {
 
 
 export interface TaxiViolation {
+  /** 紀錄 ID */
   rid: number;
-  plate: string;
-  dateFrom?: string; // YYYY-MM-DD
-  dateTo?: string; // YYYY-MM-DD
-  violationType?: 'BLACKLIST' | 'GREYLIST' | string;
-  note?: string;
-  // extra fields that backend may return
-  createdBy?: string;
-  createdAt?: string;
+
+  /** 車牌號碼 */
+  regPlate: string;
+
+  /** 停權開始時間 */
+  dateFrom: string; // ISO string: 2026-01-01T00:00:00
+
+  /** 停權結束時間 */
+  dateTo: string; // ISO string: 2026-01-01T00:00:00
+
+  /** 違規類型 */
+  violationType: string;  // 'BLACKLIST' | 'GREYLIST' | ''
+
+  /** 停權 / 違規原因 */
+  reason: string;
+
+  /** 司機編號 */
+  driverNo: string;
+
+  /** 司機姓名 */
+  driverName: string;
 }
 
 export interface TaxiStat {

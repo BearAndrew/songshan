@@ -1,0 +1,32 @@
+<!-- 出勤前六名 -->
+<div class="flex flex-col gap-4 w-full">
+  <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">出勤前六名</h2>
+
+  <div
+    class="flex flex-col w-full sm:h-0 min-h-[300px] max-h-[800px] text-center"
+  >
+    <!-- header -->
+    <div
+      class="grid grid-cols-[1fr_2fr_2fr_1fr] sm:grid-cols-4 gap-4 min-w-[250px] text-xl font-semibold px-2 pb-2 border-b border-[#f5a830] text-[#05aeed] bg-[#252525] sticky top-0 z-10"
+    >
+      <div>排名</div>
+      <div>車號</div>
+      <div>駕駛姓名</div>
+      <div>出勤次數</div>
+    </div>
+
+    <!-- 資料列容器：填滿剩餘高度 -->
+    <div class="flex flex-col flex-1">
+      @for (item of top6List.slice(0,6); track item.id) {
+      <div
+        class="grid grid-cols-[1fr_2fr_2fr_1fr] sm:grid-cols-4 gap-4 min-w-[250px] border-b p-2 text-lg h-1/6 items-center"
+      >
+        <div>{{ item.rank }}</div>
+        <div>{{ item.carNo }}</div>
+        <div>{{ item.name }}</div>
+        <div>{{ item.attendance }}</div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

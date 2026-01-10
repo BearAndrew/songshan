@@ -1,0 +1,37 @@
+<!-- 黑名單 -->
+<div class="flex flex-col gap-4 w-full">
+  <h2 class="text-xl sm:text-3xl text-[#fc4886] font-semibold">黑名單清單</h2>
+
+  <div class="flex flex-col w-full sm:h-0 min-h-[300px] max-h-[800px]">
+    <!-- 滾動容器 -->
+    <div
+      class="flex-1 overflow-auto border border-white text-center rounded px-4"
+    >
+      <!-- sticky header -->
+      <div
+        class="grid grid-cols-[1fr_1fr_1.5fr_2fr_3fr_1fr] gap-4 min-w-250 text-xl font-semibold sticky top-0 z-10 px-2 py-4 border-b border-[#fc4886] text-[#05aeed] bg-[#252525]"
+      >
+        <div>車號</div>
+        <div>駕駛姓名</div>
+        <div>編號</div>
+        <div>原因</div>
+        <div>停權日期(起迄日期)</div>
+        <div>狀態</div>
+      </div>
+
+      <!-- 資料列 -->
+      @for (item of blackList; track item.id) {
+      <div
+        class="grid grid-cols-[1fr_1fr_1.5fr_2fr_3fr_1fr] gap-4 min-w-250 border-b p-2 h-16 items-center text-lg"
+      >
+        <div>{{ item.carNo }}</div>
+        <div>{{ item.name }}</div>
+        <div>{{ item.code }}</div>
+        <div>{{ item.reason }}</div>
+        <div>{{ item.suspension }}</div>
+        <div class="bg-[#fc4886]">{{ item.status }}</div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
