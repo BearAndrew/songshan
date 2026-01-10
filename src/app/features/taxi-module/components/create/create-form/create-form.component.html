@@ -5,20 +5,44 @@
     class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full"
   >
     <!-- 車牌 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">車牌</label>
-    <input type="text" class="w-full bg-[#193652] rounded px-2 py-1" formControlName="regPlate" />
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+      >車牌</label
+    >
+    <input
+      type="text"
+      class="w-full bg-[#193652] rounded px-2 py-1"
+      formControlName="regPlate"
+    />
 
     <!-- 駕駛證號 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">編號</label>
-    <input type="text" class="w-full bg-[#193652] rounded px-2 py-1" formControlName="driverNo" />
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+      >編號</label
+    >
+    <input
+      type="text"
+      class="w-full bg-[#193652] rounded px-2 py-1"
+      formControlName="driverNo"
+    />
 
     <!-- 駕駛姓名 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">姓名</label>
-    <input type="text" class="w-full bg-[#193652] rounded px-2 py-1" formControlName="driverName" />
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+      >姓名</label
+    >
+    <input
+      type="text"
+      class="w-full bg-[#193652] rounded px-2 py-1"
+      formControlName="driverName"
+    />
 
     <!-- 聯絡電話 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">聯絡電話</label>
-    <input type="text" class="w-full bg-[#193652] rounded px-2 py-1" formControlName="driverPhone" />
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+      >聯絡電話</label
+    >
+    <input
+      type="text"
+      class="w-full bg-[#193652] rounded px-2 py-1"
+      formControlName="driverPhone"
+    />
   </form>
 
   <!-- 送出按鈕 -->
@@ -32,8 +56,19 @@
   </div>
 
   <!-- 其他按鈕 -->
+  <!-- 隱藏的檔案選擇器 -->
+  <input
+    type="file"
+    #fileInput
+    class="hidden"
+    accept=".xlsx,.xls"
+    (change)="onFileSelected($event)"
+  />
+
+  <!-- 你原本的按鈕 -->
   <button
-    class="text-sm sm:text-2xl px-12 py-3 bg-[#764e9b] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+    class="text-sm sm:text-2xl px-12 py-3 bg-[#764e9b] rounded-sm cursor-pointer hover:bg-[#6a3c95]"
+    (click)="fileInput.click()"
   >
     上傳排班計程車資料
   </button>
