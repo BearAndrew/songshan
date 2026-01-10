@@ -13,13 +13,19 @@
       (selectionChange)="onReadTypeChange($event)"
     ></app-dropdown-secondary>
 
-    <ng-container [ngTemplateOutlet]="
-      searchCondition == '0' ? info :
-      searchCondition == '1' ? list :
-      searchCondition == '2' ? list :
-      searchCondition == '3' ? top6 :
-      null
-    "></ng-container>
+    <ng-container
+      [ngTemplateOutlet]="
+        searchCondition == '0'
+          ? info
+          : searchCondition == '1'
+          ? list
+          : searchCondition == '2'
+          ? list
+          : searchCondition == '3'
+          ? top6
+          : null
+      "
+    ></ng-container>
   </div>
 
   <div
@@ -58,7 +64,7 @@
   <input
     type="text"
     class="w-full bg-[#193652] rounded px-2 py-1"
-    formControlName="flightInfo"
+    formControlName="regPlate"
   />
 
   <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
@@ -67,7 +73,7 @@
   <input
     type="text"
     class="w-full bg-[#193652] rounded px-2 py-1"
-    formControlName="flightInfo"
+    formControlName="driverNo"
   />
 </ng-template>
 
@@ -84,29 +90,33 @@
 
 <!-- 出勤前六名 -->
 <ng-template #top6>
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >開始日期</label
-  >
-  <input
-    type="text"
-    class="w-full bg-[#193652] rounded px-2 py-1"
-    formControlName="flightInfo"
-  />
+  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+    開始日期
+  </label>
+  <app-calendar-trigger
+    [isAllDay]="true"
+    [placeholder]="'-- -- --'"
+    [title]="''"
+    (dateChange)="onDateChange('start', $event)"
+  ></app-calendar-trigger>
 
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >結束日期</label
-  >
-  <input
-    type="text"
-    class="w-full bg-[#193652] rounded px-2 py-1"
-    formControlName="flightInfo"
-  />
+  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+    結束日期
+  </label>
+
+  <app-calendar-trigger
+    [isAllDay]="true"
+    [placeholder]="'-- -- --'"
+    [title]="''"
+    (dateChange)="onDateChange('end', $event)"
+  ></app-calendar-trigger>
 
   <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
     >排列方式</label
   >
   <app-dropdown-secondary
-    [value]="''"
+    [value]="top6SortType"
     [options]="top6Options"
+    (selectionChange)="top6SortType = $event.value"
   ></app-dropdown-secondary>
 </ng-template>

@@ -356,9 +356,9 @@ export class ApiService {
   // }
 
   /** 最常出現6台車 */
-  // getTop6Taxi(sortBy: string, dateFrom: string, dateTo: string): Observable<TaxiStatusInfo[]> {
-  //   return this.http.get<TaxiStatusInfo[]>(`Taxi/Top6Taxi/${sortBy}/${dateFrom}/${dateTo}`);
-  // }
+  getTop6Taxi(sortBy: string, dateFrom: string, dateTo: string): Observable<TaxiStatusInfo[]> {
+    return this.http.get<TaxiStatusInfo[]>(`Taxi/Top6Taxi/${sortBy}/${dateFrom}/${dateTo}`);
+  }
 
   /** 現時在場的車 */
   // getCurrentTaxi(): Observable<TaxiStatusInfo[]> {

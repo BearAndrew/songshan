@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { TaxiInfo, TaxiViolation } from '../../../models/taxi.model';
+import { TaxiInfo, TaxiStatusInfo, TaxiViolation } from '../../../models/taxi.model';
 import { SearchTaxiData } from './taxi.interface';
 
 @Injectable({
@@ -33,12 +33,21 @@ export class TaxiService {
     this.readTypeSubject.next(readType);
   }
 
-  // 黑名單 Subject
+  // 黑灰名單 Subject
   private blackListSubject = new Subject<TaxiViolation[]>();
   // 暴露 Observable 給其他元件訂閱
   blackListSubject$ = this.blackListSubject.asObservable();
-  // 發送查詢黑名單事件
+  // 發送查詢黑灰名單事件
   afterSearchViolationList(blackList: TaxiViolation[]) {
     this.blackListSubject.next(blackList);
+  }
+
+  // 黑灰名單 Subject
+  private top6Subject = new Subject<TaxiStatusInfo[]>();
+  // 暴露 Observable 給其他元件訂閱
+  top6Subject$ = this.top6Subject.asObservable();
+  // 發送查詢黑灰名單事件
+  afterTop6(top6: TaxiStatusInfo[]) {
+    this.top6Subject.next(top6);
   }
 }

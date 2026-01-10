@@ -47,10 +47,15 @@ export interface TaxiStat {
 }
 
 export interface TaxiStatusInfo {
-  plate: string;
-  count?: number; // 出現次數或相關排序依據
-  lastSeen?: string; // 時間戳記或日期字串
-  status?: string; // 當前狀態
-  // any other fields returned by API
-  [key: string]: any;
+  /** 車牌號碼 */
+  regPlate: string;
+
+  /** 司機姓名 */
+  driverName: string;
+
+  /** 違規類型 */
+  violationType: string;
+
+  /** 次數 */
+  count: number;
 }
