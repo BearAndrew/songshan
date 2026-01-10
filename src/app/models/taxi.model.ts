@@ -1,23 +1,13 @@
 // Models for Taxi APIs
 // NOTE: The original API schema details were not fully provided. I inferred reasonable fields
 // from the API descriptions in taxi.json. Adjust field names/types if your backend differs.
-
 export interface TaxiInfo {
-  plate: string; // 車牌號碼
-  driverId?: string; // 駕駛証碼
-  driverName?: string;
-  driverPhone?: string;
-  remark?: string;
-  status?: string; // e.g. 'BLACKLIST' | 'GREYLIST' | ''
-}
-
-export interface PostTaxiRequest {
   regPlate: string;     // 車牌號碼
   driverNo: string;     // 駕駛證號
   driverName: string;   // 駕駛姓名
   driverPhone: string;  // 聯絡電話
   remark: string;       // 備註
-  status: string;       // 狀態
+  status: string;       // 狀態 // e.g. 'BLACKLIST' | 'GREYLIST' | ''
 }
 
 

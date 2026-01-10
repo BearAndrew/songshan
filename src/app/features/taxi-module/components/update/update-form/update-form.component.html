@@ -1,62 +1,101 @@
-<div class="flex flex-col items-center gap-4 sm:gap-6 w-full h-full">
+<form
+  class="flex flex-col items-center gap-4 sm:gap-6 w-full h-full"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
   <div
     class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] items-center gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full"
   >
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >車號</label
-    >
+    <!-- 車號 -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+      車號
+    </label>
     <div class="flex items-center gap-2">
       <input
         type="text"
         class="w-full bg-[#193652] rounded px-2 py-1"
-        formControlName="flightInfo"
+        formControlName="regPlate"
       />
       <button
+        type="button"
         class="text-sm sm:text-2xl px-8 w-fit h-8 sm:h-10 bg-[#01a7e7] rounded-sm cursor-pointer whitespace-nowrap hover:bg-[#029cd8]"
-        (click)="onSubmit()"
+        (click)="onSearch()"
       >
         查詢
       </button>
     </div>
 
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >編號</label
-    >
+    <!-- 編號 -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+      編號
+    </label>
     <input
       type="text"
       class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="flightInfo"
+      formControlName="driverNo"
     />
 
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >修改內容</label
-    >
+    @if (hasSearch) {
+    <!-- 修改內容 -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+      修改內容
+    </label>
     <app-dropdown-secondary
-      [value]=""
+      [value]="modifyContentOption.value"
       [options]="options"
+      (selectionChange)="modifyContentOption = $event"
     ></app-dropdown-secondary>
 
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >修改原因</label
-    >
+    <!-- 修改原因 -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+      修改原因
+    </label>
     <input
       type="text"
       class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="flightInfo"
+      formControlName="remark"
     />
+
+    @if(modifyContentOption.value == '1') {
+    <!-- 停權期間（起） -->
+    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+      停權期間
+    </label>
+    <app-calendar-trigger
+      [isAllDay]="true"
+      [placeholder]="'-- -- --'"
+      [title]="'日期(起)'"
+      (dateChange)="onDateChange('start', $event)"
+    ></app-calendar-trigger>
+
+    <div></div>
+
+    <!-- 停權期間（迄） -->
+    <app-calendar-trigger
+      [isAllDay]="true"
+      [placeholder]="'-- -- --'"
+      [title]="'日期(迄)'"
+      (dateChange)="onDateChange('end', $event)"
+    ></app-calendar-trigger>
+    } }
   </div>
 
+  <!-- 底部按鈕 -->
   <div class="flex-1 flex flex-col gap-6 justify-end w-full sm:px-6">
+    @if (hasSearch) {
     <button
+      type="submit"
       class="text-sm sm:text-2xl mx-auto px-12 py-2 h-fit w-fit bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
-      (click)="onSubmit()"
+      (click)="onModify()"
     >
       確定送出
     </button>
+    }
     <button
+      type="button"
       class="text-sm sm:text-2xl py-2 w-full h-fit bg-[#01a7e7] rounded-sm cursor-pointer hover:bg-[#029cd8]"
     >
       匯入更新表單
     </button>
   </div>
-</div>
+</form>

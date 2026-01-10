@@ -1,5 +1,7 @@
 <div class="flex items-center justify-center w-full h-full min-h-[300px]">
-  <ng-container [ngTemplateOutlet]="data"></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="!hasSearch ? init : taxiInfo ? data : noCar"
+  ></ng-container>
 </div>
 
 <ng-template #init>
@@ -21,7 +23,9 @@
     <img class="w-16 sm:w-15" src="icons/error.png" alt="error" />
     <span class="text-xl sm:text-3xl text-[#fc4886]">查無車牌</span>
     <div class="flex flex-col gap-1 items-center">
-      <span class="text-xl sm:text-2xl text-[#aaa]">找不到車牌號碼:123</span>
+      <span class="text-xl sm:text-2xl text-[#aaa]"
+        >找不到車牌號碼:{{ searchRegPlate }}</span
+      >
       <span class="text-md sm:text-xl text-[#aaa]">請確認車牌號碼是否正確</span>
     </div>
   </div>
@@ -47,7 +51,7 @@
           <input
             type="text"
             class="w-full bg-[#193652] rounded px-2 py-1"
-            formControlName="flightInfo"
+            [value]="taxiInfo.regPlate"
             disabled
           />
         </div>
@@ -58,7 +62,7 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          formControlName="flightInfo"
+          [value]="taxiInfo.driverNo"
           disabled
         />
 
@@ -68,7 +72,7 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          formControlName="flightInfo"
+          [value]="taxiInfo.modifyContent.label"
           disabled
         />
 
@@ -78,19 +82,22 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          formControlName="flightInfo"
+          [value]="taxiInfo.remark"
           disabled
         />
 
+        <!-- 黑名單顯示 -->
+        @if(taxiInfo.modifyContent.value == '1') {
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
           >停權期間</label
         >
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          formControlName="flightInfo"
+          [value]="taxiInfo.suspensionPeriod"
           disabled
         />
+        }
       </div>
     </div>
 

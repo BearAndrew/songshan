@@ -9,7 +9,7 @@ import {
 import { ApiService } from './../../../../../core/services/api-service.service';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PostTaxiRequest, TaxiInfo } from '../../../../../models/taxi.model';
+import { TaxiInfo } from '../../../../../models/taxi.model';
 
 @Component({
   selector: 'app-create-form',
@@ -43,7 +43,7 @@ export class CreateFormComponent {
     // }
 
     console.log('送出資料', this.form.value);
-    const payload: PostTaxiRequest = {
+    const payload: TaxiInfo = {
       regPlate: this.form.value.regPlate,
       driverNo: this.form.value.driverNo,
       driverName: this.form.value.driverName,
