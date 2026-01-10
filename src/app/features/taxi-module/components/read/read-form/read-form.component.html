@@ -1,5 +1,6 @@
 <div class="flex flex-col items-center gap-4 sm:gap-6 w-full h-full">
-  <div
+  <form
+    [formGroup]="form"
     class="grid grid-cols-[64px_1fr] auto-rows-min sm:grid-cols-[100px_1fr] items-center gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 text-md sm:text-2xl w-full"
   >
     <label class="mb-4 text-white font-semibold [text-align-last:justify]"
@@ -26,7 +27,72 @@
           : null
       "
     ></ng-container>
-  </div>
+
+    <!-- 計程車資訊查詢 -->
+    <ng-template #info>
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+        >車號</label
+      >
+      <input
+        type="text"
+        class="w-full bg-[#193652] rounded px-2 py-1"
+        formControlName="regPlate"
+      />
+
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+        >編號</label
+      >
+      <input
+        type="text"
+        class="w-full bg-[#193652] rounded px-2 py-1"
+        formControlName="driverNo"
+      />
+    </ng-template>
+
+    <!-- 黑/灰名單 -->
+    <ng-template #list>
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+        >搜尋條件</label
+      >
+      <app-dropdown-secondary
+        [value]="''"
+        [options]="[{ label: '顯示全部', value: '' }]"
+      ></app-dropdown-secondary>
+    </ng-template>
+
+    <!-- 出勤前六名 -->
+    <ng-template #top6>
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+        開始日期
+      </label>
+      <app-calendar-trigger
+        [isAllDay]="true"
+        [placeholder]="'-- -- --'"
+        [title]="''"
+        (dateChange)="onDateChange('start', $event)"
+      ></app-calendar-trigger>
+
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+        結束日期
+      </label>
+
+      <app-calendar-trigger
+        [isAllDay]="true"
+        [placeholder]="'-- -- --'"
+        [title]="''"
+        (dateChange)="onDateChange('end', $event)"
+      ></app-calendar-trigger>
+
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+        >排列方式</label
+      >
+      <app-dropdown-secondary
+        [value]="top6SortType"
+        [options]="top6Options"
+        (selectionChange)="top6SortType = $event.value"
+      ></app-dropdown-secondary>
+    </ng-template>
+  </form>
 
   <div
     class="flex-1 flex flex-col gap-6 items-center justify-end w-full sm:px-6"
@@ -55,68 +121,3 @@
     </div>
   </div>
 </div>
-
-<!-- 計程車資訊查詢 -->
-<ng-template #info>
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >車號</label
-  >
-  <input
-    type="text"
-    class="w-full bg-[#193652] rounded px-2 py-1"
-    formControlName="regPlate"
-  />
-
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >編號</label
-  >
-  <input
-    type="text"
-    class="w-full bg-[#193652] rounded px-2 py-1"
-    formControlName="driverNo"
-  />
-</ng-template>
-
-<!-- 黑/灰名單 -->
-<ng-template #list>
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >搜尋條件</label
-  >
-  <app-dropdown-secondary
-    [value]="''"
-    [options]="[{ label: '顯示全部', value: '' }]"
-  ></app-dropdown-secondary>
-</ng-template>
-
-<!-- 出勤前六名 -->
-<ng-template #top6>
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
-    開始日期
-  </label>
-  <app-calendar-trigger
-    [isAllDay]="true"
-    [placeholder]="'-- -- --'"
-    [title]="''"
-    (dateChange)="onDateChange('start', $event)"
-  ></app-calendar-trigger>
-
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
-    結束日期
-  </label>
-
-  <app-calendar-trigger
-    [isAllDay]="true"
-    [placeholder]="'-- -- --'"
-    [title]="''"
-    (dateChange)="onDateChange('end', $event)"
-  ></app-calendar-trigger>
-
-  <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-    >排列方式</label
-  >
-  <app-dropdown-secondary
-    [value]="top6SortType"
-    [options]="top6Options"
-    (selectionChange)="top6SortType = $event.value"
-  ></app-dropdown-secondary>
-</ng-template>

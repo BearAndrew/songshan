@@ -309,9 +309,9 @@ export class ApiService {
   // }
 
   /** 刪除計程車記錄 */
-  // deleteTaxi(plate: string): Observable<void> {
-  //   return this.http.delete<void>(`Taxi/${plate}`);
-  // }
+  deleteTaxi(plate: string): Observable<void> {
+    return this.http.delete<void>(`Taxi/${plate}`);
+  }
 
   /** 匯入計程車資料 (multipart/form-data) */
   importTaxi(formData: FormData): Observable<any> {
@@ -346,9 +346,9 @@ export class ApiService {
   // }
 
   /** 新增黑/灰名單記錄 */
-  // postTaxiViolation(payload: TaxiViolation): Observable<TaxiViolation> {
-  //   return this.http.post<TaxiViolation>('TaxiViolation', payload);
-  // }
+  postTaxiViolation(payload: TaxiViolation): Observable<TaxiViolation> {
+    return this.http.post<TaxiViolation>('TaxiViolation', payload);
+  }
 
   /** 即時車流 */
   // getTaxiStat(): Observable<TaxiStat> {

@@ -66,7 +66,7 @@
           disabled
         />
 
-        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+        <!-- <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
           >修改內容</label
         >
         <input
@@ -74,7 +74,7 @@
           class="w-full bg-[#193652] rounded px-2 py-1"
           [value]="taxiInfo.modifyContent?.label"
           disabled
-        />
+        /> -->
 
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
           >修改原因</label
@@ -87,7 +87,7 @@
         />
 
         <!-- 黑名單顯示 -->
-        @if(taxiInfo.modifyContent?.value == '1') {
+        @if(taxiInfo.status == 'BLACKLIST' || taxiInfo.status == 'GREYLIST') {
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
           >停權期間</label
         >
@@ -105,7 +105,7 @@
       <div class="flex border-b-3 border-[#f5a830]">
         <span
           class="mx-auto px-6 py-1 text-lg sm:text-2xl font-semibold bg-[#f5a830] rounded-t-md"
-          >修改前</span
+          >修改後</span
         >
       </div>
       <div
@@ -118,7 +118,7 @@
           <input
             type="text"
             class="w-full bg-[#193652] rounded px-2 py-1"
-            formControlName="flightInfo"
+            [value]="taxiInfo.regPlate"
             disabled
           />
         </div>
@@ -129,17 +129,28 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          formControlName="flightInfo"
+          [value]="taxiInfo.driverNo"
           disabled
         />
 
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-          >修改後</label
+          >修改內容</label
         >
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          formControlName="flightInfo"
+          [value]="taxiInfo.modifyContent?.label"
+          disabled
+        />
+
+
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+          >修改原因</label
+        >
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          [value]="taxiInfo.remark"
           disabled
         />
       </div>

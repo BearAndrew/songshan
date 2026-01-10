@@ -29,7 +29,7 @@
     >
       @for (item of options; track $index) {
       <div
-        class="px-3 py-2 hover:bg-gray-800 cursor-pointer"
+        class="px-3 py-2 min-h-10 hover:bg-gray-800 cursor-pointer"
         [ngClass]="selectedLabel == item.label ? 'bg-gray-800' : ''"
         (click)="select(item)"
       >

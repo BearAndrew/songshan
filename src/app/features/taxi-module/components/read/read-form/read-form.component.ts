@@ -6,12 +6,12 @@ import { CommonModule } from '@angular/common';
 import { TaxiService } from '../../../service/taxi.service';
 import { SearchTaxiData } from '../../../service/taxi.interface';
 import { taxiInfoFakeData } from './fake-data';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarTriggerComponent } from '../../../../../shared/components/calendar-trigger/calendar-trigger.component';
 
 @Component({
   selector: 'app-read-form',
-  imports: [CommonModule, DropdownSecondaryComponent, CalendarTriggerComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DropdownSecondaryComponent, CalendarTriggerComponent],
   templateUrl: './read-form.component.html',
   styleUrl: './read-form.component.scss',
 })
