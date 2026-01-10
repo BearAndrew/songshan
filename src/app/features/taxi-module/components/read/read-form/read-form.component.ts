@@ -45,7 +45,7 @@ export class ReadFormComponent {
   }
 
   onReadTypeChange(event: Option) {
-    this.searchCondition = event.value
+    this.searchCondition = event.value;
     this.taxiService.afterReadType(this.searchCondition);
   }
 
@@ -54,18 +54,25 @@ export class ReadFormComponent {
     switch (this.searchCondition) {
       case '0':
         this.searchTaxi();
+        break;
+      case '1':
+        this.searchViolationList('BLACKLIST');
+        break;
+      case '2':
+        this.searchViolationList('GREYLIST');
+        break;
     }
   }
 
   searchTaxi() {
-    const searchTaxiData: SearchTaxiData = {
-      searchRegPlate: this.form.value.regPlate,
-      taxiInfoList: taxiInfoFakeData.map((item) => ({
-        ...item,
-      })),
-    };
-    this.taxiService.afterSearchTaxi(searchTaxiData);
-    return;
+    // const searchTaxiData: SearchTaxiData = {
+    //   searchRegPlate: this.form.value.regPlate,
+    //   taxiInfoList: taxiInfoFakeData.map((item) => ({
+    //     ...item,
+    //   })),
+    // };
+    // this.taxiService.afterSearchTaxi(searchTaxiData);
+    // return;
 
     this.apiService.searchTaxi(this.form.value.regPlate).subscribe((res) => {
       const searchTaxiData: SearchTaxiData = {
@@ -77,4 +84,12 @@ export class ReadFormComponent {
       this.taxiService.afterSearchTaxi(searchTaxiData);
     });
   }
+
+  searchViolationList(type: string) {
+    this.apiService.getTaxiViolationAll(type).subscribe((res) => {
+      this.taxiService.afterSearchViolationList(res);
+    });
+  }
+
+
 }

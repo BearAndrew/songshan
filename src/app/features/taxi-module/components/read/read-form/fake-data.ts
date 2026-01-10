@@ -39,4 +39,6 @@ export const taxiInfoFakeData = [
     "remark": "乘客投訴次數偏高",
     "status": "GREYLIST"
   }
-]
+];
+
+export const blackListData = [];

@@ -19,15 +19,15 @@
       </div>
 
       <!-- 資料列 -->
-      @for (item of grayList; track item.id) {
+      @for (item of grayList; track item.rid) {
       <div
         class="grid grid-cols-[1fr_1fr_1.5fr_2fr_3fr] gap-4 min-w-250 border-b p-2 h-16 items-center text-lg"
       >
-        <div>{{ item.carNo }}</div>
-        <div>{{ item.name }}</div>
-        <div>{{ item.code }}</div>
+        <div>{{ item.regPlate }}</div>
+        <div>{{ item.driverName }}</div>
+        <div>{{ item.driverNo }}</div>
         <div>{{ item.reason }}</div>
-        <div>{{ item.suspension }}</div>
+        <div>{{ item.dateFrom | date: 'yyyy/MM/dd' }} ~ {{ item.dateTo | date: 'yyyy/MM/dd' }}</div>
       </div>
       }
     </div>
