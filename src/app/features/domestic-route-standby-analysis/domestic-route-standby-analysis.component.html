@@ -101,10 +101,10 @@
     <div class="w-full h-full sm:overflow-x-hidden overflow-y-auto relative">
       <!-- Header -->
       <div
-        class="sticky top-0 w-full min-w-[1200px] sm:min-w-none grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-lg sm:text-2xl font-semibold text-center z-10"
+        class="sticky top-0 w-full min-w-[1200px] sm:min-w-none grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-[#00c4ce] text-lg sm:text-2xl font-semibold text-center z-10"
       >
         <div class="p-2">航點</div>
-        <div class="p-2">對站天氣</div>
+        <!-- <div class="p-2">對站天氣</div> -->
         <div class="p-2">航空公司</div>
         <div class="p-2">登記候補</div>
         <div class="p-2">補上人數</div>
@@ -120,7 +120,7 @@
           <!-- 明細 -->
           @for (detail of group.details; let i = $index; track detail;) {
           <div
-            class="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] text-center"
+            class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr] text-center"
           >
             <!-- 航點 / 天氣 -->
             @if (i === 0) {
@@ -134,7 +134,7 @@
                 {{ group.route }}
               </span>
             </div>
-            <div
+            <!-- <div
               class="relative p-1 h-[300%] row-span-3 flex items-center justify-center"
             >
               <div
@@ -181,10 +181,10 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
             } @else {
             <div></div>
-            <div></div>
+            <!-- <div></div> -->
             }
 
             <!-- 明細資料 -->
@@ -250,7 +250,7 @@
                 {{ detail.flyRate }}
               </div>
 
-              @if (i === 0) {
+              <!-- @if (i === 0) {
               <div
                 class="relative row-span-3 flex items-center justify-center h-[300%]"
               >
@@ -263,7 +263,7 @@
                   <span>明細>></span>
                 </a>
               </div>
-              }
+              } -->
             </div>
           </div>
           }

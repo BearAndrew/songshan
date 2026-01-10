@@ -60,6 +60,7 @@ export class FixedRouteTrafficAnalysisComponent  {
   airlineOptions: Option[] = [];
 
   flightClassOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '定航', value: 'SCHEDULE' },
     { label: '商務機', value: 'BJ' },
     { label: '軍機', value: 'MILITARY' },
@@ -67,6 +68,7 @@ export class FixedRouteTrafficAnalysisComponent  {
   ];
 
   flightTypeOptions: Option[] = [
+    { label: '全部', value: '' },
     { label: '出境', value: 'OUTBOUND' },
     { label: '入境', value: 'INBOUND' },
   ];
@@ -162,7 +164,9 @@ export class FixedRouteTrafficAnalysisComponent  {
         label: airport.name_zhTW,
         value: airport.iata,
       }));
+      this.routeOptions.unshift({ label: '全部', value: '' });
     });
+
 
     // 取得航空公司清單
     this.apiService.getAirlineList().subscribe((res: Airline[]) => {
@@ -170,7 +174,9 @@ export class FixedRouteTrafficAnalysisComponent  {
         label: airline.name_zhTW,
         value: airline.iata,
       }));
+       this.airlineOptions.unshift({ label: '全部', value: '' });
     });
+
   }
 
   // 選擇事件
