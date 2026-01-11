@@ -11,6 +11,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
+import { ApiService } from '../../../core/services/api-service.service';
+import {
+  CounterGetAllRequest,
+  CounterInfo,
+  statusMap,
+} from '../../../models/counter.model';
 
 interface ScheduleItem {
   date: string; // YYYY-MM-DD
@@ -43,15 +49,7 @@ export class IntlCheckinCounterUserComponent {
   paginatorPages: (number | '...')[] = [];
 
   // index 0 = Mon, 6 = Sun
-  rawData: ScheduleItem[] = [
-    { date: '2026-01-05', flightNo: 'BR192', time: '05:00', status: '申請中' }, // Mon
-    { date: '2026-01-06', flightNo: 'CI103', time: '08:30', status: '已核准' },
-    { date: '2026-01-09', flightNo: 'NH886', time: '11:00', status: '取消' },
-
-    { date: '2026-01-12', flightNo: 'BR808', time: '07:45', status: '已核准' }, // next Mon
-    { date: '2026-01-13', flightNo: 'CI202', time: '09:10', status: '申請中' },
-    { date: '2026-01-16', flightNo: 'BR999', time: '13:00', status: '申請中' },
-  ];
+  rawData: CounterInfo[] = [];
 
   /** 申請內容 */
   form!: FormGroup;
@@ -80,12 +78,9 @@ export class IntlCheckinCounterUserComponent {
     { label: '9', value: '9' },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private apiService: ApiService) {}
 
   ngOnInit() {
-    this.weeks = this.buildWeeks(this.rawData);
-    this.setCurrentWeek(0);
-
     /** 申請內容 */
     this.form = this.fb.group({
       flightInfo: [''],
@@ -113,26 +108,113 @@ export class IntlCheckinCounterUserComponent {
         applyDateEnd: value.applyDateEnd,
       };
     });
+
+    this.getAllCounter();
   }
 
-  private buildWeeks(data: ScheduleItem[]): ScheduleItem[][][] {
-    const weekMap = new Map<string, ScheduleItem[][]>();
-    for (const item of data) {
-      const date = new Date(item.date);
-      const monday = this.getMonday(date).toISOString().slice(0, 10);
+  /** 取得全部櫃檯資料（當周） */
+  getAllCounter() {
+    const today = new Date();
 
-      if (!weekMap.has(monday)) {
-        weekMap.set(
-          monday,
-          Array.from({ length: 7 }, () => [])
-        );
-      }
+    // 起始：今天
+    const yyyy1 = today.getFullYear();
+    const mm1 = String(today.getMonth() + 1).padStart(2, '0');
+    const dd1 = String(today.getDate()).padStart(2, '0');
+    const dateFrom = `${yyyy1}-${mm1}-${dd1}`;
 
-      const dayIndex = (date.getDay() + 6) % 7; // Mon=0
-      weekMap.get(monday)![dayIndex].push(item);
+    // 結束：今天 + 7 天
+    const end = new Date(today);
+    end.setDate(end.getDate() + 7);
+
+    const yyyy2 = end.getFullYear();
+    const mm2 = String(end.getMonth() + 1).padStart(2, '0');
+    const dd2 = String(end.getDate()).padStart(2, '0');
+    const dateTo = `${yyyy2}-${mm2}-${dd2}`;
+
+    const payload: CounterGetAllRequest = {
+      dateFrom,
+      dateTo,
+      status: 'ALL',
+      agent: 'ALL',
+    };
+
+    this.apiService.getAllCounter(payload).subscribe((res) => {
+      console.log(res);
+      this.rawData = res;
+      this.weeks = this.buildWeeks(this.rawData);
+      this.setCurrentWeek(0);
+    });
+  }
+
+  // private buildWeeks(data: ScheduleItem[]): ScheduleItem[][][] {
+  //   const weekMap = new Map<string, ScheduleItem[][]>();
+  //   for (const item of data) {
+  //     const date = new Date(item.date);
+  //     const monday = this.getMonday(date).toISOString().slice(0, 10);
+
+  //     if (!weekMap.has(monday)) {
+  //       weekMap.set(
+  //         monday,
+  //         Array.from({ length: 7 }, () => [])
+  //       );
+  //     }
+
+  //     const dayIndex = (date.getDay() + 6) % 7; // Mon=0
+  //     weekMap.get(monday)![dayIndex].push(item);
+  //   }
+
+  //   return Array.from(weekMap.values());
+  // }
+  private buildWeeks(data: CounterInfo[]): ScheduleItem[][][] {
+    const weekMap = new Map<number, ScheduleItem[][]>();
+    const weekIndex = 0;
+
+    if (!weekMap.has(weekIndex)) {
+      // 建立 7 天空陣列，Mon=0 ... Sun=6
+      weekMap.set(
+        weekIndex,
+        Array.from({ length: 7 }, () => [])
+      );
     }
 
-    return Array.from(weekMap.values());
+    const weekArray = weekMap.get(weekIndex)!;
+
+    // 計算本週 Monday 日期
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0=Sun ... 6=Sat
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7)); // 回到週一
+
+    console.log(data);
+    for (const item of data) {
+      // dayOfWeek 字串拆成數字
+      const days = item.dayOfWeek.split(',').map((n) => parseInt(n, 10));
+      console.log(days);
+
+      for (let day of days) {
+        // 將 dayOfWeek 轉成 index：Mon=0, Sun=6
+        const index = day === 0 || day === 7 ? 6 : day - 1;
+
+        // 對應日期 = Monday + index 天
+        const itemDate = new Date(monday);
+        itemDate.setDate(monday.getDate() + index);
+        const yyyy = itemDate.getFullYear();
+        const mm = String(itemDate.getMonth() + 1).padStart(2, '0');
+        const dd = String(itemDate.getDate()).padStart(2, '0');
+        const dateStr = `${yyyy}-${mm}-${dd}`;
+
+        weekArray[index].push({
+          date: dateStr,
+          flightNo: item.airlineIata + item.flightNo,
+          time: `${item.startTime.slice(0, -3)}-${item.endTime.slice(0, -3)}`,
+          status: statusMap[item.status],
+        });
+      }
+    }
+
+    const a = Array.from(weekMap.values());
+    console.log(a);
+    return a;
   }
 
   private getMonday(date: Date): Date {

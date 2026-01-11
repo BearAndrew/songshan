@@ -48,7 +48,11 @@ import {
   HistoricStandbyListRequest,
   HistoricStandbyListItem,
 } from '../../models/historic-standby-list.model';
-import { CounterGetAllRequest, CounterInfo, CounterInfoRaw } from '../../models/counter.model';
+import {
+  CounterGetAllRequest,
+  CounterInfo,
+  CounterInfoRaw,
+} from '../../models/counter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -376,31 +380,31 @@ export class ApiService {
   // }
 
   // ========= 報到櫃台 =========
-/** 報到櫃台 - 取得全部 */
-getAllCounter(payload: CounterGetAllRequest): Observable<CounterInfo[]> {
-  return this.http
-    .get<CounterInfoRaw[]>(
-      `Counter/GetAll/${payload.status}/${payload.agent}/${payload.dateFrom}/${payload.dateTo}`
-    )
-    .pipe(
-      map(res =>
-        res.map(item => ({
-          requestId: item.request_id,
-          agent: item.agent,
-          airlineIata: item.airline_iata,
-          flightNo: item.flight_no,
-          season: item.season,
-          applyForPeriod: item.apply_for_period,
-          applicationDate: item.application_date,
-          dayOfWeek: item.day_of_week,
-          startTime: item.start_time,
-          endTime: item.end_time,
-          status: item.status,
-          assignedBy: item.assigned_by,
-          appliedBy: item.applied_by,
-          assignedCounterArea: item.assigned_counter_area
-        }))
+  /** 報到櫃台 - 取得全部 */
+  getAllCounter(payload: CounterGetAllRequest): Observable<CounterInfo[]> {
+    return this.http
+      .get<CounterInfoRaw[]>(
+        `Counter/GetAll/${payload.status}/${payload.agent}/${payload.dateFrom}/${payload.dateTo}`
       )
-    );
-}
+      .pipe(
+        map((res) =>
+          res.map((item) => ({
+            requestId: item.request_id,
+            agent: item.agent,
+            airlineIata: item.airline_iata,
+            flightNo: item.flight_no,
+            season: item.season,
+            applyForPeriod: item.apply_for_period,
+            applicationDate: item.application_date,
+            dayOfWeek: item.day_of_week,
+            startTime: item.start_time,
+            endTime: item.end_time,
+            status: item.status,
+            assignedBy: item.assigned_by,
+            appliedBy: item.applied_by,
+            assignedCounterArea: item.assigned_counter_area,
+          }))
+        )
+      );
+  }
 }
