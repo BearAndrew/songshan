@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Airline } from '../../models/airline.model';
 import { Airport } from '../../models/airport.model';
 import {
@@ -48,6 +48,7 @@ import {
   HistoricStandbyListRequest,
   HistoricStandbyListItem,
 } from '../../models/historic-standby-list.model';
+import { CounterGetAllRequest, CounterInfo, CounterInfoRaw } from '../../models/counter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -331,7 +332,10 @@ export class ApiService {
   }
 
   /** 更新黑/灰名單記錄 */
-  updateTaxiViolation(rid: number, payload: TaxiViolation): Observable<TaxiViolation> {
+  updateTaxiViolation(
+    rid: number,
+    payload: TaxiViolation
+  ): Observable<TaxiViolation> {
     return this.http.put<TaxiViolation>(`TaxiViolation/${rid}`, payload);
   }
 
@@ -356,8 +360,14 @@ export class ApiService {
   // }
 
   /** 最常出現6台車 */
-  getTop6Taxi(sortBy: string, dateFrom: string, dateTo: string): Observable<TaxiStatusInfo[]> {
-    return this.http.get<TaxiStatusInfo[]>(`Taxi/Top6Taxi/${sortBy}/${dateFrom}/${dateTo}`);
+  getTop6Taxi(
+    sortBy: string,
+    dateFrom: string,
+    dateTo: string
+  ): Observable<TaxiStatusInfo[]> {
+    return this.http.get<TaxiStatusInfo[]>(
+      `Taxi/Top6Taxi/${sortBy}/${dateFrom}/${dateTo}`
+    );
   }
 
   /** 現時在場的車 */
@@ -365,4 +375,32 @@ export class ApiService {
   //   return this.http.get<TaxiStatusInfo[]>('Taxi/CurrentTaxi');
   // }
 
+  // ========= 報到櫃台 =========
+/** 報到櫃台 - 取得全部 */
+getAllCounter(payload: CounterGetAllRequest): Observable<CounterInfo[]> {
+  return this.http
+    .get<CounterInfoRaw[]>(
+      `Counter/GetAll/${payload.status}/${payload.agent}/${payload.dateFrom}/${payload.dateTo}`
+    )
+    .pipe(
+      map(res =>
+        res.map(item => ({
+          requestId: item.request_id,
+          agent: item.agent,
+          airlineIata: item.airline_iata,
+          flightNo: item.flight_no,
+          season: item.season,
+          applyForPeriod: item.apply_for_period,
+          applicationDate: item.application_date,
+          dayOfWeek: item.day_of_week,
+          startTime: item.start_time,
+          endTime: item.end_time,
+          status: item.status,
+          assignedBy: item.assigned_by,
+          appliedBy: item.applied_by,
+          assignedCounterArea: item.assigned_counter_area
+        }))
+      )
+    );
+}
 }

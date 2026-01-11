@@ -23,6 +23,7 @@ import { FlightAbnormalComponent } from './features/chart-page/page/flight-abnor
 import { DomesticRouteStandbyAnalysisDetailComponent } from './features/domestic-route-standby-analysis/components/domestic-route-standby-analysis/domestic-route-standby-analysis.component';
 import { IntlCheckinCounterUserComponent } from './features/intl-checkin-counter/intl-checkin-counter-user/intl-checkin-counter-user.component';
 import { IntlCheckinCounterAdminComponent } from './features/intl-checkin-counter/intl-checkin-counter-admin/intl-checkin-counter-admin.component';
+import { IntlCheckinCounterTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-table/intl-checkin-counter-table.component';
 
 export const routes: Routes = [
   {
@@ -162,6 +163,11 @@ export const routes: Routes = [
       {
         path: 'intl-checkin-counter-admin',
         component: IntlCheckinCounterAdminComponent,
+        data: { title: '國際線報到櫃檯模組', theme: 'dark' },
+      },
+      {
+        path: 'intl-checkin-counter-table',
+        component: IntlCheckinCounterTableComponent,
         data: { title: '國際線報到櫃檯模組', theme: 'dark' },
       },
       {
