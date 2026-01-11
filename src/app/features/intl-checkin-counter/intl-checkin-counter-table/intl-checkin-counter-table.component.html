@@ -1,54 +1,64 @@
-<div class="card flex flex-col flex-shrink-0 gap-2 p-4 w-full h-full relative">
+<div class="flex flex-col gap-4 w-full h-full">
   <div class="flex items-center justify-between gap-2">
-    <div class="flex items-center gap-4 text-[#aaa]">
-      <label>航空公司</label>
-      <app-dropdown
-        class="w-full sm:w-27"
-        [options]="airlineOptions"
-        [value]="''"
-        (selectionChange)="onAirlineChange($event)"
+    <div
+      class="flex flex-col sm:flex-row items-center gap-4 text-[#aaa] w-full sm:w-fit sm:ml-auto"
+    >
+      <div class="grid grid-cols-[64px_1fr] sm:flex items-center gap-4 w-full sm:w-fit">
+        <label class="flex-shrink-0">航空公司</label>
+        <app-dropdown
+          class="w-full sm:w-27"
+          [options]="airlineOptions"
+          [value]="''"
+          (selectionChange)="onAirlineChange($event)"
+        >
+        </app-dropdown>
+      </div>
+
+      <div
+        class="grid grid-cols-[64px_1fr] sm:flex items-center gap-4 w-full sm:w-fit"
       >
-      </app-dropdown>
+        <!-- （起） -->
+        <label>指定期間</label>
+        <app-calendar-trigger
+          class="w-full sm:w-60"
+          [isAllDay]="true"
+          [placeholder]="'-- -- --'"
+          [title]="'日期(起)'"
+          (dateChange)="onDateChange('start', $event)"
+        ></app-calendar-trigger>
 
-      <!-- （起） -->
-      <label>指定期間</label>
-      <app-calendar-trigger
-        class="w-60"
-        [isAllDay]="true"
-        [placeholder]="'-- -- --'"
-        [title]="'日期(起)'"
-        (dateChange)="onDateChange('start', $event)"
-      ></app-calendar-trigger>
+        <!-- （迄） -->
+        <app-calendar-trigger
+          class="col-start-2 w-full sm:w-60"
+          [isAllDay]="true"
+          [placeholder]="'-- -- --'"
+          [title]="'日期(迄)'"
+          (dateChange)="onDateChange('end', $event)"
+        ></app-calendar-trigger>
+      </div>
 
-      <!-- （迄） -->
-      <app-calendar-trigger
-        class="w-60"
-        [isAllDay]="true"
-        [placeholder]="'-- -- --'"
-        [title]="'日期(迄)'"
-        (dateChange)="onDateChange('end', $event)"
-      ></app-calendar-trigger>
-
-      <label>島櫃</label>
-      <app-dropdown
-        class="w-full sm:w-27"
-        [options]="islandOptions"
-        [value]="'ALL'"
-        (selectionChange)="onIslandChange($event)"
-      >
-      </app-dropdown>
+      <div class="grid grid-cols-[64px_1fr] sm:flex items-center gap-4 w-full sm:w-fit">
+        <label class="[text-align-last:justify]">島櫃</label>
+        <app-dropdown
+          class="w-full sm:w-27"
+          [options]="islandOptions"
+          [value]="'ALL'"
+          (selectionChange)="onIslandChange($event)"
+        >
+        </app-dropdown>
+      </div>
 
       <button
-        class="col-start-4 px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
+        class="col-start-2 ml-auto sm:ml-none px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
         (click)="onConfirm()"
       >
         確認
       </button>
     </div>
 
-    <a
+    <!-- <a
       class="flex items-center gap-2 px-2 py-1 rounded-md bg-[#318dce] cursor-pointer"
-      routerLink="/domestic-route-standby-analysis"
+      [routerLink]="redirectURL"
     >
       <span>回上一頁</span>
       <img
@@ -56,42 +66,50 @@
         src="icons/white-down-arrow.png"
         alt="arrow"
       />
-    </a>
+    </a> -->
   </div>
 
-  <div class="w-full h-full overflow-auto">
-    <div
-      class="sticky w-full min-w-[650px] sm:min-w-none grid grid-cols-7 bg-[#00b2ee] text-lg sm:text-2xl font-semibold text-center z-10"
-    >
-      <div class="p-2">航空公司</div>
-      <div class="p-2">航班資訊</div>
-      <div class="p-2">申請時段</div>
-      <div class="p-2">項目</div>
-      <div class="p-2">狀態</div>
-      <div class="p-2">操作人員</div>
-      <div class="p-2"></div>
-    </div>
-
-    <div class="py-1 text-md sm:text-xl min-w-[650px] sm:min-w-none">
-      <!-- 明細 -->
-      @for (row of table; let i = $index; track row;) {
+  <div class="card flex flex-1 flex-col flex-shrink-0 gap-2 p-4 h-0 relative">
+    <div class="w-full h-full overflow-auto relative">
       <div
-        class="grid grid-cols-7 text-center hover:bg-[#494746]"
-        [ngClass]="{ 'bg-[#333333]': i % 2 === 1 }"
+        class="sticky top-0 w-full min-w-[1000px] sm:min-w-none grid grid-cols-7 bg-[#00b2ee] text-lg sm:text-2xl font-semibold text-center z-10"
       >
-        <div class="p-2">{{ getAirlineLabel(row.airlineIata) }}</div>
-        <div class="p-2">{{ row.airlineIata }}{{ row.flightNo}}</div>
-        <div class="p-2">{{ row.startTime.slice(0, -3) }} - {{ row.endTime.slice(0, -3) }}</div>
-        <div class="p-2">{{ row.assignedCounterArea }}</div>
-        <div class="p-2">{{ statusMap[row.status] }}</div>
-        <div class="p-2">{{ row.assignedBy }}</div>
-        <div class="p-2">
-          @if(row.status !== 'APPLY') {
-            <a class="px-6 py-1 min-h-8 text-white bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]">修改</a>
-          }
-        </div>
+        <div class="p-2">航空公司</div>
+        <div class="p-2">航班資訊</div>
+        <div class="p-2">申請時段</div>
+        <div class="p-2">項目</div>
+        <div class="p-2">狀態</div>
+        <div class="p-2">操作人員</div>
+        <div class="p-2"></div>
       </div>
-      }
+
+      <div class="py-1 text-md sm:text-xl min-w-[1000px] sm:min-w-none">
+        <!-- 明細 -->
+        @for (row of table; let i = $index; track row;) {
+        <div
+          class="grid grid-cols-7 text-center hover:bg-[#494746]"
+          [ngClass]="{ 'bg-[#333333]': i % 2 === 1 }"
+        >
+          <div class="p-2">{{ getAirlineLabel(row.airlineIata) }}</div>
+          <div class="p-2">{{ row.airlineIata }}{{ row.flightNo }}</div>
+          <div class="p-2">
+            {{ row.startTime.slice(0, -3) }} - {{ row.endTime.slice(0, -3) }}
+          </div>
+          <div class="p-2">{{ row.assignedCounterArea }}</div>
+          <div class="p-2">{{ statusMap[row.status] }}</div>
+          <div class="p-2">{{ row.assignedBy }}</div>
+          <div class="p-2">
+            @if(row.status !== 'APPLY') {
+            <a
+              class="px-6 py-1 min-h-8 text-white bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+              [routerLink]="redirectURL"
+              >修改</a
+            >
+            }
+          </div>
+        </div>
+        }
+      </div>
     </div>
   </div>
 </div>

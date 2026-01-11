@@ -24,6 +24,8 @@ import { DomesticRouteStandbyAnalysisDetailComponent } from './features/domestic
 import { IntlCheckinCounterUserComponent } from './features/intl-checkin-counter/intl-checkin-counter-user/intl-checkin-counter-user.component';
 import { IntlCheckinCounterAdminComponent } from './features/intl-checkin-counter/intl-checkin-counter-admin/intl-checkin-counter-admin.component';
 import { IntlCheckinCounterTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-table/intl-checkin-counter-table.component';
+import { IntlCheckinCounterUserTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-user-table/intl-checkin-counter-user-table.component';
+import { IntlCheckinCounterAdminTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-admin-table/intl-checkin-counter-admin-table.component';
 
 export const routes: Routes = [
   {
@@ -166,8 +168,13 @@ export const routes: Routes = [
         data: { title: '國際線報到櫃檯模組', theme: 'dark' },
       },
       {
-        path: 'intl-checkin-counter-table',
-        component: IntlCheckinCounterTableComponent,
+        path: 'intl-checkin-counter-user-table',
+        component: IntlCheckinCounterUserTableComponent,
+        data: { title: '國際線報到櫃檯模組', theme: 'dark' },
+      },
+      {
+        path: 'intl-checkin-counter-admintable',
+        component: IntlCheckinCounterAdminTableComponent,
         data: { title: '國際線報到櫃檯模組', theme: 'dark' },
       },
       {

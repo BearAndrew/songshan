@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ApiService } from '../../../core/services/api-service.service';
 import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
@@ -22,6 +22,7 @@ import { Airline } from '../../../models/airline.model';
   styleUrl: './intl-checkin-counter-table.component.scss',
 })
 export class IntlCheckinCounterTableComponent {
+  @Input() isUser: boolean = false;
   table: CounterInfo[] = [];
 
   airlineOptions: Option[] = [];
@@ -41,6 +42,9 @@ export class IntlCheckinCounterTableComponent {
   dateTo: string = '';
   statusMap = statusMap;
 
+  redirectURL:string = '';
+
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
@@ -52,6 +56,8 @@ export class IntlCheckinCounterTableComponent {
       }));
       this.airlineOptions.unshift({ label: '全部', value: '' });
     });
+
+    this.redirectURL = this.isUser ? '/intl-checkin-counter-user' : '/intl-checkin-counter-admin';
   }
 
   /** 日期更改 */
