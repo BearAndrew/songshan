@@ -50,6 +50,7 @@ import {
 } from '../../models/historic-standby-list.model';
 import {
   CounterApplicationManualRequest,
+  CounterApplyEditRequest,
   CounterGetAllRequest,
   CounterInfo,
   CounterInfoRaw,
@@ -416,8 +417,9 @@ export class ApiService {
     return this.http.post<void>('/Counter/ApplicationManual', payload);
   }
 
-  POST
-/api/Counter/ApplyEdit
-修改以申請/核準前後的資料
+  /** 修改手動申請/核准前後資料 */
+  applyEdit(payload: CounterApplyEditRequest): Observable<void> {
+    return this.http.post<void>('/api/Counter/ApplyEdit', payload);
+  }
 
 }

@@ -192,8 +192,8 @@
 
         <div class="col-span-3 flex items-center justify-between w-full gap-2">
           <!-- 星期陣列 -->
+          @for(day of weekList; track day) {
           <label
-            *ngFor="let day of weekList"
             class="flex items-center gap-2 cursor-pointer"
           >
             <input
@@ -213,6 +213,7 @@
 
             <span class="text-[#97e0fb]">{{ day.label }}</span>
           </label>
+          }
         </div>
       </div>
 
@@ -342,18 +343,22 @@
       </div>
     </form>
 
-    <div class="sm:px-15 mt-4 grid grid-cols-2 gap-4 w-full">
+    <div class="sm:px-15 mt-4 flex gap-4 w-full">
+      @if(!isEdit) {
       <button
-        class="text-sm sm:text-2xl py-1 bg-[#c8c8c8] rounded-sm cursor-pointer hover:bg-[#b7b7b7]"
+        class="mx-auto w-3/5 sm:w-1/2 text-sm sm:text-2xl py-1 bg-[#c8c8c8] rounded-sm cursor-pointer hover:bg-[#b7b7b7]"
         (click)="onCreate()"
       >
         送出申請
       </button>
+      } @else {
       <button
-        class="text-sm sm:text-2xl py-1 bg-[#c8c8c8] rounded-sm cursor-pointer hover:bg-[#b7b7b7]"
+        class="mx-auto w-3/5 sm:w-1/2 text-sm sm:text-2xl py-1 bg-[#c8c8c8] rounded-sm cursor-pointer hover:bg-[#b7b7b7]"
+        (click)="onModify()"
       >
         修改
       </button>
+      }
     </div>
 
     <div class="w-[90%] my-4 sm:my-8 border-b-2 border-[#e69d30]"></div>

@@ -1,14 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../../core/services/api-service.service';
 import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
 import {
   DropdownComponent,
   Option,
 } from '../../../shared/components/dropdown/dropdown.component';
-import { CounterGetAllRequest, CounterInfo, statusMap } from '../../../models/counter.model';
+import {
+  CounterApplyEditRequest,
+  CounterGetAllRequest,
+  CounterInfo,
+  statusMap,
+} from '../../../models/counter.model';
 import { Airline } from '../../../models/airline.model';
+import { CounterService } from '../service/counter.service';
 
 @Component({
   selector: 'app-intl-checkin-counter-table',
@@ -42,10 +48,13 @@ export class IntlCheckinCounterTableComponent {
   dateTo: string = '';
   statusMap = statusMap;
 
-  redirectURL:string = '';
+  redirectURL: string = '';
 
-
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private router: Router,
+    private counterService: CounterService,
+    private apiService: ApiService
+  ) {}
 
   ngOnInit(): void {
     // 取得航空公司清單
@@ -57,7 +66,9 @@ export class IntlCheckinCounterTableComponent {
       this.airlineOptions.unshift({ label: '全部', value: '' });
     });
 
-    this.redirectURL = this.isUser ? '/intl-checkin-counter-user' : '/intl-checkin-counter-admin';
+    this.redirectURL = this.isUser
+      ? '/intl-checkin-counter-user'
+      : '/intl-checkin-counter-admin';
   }
 
   /** 日期更改 */
@@ -99,6 +110,49 @@ export class IntlCheckinCounterTableComponent {
   }
 
   getAirlineLabel(value: string): string {
-    return this.airlineOptions.find(item => item.value == value)?.label || '';
+    return this.airlineOptions.find((item) => item.value == value)?.label || '';
+  }
+
+  goEdit(data: CounterInfo) {
+    const applyRequest: CounterApplyEditRequest =
+      this.mapCounterInfoToApplyRequest(data);
+
+    // 導向另一個元件，把所有參數放 URL
+    this.router.navigate([this.redirectURL], {
+      queryParams: {
+        isEdit: 'Y',
+        requestId: applyRequest.requestId,
+        airlineIata: applyRequest.airlineIata,
+        flightNo: applyRequest.flightNo,
+        season: applyRequest.season,
+        apply_for_period: applyRequest.apply_for_period,
+        startDate: applyRequest.startDate,
+        endDate: applyRequest.endDate,
+        dayOfWeek: applyRequest.dayOfWeek,
+        startTime: applyRequest.startTime,
+        endTime: applyRequest.endTime,
+      },
+    });
+  }
+
+  mapCounterInfoToApplyRequest(data: CounterInfo): CounterApplyEditRequest {
+    // 確保 apply_for_period 格式正確
+    const apply_for_period =
+      data.applyForPeriod && data.applyForPeriod.includes('~')
+        ? data.applyForPeriod
+        : '';
+
+    return {
+      requestId: data.requestId || '',
+      airlineIata: data.airlineIata || '',
+      flightNo: data.flightNo || '',
+      season: data.season || '',
+      apply_for_period, // 注意改成下底線
+      startDate: '',
+      endDate: '',
+      dayOfWeek: data.dayOfWeek || '',
+      startTime: data.startTime || '',
+      endTime: data.endTime || '',
+    };
   }
 }

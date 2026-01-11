@@ -87,3 +87,17 @@ export interface CounterApplicationManualRequest {
   start_time: string;
   end_time: string;
 }
+
+
+export interface CounterApplyEditRequest {
+  requestId: string;
+  airlineIata: string;
+  flightNo: string;
+  season: string;
+  apply_for_period: string;
+  startDate: string;  // ISO 字串
+  endDate: string;    // ISO 字串
+  dayOfWeek: string;  // ex: "1,2,3"
+  startTime: string;  // ex: "10:00:00"
+  endTime: string;    // ex: "12:30:00"
+}

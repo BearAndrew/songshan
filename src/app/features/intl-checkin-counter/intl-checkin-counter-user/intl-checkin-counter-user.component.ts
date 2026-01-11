@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { DropdownSecondaryComponent } from '../../../shared/components/dropdown-secondary/dropdown-secondary.component';
 import { Option } from '../../../shared/components/dropdown/dropdown.component';
 import {
@@ -15,10 +15,13 @@ import { CalendarTriggerComponent } from '../../../shared/components/calendar-tr
 import { ApiService } from '../../../core/services/api-service.service';
 import {
   CounterApplicationManualRequest,
+  CounterApplyEditRequest,
   CounterGetAllRequest,
   CounterInfo,
   statusMap,
 } from '../../../models/counter.model';
+import { ActivatedRoute } from '@angular/router';
+import { CounterService } from '../service/counter.service';
 
 interface ScheduleItem {
   date: string; // YYYY-MM-DD
@@ -33,7 +36,6 @@ interface ScheduleItem {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    DropdownSecondaryComponent,
     CalendarTriggerComponent,
   ],
   templateUrl: './intl-checkin-counter-user.component.html',
@@ -60,11 +62,10 @@ export class IntlCheckinCounterUserComponent {
     departureTime: '',
     applyTimeStart: '',
     applyTimeEnd: '',
-    islands: [] as string[],
-    seasonType: '' as 'all' | 'other' | '',
     applyDateStart: null,
     applyDateEnd: null,
   };
+
   get islandList(): FormArray {
     return this.form.get('islands') as FormArray;
   }
@@ -79,6 +80,8 @@ export class IntlCheckinCounterUserComponent {
     { label: '8', value: '8' },
     { label: '9', value: '9' },
   ];
+
+  isEdit: boolean = false;
 
   getWeekControl(key: string): FormControl {
     return this.form.get('weekDays.' + key) as FormControl;
@@ -95,17 +98,23 @@ export class IntlCheckinCounterUserComponent {
 
   dateFrom: string = '';
   dateTo: string = '';
+  requestId: string = '';
 
-  constructor(private fb: FormBuilder, private apiService: ApiService) {}
+  constructor(
+    private fb: FormBuilder,
+    private apiService: ApiService,
+    private counterService: CounterService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     /** 申請內容 */
     this.form = this.fb.group({
-      flightInfo: [''],
+      flightInfo: ['123'],
       departureTime: [''],
       applyTimeStart: [''],
       applyTimeEnd: [''],
-      islands: this.fb.array([]),
       seasonType: [''],
       applyDateStart: [''],
       applyDateEnd: [''],
@@ -120,20 +129,90 @@ export class IntlCheckinCounterUserComponent {
       }),
     });
 
-    // 至少加入一筆
-    // this.addIsland();
+    // 取得 isEdit
+    this.route.queryParamMap.subscribe((params) => {
+      const isEditParam = params.get('isEdit');
+      this.isEdit = isEditParam === 'Y';
+      // 取得其他參數
+      const applyRequest: CounterApplyEditRequest = {
+        requestId: params.get('requestId') || '',
+        airlineIata: params.get('airlineIata') || '',
+        flightNo: params.get('flightNo') || '',
+        season: params.get('season') || '',
+        apply_for_period: params.get('apply_for_period') || '',
+        startDate: params.get('startDate') || '',
+        endDate: params.get('endDate') || '',
+        dayOfWeek: params.get('dayOfWeek') || '',
+        startTime: params.get('startTime') || '',
+        endTime: params.get('endTime') || '',
+      };
+
+      this.requestId = applyRequest.requestId;
+
+      // 轉換成表單需要的格式
+      const flightInfo = applyRequest.airlineIata + applyRequest.flightNo;
+      const departureTime = '';
+      const applyTimeStart = applyRequest.startTime.slice(0, -3) || '';
+      const applyTimeEnd = applyRequest.endTime.slice(0, -3) || '';
+      const applyDateStart = applyRequest.apply_for_period
+        ? applyRequest.apply_for_period.split('~')[0]
+        : '';
+      const applyDateEnd = applyRequest.apply_for_period
+        ? applyRequest.apply_for_period.split('~')[1]
+        : '';
+
+      // weekDays
+      const weekDaysMap = {
+        mon: false,
+        tue: false,
+        wed: false,
+        thu: false,
+        fri: false,
+        sat: false,
+        sun: false,
+      };
+      if (applyRequest.dayOfWeek) {
+        applyRequest.dayOfWeek.split(',').forEach((d) => {
+          switch (d) {
+            case '1':
+              weekDaysMap.mon = true;
+              break;
+            case '2':
+              weekDaysMap.tue = true;
+              break;
+            case '3':
+              weekDaysMap.wed = true;
+              break;
+            case '4':
+              weekDaysMap.thu = true;
+              break;
+            case '5':
+              weekDaysMap.fri = true;
+              break;
+            case '6':
+              weekDaysMap.sat = true;
+              break;
+            case '7':
+              weekDaysMap.sun = true;
+              break;
+          }
+        });
+      }
+
+      // patch 表單
+      this.form.patchValue({
+        flightInfo,
+        departureTime,
+        applyTimeStart,
+        applyTimeEnd,
+        applyDateStart,
+        applyDateEnd,
+        weekDays: weekDaysMap,
+      });
+    });
 
     this.form.valueChanges.subscribe((value) => {
-      this.formData = {
-        flightInfo: value.flightInfo,
-        departureTime: value.departureTime,
-        applyTimeStart: value.applyTimeStart,
-        applyTimeEnd: value.applyTimeEnd,
-        islands: value.islands,
-        seasonType: value.seasonType,
-        applyDateStart: value.applyDateStart,
-        applyDateEnd: value.applyDateEnd,
-      };
+      console.trace();
     });
 
     this.getAllCounter();
@@ -166,7 +245,6 @@ export class IntlCheckinCounterUserComponent {
     };
 
     this.apiService.getAllCounter(payload).subscribe((res) => {
-      console.log(res);
       this.rawData = res;
       this.weeks = this.buildWeeks(this.rawData);
       this.setCurrentWeek(0);
@@ -212,7 +290,6 @@ export class IntlCheckinCounterUserComponent {
     const monday = new Date(today);
     monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7)); // 回到週一
 
-    console.log(data);
     for (const item of data) {
       // dayOfWeek 字串拆成數字
       const days = item.dayOfWeek.split(',').map((n) => parseInt(n, 10));
@@ -239,7 +316,8 @@ export class IntlCheckinCounterUserComponent {
     }
 
     const a = Array.from(weekMap.values());
-    console.log(a);
+    console.log('===================');
+    console.log(this.form.value);
     return a;
   }
 
@@ -356,8 +434,6 @@ export class IntlCheckinCounterUserComponent {
   }
 
   onCreate() {
-    // console.log(this.form.value)
-    // return;
     const week = this.form.value.weekDays; // { mon: true, tue: false ... }
     const dayMap: Record<string, number> = {
       mon: 1,
@@ -398,10 +474,54 @@ export class IntlCheckinCounterUserComponent {
       end_time: this.formatTime(this.form.value.applyTimeEnd),
     };
     console.log(payload);
-    this.apiService.addCounterApplication(payload).subscribe(res => {
+    this.apiService.addCounterApplication(payload).subscribe((res) => {
       console.log(res);
     });
   }
 
-  onModify() {}
+  onModify() {
+    const week = this.form.value.weekDays; // { mon: true, tue: false ... }
+    const dayMap: Record<string, number> = {
+      mon: 1,
+      tue: 2,
+      wed: 3,
+      thu: 4,
+      fri: 5,
+      sat: 6,
+      sun: 0, // Sunday = 0
+    };
+
+    const selectedDays = Object.entries(week)
+      .filter(([key, value]) => value)
+      .map(([key]) => dayMap[key]);
+
+    const day_of_week = selectedDays.join(',');
+
+    let airline_iata = '';
+    let flight_no = '';
+    const flightInfo = this.form.value.flightInfo || '';
+    const match = flightInfo.match(/^([A-Z]+)(\d+)$/i);
+    if (match) {
+      airline_iata = match[1].toUpperCase(); // 前面字母
+      flight_no = match[2]; // 後面數字
+    }
+
+    const payload: CounterApplyEditRequest = {
+      requestId: this.requestId,
+      airlineIata: airline_iata || '', // 對應 flightInfo
+      flightNo: flight_no || '', // 也可以拆成航班號和航空公司
+      season: '',
+      dayOfWeek: day_of_week,
+      apply_for_period: '',
+      startDate: this.dateFrom || '',
+      endDate: this.dateTo || '',
+      startTime: this.formatTime(this.form.value.applyTimeStart),
+      endTime: this.formatTime(this.form.value.applyTimeEnd),
+    };
+
+    this.apiService.applyEdit(payload).subscribe({
+      next: () => console.log('修改成功'),
+      error: (err) => console.error('修改失敗', err),
+    });
+  }
 }
