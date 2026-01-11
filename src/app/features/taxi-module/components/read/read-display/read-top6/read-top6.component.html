@@ -17,14 +17,14 @@
 
     <!-- 資料列容器：填滿剩餘高度 -->
     <div class="flex flex-col flex-1">
-      @for (item of top6List.slice(0,6); track item.id) {
+      @for (item of top6List.slice(0,6); track item) {
       <div
         class="grid grid-cols-[1fr_2fr_2fr_1fr] sm:grid-cols-4 gap-4 min-w-[250px] border-b p-2 text-lg h-1/6 items-center"
       >
-        <div>{{ item.rank }}</div>
-        <div>{{ item.carNo }}</div>
-        <div>{{ item.name }}</div>
-        <div>{{ item.attendance }}</div>
+        <div>{{ $index + 1 }}</div>
+        <div>{{ item.regPlate }}</div>
+        <div>{{ item.driverName }}</div>
+        <div>{{ item.count }}</div>
       </div>
       }
     </div>

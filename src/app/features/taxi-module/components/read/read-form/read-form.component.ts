@@ -28,12 +28,13 @@ export class ReadFormComponent {
   searchCondition: string = '0';
 
   top6Options: Option[] = [
-    { label: '排名', value: '排名' },
-    { label: '車號', value: '車號' },
-    { label: '駕駛姓名', value: '駕駛姓名' },
-    { label: '出勤次數', value: '出勤次數' },
+    { label: '全部', value: 'ALL' },
+    // { label: '排名', value: '排名' },
+    // { label: '車號', value: '車號' },
+    // { label: '駕駛姓名', value: '駕駛姓名' },
+    // { label: '出勤次數', value: '出勤次數' },
   ];
-  top6SortType: string = '排名';
+  top6SortType: string = 'ALL';
 
   dateFrom: string = '';
   dateTo: string = '';
