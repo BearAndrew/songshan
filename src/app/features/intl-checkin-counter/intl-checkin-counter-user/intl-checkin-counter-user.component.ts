@@ -5,6 +5,7 @@ import { Option } from '../../../shared/components/dropdown/dropdown.component';
 import {
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -13,6 +14,7 @@ import {
 import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
 import { ApiService } from '../../../core/services/api-service.service';
 import {
+  CounterApplicationManualRequest,
   CounterGetAllRequest,
   CounterInfo,
   statusMap,
@@ -78,6 +80,22 @@ export class IntlCheckinCounterUserComponent {
     { label: '9', value: '9' },
   ];
 
+  getWeekControl(key: string): FormControl {
+    return this.form.get('weekDays.' + key) as FormControl;
+  }
+  weekList = [
+    { key: 'mon', label: '一' },
+    { key: 'tue', label: '二' },
+    { key: 'wed', label: '三' },
+    { key: 'thu', label: '四' },
+    { key: 'fri', label: '五' },
+    { key: 'sat', label: '六' },
+    { key: 'sun', label: '日' },
+  ];
+
+  dateFrom: string = '';
+  dateTo: string = '';
+
   constructor(private fb: FormBuilder, private apiService: ApiService) {}
 
   ngOnInit() {
@@ -91,10 +109,19 @@ export class IntlCheckinCounterUserComponent {
       seasonType: [''],
       applyDateStart: [''],
       applyDateEnd: [''],
+      weekDays: this.fb.group({
+        mon: [false],
+        tue: [false],
+        wed: [false],
+        thu: [false],
+        fri: [false],
+        sat: [false],
+        sun: [false],
+      }),
     });
 
     // 至少加入一筆
-    this.addIsland();
+    // this.addIsland();
 
     this.form.valueChanges.subscribe((value) => {
       this.formData = {
@@ -189,7 +216,6 @@ export class IntlCheckinCounterUserComponent {
     for (const item of data) {
       // dayOfWeek 字串拆成數字
       const days = item.dayOfWeek.split(',').map((n) => parseInt(n, 10));
-      console.log(days);
 
       for (let day of days) {
         // 將 dayOfWeek 轉成 index：Mon=0, Sun=6
@@ -279,28 +305,103 @@ export class IntlCheckinCounterUserComponent {
     return `${this.formatDate(min)} ~ ${this.formatDate(max)}`;
   }
 
-  private formatDate(date: Date): string {
+  private formatDate(date: Date, spliter: string = '/'): string {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
-    return `${y}/${m}/${d}`;
+    return `${y}${spliter}${m}${spliter}${d}`;
   }
 
   /** ===== 申請內容 ===== */
-  setSeasonType(type: 'all' | 'other') {
-    this.form.get('seasonType')?.setValue(type);
+  // setSeasonType(type: 'all' | 'other') {
+  //   this.form.get('seasonType')?.setValue(type);
+  // }
+
+  // addIsland() {
+  //   this.islandList.push(this.fb.control(''));
+  // }
+
+  // reomveIsland(index: number) {
+  //   if (this.islandList.length <= 1) return;
+  //   this.islandList.removeAt(index);
+  // }
+
+  // updateIsland(index: number, value: string) {
+  //   this.islandList.at(index).setValue(value);
+  // }
+
+  /** 日期更改 */
+  onDateChange(type: 'start' | 'end', event: Date) {
+    const yyyy = event.getFullYear();
+    const mm = String(event.getMonth() + 1).padStart(2, '0'); // 月份要 +1
+    const dd = String(event.getDate()).padStart(2, '0');
+
+    const formatted = `${yyyy}-${mm}-${dd}`;
+    if (type === 'start') {
+      this.dateFrom = formatted || '';
+    } else {
+      this.dateTo = formatted || '';
+    }
   }
 
-  addIsland() {
-    this.islandList.push(this.fb.control(''));
+  formatTime(input: string | null | undefined): string {
+    if (!input) return ''; // 沒輸入
+    // 檢查格式是否為 HH:mm 或 H:mm
+    const match = input.match(/^([0-1]?\d|2[0-3]):([0-5]\d)$/);
+    if (match) {
+      return input + ':00'; // 正確格式，加秒
+    }
+    // 格式不正確就回原值
+    return input;
   }
 
-  reomveIsland(index: number) {
-    if (this.islandList.length <= 1) return;
-    this.islandList.removeAt(index);
+  onCreate() {
+    // console.log(this.form.value)
+    // return;
+    const week = this.form.value.weekDays; // { mon: true, tue: false ... }
+    const dayMap: Record<string, number> = {
+      mon: 1,
+      tue: 2,
+      wed: 3,
+      thu: 4,
+      fri: 5,
+      sat: 6,
+      sun: 0, // Sunday = 0
+    };
+
+    const selectedDays = Object.entries(week)
+      .filter(([key, value]) => value)
+      .map(([key]) => dayMap[key]);
+
+    const day_of_week = selectedDays.join(',');
+
+    let airline_iata = '';
+    let flight_no = '';
+    const flightInfo = this.form.value.flightInfo || '';
+    const match = flightInfo.match(/^([A-Z]+)(\d+)$/i);
+    if (match) {
+      airline_iata = match[1].toUpperCase(); // 前面字母
+      flight_no = match[2]; // 後面數字
+    }
+
+    // 組 payload
+    const payload: CounterApplicationManualRequest = {
+      agent: '',
+      airline_iata: airline_iata || '', // 對應 flightInfo
+      flight_no: flight_no || '', // 也可以拆成航班號和航空公司
+      season: '',
+      day_of_week: day_of_week,
+      apply_for_period: '',
+      startDate: this.dateFrom || '',
+      endDate: this.dateTo || '',
+      start_time: this.formatTime(this.form.value.applyTimeStart),
+      end_time: this.formatTime(this.form.value.applyTimeEnd),
+    };
+    console.log(payload);
+    this.apiService.addCounterApplication(payload).subscribe(res => {
+      console.log(res);
+    });
   }
 
-  updateIsland(index: number, value: string) {
-    this.islandList.at(index).setValue(value);
-  }
+  onModify() {}
 }

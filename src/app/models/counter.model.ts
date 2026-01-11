@@ -73,3 +73,17 @@ export interface CounterInfoRaw {
   assigned_counter_area: string;
 }
 
+
+
+export interface CounterApplicationManualRequest {
+  agent: string;
+  airline_iata: string;
+  flight_no: string;
+  season: string;
+  day_of_week: string;
+  apply_for_period: string;
+  startDate: string; // ISO 字串
+  endDate: string;   // ISO 字串
+  start_time: string;
+  end_time: string;
+}
