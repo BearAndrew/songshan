@@ -90,9 +90,20 @@
       確定送出
     </button>
     }
+    <!-- 隱藏的檔案選擇器 -->
+    <input
+      type="file"
+      #fileInput
+      class="hidden"
+      accept=".xlsx,.xls"
+      (change)="onFileSelected($event)"
+    />
+
+    <!-- 上傳按鈕 -->
     <button
       type="button"
       class="text-sm sm:text-2xl py-2 w-full h-fit bg-[#01a7e7] rounded-sm cursor-pointer hover:bg-[#029cd8]"
+      (click)="fileInput.click()"
     >
       匯入更新表單
     </button>
