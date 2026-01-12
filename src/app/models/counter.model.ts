@@ -101,3 +101,36 @@ export interface CounterApplyEditRequest {
   startTime: string;  // ex: "10:00:00"
   endTime: string;    // ex: "12:30:00"
 }
+
+
+export interface CounterAdminApprovalRequest {
+  /** 申請單 ID */
+  requestId: string;
+
+  /** 核准 / 駁回原因 */
+  reason: string;
+
+  /** 指派櫃台區域 (1~6) */
+  assignedCounterArea: string;
+
+  /** 指派櫃台編號 */
+  assignedCounterBooth: string;
+
+  /** 操作人員 */
+  assignedBy: string;
+
+  /** 狀態：APPROVE / REJECT */
+  status: string;
+}
+
+
+export interface CounterSeason {
+  /** 季別代碼 */
+  season: string;
+
+  /** 季開始時間 */
+  startDate: string;
+
+  /** 季結束時間 */
+  endDate: string;
+}

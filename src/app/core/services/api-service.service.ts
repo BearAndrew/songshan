@@ -49,11 +49,13 @@ import {
   HistoricStandbyListItem,
 } from '../../models/historic-standby-list.model';
 import {
+  CounterAdminApprovalRequest,
   CounterApplicationManualRequest,
   CounterApplyEditRequest,
   CounterGetAllRequest,
   CounterInfo,
   CounterInfoRaw,
+  CounterSeason,
 } from '../../models/counter.model';
 
 @Injectable({
@@ -419,7 +421,16 @@ export class ApiService {
 
   /** 修改手動申請/核准前後資料 */
   applyEdit(payload: CounterApplyEditRequest): Observable<void> {
-    return this.http.post<void>('/api/Counter/ApplyEdit', payload);
+    return this.http.post<void>('/Counter/ApplyEdit', payload);
   }
 
+  /** 櫃檯申請－管理者核準 */
+  adminApproval(payload: CounterAdminApprovalRequest): Observable<void> {
+    return this.http.post<void>('/Counter/AdminApproval', payload);
+  }
+
+  /** 取得各季時間 */
+  getSeasons(): Observable<CounterSeason[]> {
+    return this.http.get<CounterSeason[]>('/Counter/GetSeasons');
+  }
 }

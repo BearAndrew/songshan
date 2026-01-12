@@ -18,6 +18,7 @@ import {
   CounterApplyEditRequest,
   CounterGetAllRequest,
   CounterInfo,
+  CounterSeason,
   statusMap,
 } from '../../../models/counter.model';
 import { ActivatedRoute } from '@angular/router';
@@ -37,6 +38,7 @@ interface ScheduleItem {
     FormsModule,
     ReactiveFormsModule,
     CalendarTriggerComponent,
+    DropdownSecondaryComponent,
   ],
   templateUrl: './intl-checkin-counter-user.component.html',
   styleUrl: './intl-checkin-counter-user.component.scss',
@@ -66,20 +68,7 @@ export class IntlCheckinCounterUserComponent {
     applyDateEnd: null,
   };
 
-  get islandList(): FormArray {
-    return this.form.get('islands') as FormArray;
-  }
-  islandOptions: Option[] = [
-    { label: '1', value: '1' },
-    { label: '2', value: '2' },
-    { label: '3', value: '3' },
-    { label: '4', value: '4' },
-    { label: '5', value: '5' },
-    { label: '6', value: '6' },
-    { label: '7', value: '7' },
-    { label: '8', value: '8' },
-    { label: '9', value: '9' },
-  ];
+  seasonOptions: Option[] = [];
 
   isEdit: boolean = false;
 
@@ -95,9 +84,11 @@ export class IntlCheckinCounterUserComponent {
     { key: 'sat', label: '六' },
     { key: 'sun', label: '日' },
   ];
+  seasonList: CounterSeason[] = [];
 
   dateFrom: string = '';
   dateTo: string = '';
+  season: string = '';
   requestId: string = '';
 
   constructor(
@@ -115,7 +106,7 @@ export class IntlCheckinCounterUserComponent {
       departureTime: [''],
       applyTimeStart: [''],
       applyTimeEnd: [''],
-      seasonType: [''],
+      seasonType: ['all'],
       applyDateStart: [''],
       applyDateEnd: [''],
       weekDays: this.fb.group({
@@ -148,6 +139,7 @@ export class IntlCheckinCounterUserComponent {
       };
 
       this.requestId = applyRequest.requestId;
+      this.season = applyRequest.season;
 
       // 轉換成表單需要的格式
       const flightInfo = applyRequest.airlineIata + applyRequest.flightNo;
@@ -211,11 +203,19 @@ export class IntlCheckinCounterUserComponent {
       });
     });
 
-    this.form.valueChanges.subscribe((value) => {
-      console.trace();
-    });
-
     this.getAllCounter();
+    this.getSeasons();
+  }
+
+  getSeasons() {
+    this.apiService.getSeasons().subscribe((res) => {
+      console.log(res);
+      this.seasonList = res;
+      this.seasonOptions = res.map((item) => {
+        return { label: item.season, value: item.season };
+      });
+      this.season = res[0].season;
+    });
   }
 
   /** 取得全部櫃檯資料（當周） */
@@ -251,25 +251,6 @@ export class IntlCheckinCounterUserComponent {
     });
   }
 
-  // private buildWeeks(data: ScheduleItem[]): ScheduleItem[][][] {
-  //   const weekMap = new Map<string, ScheduleItem[][]>();
-  //   for (const item of data) {
-  //     const date = new Date(item.date);
-  //     const monday = this.getMonday(date).toISOString().slice(0, 10);
-
-  //     if (!weekMap.has(monday)) {
-  //       weekMap.set(
-  //         monday,
-  //         Array.from({ length: 7 }, () => [])
-  //       );
-  //     }
-
-  //     const dayIndex = (date.getDay() + 6) % 7; // Mon=0
-  //     weekMap.get(monday)![dayIndex].push(item);
-  //   }
-
-  //   return Array.from(weekMap.values());
-  // }
   private buildWeeks(data: CounterInfo[]): ScheduleItem[][][] {
     const weekMap = new Map<number, ScheduleItem[][]>();
     const weekIndex = 0;
@@ -387,23 +368,15 @@ export class IntlCheckinCounterUserComponent {
     return `${y}${spliter}${m}${spliter}${d}`;
   }
 
-  /** ===== 申請內容 ===== */
-  // setSeasonType(type: 'all' | 'other') {
-  //   this.form.get('seasonType')?.setValue(type);
-  // }
-
-  // addIsland() {
-  //   this.islandList.push(this.fb.control(''));
-  // }
-
-  // reomveIsland(index: number) {
-  //   if (this.islandList.length <= 1) return;
-  //   this.islandList.removeAt(index);
-  // }
-
-  // updateIsland(index: number, value: string) {
-  //   this.islandList.at(index).setValue(value);
-  // }
+  /** season下拉選單 */
+  onSeasonChange(event: Option) {
+    const item = this.seasonList.find((item) => item.season == event.value);
+    const start = this.parseTwDateTime(item?.startDate);
+    const end = this.parseTwDateTime(item?.endDate);
+    this.onDateChange('start', start);
+    this.onDateChange('end', end);
+    this.season = event.value;
+  }
 
   /** 日期更改 */
   onDateChange(type: 'start' | 'end', event: Date) {
@@ -428,6 +401,34 @@ export class IntlCheckinCounterUserComponent {
     }
     // 格式不正確就回原值
     return input;
+  }
+
+  parseTwDateTime(value: string | undefined): Date {
+    if (!value) return new Date();
+
+    // ex: 2026/3/29 上午 12:00:00
+    const match = value.match(
+      /^(\d{4})\/(\d{1,2})\/(\d{1,2})\s(上午|下午)\s(\d{1,2}):(\d{2}):(\d{2})$/
+    );
+
+    if (!match) return new Date();
+
+    let [, year, month, day, ampm, hour, minute, second] = match;
+
+    let h = Number(hour);
+
+    // 上午 / 下午 處理
+    if (ampm === '下午' && h < 12) h += 12;
+    if (ampm === '上午' && h === 12) h = 0;
+
+    return new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      h,
+      Number(minute),
+      Number(second)
+    );
   }
 
   onCreate() {
@@ -462,7 +463,7 @@ export class IntlCheckinCounterUserComponent {
       agent: '',
       airline_iata: airline_iata || '', // 對應 flightInfo
       flight_no: flight_no || '', // 也可以拆成航班號和航空公司
-      season: '',
+      season: this.season,
       day_of_week: day_of_week,
       apply_for_period: '',
       startDate: this.dateFrom || '',
@@ -507,7 +508,7 @@ export class IntlCheckinCounterUserComponent {
       requestId: this.requestId,
       airlineIata: airline_iata || '', // 對應 flightInfo
       flightNo: flight_no || '', // 也可以拆成航班號和航空公司
-      season: '',
+      season: this.season,
       dayOfWeek: day_of_week,
       apply_for_period: '',
       startDate: this.dateFrom || '',

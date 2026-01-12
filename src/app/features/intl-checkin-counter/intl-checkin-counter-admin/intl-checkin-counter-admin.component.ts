@@ -5,17 +5,20 @@ import { Option } from '../../../shared/components/dropdown/dropdown.component';
 import {
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ApiService } from '../../../core/services/api-service.service';
 import {
+  CounterAdminApprovalRequest,
+  CounterApplyEditRequest,
   CounterGetAllRequest,
   CounterInfo,
   statusMap,
 } from '../../../models/counter.model';
-import { ɵEmptyOutletComponent } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 interface SeasonCounterItem {
   checked: boolean; // 是否被選取
@@ -52,7 +55,6 @@ export interface InfoCard {
     FormsModule,
     ReactiveFormsModule,
     DropdownSecondaryComponent,
-    ɵEmptyOutletComponent,
   ],
   templateUrl: './intl-checkin-counter-admin.component.html',
   styleUrl: './intl-checkin-counter-admin.component.scss',
@@ -60,105 +62,7 @@ export interface InfoCard {
 export class IntlCheckinCounterAdminComponent {
   ganttRows = [1, 2, 3, 4, 5, 6];
   ganttDays: GanttDay[] = [];
-  // [
-  //   {
-  //     date: '2025/01/01',
-  //     items: [
-  //       { row: 1, data: { flightNo: 'BR722', time: '14:00-17:00' } },
-  //       { row: 3, data: { flightNo: 'CI101', time: '09:00-11:30' } },
-  //     ],
-  //   },
-  //   {
-  //     date: '2025/01/02',
-  //     items: [
-  //       { row: 2, data: { flightNo: 'BR801', time: '08:00-10:00' } },
-  //       { row: 4, data: { flightNo: 'CI234', time: '15:00-18:00' } },
-  //     ],
-  //   },
-  //   {
-  //     date: '2025/01/03',
-  //     items: [{ row: 1, data: { flightNo: 'BR722', time: '14:00-17:00' } }],
-  //   },
-  //   {
-  //     date: '2025/01/04',
-  //     items: [
-  //       { row: 5, data: { flightNo: 'JL812', time: '07:30-11:00' } },
-  //       { row: 6, data: { flightNo: 'BR655', time: '18:00-20:30' } },
-  //     ],
-  //   },
-  //   {
-  //     date: '2025/01/05',
-  //     items: [{ row: 2, data: { flightNo: 'CI789', time: '10:00-13:00' } }],
-  //   },
-  //   {
-  //     date: '2025/01/06',
-  //     items: [
-  //       { row: 1, data: { flightNo: 'BR722', time: '14:00-17:00' } },
-  //       { row: 4, data: { flightNo: 'KE691', time: '06:00-08:40' } },
-  //     ],
-  //   },
-  //   {
-  //     date: '2025/01/07',
-  //     items: [{ row: 3, data: { flightNo: 'CI101', time: '09:00-11:30' } }],
-  //   },
-  //   {
-  //     date: '2025/01/08',
-  //     items: [
-  //       { row: 2, data: { flightNo: 'BR801', time: '08:00-10:00' } },
-  //       { row: 6, data: { flightNo: 'JL812', time: '16:00-19:30' } },
-  //     ],
-  //   },
-  //   {
-  //     date: '2025/01/09',
-  //     items: [{ row: 4, data: { flightNo: 'CI234', time: '15:00-18:00' } }],
-  //   },
-  //   {
-  //     date: '2025/01/10',
-  //     items: [
-  //       { row: 1, data: { flightNo: 'BR722', time: '14:00-17:00' } },
-  //       { row: 5, data: { flightNo: 'KE691', time: '06:00-08:40' } },
-  //     ],
-  //   },
-  // ];
-
-  infoCardList = [
-    {
-      flightNo: 'BR192',
-      time: '14:00-17:00',
-      date: '整季(2025/01/01 - 2025/02/03)',
-      status: '申請中',
-    },
-    {
-      flightNo: 'BR192',
-      time: '14:00-17:00',
-      date: '整季(2025/01/01 - 2025/02/03)',
-      status: '申請中',
-    },
-    {
-      flightNo: 'BR192',
-      time: '14:00-17:00',
-      date: '整季(2025/01/01 - 2025/02/03)',
-      status: '申請中',
-    },
-    {
-      flightNo: 'BR192',
-      time: '14:00-17:00',
-      date: '整季(2025/01/01 - 2025/02/03)',
-      status: '申請中',
-    },
-    {
-      flightNo: 'BR192',
-      time: '14:00-17:00',
-      date: '整季(2025/01/01 - 2025/02/03)',
-      status: '申請中',
-    },
-    {
-      flightNo: 'BR192',
-      time: '14:00-17:00',
-      date: '整季(2025/01/01 - 2025/02/03)',
-      status: '申請中',
-    },
-  ];
+  infoCardList: InfoCard[] = [];
 
   /** 申請內容 */
   form!: FormGroup;
@@ -170,6 +74,8 @@ export class IntlCheckinCounterAdminComponent {
     applyDateInterval: '',
     rejectReason: '',
   };
+
+  requestId: string = '';
 
   islandOptions: Option[] = [
     { label: '1', value: '1' },
@@ -183,23 +89,48 @@ export class IntlCheckinCounterAdminComponent {
     { label: '9', value: '9' },
   ];
 
-  get seasonCountersFA(): FormArray {
-    return this.form.get('seasonCounters') as FormArray;
-  }
+  season: string = '';
 
-  constructor(private fb: FormBuilder, private apiService: ApiService) {}
+  getWeekControl(key: string): FormControl {
+    return this.form.get('weekDays.' + key) as FormControl;
+  }
+  weekList = [
+    { key: 'mon', label: '一' },
+    { key: 'tue', label: '二' },
+    { key: 'wed', label: '三' },
+    { key: 'thu', label: '四' },
+    { key: 'fri', label: '五' },
+    { key: 'sat', label: '六' },
+    { key: 'sun', label: '日' },
+  ];
+
+  constructor(
+    private fb: FormBuilder,
+    private apiService: ApiService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     /** 申請內容 */
     this.form = this.fb.group({
       flightInfo: [''],
       departureTime: [''],
-      islands: this.fb.array([]),
+      assignedCounterArea: [''],
+      assignedCounterBooth: [''],
       seasonType: [''],
-      applyTimeInterval: [''],
+      startTime: [''],
+      endTime: [''],
       applyDateInterval: [''],
-      rejectReason: [''],
-      seasonCounters: this.fb.array([]),
+      reason: [''],
+      weekDays: this.fb.group({
+        mon: [false],
+        tue: [false],
+        wed: [false],
+        thu: [false],
+        fri: [false],
+        sat: [false],
+        sun: [false],
+      }),
     });
 
     this.form.valueChanges.subscribe((value) => {
@@ -213,23 +144,84 @@ export class IntlCheckinCounterAdminComponent {
       };
     });
 
-    // 至少加入一筆
-    for (let i = 0; i < 1; i++) {
-      this.seasonCountersFA.push(
-        this.fb.group({
-          checked: [false],
-          islandNo: [''],
-          counterFrom: [''],
-          counterTo: [''],
-        })
-      );
-    }
+    this.route.queryParamMap.subscribe((params) => {
+      // 取得其他參數
+      const applyRequest: CounterApplyEditRequest = {
+        requestId: params.get('requestId') || '',
+        airlineIata: params.get('airlineIata') || '',
+        flightNo: params.get('flightNo') || '',
+        season: params.get('season') || '',
+        apply_for_period: params.get('apply_for_period') || '',
+        startDate: params.get('startDate') || '',
+        endDate: params.get('endDate') || '',
+        dayOfWeek: params.get('dayOfWeek') || '',
+        startTime: params.get('startTime') || '',
+        endTime: params.get('endTime') || '',
+      };
+
+      this.requestId = applyRequest.requestId;
+
+      // 轉換成表單需要的格式
+      const flightInfo = applyRequest.airlineIata + applyRequest.flightNo;
+      const departureTime = '';
+      const startTime = applyRequest.startTime.slice(0, -3) || '';
+      const endTime = applyRequest.endTime.slice(0, -3) || '';
+      this.season = applyRequest.season;
+
+      // weekDays
+      const weekDaysMap = {
+        mon: false,
+        tue: false,
+        wed: false,
+        thu: false,
+        fri: false,
+        sat: false,
+        sun: false,
+      };
+      if (applyRequest.dayOfWeek) {
+        applyRequest.dayOfWeek.split(',').forEach((d) => {
+          switch (d) {
+            case '1':
+              weekDaysMap.mon = true;
+              break;
+            case '2':
+              weekDaysMap.tue = true;
+              break;
+            case '3':
+              weekDaysMap.wed = true;
+              break;
+            case '4':
+              weekDaysMap.thu = true;
+              break;
+            case '5':
+              weekDaysMap.fri = true;
+              break;
+            case '6':
+              weekDaysMap.sat = true;
+              break;
+            case '7':
+              weekDaysMap.sun = true;
+              break;
+          }
+        });
+      }
+
+      // patch 表單
+      this.form.patchValue({
+        flightInfo,
+        departureTime,
+        startTime,
+        endTime,
+        applyTimeInterval: applyRequest.apply_for_period,
+        weekDays: weekDaysMap,
+      });
+    });
 
     this.getAllCounter();
   }
 
   /** 取得全部櫃檯資料（當周） */
-  getAllCounter() {
+  private getAllCounter() {
     const today = new Date();
 
     // 起始：今天
@@ -258,10 +250,11 @@ export class IntlCheckinCounterAdminComponent {
       console.log(res);
       this.ganttDays = this.mapCounterToGantt(res, dateFrom, dateTo);
       this.infoCardList = this.mapCounterToInfoCards(res, dateFrom, dateTo);
+      console.log(this.ganttDays)
     });
   }
 
-  mapCounterToInfoCards(
+  private mapCounterToInfoCards(
     data: CounterInfo[],
     dateFrom: string,
     dateTo: string
@@ -302,7 +295,7 @@ export class IntlCheckinCounterAdminComponent {
       /** row 來源：assignedCounterArea */
       const row = Number(item.assignedCounterArea);
 
-      // ❗ 條件：必須是 1~6 的數字
+      // 條件：必須是 1~6 的數字
       if (!row || isNaN(row) || row < 1 || row > 6) {
         return; // 直接忽略這筆
       }
@@ -330,7 +323,7 @@ export class IntlCheckinCounterAdminComponent {
         }
 
         ganttMap.get(dateKey)!.items.push({
-          row, // ✅ 對應 assignedCounterArea
+          row, //  對應 assignedCounterArea
           data: {
             flightNo: `${item.airlineIata}${item.flightNo}`,
             time: `${item.startTime?.slice(0, 5)}-${item.endTime?.slice(0, 5)}`,
@@ -343,6 +336,81 @@ export class IntlCheckinCounterAdminComponent {
     return Array.from(ganttMap.values()).sort((a, b) =>
       a.date.localeCompare(b.date)
     );
+  }
+
+  /** 核准或駁回 */
+  onApproval(isApprove: boolean) {
+    const payload: CounterAdminApprovalRequest = {
+      requestId: this.requestId,
+      reason: this.form.value.reason,
+      assignedCounterArea: this.form.value.assignedCounterArea,
+      assignedCounterBooth: this.form.value.assignedCounterBooth,
+      assignedBy: '',
+      status: isApprove ? 'APPROVE' : 'REJECT',
+    };
+
+    this.apiService.adminApproval(payload).subscribe({
+      next: () => console.log('核准成功'),
+      error: (err) => console.error('核准失敗', err),
+    });
+  }
+
+  /** 修改 */
+  onModify() {
+    const week = this.form.value.weekDays; // { mon: true, tue: false ... }
+    const dayMap: Record<string, number> = {
+      mon: 1,
+      tue: 2,
+      wed: 3,
+      thu: 4,
+      fri: 5,
+      sat: 6,
+      sun: 0, // Sunday = 0
+    };
+
+    const selectedDays = Object.entries(week)
+      .filter(([key, value]) => value)
+      .map(([key]) => dayMap[key]);
+
+    const day_of_week = selectedDays.join(',');
+
+    let airline_iata = '';
+    let flight_no = '';
+    const flightInfo = this.form.value.flightInfo || '';
+    const match = flightInfo.match(/^([A-Z]+)(\d+)$/i);
+    if (match) {
+      airline_iata = match[1].toUpperCase(); // 前面字母
+      flight_no = match[2]; // 後面數字
+    }
+
+    const payload: CounterApplyEditRequest = {
+      requestId: this.requestId,
+      airlineIata: airline_iata || '',
+      flightNo: flight_no || '',
+      season: this.season,
+      dayOfWeek: day_of_week,
+      apply_for_period: this.form.value.applyDateInterval,
+      startDate: '',
+      endDate: '',
+      startTime: this.formatTime(this.form.value.startTime),
+      endTime: this.formatTime(this.form.value.endTime),
+    };
+
+    this.apiService.applyEdit(payload).subscribe({
+      next: () => console.log('修改成功'),
+      error: (err) => console.error('修改失敗', err),
+    });
+  }
+
+  formatTime(input: string | null | undefined): string {
+    if (!input) return ''; // 沒輸入
+    // 檢查格式是否為 HH:mm 或 H:mm
+    const match = input.match(/^([0-1]?\d|2[0-3]):([0-5]\d)$/);
+    if (match) {
+      return input + ':00'; // 正確格式，加秒
+    }
+    // 格式不正確就回原值
+    return input;
   }
 
   /** ===== 申請內容 ===== */
