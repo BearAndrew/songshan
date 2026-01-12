@@ -24,12 +24,12 @@
           <div class="p-1 pt-8 border-r-2 last:border-r-0 even:bg-[#eef2f8]">
             @for (item of dayItems; track $index) {
             <div
-              class="flex flex-col items-center gap-1 mb-2 rounded-xl bg-white p-2 pt-4 text-sm border-3 border-[#aba196]"
+              class="flex flex-col items-center gap-1 mb-2 rounded-xl bg-white p-1 sm:p-2 pt-2 sm:pt-4 text-sm border-3 border-[#aba196]"
             >
               <div class="text-2xl text-[#008540] font-semibold leading-none">
                 {{ item.flightNo }}
               </div>
-              <div class="text-md font-semibold text-black text-center">
+              <div class="text-sm sm:text-md font-semibold text-black text-center">
                 {{ item.time }}
               </div>
               <div

@@ -315,10 +315,7 @@ export class IntlCheckinCounterUserComponent {
       }
     }
 
-    const a = Array.from(weekMap.values());
-    console.log('===================');
-    console.log(this.form.value);
-    return a;
+    return Array.from(weekMap.values());
   }
 
   private getMonday(date: Date): Date {
