@@ -21,7 +21,7 @@ export class TaxiService {
     this.createTaxiSubject.next(payload);
   }
 
-  // 建立 Subject
+  // 查詢 Subject
   private searchTaxiSubject = new Subject<SearchTaxiData>();
   searchTaxi$ = this.searchTaxiSubject.asObservable();
   // 發送查詢計程車事件
@@ -35,6 +35,14 @@ export class TaxiService {
   // 查詢類型
   afterReadType(readType: string) {
     this.readTypeSubject.next(readType);
+  }
+
+  // 更新 Subject
+  private updateSubject = new Subject<TaxiInfo>();
+  update$ = this.updateSubject.asObservable();
+  // 更新
+  setUpdate(updateData: TaxiInfo) {
+    this.updateSubject.next(updateData);
   }
 
   // 黑灰名單 Subject

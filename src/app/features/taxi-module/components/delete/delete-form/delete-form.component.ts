@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ApiService } from '../../../../../core/services/api-service.service';
 import { TaxiService } from '../../../service/taxi.service';
 import { SearchTaxiData } from '../../../service/taxi.interface';
@@ -14,6 +20,7 @@ import { fakeData } from './fake-data';
 export class DeleteFormComponent {
   form!: FormGroup;
   searchRegPlate: string = '';
+  searchSuccess: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +55,12 @@ export class DeleteFormComponent {
           ...item,
         })),
       };
-      this.form.controls['driverNo'].setValue(searchTaxiData.taxiInfoList[0].driverNo);
+      if (res.length == 1) {
+        this.searchSuccess = true;
+        this.form.controls['driverNo'].setValue(
+          searchTaxiData.taxiInfoList[0].driverNo
+        );
+      }
       this.taxiService.afterSearchTaxi(searchTaxiData);
     });
   }

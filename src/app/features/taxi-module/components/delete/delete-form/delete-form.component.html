@@ -30,7 +30,7 @@
     />
   </form>
 
-  @if(searchRegPlate !== '') {
+  @if(searchSuccess) {
   <button
     class="text-sm sm:text-2xl px-12 py-2 h-fit bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
     (click)="onDelete()"

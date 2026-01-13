@@ -55,12 +55,13 @@
       formControlName="remark"
     />
 
-    @if(modifyContentOption.value == '1') {
+    @if(modifyContentOption.value != '0') {
     <!-- 停權期間（起） -->
     <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
       停權期間
     </label>
     <app-calendar-trigger
+      [selectedDate]="dateStart"
       [isAllDay]="true"
       [placeholder]="'-- -- --'"
       [title]="'日期(起)'"
@@ -71,6 +72,7 @@
 
     <!-- 停權期間（迄） -->
     <app-calendar-trigger
+      [selectedDate]="dateEnd"
       [isAllDay]="true"
       [placeholder]="'-- -- --'"
       [title]="'日期(迄)'"

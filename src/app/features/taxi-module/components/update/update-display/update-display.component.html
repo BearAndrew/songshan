@@ -1,6 +1,14 @@
 <div class="flex items-center justify-center w-full h-full min-h-[300px]">
   <ng-container
-    [ngTemplateOutlet]="!hasSearch ? init : taxiInfo ? data : noCar"
+    [ngTemplateOutlet]="
+      !hasSearch
+        ? init
+        : taxiInfoList.length == 0
+        ? noCar
+        : taxiInfoList.length == 1
+        ? data
+        : duplicate
+    "
   ></ng-container>
 </div>
 
@@ -33,7 +41,7 @@
 
 <ng-template #data>
   <!-- 資料呈現 -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 w-full">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 w-full h-full">
     <div class="flex flex-col gap-y-4">
       <div class="flex border-b-3 border-[#a9a9a9]">
         <span
@@ -51,7 +59,7 @@
           <input
             type="text"
             class="w-full bg-[#193652] rounded px-2 py-1"
-            [value]="taxiInfo.regPlate"
+            [value]="taxiInfoList[0].regPlate"
             disabled
           />
         </div>
@@ -62,39 +70,39 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="taxiInfo.driverNo"
+          [value]="taxiInfoList[0].driverNo"
           disabled
         />
 
-        <!-- <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-          >修改內容</label
-        >
-        <input
-          type="text"
-          class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="taxiInfo.modifyContent?.label"
-          disabled
-        /> -->
-
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-          >修改原因</label
+          >狀態</label
         >
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="taxiInfo.remark"
+          [value]="getViolationLabel(taxiInfoList[0].status)"
           disabled
         />
 
         <!-- 黑名單顯示 -->
-        @if(taxiInfo.status == 'BLACKLIST' || taxiInfo.status == 'GREYLIST') {
+        @if(taxiInfoList[0].status?.includes('BLACKLIST') ||
+        taxiInfoList[0].status?.includes('GREYLIST')) {
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
           >停權期間</label
         >
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="taxiInfo.suspensionPeriod"
+          [value]="taxiInfoList[0]['startDate']"
+          disabled
+        />
+        <label
+          class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+        ></label>
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          [value]="taxiInfoList[0]['endDate']"
           disabled
         />
         }
@@ -118,7 +126,7 @@
           <input
             type="text"
             class="w-full bg-[#193652] rounded px-2 py-1"
-            [value]="taxiInfo.regPlate"
+            [value]="afterTaxiInfo.regPlate"
             disabled
           />
         </div>
@@ -129,31 +137,79 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="taxiInfo.driverNo"
+          [value]="afterTaxiInfo.driverNo"
           disabled
         />
 
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-          >修改內容</label
+          >狀態</label
         >
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="taxiInfo.modifyContent?.label"
+          [value]="getViolationLabel(afterTaxiInfo.status)"
           disabled
         />
 
-
+        @if(afterTaxiInfo.status?.includes('BLACKLIST') ||
+        afterTaxiInfo.status?.includes('GREYLIST')) {
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-          >修改原因</label
+          >停權期間</label
         >
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="taxiInfo.remark"
+          [value]="afterTaxiInfo['startDate']"
           disabled
         />
+        <label
+          class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+        ></label>
+        <input
+          type="text"
+          class="w-full bg-[#193652] rounded px-2 py-1"
+          [value]="afterTaxiInfo['endDate']"
+          disabled
+        />
+        }
       </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #duplicate>
+  <div class="flex flex-col w-full h-0 min-h-[200px] sm:min-h-[300px]">
+    <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">
+      提示:查詢到多筆相似車號資料
+    </h2>
+
+    <!-- 填滿剩餘高度，滾動 -->
+    <div
+      class="flex-1 overflow-y-auto mt-4 border border-white text-md sm:text-2xl"
+    >
+      @for (item of taxiInfoList; track item) {
+      <!-- item 高度固定 -->
+      <div class="border-b mx-8 p-2 h-1/2">
+        <div class="grid grid-cols-2 gap-x-6 gap-y-1 h-full">
+          <div class="flex gap-8 items-center">
+            <span class="text-[#05aeed]">車號</span>
+            <span>{{ item.regPlate }}</span>
+          </div>
+          <div class="flex gap-8 items-center">
+            <span class="text-[#05aeed]">姓名</span>
+            <span>{{ item.driverName }}</span>
+          </div>
+          <div class="flex gap-8 items-center">
+            <span class="text-[#05aeed]">編號</span>
+            <span>{{ item.driverNo }}</span>
+          </div>
+          <div class="flex gap-8 items-center">
+            <span class="text-[#05aeed]">手機</span>
+            <span>{{ item.driverPhone }}</span>
+          </div>
+        </div>
+      </div>
+      }
     </div>
   </div>
 </ng-template>

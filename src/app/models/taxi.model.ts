@@ -7,7 +7,8 @@ export interface TaxiInfo {
   driverName: string;   // 駕駛姓名
   driverPhone: string;  // 聯絡電話
   remark: string;       // 備註
-  status: string;       // 狀態 // e.g. 'BLACKLIST' | 'GREYLIST' | ''
+  status: string | null;       // 狀態 // e.g. 'BLACKLIST' | 'GREYLIST' | ''
+  [key: string]: any;
 }
 
 

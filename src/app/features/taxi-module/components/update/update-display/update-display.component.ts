@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TaxiService } from '../../../service/taxi.service';
-import { SearchTaxiInfo } from '../../../service/taxi.interface';
+import { TaxiInfo } from '../../../../../models/taxi.model';
 
 @Component({
   selector: 'app-update-display',
@@ -12,13 +12,29 @@ import { SearchTaxiInfo } from '../../../service/taxi.interface';
 export class UpdateDisplayComponent {
   hasSearch: boolean = false;
   searchRegPlate: string = '';
-  taxiInfo!: SearchTaxiInfo;
+  taxiInfoList!: TaxiInfo[];
+  afterTaxiInfo!: TaxiInfo;
 
   constructor(private taxiService: TaxiService) {
     this.taxiService.searchTaxi$.subscribe((res) => {
       this.hasSearch = true;
       this.searchRegPlate = res.searchRegPlate;
-      this.taxiInfo = res.taxiInfoList[0];
+      this.taxiInfoList = res.taxiInfoList;
     });
+
+    this.taxiService.update$.subscribe((res) => {
+      this.afterTaxiInfo = res;
+    });
+  }
+
+  getViolationLabel(status: string | null): string {
+    if (status == null) return '';
+
+    const map = [
+      { key: 'BLACKLIST', label: '黑名單' },
+      { key: 'GREYLIST', label: '灰名單' },
+    ];
+
+    return map.find((m) => status.includes(m.key))?.label ?? '無違規';
   }
 }

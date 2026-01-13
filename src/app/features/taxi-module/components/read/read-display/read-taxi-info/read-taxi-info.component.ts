@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TaxiService } from '../../../../service/taxi.service';
-import { SearchTaxiInfo } from '../../../../service/taxi.interface';
+import { TaxiInfo } from '../../../../../../models/taxi.model';
 
 @Component({
   selector: 'app-read-taxi-info',
@@ -49,7 +49,7 @@ export class ReadTaxiInfoComponent {
   ];
 
   hasSearch: boolean = false;
-  taxiInfoList!: SearchTaxiInfo[];
+  taxiInfoList!: TaxiInfo[];
 
   constructor(private taxiService: TaxiService) {
     this.taxiService.searchTaxi$.subscribe((res) => {
