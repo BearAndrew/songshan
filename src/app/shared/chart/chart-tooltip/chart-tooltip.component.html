@@ -1,0 +1,33 @@
+<div
+  class="bg-black/80 text-white rounded-lg px-4 py-3 shadow-lg min-w-[180px] pointer-events-none"
+>
+  <!-- 標題（可選，如果你之後想加 key / 月份） -->
+  <!--
+  <div class="text-sm font-semibold mb-2 text-gray-200">
+    {{ title }}
+  </div>
+  -->
+
+  <!-- 資料列 -->
+  <div class="flex flex-col gap-1">
+    @for (item of items; track $index) {
+    <div class="flex items-center gap-2 text-sm">
+      <!-- 顏色圓點 -->
+      <span
+        class="w-2.5 h-2.5 rounded-full shrink-0"
+        [ngStyle]="{ backgroundColor: item.color }"
+      ></span>
+
+      <!-- Label -->
+      <span class="flex-1 text-gray-200 truncate">
+        {{ item.label }}
+      </span>
+
+      <!-- Value -->
+      <span class="font-semibold text-white">
+        {{ item.value }}
+      </span>
+    </div>
+    }
+  </div>
+</div>
