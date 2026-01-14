@@ -60,3 +60,21 @@ export interface TaxiStatusInfo {
   /** 次數 */
   count: number;
 }
+
+
+export interface TaxiStat {
+  taxiWaiting: number;
+
+  currentPeopleCount_Intl: number;
+  currentPeopleCount_Domestic: number;
+
+  estWaitingTime_Intl: number;
+  estWaitingTime_Domestic: number;
+
+  served_Intl: number;
+  served_Domestic: number;
+
+  avgTaxiPerHour: number;
+  avgWaitTaxi: number;
+  avgWaitPax: number;
+}

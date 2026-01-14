@@ -31,6 +31,7 @@ export class DropdownComponent {
   @Input() placeholder = ' ';
   @Input() showIcon: boolean = false;
   @Input() disabeld: boolean = false;
+  @Input() disabeldOptions: any[] = [];
   @Output() selectionChange = new EventEmitter<Option>();
 
   @ViewChild('dropdownTrigger') trigger!: ElementRef;
@@ -101,6 +102,9 @@ export class DropdownComponent {
   }
 
   select(item: { label: string; value: any }) {
+    if (this.disabeldOptions.includes(item.value)) {
+      return;
+    }
     this.value = item.value;
     this.selectedLabel = item.label;
     this.selectionChange.emit(item);

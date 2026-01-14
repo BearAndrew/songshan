@@ -362,10 +362,10 @@ export class ApiService {
     return this.http.post<TaxiViolation>('TaxiViolation', payload);
   }
 
-  /** 即時車流 */
-  // getTaxiStat(): Observable<TaxiStat> {
-  //   return this.http.get<TaxiStat>('Taxi/Stat');
-  // }
+  /** 即時車流統計 */
+  getTaxiStat(): Observable<TaxiStat> {
+    return this.http.get<TaxiStat>('/Taxi/Stat');
+  }
 
   /** 最常出現6台車 */
   getTop6Taxi(

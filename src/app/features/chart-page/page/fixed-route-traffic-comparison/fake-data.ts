@@ -148,17 +148,17 @@ export const fakeData = [
         },
         {
           "label": "2026/2",
-          "numOfFlight": 0,
+          "numOfFlight": 2320,
           "numOfPax": 0
         },
         {
           "label": "2026/3",
-          "numOfFlight": 0,
+          "numOfFlight": 1230,
           "numOfPax": 0
         },
         {
           "label": "2026/4",
-          "numOfFlight": 0,
+          "numOfFlight": 3330,
           "numOfPax": 0
         },
         {

@@ -38,6 +38,7 @@
           class="w-30"
           [options]="yearOptions"
           [value]="formData.firstYear"
+          [disabeldOptions]="[formData.secondYear, formData.thirdYear]"
           (selectionChange)="onSelectionChange('firstYear', $event)"
         ></app-dropdown>
         <span>年</span>
@@ -48,6 +49,7 @@
           [options]="yearOptions"
           [value]="formData.secondYear"
           [disabeld]="formData.firstYear == null"
+          [disabeldOptions]="[formData.firstYear, formData.thirdYear]"
           (selectionChange)="onSelectionChange('secondYear', $event)"
         ></app-dropdown>
         <span>年</span>
@@ -58,6 +60,7 @@
           [options]="yearOptions"
           [value]="formData.thirdYear"
           [disabeld]="formData.secondYear == null"
+          [disabeldOptions]="[formData.secondYear, formData.firstYear]"
           (selectionChange)="onSelectionChange('thirdYear', $event)"
         ></app-dropdown>
         <span>年</span>

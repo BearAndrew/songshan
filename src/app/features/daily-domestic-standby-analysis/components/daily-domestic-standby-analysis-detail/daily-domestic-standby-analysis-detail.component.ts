@@ -51,9 +51,9 @@ export class DailyDomesticStandbyAnalysisDetailComponent {
   ];
 
   constructor(private apiService: ApiService, private route: ActivatedRoute) {
-    const mockData: StandbyListItem[] = this.mockStandbyList;
-    this.setTableData(mockData);
-    return;
+    // const mockData: StandbyListItem[] = this.mockStandbyList;
+    // this.setTableData(mockData);
+    // return;
     // 直接訂閱 queryParams
     this.route.queryParams.subscribe((params) => {
       const iata = params['iata']; // 從 URL ?iata=XXX 取得

@@ -10,6 +10,7 @@ import { UpdateDisplayComponent } from "./components/update/update-display/updat
 import { DeleteDisplayComponent } from "./components/delete/delete-display/delete-display.component";
 import { ReadDisplayComponent } from "./components/read/read-display/read-display.component";
 import { ApiService } from '../../core/services/api-service.service';
+import { TaxiStat } from '../../models/taxi.model';
 
 export type TabType = 'create' | 'read' | 'update' | 'delete';
 
@@ -21,11 +22,14 @@ export type TabType = 'create' | 'read' | 'update' | 'delete';
 })
 export class TaxiModuleComponent {
   activeTab: TabType = 'create';
+  taxiStat?: TaxiStat;
 
   constructor(private apiService: ApiService, private taxiService: TaxiService) {}
 
   ngOnInit(): void {
-
+    this.apiService.getTaxiStat().subscribe(res=> {
+      this.taxiStat = res;
+    });
   }
 
   setTab(tab: TabType): void {

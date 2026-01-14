@@ -18,6 +18,7 @@ import {
   FlightTrafficType,
   FlightDirection,
 } from '../../../../models/flight-traffic-analysis.model';
+import { extractAfterSlash } from '../../../../core/utils/extract-slash';
 
 @Component({
   selector: 'app-traffic-comparison',
@@ -282,16 +283,32 @@ export class TrafficComparisonComponent {
     return result;
   }
 
+
   private handleFlightTrafficAnalysis(res: YearlyTrafficAnalysisResponse[]) {
     console.log('處理資料', res);
 
-    const firstYear = res[0]?.data;
-    const secondYear = res[1]?.data;
-    const thirdYear = res[2]?.data;
+    const firstYear = res.find(
+      (item) => item.year === this.formData.firstYear?.toString()
+    )?.data;
+
+    const secondYear = res.find(
+      (item) => item.year === this.formData.secondYear?.toString()
+    )?.data;
+
+    const thirdYear = res.find(
+      (item) => item.year === this.formData.thirdYear?.toString()
+    )?.data;
 
     const firstStat = Array.isArray(firstYear?.stat) ? firstYear.stat : [];
     const secondStat = Array.isArray(secondYear?.stat) ? secondYear.stat : [];
     const thirdStat = Array.isArray(thirdYear?.stat) ? thirdYear.stat : [];
+
+    const baseStat =
+      firstStat.length > 0
+        ? firstStat
+        : secondStat.length > 0
+        ? secondStat
+        : thirdStat;
 
     const hasAnyData =
       firstStat.length > 0 || secondStat.length > 0 || thirdStat.length > 0;
@@ -307,82 +324,77 @@ export class TrafficComparisonComponent {
     }
 
     this.isNoData = false;
+    // this.secondDateRangeLabel = this.buildDateRangeLabel();
+
+    // 先取得所有 base key（例如月份、日期等）
+    const baseKeys = baseStat.map((item) => extractAfterSlash(item.label));
+
+    // 共用函式：根據 stat 與數值欄位生成 series data
+    const buildSeriesData = <T>(stat: T[], getValue: (item: T) => number) => {
+      if (!stat || stat.length === 0) {
+        // 若 stat 為空，全部補 0
+        return baseKeys.map((key) => ({
+          key,
+          value: 0,
+        }));
+      }
+
+      // 建立 key → value 的 Map
+      const valueMap = new Map(
+        stat.map((item) => [
+          extractAfterSlash((item as any).label),
+          getValue(item),
+        ])
+      );
+
+      // 補齊 baseKeys
+      return baseKeys.map((key) => ({
+        key,
+        value: valueMap.get(key) ?? 0,
+      }));
+    };
 
     // ================= Bar：人數 =================
-    const barSeries: any[] = [];
-
-    if (firstStat.length > 0) {
-      barSeries.push({
+    this.barData = [
+      {
         label: `${this.firstDateRangeLabel}人數`,
-        data: firstStat.map((item) => ({
-          key: item.label,
-          value: item.numOfPax,
-        })),
+        data: buildSeriesData(firstStat, (item) => item.numOfPax),
         colors: ['#0279ce'],
-      });
-    }
-
-    if (secondStat.length > 0) {
-      barSeries.push({
+      },
+      {
         label: `${this.secondDateRangeLabel}人數`,
-        data: secondStat.map((item) => ({
-          key: item.label,
-          value: item.numOfPax,
-        })),
+        data: buildSeriesData(secondStat, (item) => item.numOfPax),
         colors: ['#f08622'],
-      });
-    }
-
-    if (thirdStat.length > 0) {
-      barSeries.push({
+      },
+      {
         label: `${this.thirdDateRangeLabel}人數`,
-        data: thirdStat.map((item) => ({
-          key: item.label,
-          value: item.numOfPax,
-        })),
+        data: buildSeriesData(thirdStat, (item) => item.numOfPax),
         colors: ['#B084A2'],
-      });
-    }
+      },
+    ];
 
-    this.barData = barSeries;
+    console.log('barData', this.barData);
 
     // ================= Line：架次 =================
-    const lineSeries: any[] = [];
-
-    if (firstStat.length > 0) {
-      lineSeries.push({
+    this.lineData = [
+      {
         label: `${this.firstDateRangeLabel}架次`,
-        data: firstStat.map((item) => ({
-          key: item.label,
-          value: item.numOfFlight,
-        })),
+        data: buildSeriesData(firstStat, (item) => item.numOfFlight),
         colors: ['#0279ce'],
-      });
-    }
-
-    if (secondStat.length > 0) {
-      lineSeries.push({
+      },
+      {
         label: `${this.secondDateRangeLabel}架次`,
-        data: secondStat.map((item) => ({
-          key: item.label,
-          value: item.numOfFlight,
-        })),
+        data: buildSeriesData(secondStat, (item) => item.numOfFlight),
         colors: ['#f08622'],
-      });
-    }
-
-    if (thirdStat.length > 0) {
-      lineSeries.push({
+      },
+      {
         label: `${this.thirdDateRangeLabel}架次`,
-        data: thirdStat.map((item) => ({
-          key: item.label,
-          value: item.numOfFlight,
-        })),
-        colors: ['#f08622'],
-      });
-    }
+        data: buildSeriesData(thirdStat, (item) => item.numOfFlight),
+        colors: ['#B084A2'],
+      },
+    ];
 
-    this.lineData = lineSeries;
+    console.log('lineData', this.lineData);
 
     this.totalFlight = firstYear?.totalFlight ?? 0;
     this.totalPax = firstYear?.totalPax ?? 0;

@@ -62,8 +62,8 @@ export class RealtimePassengerVehicleBaggageComponent {
           scheduledTime: b.sta,
           actualArrival: b.ata,
           flightArrival: b.ata,
-          firstBaggage: b.firstBagDeplane,
-          lastBaggage: b.lastBagDeplane,
+          firstBaggage: b.firstBagOutXray,
+          lastBaggage: b.lastBagOutXray,
           baggageDetails,
           isOpen: false,
         };

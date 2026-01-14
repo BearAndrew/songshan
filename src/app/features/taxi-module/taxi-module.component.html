@@ -81,13 +81,19 @@
 
     <!-- 固定內容 -->
     <div class="flex flex-col gap-3">
-      <div class="flex-1 flex flex-col sm:flex-row p-4 w-full border border-blue-500 rounded-xl">
+      <!-- 上方統計 -->
+      <div
+        class="flex-1 flex flex-col sm:flex-row p-4 w-full border border-blue-500 rounded-xl"
+      >
+        <!-- 目前排班總數 -->
         <div
           class="flex flex-1 flex-col items-center justify-center gap-4 relative w-[240px] sm:w-full mx-auto py-6 sm:py-0 border-b sm:border-b-0"
         >
           <h4 class="text-xl text-[#c5b6d4] font-semibold">目前排班總數</h4>
           <div class="flex flex-1 items-center gap-x-2">
-            <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+            <span class="text-5xl text-[#87c8ee] font-bold">
+              {{ taxiStat?.taxiWaiting }}
+            </span>
             <span class="text-xl">輛</span>
           </div>
           <div
@@ -95,17 +101,22 @@
           ></div>
         </div>
 
+        <!-- 現場人數 -->
         <div
           class="flex flex-1 flex-col items-center justify-center gap-4 relative w-[240px] sm:w-full mx-auto py-6 sm:py-0 border-b sm:border-b-0"
         >
           <h4 class="text-xl text-[#c5b6d4] font-semibold">現場人數</h4>
           <div class="flex flex-1 items-center gap-x-2">
             <div class="flex flex-col items-center gap-y-2 mr-8">
-              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-5xl text-[#87c8ee] font-bold">
+                {{ taxiStat?.currentPeopleCount_Intl }}
+              </span>
               <span class="text-xl text-[#9e9f9f]">國際</span>
             </div>
             <div class="flex flex-col items-center gap-y-2">
-              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-5xl text-[#87c8ee] font-bold">
+                {{ taxiStat?.currentPeopleCount_Domestic }}
+              </span>
               <span class="text-xl text-[#9e9f9f]">國內</span>
             </div>
             <span class="absolute right-0 sm:block text-xl">人</span>
@@ -115,17 +126,22 @@
           ></div>
         </div>
 
+        <!-- 預估等待時間 -->
         <div
           class="flex flex-1 flex-col items-center justify-center gap-4 relative w-[240px] sm:w-full mx-auto py-6 sm:py-0 border-b sm:border-b-0"
         >
           <h4 class="text-xl text-[#c5b6d4] font-semibold">預估等待時間</h4>
           <div class="flex flex-1 items-center gap-x-2">
             <div class="flex flex-col items-center gap-y-2 mr-8">
-              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-5xl text-[#87c8ee] font-bold">
+                {{ taxiStat?.estWaitingTime_Intl }}
+              </span>
               <span class="text-xl text-[#9e9f9f]">國際</span>
             </div>
             <div class="flex flex-col items-center gap-y-2">
-              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-5xl text-[#87c8ee] font-bold">
+                {{ taxiStat?.estWaitingTime_Domestic }}
+              </span>
               <span class="text-xl text-[#9e9f9f]">國內</span>
             </div>
             <span class="absolute right-0 sm:block text-xl">min</span>
@@ -135,74 +151,86 @@
           ></div>
         </div>
 
+        <!-- 今日已服務 -->
         <div
           class="flex flex-1 flex-col items-center justify-center gap-4 relative w-[240px] sm:w-full mx-auto py-6 sm:py-0"
         >
           <h4 class="text-xl text-[#c5b6d4] font-semibold">今日已服務</h4>
           <div class="flex flex-1 items-center gap-x-2">
             <div class="flex flex-col items-center gap-y-2 mr-8">
-              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-5xl text-[#87c8ee] font-bold">
+                {{ taxiStat?.served_Intl }}
+              </span>
               <span class="text-xl text-[#9e9f9f]">國際</span>
             </div>
             <div class="flex flex-col items-center gap-y-2">
-              <span class="text-5xl text-[#87c8ee] font-bold">23</span>
+              <span class="text-5xl text-[#87c8ee] font-bold">
+                {{ taxiStat?.served_Domestic }}
+              </span>
               <span class="text-xl text-[#9e9f9f]">國內</span>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- 營運統計 -->
       <div
         class="flex-1 flex flex-col sm:gap-y-4 p-4 w-full border border-blue-500 rounded-xl"
       >
-        <h4 class="text-xl text-[#c5b6d4] font-semibold text-center sm:text-left sm:ml-16 pt-6 sm:pt-0">營運統計</h4>
+        <div class="grid grid-cols-4">
+          <h4
+            class="text-xl text-[#c5b6d4] font-semibold text-center pt-6 sm:pt-0"
+          >
+            營運統計
+          </h4>
+        </div>
+
         <div class="flex flex-col sm:flex-row w-full">
+          <!-- 平均車輛數/時 -->
           <div
             class="flex flex-1 flex-col items-center justify-center gap-4 relative w-[240px] sm:w-full mx-auto py-6 sm:py-0 border-b sm:border-b-0"
           >
-            <div class="flex flex-1 items-center gap-x-2">
-              <div class="flex flex-col items-center gap-y-2">
-                <span class="text-5xl text-[#87c8ee] font-bold">32.4</span>
-                <span class="text-xl text-[#9e9f9f]">平均車輛數/時</span>
-              </div>
+            <div class="flex flex-col items-center gap-y-2">
+              <span class="text-5xl text-[#87c8ee] font-bold">
+                {{ taxiStat?.avgTaxiPerHour | number : "1.0-2" }}
+              </span>
+              <span class="text-xl text-[#9e9f9f]">平均車輛數/時</span>
             </div>
             <div
               class="hidden sm:absolute right-0 bottom-0 h-18 border-r-3 border-[#979896]"
             ></div>
           </div>
 
+          <!-- 平均等候時間/車 -->
           <div
             class="flex flex-1 flex-col items-center justify-center gap-4 relative w-[240px] sm:w-full mx-auto py-6 sm:py-0 border-b sm:border-b-0"
           >
-            <div class="flex flex-1 items-center gap-x-2">
-              <div class="flex flex-col items-center gap-y-2">
-                <div>
-                  <span class="text-5xl text-[#87c8ee] font-bold mr-2 sm:mr-4"
-                    >4.3</span
-                  >
-                  <span class="text-xl">min</span>
-                </div>
-                <span class="text-xl text-[#9e9f9f]">平均等候時間/車</span>
+            <div class="flex flex-col items-center gap-y-2">
+              <div>
+                <span class="text-5xl text-[#87c8ee] font-bold mr-2 sm:mr-4">
+                  {{ taxiStat?.avgWaitTaxi }}
+                </span>
+                <span class="text-xl">min</span>
               </div>
+              <span class="text-xl text-[#9e9f9f]">平均等候時間/車</span>
             </div>
             <div
               class="hidden sm:absolute right-0 bottom-0 h-18 border-r-3 border-[#979896]"
             ></div>
           </div>
 
+          <!-- 平均等候時間/人 -->
           <div
             class="flex flex-1 flex-col items-center justify-center gap-4 relative w-[240px] sm:w-full mx-auto py-6 sm:py-0"
           >
-            <div class="flex flex-1 items-center gap-x-2">
-              <div class="flex flex-col items-center gap-y-2">
-                <div>
-                  <span class="text-5xl text-[#87c8ee] font-bold mr-2 sm:mr-4"
-                    >2.1</span
-                  >
-                  <span class="text-xl">min</span>
-                </div>
-                <span class="text-xl text-[#9e9f9f]">平均等候時間/人</span>
+            <div class="flex flex-col items-center gap-y-2">
+              <div>
+                <span class="text-5xl text-[#87c8ee] font-bold mr-2 sm:mr-4">
+                  {{ taxiStat?.avgWaitPax }}
+                </span>
+                <span class="text-xl">min</span>
               </div>
+              <span class="text-xl text-[#9e9f9f]">平均等候時間/人</span>
             </div>
           </div>
         </div>

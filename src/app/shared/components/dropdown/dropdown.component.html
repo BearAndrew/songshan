@@ -2,15 +2,20 @@
   <div
     #dropdownTrigger
     class="flex items-center border border-[#3372bd] min-h-8 pl-2 pr-3 py-0.5 rounded select-none"
-    [ngClass]="disabeld ? 'bg-[#333] cursor-not-allowed' : 'bg-black cursor-pointer'"
+    [ngClass]="
+      disabeld ? 'bg-[#333] cursor-not-allowed' : 'bg-black cursor-pointer'
+    "
     (click)="toggle()"
   >
     @if(showIcon) {
-      <div
-        class="flex-shrink-0 w-4 h-4 mr-4 rounded-full bg-orange-500 border-2 border-white"
-      ></div>
+    <div
+      class="flex-shrink-0 w-4 h-4 mr-4 rounded-full bg-orange-500 border-2 border-white"
+    ></div>
     }
-    <span class="w-full text-white text-ellipsis overflow-hidden line-clamp-1">{{ selectedLabel || placeholder }}</span>
+    <span
+      class="w-full text-white text-ellipsis overflow-hidden line-clamp-1"
+      >{{ selectedLabel || placeholder }}</span
+    >
     <img
       class="ml-auto w-3"
       src="icons/white-down-arrow.png"
@@ -25,7 +30,10 @@
       @for (item of options; track $index) {
       <div
         class="px-3 py-2 hover:bg-gray-800 cursor-pointer"
-        [ngClass]="selectedLabel == item.label ? 'bg-gray-800' : ''"
+        [ngClass]="{
+          'bg-gray-800': selectedLabel == item.label,
+          'bg-gray-900 text-gray-600 !cursor-not-allowed': disabeldOptions.includes(item.value)
+        }"
         (click)="select(item)"
       >
         {{ item.label }}
