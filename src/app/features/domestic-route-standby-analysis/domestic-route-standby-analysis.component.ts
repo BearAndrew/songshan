@@ -232,6 +232,7 @@ export class DomesticRouteStandbyAnalysisComponent {
           airlineName: detail.airlineName,
           regtotal: detail.regtotal,
           fetchuptotal: detail.fetchuptotal,
+          nonFetchuptotal: Number(detail.regtotal) - Number(detail.fetchuptotal),
           passtotal: detail.passtotal,
           flytotal: detail.flytotal,
           flyRate: detail.flyRate,

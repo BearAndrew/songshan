@@ -12,9 +12,10 @@
   <div class="flex flex-col gap-1">
     @for (item of items; track $index) {
     <div class="flex items-center gap-2 text-sm">
-      <!-- 顏色圓點 -->
+      <!-- 顏色 -->
       <span
-        class="w-2.5 h-2.5 rounded-full shrink-0"
+        class="shrink-0"
+        [ngClass]="$odd ? 'w-2.5 h-2.5 rounded-full': 'w-2.5 h-1'"
         [ngStyle]="{ backgroundColor: item.color }"
       ></span>
 

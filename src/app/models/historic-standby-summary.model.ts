@@ -17,6 +17,7 @@ export interface HistoricStandbyAirlineStat {
   airlineName: string;
   regtotal: number | string;
   fetchuptotal: number | string;
+  nonFetchuptotal?: number | string;
   passtotal: number | string;
   flytotal: number | string;
   flyRate: number | string;

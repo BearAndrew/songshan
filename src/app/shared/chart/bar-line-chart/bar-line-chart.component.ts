@@ -55,6 +55,7 @@ export class BarLineChartComponent {
       .setXLabelFont({ color: 'white' })
       .setYLabelFont({ color: 'white' })
       .setHover(true)
+      .setHoverColor('#ffffff22')
       .setShowActiveArea(false);
 
     gridFactory.onPointerover().subscribe((res) => {

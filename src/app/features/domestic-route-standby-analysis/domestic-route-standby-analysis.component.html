@@ -223,7 +223,7 @@
                   : ''
               }}"
             >
-              {{ detail.passtotal }}
+              {{ detail.nonFetchuptotal }}
             </div>
 
             <!-- 過號 -->
@@ -234,7 +234,7 @@
                   : ''
               }}"
             >
-              {{ detail.flytotal }}
+              {{ detail.passtotal }}
             </div>
 
             <!-- filled 欄位：左數值 + 右 button -->
@@ -247,7 +247,7 @@
                     : ''
                 }}"
               >
-                {{ detail.flyRate }}
+                {{ detail.flytotal }} / {{ detail.flyRate }}%
               </div>
 
               <!-- @if (i === 0) {
