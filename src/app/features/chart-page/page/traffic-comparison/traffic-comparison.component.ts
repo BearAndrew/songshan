@@ -366,14 +366,16 @@ export class TrafficComparisonComponent {
         data: buildSeriesData(secondStat, (item) => item.numOfPax),
         colors: ['#f08622'],
       },
-      {
+    ];
+
+    if (this.thirdDateRangeLabel) {
+      const item = {
         label: `${this.thirdDateRangeLabel}人數`,
         data: buildSeriesData(thirdStat, (item) => item.numOfPax),
         colors: ['#B084A2'],
-      },
-    ];
-
-    console.log('barData', this.barData);
+      };
+      this.barData.push(item);
+    }
 
     // ================= Line：架次 =================
     this.lineData = [
@@ -387,14 +389,16 @@ export class TrafficComparisonComponent {
         data: buildSeriesData(secondStat, (item) => item.numOfFlight),
         colors: ['#f08622'],
       },
-      {
+    ];
+
+    if (this.thirdDateRangeLabel) {
+      const item = {
         label: `${this.thirdDateRangeLabel}架次`,
         data: buildSeriesData(thirdStat, (item) => item.numOfFlight),
         colors: ['#B084A2'],
-      },
-    ];
-
-    console.log('lineData', this.lineData);
+      };
+      this.lineData.push(item);
+    }
 
     this.totalFlight = firstYear?.totalFlight ?? 0;
     this.totalPax = firstYear?.totalPax ?? 0;
