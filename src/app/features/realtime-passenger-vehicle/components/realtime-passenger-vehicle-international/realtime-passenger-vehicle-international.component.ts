@@ -14,30 +14,25 @@ import { Component } from '@angular/core';
 })
 export class RealtimePassengerVehicleInternationalComponent {
   checkinData = [
-    { label: '1', people: 11, time: 1.7 },
-    { label: '1', people: 8, time: 2.3 },
-    { label: '1', people: 15, time: 0.9 },
-    { label: '1', people: 6, time: 3.1 },
-    { label: '1', people: 20, time: 1.2 },
-    { label: '1', people: 9, time: 2.0 },
+    { label: '1', people: 0, time: 0 },
   ];
 
   securityData = [
-    { label: 'Fast track', people: 11, time: 1.7 },
-    { label: '一般通道', people: 8, time: 2.3 },
-    { label: '總計', people: 15, time: 0.9 },
+    { label: 'Fast track', people: 0, time: 0 },
+    { label: '一般通道', people: 0, time: 0 },
+    { label: '總計', people: 0, time: 0 },
   ];
 
-  customsData = [{ label: '1', people: 9, time: 2.0 }];
+  customsData = [{ label: '1', people: 0, time: 0 }];
 
   departureData = [
-    { label: '自動通關', people: 11, time: 1.7 },
-    { label: '人工查驗', people: 8, time: 2.3 },
+    { label: '自動通關', people: 0, time: 0 },
+    { label: '人工查驗', people: 0, time: 0 },
   ];
 
   arrivalData = [
-    { label: '自動通關', people: 11, time: 1.7 },
-    { label: '人工查驗', people: 8, time: 2.3 },
+    { label: '自動通關', people: 0, time: 0 },
+    { label: '人工查驗', people: 0, time: 0 },
   ];
 
   private destroy$ = new Subject<void>();

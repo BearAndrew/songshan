@@ -232,7 +232,7 @@ export class DomesticRouteStandbyAnalysisComponent {
           airlineName: detail.airlineName,
           regtotal: detail.regtotal,
           fetchuptotal: detail.fetchuptotal,
-          nonFetchuptotal: Number(detail.regtotal) - Number(detail.fetchuptotal),
+          nonFetchuptotal: typeof detail.regtotal === 'number' ? Number(detail.regtotal) - Number(detail.fetchuptotal) : `\u00A0`,
           passtotal: detail.passtotal,
           flytotal: detail.flytotal,
           flyRate: detail.flyRate,

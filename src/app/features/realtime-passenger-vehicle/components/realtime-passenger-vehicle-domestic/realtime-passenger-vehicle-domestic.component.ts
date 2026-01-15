@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RealTimeTrafficFlowItem, RealTimeTrafficPoint } from '../../../../models/real-time-traffic-flow.model';
 import { Subject, takeUntil } from 'rxjs';
 import { RealTimeService } from '../../services/real-time.service';
+import { TaxiData } from '../../realtime-passenger-vehicle.component';
 
 @Component({
   selector: 'app-realtime-passenger-vehicle-domestic',
@@ -10,11 +11,11 @@ import { RealTimeService } from '../../services/real-time.service';
   styleUrl: './realtime-passenger-vehicle-domestic.component.scss',
 })
 export class RealtimePassengerVehicleDomesticComponent {
-  data1 = [{ label: '', people: 11, time: 1.7 }];
+  data1: TaxiData[] = [];
 
-  data2 = [{ label: '', people: 11, time: 1.7 }];
+  data2: TaxiData[] = [];
 
-  data3 = [{ label: '', people: 11, time: 1.7 }];
+  data3: TaxiData[] = [];
 
   private destroy$ = new Subject<void>();
 

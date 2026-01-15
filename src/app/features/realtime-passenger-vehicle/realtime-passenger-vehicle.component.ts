@@ -19,6 +19,12 @@ export interface LocationImageGroup {
   currentIndex: number;
 }
 
+export interface TaxiData {
+  label: string;
+  people: number;
+  time: number;
+}
+
 @Component({
   selector: 'app-realtime-passenger-vehicle',
   imports: [CommonModule, RouterModule, DropdownComponent],

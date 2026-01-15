@@ -119,9 +119,7 @@
         <div class="py-1 border-b text-[#baeaff] hover:bg-[#494746]">
           <!-- 明細 -->
           @for (detail of group.details; let i = $index; track detail;) {
-          <div
-            class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr] text-center"
-          >
+          <div class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr] text-center">
             <!-- 航點 / 天氣 -->
             @if (i === 0) {
             <div
@@ -247,7 +245,9 @@
                     : ''
                 }}"
               >
-                {{ detail.flytotal }} / {{ detail.flyRate }}%
+                @if (detail.flytotal !== '\u00A0' && detail.flyRate !== '\u00A0') {
+                <span>{{ detail.flytotal }} / {{ detail.flyRate }}%</span>
+                }
               </div>
 
               <!-- @if (i === 0) {
