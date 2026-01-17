@@ -19,6 +19,7 @@ import {
   statusMap,
 } from '../../../models/counter.model';
 import { ActivatedRoute } from '@angular/router';
+import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
 
 interface SeasonCounterItem {
   checked: boolean; // 是否被選取
@@ -46,6 +47,7 @@ export interface InfoCard {
   time: string;
   date: string;
   status: string;
+  item: CounterInfo;
 }
 
 @Component({
@@ -55,6 +57,7 @@ export interface InfoCard {
     FormsModule,
     ReactiveFormsModule,
     DropdownSecondaryComponent,
+    CalendarTriggerComponent,
   ],
   templateUrl: './intl-checkin-counter-admin.component.html',
   styleUrl: './intl-checkin-counter-admin.component.scss',
@@ -90,6 +93,10 @@ export class IntlCheckinCounterAdminComponent {
   ];
 
   season: string = '';
+  currentWeekRange: string = '';
+  searchDate: Date = new Date();
+  searchDateFrom: string = '';
+  searchDateTo: string = '';
 
   getWeekControl(key: string): FormControl {
     return this.form.get('weekDays.' + key) as FormControl;
@@ -221,23 +228,31 @@ export class IntlCheckinCounterAdminComponent {
   }
 
   /** 取得全部櫃檯資料（當周） */
-  private getAllCounter() {
-    const today = new Date();
+  getAllCounter(date?: Date) {
+    const targetDate = date || new Date();
 
-    // 起始：今天
-    const yyyy1 = today.getFullYear();
-    const mm1 = String(today.getMonth() + 1).padStart(2, '0');
-    const dd1 = String(today.getDate()).padStart(2, '0');
-    const dateFrom = `${yyyy1}-${mm1}-${dd1}`;
+    // 計算週日（作為 start）
+    const dayOfWeek = targetDate.getDay(); // 0(日) ~ 6(六)
+    const sunday = new Date(targetDate);
+    sunday.setDate(targetDate.getDate() - dayOfWeek); // 回到週日
 
-    // 結束：今天 + 7 天
-    const end = new Date(today);
-    end.setDate(end.getDate() + 7);
+    // 計算週六（作為 end）
+    const saturday = new Date(sunday);
+    saturday.setDate(sunday.getDate() + 6); // 週日 + 6 天 = 週六
 
-    const yyyy2 = end.getFullYear();
-    const mm2 = String(end.getMonth() + 1).padStart(2, '0');
-    const dd2 = String(end.getDate()).padStart(2, '0');
-    const dateTo = `${yyyy2}-${mm2}-${dd2}`;
+    // 格式化成 yyyy-mm-dd
+    const formatDate = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
+        d.getDate()
+      ).padStart(2, '0')}`;
+
+    this.searchDateFrom = formatDate(sunday);
+    this.searchDateTo = formatDate(saturday);
+
+    this.currentWeekRange = this.searchDateFrom + '~' + this.searchDateTo;
+
+    const dateFrom = this.searchDateFrom;
+    const dateTo = this.searchDateTo;
 
     const payload: CounterGetAllRequest = {
       dateFrom,
@@ -250,7 +265,7 @@ export class IntlCheckinCounterAdminComponent {
       console.log(res);
       this.ganttDays = this.mapCounterToGantt(res, dateFrom, dateTo);
       this.infoCardList = this.mapCounterToInfoCards(res, dateFrom, dateTo);
-      console.log(this.ganttDays)
+      console.log(this.ganttDays);
     });
   }
 
@@ -261,22 +276,23 @@ export class IntlCheckinCounterAdminComponent {
   ): InfoCard[] {
     return data.map((item) => {
       // 航班
-      const flightNo = `${item.airlineIata}${item.flightNo}`;
+      const flightNo = `${item.airlineIata}${item.flightNo}` || `\u00A0`;
 
       // 時間
       const time =
         item.startTime && item.endTime
           ? `${item.startTime.slice(0, 5)}-${item.endTime.slice(0, 5)}`
-          : '';
+          : `\u00A0`;
 
       // 日期顯示
-      const date = item.applyForPeriod;
+      const date = item.applyForPeriod || `\u00A0`;
 
       return {
         flightNo,
         time,
         date,
         status: statusMap[item.status] || item.status,
+        item,
       };
     });
   }
@@ -336,6 +352,71 @@ export class IntlCheckinCounterAdminComponent {
     return Array.from(ganttMap.values()).sort((a, b) =>
       a.date.localeCompare(b.date)
     );
+  }
+
+  selectItem(infoCard: InfoCard) {
+    const item = infoCard.item; // CounterInfo 或相似型別
+
+    if (!item) return;
+
+    // flightInfo
+    const flightInfo = item.airlineIata + item.flightNo;
+
+    // 時間處理（去掉秒）
+    const startTime = item.startTime?.slice(0, -3) || '';
+    const endTime = item.endTime?.slice(0, -3) || '';
+
+    // applyForPeriod 直接對應
+    const applyTimeInterval = item.applyForPeriod || '';
+
+    // weekDays 對應
+    const weekDaysMap = {
+      mon: false,
+      tue: false,
+      wed: false,
+      thu: false,
+      fri: false,
+      sat: false,
+      sun: false,
+    };
+
+    if (item.dayOfWeek) {
+      item.dayOfWeek.split(',').forEach((d) => {
+        switch (d) {
+          case '1':
+            weekDaysMap.mon = true;
+            break;
+          case '2':
+            weekDaysMap.tue = true;
+            break;
+          case '3':
+            weekDaysMap.wed = true;
+            break;
+          case '4':
+            weekDaysMap.thu = true;
+            break;
+          case '5':
+            weekDaysMap.fri = true;
+            break;
+          case '6':
+            weekDaysMap.sat = true;
+            break;
+          case '7':
+            weekDaysMap.sun = true;
+            break;
+        }
+      });
+    }
+
+    // patch 表單
+    this.form.patchValue({
+      flightInfo,
+      startTime,
+      endTime,
+      applyTimeInterval,
+      weekDays: weekDaysMap,
+      departureTime: '', // 如果你有對應欄位可填
+    });
   }
 
   /** 核准或駁回 */
@@ -411,6 +492,10 @@ export class IntlCheckinCounterAdminComponent {
     }
     // 格式不正確就回原值
     return input;
+  }
+
+  onSearchDateChange(date: Date) {
+    this.getAllCounter(date);
   }
 
   /** ===== 申請內容 ===== */

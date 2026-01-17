@@ -46,7 +46,7 @@ interface ScheduleItem {
   styleUrl: './intl-checkin-counter-user.component.scss',
 })
 export class IntlCheckinCounterUserComponent {
-  weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   weeks: ScheduleItem[][][] = [];
 
@@ -88,10 +88,15 @@ export class IntlCheckinCounterUserComponent {
   ];
   seasonList: CounterSeason[] = [];
 
+  searchDateFrom: string = '';
+  searchDateTo: string = '';
+
+  // 申請內容
   dateFrom: string = '';
   dateTo: string = '';
   season: string = '';
   requestId: string = '';
+  searchDate: Date = new Date();
 
   constructor(
     private fb: FormBuilder,
@@ -221,27 +226,32 @@ export class IntlCheckinCounterUserComponent {
   }
 
   /** 取得全部櫃檯資料（當周） */
-  getAllCounter() {
-    const today = new Date();
+  getAllCounter(date?: Date) {
+    const targetDate = date || new Date();
 
-    // 起始：今天
-    const yyyy1 = today.getFullYear();
-    const mm1 = String(today.getMonth() + 1).padStart(2, '0');
-    const dd1 = String(today.getDate()).padStart(2, '0');
-    const dateFrom = `${yyyy1}-${mm1}-${dd1}`;
+    // 計算週日（作為 start）
+    const dayOfWeek = targetDate.getDay(); // 0(日) ~ 6(六)
+    const sunday = new Date(targetDate);
+    sunday.setDate(targetDate.getDate() - dayOfWeek); // 回到週日
 
-    // 結束：今天 + 7 天
-    const end = new Date(today);
-    end.setDate(end.getDate() + 7);
+    // 計算週六（作為 end）
+    const saturday = new Date(sunday);
+    saturday.setDate(sunday.getDate() + 6); // 週日 + 6 天 = 週六
 
-    const yyyy2 = end.getFullYear();
-    const mm2 = String(end.getMonth() + 1).padStart(2, '0');
-    const dd2 = String(end.getDate()).padStart(2, '0');
-    const dateTo = `${yyyy2}-${mm2}-${dd2}`;
+    // 格式化成 yyyy-mm-dd
+    const formatDate = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
+        d.getDate()
+      ).padStart(2, '0')}`;
+
+    this.searchDateFrom = formatDate(sunday);
+    this.searchDateTo = formatDate(saturday);
+
+    this.currentWeekRange = this.searchDateFrom + '~' + this.searchDateTo;
 
     const payload: CounterGetAllRequest = {
-      dateFrom,
-      dateTo,
+      dateFrom: this.searchDateFrom,
+      dateTo: this.searchDateTo,
       status: 'ALL',
       agent: 'ALL',
     };
@@ -258,7 +268,7 @@ export class IntlCheckinCounterUserComponent {
     const weekIndex = 0;
 
     if (!weekMap.has(weekIndex)) {
-      // 建立 7 天空陣列，Mon=0 ... Sun=6
+      // 建立 7 天空陣列，Sun=0 ... Sat=6
       weekMap.set(
         weekIndex,
         Array.from({ length: 7 }, () => [])
@@ -267,23 +277,21 @@ export class IntlCheckinCounterUserComponent {
 
     const weekArray = weekMap.get(weekIndex)!;
 
-    // 計算本週 Monday 日期
-    const today = new Date();
-    const dayOfWeek = today.getDay(); // 0=Sun ... 6=Sat
-    const monday = new Date(today);
-    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7)); // 回到週一
+    // 確認 this.searchDateFrom 與 this.searchDateTo 已經是 Date 物件
+    const sunday = new Date(this.searchDateFrom); // 週日
+    // const saturday = new Date(this.searchDateTo); // 不一定需要用到
 
     for (const item of data) {
       // dayOfWeek 字串拆成數字
       const days = item.dayOfWeek.split(',').map((n) => parseInt(n, 10));
 
       for (let day of days) {
-        // 將 dayOfWeek 轉成 index：Mon=0, Sun=6
-        const index = day === 0 || day === 7 ? 6 : day - 1;
+        // 對應陣列索引：Sun=0, Mon=1 ... Sat=6
+        let index = day === 0 || day === 7 ? 0 : day;
 
-        // 對應日期 = Monday + index 天
-        const itemDate = new Date(monday);
-        itemDate.setDate(monday.getDate() + index);
+        // 對應日期 = this.searchDateFrom + index 天
+        const itemDate = new Date(sunday);
+        itemDate.setDate(sunday.getDate() + index);
         const yyyy = itemDate.getFullYear();
         const mm = String(itemDate.getMonth() + 1).padStart(2, '0');
         const dd = String(itemDate.getDate()).padStart(2, '0');
@@ -327,7 +335,6 @@ export class IntlCheckinCounterUserComponent {
   private setCurrentWeek(index: number) {
     this.currentWeekIndex = index;
     this.currentWeek = this.weeks[index];
-    this.currentWeekRange = this.getWeekRangeText(this.currentWeek);
     this.paginatorPages = this.buildPaginatorPages();
   }
 
@@ -578,5 +585,9 @@ export class IntlCheckinCounterUserComponent {
   onWithdraw() {
     if (this.requestId == '') return;
     this.apiService.userWithdraw(this.requestId).subscribe();
+  }
+
+  onSearchDateChange(date: Date) {
+    this.getAllCounter(date);
   }
 }
