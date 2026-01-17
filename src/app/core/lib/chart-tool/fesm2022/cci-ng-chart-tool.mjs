@@ -3464,7 +3464,8 @@ class BarLineChart extends RootChart {
 }
 
 const DefaultPieConfig = {
-    donutWidthRatio: 1
+    donutWidthRatio: 1,
+    isShowLabel: true,
 };
 
 var LabelDispalyMode;
@@ -3566,7 +3567,17 @@ class PieFactory extends BasicFactory {
                 const colors = this.dataSetWithData?.[i]?.colors;
                 return colors?.[0] ?? DefaultDataColorArray[i % 10][0].color;
               })
-              .style('opacity', 0),
+              .style('opacity', 0)
+              .on('pointerover', (event, d) => {
+                this.pointerover$.next({
+                  element: event.currentTarget,
+                  keyIndex: d.index,
+                  data: d.data,
+                });
+              })
+              .on('pointerout', () => {
+                this.pointerover$.next(null);
+              }),
           (update) =>
             update
               .attr('fill', (d, i) => {
@@ -3578,7 +3589,17 @@ class PieFactory extends BasicFactory {
                 return colors?.[0] ?? DefaultDataColorArray[i % 10][0].color;
               })
               .attr('d', arc)
-              .style('opacity', 1),
+              .style('opacity', 1)
+              .on('pointerover', (event, d) => {
+                this.pointerover$.next({
+                  element: event.currentTarget,
+                  keyIndex: d.index,
+                  data: d.data,
+                });
+              })
+              .on('pointerout', () => {
+                this.pointerover$.next(null);
+              }),
           (exit) =>
             exit
               .transition()
@@ -3591,7 +3612,7 @@ class PieFactory extends BasicFactory {
         .attr('d', arc)
         .style('opacity', 1);
         // ----------- Labels -------------
-        const labelData = isAllZero ? [] : pieData;
+        const labelData = isAllZero || !this.pieConfig.isShowLabel ? [] : pieData;
         const labels = this.pieGroup
             .selectAll('text.label')
             .data(labelData);

@@ -133,7 +133,7 @@ export class FixedRouteTrafficComparisonComponent {
     secondYear: null,
     thirdYear: null,
     route: null,
-    flightClass: null,
+    flightClass: 'SCHEDULE',
     airline: null,
     direction: null,
     flightType: TabType.NONDOMESTIC,

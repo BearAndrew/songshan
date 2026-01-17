@@ -9,4 +9,5 @@ import { Component } from '@angular/core';
 })
 export class ChartTooltipComponent {
   items!: { label: string; value: string | number; color: string }[];
+  unitText: string = '';
 }
