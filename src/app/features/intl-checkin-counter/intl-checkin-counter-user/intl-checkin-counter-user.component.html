@@ -24,7 +24,8 @@
           <div class="p-1 pt-8 border-r-2 last:border-r-0 even:bg-[#eef2f8]">
             @for (item of dayItems; track $index) {
             <div
-              class="flex flex-col items-center gap-1 mb-2 rounded-xl bg-white p-1 sm:p-2 pt-2 sm:pt-4 text-sm border-3 border-[#aba196]"
+              class="flex flex-col items-center gap-1 mb-2 rounded-xl bg-white p-1 sm:p-2 pt-2 sm:pt-4 text-sm border-3 border-[#aba196] cursor-pointer"
+              (click)="selectItem(item)"
             >
               <div class="text-2xl text-[#008540] font-semibold leading-none">
                 {{ item.flightNo }}
@@ -276,7 +277,9 @@
       <div
         class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-4 items-center mt-12"
       >
-        <label class="flex items-center text-[#97e0fb] font-semibold min-h-10">申請日期</label>
+        <label class="flex items-center text-[#97e0fb] font-semibold min-h-10"
+          >申請日期</label
+        >
 
         <!-- Checkbox：只能選一 -->
         <div class="flex items-center gap-6 min-h-10">
@@ -359,7 +362,14 @@
       >
         送出申請
       </button>
-      } @else {
+      @if (requestId !== '') {
+      <button
+        class="mx-auto w-3/5 sm:w-1/2 text-sm sm:text-2xl py-1 bg-[#c8c8c8] rounded-sm cursor-pointer hover:bg-[#b7b7b7]"
+        (click)="onWithdraw()"
+      >
+        撤回申請
+      </button>
+      } } @else {
       <button
         class="mx-auto w-3/5 sm:w-1/2 text-sm sm:text-2xl py-1 bg-[#c8c8c8] rounded-sm cursor-pointer hover:bg-[#b7b7b7]"
         (click)="onModify()"

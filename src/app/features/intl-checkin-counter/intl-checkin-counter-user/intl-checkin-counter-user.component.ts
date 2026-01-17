@@ -30,6 +30,7 @@ interface ScheduleItem {
   flightNo: string;
   time: string;
   status: string;
+  counterInfo: CounterInfo;
 }
 
 @Component({
@@ -103,7 +104,7 @@ export class IntlCheckinCounterUserComponent {
   ngOnInit() {
     /** 申請內容 */
     this.form = this.fb.group({
-      flightInfo: ['123'],
+      flightInfo: [''],
       departureTime: [''],
       applyTimeStart: [''],
       applyTimeEnd: [''],
@@ -293,6 +294,7 @@ export class IntlCheckinCounterUserComponent {
           flightNo: item.airlineIata + item.flightNo,
           time: `${item.startTime.slice(0, -3)}-${item.endTime.slice(0, -3)}`,
           status: statusMap[item.status],
+          counterInfo: item,
         });
       }
     }
@@ -404,6 +406,83 @@ export class IntlCheckinCounterUserComponent {
     return input;
   }
 
+  selectItem(item: ScheduleItem): void {
+    const info: CounterInfo = item.counterInfo;
+    if (!info) return;
+
+    // flightInfo
+    const flightInfo = info.airlineIata + info.flightNo;
+
+    // departureTime 暫時留空或自行設定
+    const departureTime = '';
+
+    // applyTimeStart / applyTimeEnd 去掉秒
+    const applyTimeStart = info.startTime ? info.startTime.slice(0, 5) : '';
+    const applyTimeEnd = info.endTime ? info.endTime.slice(0, 5) : '';
+
+    // applyDateStart / applyDateEnd 從 applyForPeriod 拆分
+    const applyDateStart = info.applyForPeriod
+      ? info.applyForPeriod.split('~')[0]
+      : '';
+    const applyDateEnd = info.applyForPeriod
+      ? info.applyForPeriod.split('~')[1]
+      : '';
+
+    // weekDays
+    const weekDaysMap = {
+      mon: false,
+      tue: false,
+      wed: false,
+      thu: false,
+      fri: false,
+      sat: false,
+      sun: false,
+    };
+
+    if (info.dayOfWeek) {
+      info.dayOfWeek.split(',').forEach((d) => {
+        switch (d) {
+          case '1':
+            weekDaysMap.mon = true;
+            break;
+          case '2':
+            weekDaysMap.tue = true;
+            break;
+          case '3':
+            weekDaysMap.wed = true;
+            break;
+          case '4':
+            weekDaysMap.thu = true;
+            break;
+          case '5':
+            weekDaysMap.fri = true;
+            break;
+          case '6':
+            weekDaysMap.sat = true;
+            break;
+          case '7':
+            weekDaysMap.sun = true;
+            break;
+        }
+      });
+    }
+
+    // patch 表單
+    this.form.patchValue({
+      flightInfo,
+      departureTime,
+      applyTimeStart,
+      applyTimeEnd,
+      applyDateStart,
+      applyDateEnd,
+      weekDays: weekDaysMap,
+    });
+
+    // 如果你需要存 requestId / season
+    this.requestId = info.requestId;
+    this.season = info.season;
+  }
+
   onCreate() {
     const week = this.form.value.weekDays; // { mon: true, tue: false ... }
     const dayMap: Record<string, number> = {
@@ -494,5 +573,10 @@ export class IntlCheckinCounterUserComponent {
       next: () => console.log('修改成功'),
       error: (err) => console.error('修改失敗', err),
     });
+  }
+
+  onWithdraw() {
+    if (this.requestId == '') return;
+    this.apiService.userWithdraw(this.requestId).subscribe();
   }
 }

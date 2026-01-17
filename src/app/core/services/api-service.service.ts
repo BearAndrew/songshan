@@ -429,6 +429,11 @@ export class ApiService {
     return this.http.post<void>('/Counter/AdminApproval', payload);
   }
 
+  /** 櫃檯申請－使用者撤回 */
+  userWithdraw(requestId: string | number): Observable<void> {
+    return this.http.post<void>(`/Withdraw/${requestId}`, {});
+  }
+
   /** 取得各季時間 */
   getSeasons(): Observable<CounterSeason[]> {
     return this.http.get<CounterSeason[]>('/Counter/GetSeasons');
