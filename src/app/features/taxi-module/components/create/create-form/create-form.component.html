@@ -1,48 +1,88 @@
 <div class="flex flex-col items-center gap-4 sm:gap-6 w-full h-full">
-  <!-- 表單 -->
   <form
     [formGroup]="form"
-    class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6 items-center text-md sm:text-2xl w-full"
+    (ngSubmit)="onSubmit()"
+    class="grid grid-cols-[64px_1fr] sm:grid-cols-[100px_1fr] gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-4 items-center text-md sm:text-2xl w-full"
   >
     <!-- 車號 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >車號</label
+    <label
+      class="text-[#97e0fb] font-semibold [text-align-last:justify] self-start pt-1"
     >
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="regPlate"
-    />
+      車號
+    </label>
+    <div>
+      <input
+        type="text"
+        formControlName="regPlate"
+        class="w-full h-10 bg-[#193652] rounded px-2 py-1 border border-[#193652] focus:outline-none focus:border-[#2bb0ff]"
+        [class.border-red-400]="isInvalid('regPlate')"
+      />
+      <div class="h-5 mt-1">
+        @if (isInvalid('regPlate')) {
+        <p class="text-red-400 text-sm">車號為必填</p>
+        }
+      </div>
+    </div>
 
-    <!-- 駕駛證號 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >編號</label
+    <!-- 編號 -->
+    <label
+      class="text-[#97e0fb] font-semibold [text-align-last:justify] self-start pt-1"
     >
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="driverNo"
-    />
+      編號
+    </label>
+    <div>
+      <input
+        type="text"
+        formControlName="driverNo"
+        class="w-full h-10 bg-[#193652] rounded px-2 py-1 border border-[#193652] focus:outline-none focus:border-[#2bb0ff]"
+        [class.border-red-400]="isInvalid('driverNo')"
+      />
+      <div class="h-5 mt-1">
+        @if (isInvalid('driverNo')) {
+        <p class="text-red-400 text-sm">編號為必填</p>
+        }
+      </div>
+    </div>
 
-    <!-- 駕駛姓名 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >姓名</label
+    <!-- 姓名 -->
+    <label
+      class="text-[#97e0fb] font-semibold [text-align-last:justify] self-start pt-1"
     >
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="driverName"
-    />
+      姓名
+    </label>
+    <div>
+      <input
+        type="text"
+        formControlName="driverName"
+        class="w-full h-10 bg-[#193652] rounded px-2 py-1 border border-[#193652] focus:outline-none focus:border-[#2bb0ff]"
+        [class.border-red-400]="isInvalid('driverName')"
+      />
+      <div class="h-5 mt-1">
+        @if (isInvalid('driverName')) {
+        <p class="text-red-400 text-sm">姓名為必填</p>
+        }
+      </div>
+    </div>
 
     <!-- 聯絡電話 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-      >聯絡電話</label
+    <label
+      class="text-[#97e0fb] font-semibold [text-align-last:justify] self-start pt-1"
     >
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="driverPhone"
-    />
+      聯絡電話
+    </label>
+    <div>
+      <input
+        type="text"
+        formControlName="driverPhone"
+        class="w-full h-10 bg-[#193652] rounded px-2 py-1 border border-[#193652] focus:outline-none focus:border-[#2bb0ff]"
+        [class.border-red-400]="isInvalid('driverPhone')"
+      />
+      <div class="h-5 mt-1">
+        @if (isInvalid('driverPhone')) {
+        <p class="text-red-400 text-sm">聯絡電話為必填</p>
+        }
+      </div>
+    </div>
   </form>
 
   <!-- 送出按鈕 -->

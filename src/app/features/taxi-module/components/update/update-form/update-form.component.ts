@@ -78,12 +78,11 @@ export class UpdateFormComponent {
       driverPhone: taxi.driverPhone,
       remark: taxi.remark,
     });
-    this.hasSearch = true;
     const searchTaxiData: SearchTaxiData = {
       searchRegPlate: this.form.value.regPlate,
       taxiInfoList: [this.editTaxiInfo],
     };
-    this.taxiService.afterSearchTaxi(searchTaxiData);
+    this.searchSuccess(searchTaxiData);
   }
 
   /** 查詢資料 */
@@ -114,53 +113,7 @@ export class UpdateFormComponent {
         return;
       }
 
-      this.hasSearch = true;
-
-      if (
-        res[0].status?.includes('BLACKLIST') ||
-        res[0].status?.includes('GREYLIST')
-      ) {
-        this.apiService.getTaxiViolationAll('ALL').subscribe((res) => {
-          const taxiInfo = res.find((item) => item.regPlate == res[0].regPlate);
-          this.rid = res[0].rid;
-
-          this.options = [];
-          if (taxiInfo?.violationType.includes('BLACKLIST')) {
-            this.options.push({ label: '更新黑名單', value: '3' });
-          }
-          if (taxiInfo?.violationType.includes('GREYLIST')) {
-            this.options.push({ label: '更新灰名單', value: '4' });
-          }
-          this.options.push({ label: '變更為無違規紀錄', value: '0' });
-          this.modifyContentOption = this.options[0];
-
-          this.dateStart = parseTwDateTime(taxiInfo?.dateFrom);
-          this.dateEnd = parseTwDateTime(taxiInfo?.dateTo);
-          this.onDateChange('start', this.dateStart);
-          this.onDateChange('end', this.dateEnd);
-
-          searchTaxiData.taxiInfoList[0]['startDate'] =
-            this.form.value.dateFrom;
-          searchTaxiData.taxiInfoList[0]['endDate'] = this.form.value.dateTo;
-          this.taxiService.afterSearchTaxi(searchTaxiData);
-        });
-      } else {
-        this.options = [
-          { label: '加入黑名單', value: '1' },
-          { label: '加入灰名單', value: '2' },
-        ];
-        this.modifyContentOption = this.options[0];
-        this.dateStart = null;
-        this.dateEnd = null;
-
-        this.form.controls['remark'].setValue(
-          searchTaxiData.taxiInfoList[0].remark
-        );
-        this.form.controls['driverNo'].setValue(
-          searchTaxiData.taxiInfoList[0].driverNo
-        );
-        this.taxiService.afterSearchTaxi(searchTaxiData);
-      }
+      this.searchSuccess(searchTaxiData);
     });
 
     const updateInfo: TaxiInfo = {
@@ -174,6 +127,55 @@ export class UpdateFormComponent {
       endDate: '',
     };
     this.taxiService.setUpdate(updateInfo);
+  }
+
+  searchSuccess(searchTaxiData: SearchTaxiData) {
+    this.hasSearch = true;
+
+    if (
+      searchTaxiData.taxiInfoList[0].status?.includes('BLACKLIST') ||
+      searchTaxiData.taxiInfoList[0].status?.includes('GREYLIST')
+    ) {
+      this.apiService.getTaxiViolationAll('ALL').subscribe((res) => {
+        const taxiInfo = res.find((item) => item.regPlate == res[0].regPlate);
+        this.rid = res[0].rid;
+
+        this.options = [];
+        if (taxiInfo?.violationType.includes('BLACKLIST')) {
+          this.options.push({ label: '更新黑名單', value: '3' });
+        }
+        if (taxiInfo?.violationType.includes('GREYLIST')) {
+          this.options.push({ label: '更新灰名單', value: '4' });
+        }
+        this.options.push({ label: '變更為無違規紀錄', value: '0' });
+        this.modifyContentOption = this.options[0];
+
+        this.dateStart = parseTwDateTime(taxiInfo?.dateFrom);
+        this.dateEnd = parseTwDateTime(taxiInfo?.dateTo);
+        this.onDateChange('start', this.dateStart);
+        this.onDateChange('end', this.dateEnd);
+
+        searchTaxiData.taxiInfoList[0]['startDate'] = this.form.value.dateFrom;
+        searchTaxiData.taxiInfoList[0]['endDate'] = this.form.value.dateTo;
+        this.taxiService.afterSearchTaxi(searchTaxiData);
+      });
+    } else {
+      this.options = [
+        { label: '加入黑名單', value: '1' },
+        { label: '加入灰名單', value: '2' },
+      ];
+      this.modifyContentOption = this.options[0];
+      this.dateStart = null;
+      this.dateEnd = null;
+
+      this.form.controls['remark'].setValue(
+        searchTaxiData.taxiInfoList[0].remark
+      );
+      this.form.controls['driverNo'].setValue(
+        searchTaxiData.taxiInfoList[0].driverNo
+      );
+      this.taxiService.afterSearchTaxi(searchTaxiData);
+    }
   }
 
   /** 呼叫修改API */

@@ -6,12 +6,23 @@ import { CommonModule } from '@angular/common';
 import { TaxiService } from '../../../service/taxi.service';
 import { SearchTaxiData } from '../../../service/taxi.interface';
 import { taxiInfoFakeData } from './fake-data';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CalendarTriggerComponent } from '../../../../../shared/components/calendar-trigger/calendar-trigger.component';
 
 @Component({
   selector: 'app-read-form',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, DropdownSecondaryComponent, CalendarTriggerComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DropdownSecondaryComponent,
+    CalendarTriggerComponent,
+  ],
   templateUrl: './read-form.component.html',
   styleUrl: './read-form.component.scss',
 })
@@ -102,8 +113,24 @@ export class ReadFormComponent {
   }
 
   searchTop6() {
+    let dateFrom = this.dateFrom;
+    let dateTo = this.dateTo;
+
+    // 如果沒有設定，就給預設值
+    if (!dateFrom || dateFrom === '') {
+      const today = new Date();
+      dateFrom = today.toISOString().split('T')[0]; // yyyy-mm-dd
+    }
+
+    if (!dateTo || dateTo === '') {
+      const fromDateObj = new Date(dateFrom);
+      const nextMonth = new Date(fromDateObj);
+      nextMonth.setMonth(fromDateObj.getMonth() + 1);
+      dateTo = nextMonth.toISOString().split('T')[0]; // yyyy-mm-dd
+    }
+
     this.apiService
-      .getTop6Taxi(this.top6SortType, this.dateFrom, this.dateTo)
+      .getTop6Taxi(this.top6SortType, dateFrom, dateTo)
       .subscribe((res) => {
         this.taxiService.afterTop6(res);
       });

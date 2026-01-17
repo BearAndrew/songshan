@@ -61,7 +61,7 @@ export class RealtimePassengerVehicleBaggageComponent {
           from: b.departurePort,
           scheduledTime: b.sta,
           actualArrival: b.ata,
-          flightArrival: b.ata,
+          flightArrival: b.ibt,
           firstBaggage: b.firstBagOutXray,
           lastBaggage: b.lastBagOutXray,
           baggageDetails,

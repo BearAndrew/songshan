@@ -4,6 +4,7 @@ export interface BaggageTimeItem {
   sta: string;                     // 表定時間 (Scheduled Time of Arrival)
   eta: string;                     // 預計抵達 (Estimated Time of Arrival)
   ata: string;                     // 實際抵達 (Actual Time of Arrival)
+  ibt: string;                     // 航班抵達
 
   firstBagDeplane: string;         // 第一件行李下機時間
   firstBagArriveCarousel: string;  // 第一件行李到轉盤時間

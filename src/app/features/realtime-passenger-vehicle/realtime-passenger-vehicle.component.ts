@@ -103,7 +103,11 @@ export class RealtimePassengerVehicleComponent {
         .subscribe((res) => {
           // 更新資料
           this.realTimeService.setRealTimeData(res);
-          this.buildLocationGroups(res);
+          if (this.activeIndex == 2) {
+            this.buildTaxiLocationGroups(res);
+          } else {
+            this.buildLocationGroups(res);
+          }
 
           // 資料更新完成後再啟動輪播
           this.startRotation();
@@ -130,6 +134,16 @@ export class RealtimePassengerVehicleComponent {
         images,
         currentIndex: 0,
       };
+    });
+  }
+
+  private buildTaxiLocationGroups(items: RealTimeTrafficFlowItem[]) {
+    this.locationGroups = items.flatMap((location) => {
+      return location.data.map((taxi, pointIndex) => ({
+        locationName: taxi.label, // label 當作新的 locationName
+        images: [] as LocationImage[], // 目前沒有 image，先給空陣列
+        currentIndex: 0,
+      }));
     });
   }
 

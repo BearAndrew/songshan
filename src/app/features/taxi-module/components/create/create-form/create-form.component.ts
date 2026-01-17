@@ -19,6 +19,7 @@ import { TaxiInfo } from '../../../../../models/taxi.model';
 })
 export class CreateFormComponent {
   form!: FormGroup;
+  submitted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -29,20 +30,24 @@ export class CreateFormComponent {
   ngOnInit(): void {
     this.form = this.fb.group({
       regPlate: ['', Validators.required],
-      driverNo: [''],
-      driverName: [''],
-      driverPhone: [''],
+      driverNo: ['', Validators.required],
+      driverName: ['', Validators.required],
+      driverPhone: ['', Validators.required],
     });
   }
 
-  onSubmit() {
-    // 可檢核
-    // if (this.form.invalid) {
-    //   this.form.markAllAsTouched();
-    //   return;
-    // }
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return !!(control && control.invalid && this.submitted);
+  }
 
-    console.log('送出資料', this.form.value);
+  onSubmit() {
+    this.submitted = true;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     const payload: TaxiInfo = {
       regPlate: this.form.value.regPlate,
       driverNo: this.form.value.driverNo,
@@ -51,6 +56,7 @@ export class CreateFormComponent {
       remark: '',
       status: '',
     };
+
     this.apiService.postTaxi(payload).subscribe(() => {
       this.taxiService.afterCreateTaxi(payload);
     });
