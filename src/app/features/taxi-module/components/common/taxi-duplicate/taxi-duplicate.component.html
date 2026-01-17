@@ -1,0 +1,39 @@
+  <div class="flex flex-col w-full h-0 min-h-[200px] sm:min-h-[300px]">
+    <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">
+      提示:查詢到多筆相似車號資料
+    </h2>
+
+    <!-- 填滿剩餘高度，滾動 -->
+    <div
+      class="flex-1 overflow-y-auto mt-4 border border-white text-md sm:text-2xl"
+    >
+      @for (item of taxiInfoList; track item) {
+      <!-- item 高度固定 -->
+      <div class="flex flex-col sm:flex-row gap-2 border-b mx-8 p-2 sm:h-1/2">
+        <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 h-full">
+          <div class="flex gap-8 items-center">
+            <span class="text-[#05aeed]">車號</span>
+            <span>{{ item.regPlate }}</span>
+          </div>
+          <div class="flex gap-8 items-center">
+            <span class="text-[#05aeed]">姓名</span>
+            <span>{{ item.driverName }}</span>
+          </div>
+          <div class="flex gap-8 items-center">
+            <span class="text-[#05aeed]">編號</span>
+            <span>{{ item.driverNo }}</span>
+          </div>
+          <div class="flex gap-8 items-center">
+            <span class="text-[#05aeed]">手機</span>
+            <span>{{ item.driverPhone }}</span>
+          </div>
+        </div>
+
+        <div class="flex sm:flex-col items-center justify-around">
+          <button class="px-3 py-0.5 bg-[#01a7e7] rounded cursor-pointer hover:bg-[#029cd8]" (click)="onEdit(item)">編輯</button>
+          <button class="px-3 py-0.5 bg-red-400 rounded cursor-pointer hover:bg-[#ff4f54]" (click)="onDelete(item.regPlate)">刪除</button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>

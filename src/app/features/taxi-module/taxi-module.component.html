@@ -26,7 +26,7 @@
         修改
       </button>
 
-      <button
+      <!-- <button
         class="flex-1 py-1 rounded border border-[#f5a830] cursor-pointer"
         [ngClass]="
           activeTab === 'delete'
@@ -36,7 +36,7 @@
         (click)="setTab('delete')"
       >
         刪除
-      </button>
+      </button> -->
 
       <button
         class="flex-1 py-1 rounded border border-[#f5a830] cursor-pointer"
@@ -56,7 +56,7 @@
       @if (activeTab === 'create') {
       <app-create-form></app-create-form>
       } @else if (activeTab === 'update') {
-      <app-update-form></app-update-form>
+      <app-update-form [editTaxiInfo]="editTaxiInfo"></app-update-form>
       } @else if (activeTab === 'delete') {
       <app-delete-form></app-delete-form>
       } @else if (activeTab === 'read') {

@@ -309,7 +309,7 @@ export class ApiService {
 
   /** 計程車列表搜索 */
   searchTaxi(keyword: string): Observable<TaxiInfo[]> {
-    return this.http.get<TaxiInfo[]>(`Taxi/search/${keyword}`);
+    return this.http.get<TaxiInfo[]>(`Taxi/searchbyplate/${keyword}`);
   }
 
   /** 更新計程車記錄 */

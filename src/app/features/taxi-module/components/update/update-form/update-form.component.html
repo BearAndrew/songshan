@@ -24,6 +24,7 @@
       </button>
     </div>
 
+    @if (hasSearch) {
     <!-- 編號 -->
     <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
       編號
@@ -34,7 +35,6 @@
       formControlName="driverNo"
     />
 
-    @if (hasSearch) {
     <!-- 修改內容 -->
     <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
       修改內容

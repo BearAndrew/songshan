@@ -5,8 +5,8 @@
       {{ currentWeekRange }}
     </div>
 
-    <div class="flex-1 w-full min-h-160 overflow-x-auto">
-      <div class="flex flex-col h-full bg-white min-w-200">
+    <div class="flex-1 w-full min-h-160 overflow-auto">
+      <div class="flex flex-col h-fit min-h-full bg-white min-w-200">
         <!-- Header -->
         <div class="sticky top-0 z-10 grid grid-cols-7 bg-[#4a6eb6] border-b">
           @for (day of weekDays; track $index) {
@@ -19,7 +19,7 @@
         </div>
 
         <!-- Content -->
-        <div class="flex-1 overflow-y-auto grid grid-cols-7">
+        <div class="flex-1 grid grid-cols-7">
           @for (dayItems of currentWeek; track $index) {
           <div class="p-1 pt-8 border-r-2 last:border-r-0 even:bg-[#eef2f8]">
             @for (item of dayItems; track $index) {

@@ -71,4 +71,13 @@ export class TaxiService {
   afterDelete() {
     this.deleteSubject.next('');
   }
+
+  // 編輯發送 Subject
+  private editSubject = new Subject<{activeTab: string, taxiInfo: TaxiInfo}>();
+  // 暴露 Observable 給其他元件訂閱
+  editSubject$ = this.editSubject.asObservable();
+  // 發送點擊編輯事件
+  clickEdit(taxiInfo: TaxiInfo) {
+    this.editSubject.next({activeTab: 'update', taxiInfo});
+  }
 }

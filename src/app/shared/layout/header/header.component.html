@@ -65,7 +65,8 @@
     [showIcon]="true"
     (selectionChange)="onFlightTypeChange($event)"
   ></app-dropdown>
-  } @else {
+  }
+  @else if (!isHideAirportDropdown()) {
   <app-dropdown
     class=""
     [options]="airportList"

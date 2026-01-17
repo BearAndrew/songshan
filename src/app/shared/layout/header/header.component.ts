@@ -5,7 +5,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { routes } from '../../../app.routes';
 import { MainLayoutComponent } from '../main-layout/main-layout.component';
 import { filter } from 'rxjs';
-import { DropdownComponent, Option } from '../../components/dropdown/dropdown.component';
+import {
+  DropdownComponent,
+  Option,
+} from '../../components/dropdown/dropdown.component';
 import { ApiService } from '../../../core/services/api-service.service';
 import { Airport } from '../../../models/airport.model';
 import { CommonService } from '../../../core/services/common.service';
@@ -66,6 +69,13 @@ export class HeaderComponent {
   // 判斷是否在 /traffic-analysis
   isTrafficAnalysisRoute(): boolean {
     return this.currentUrl.startsWith('/traffic-analysis');
+  }
+
+  /** 隱藏機場下拉選單 */
+  isHideAirportDropdown(): boolean {
+    const prefixes: string[] = ['/taxi-module', '/intl-checkin-counter'];
+
+    return prefixes.some((prefix) => this.currentUrl.startsWith(prefix));
   }
 
   /** 讀取 app.routes.ts 的路由資訊 */

@@ -50,40 +50,7 @@
   </ng-template>
 
   <ng-template #infoDuplicate>
-    <div class="flex flex-col w-full h-0 min-h-[200px] sm:min-h-[300px]">
-      <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">
-        提示:查詢到多筆相似車號資料
-      </h2>
-
-      <!-- 填滿剩餘高度，滾動 -->
-      <div
-        class="flex-1 overflow-y-auto mt-4 border border-white text-md sm:text-2xl"
-      >
-        @for (item of items; track item.id) {
-        <!-- item 高度固定 -->
-        <div class="border-b mx-8 p-2 h-1/2">
-          <div class="grid grid-cols-2 gap-x-6 gap-y-1 h-full">
-            <div class="flex gap-8 items-center">
-              <span class="text-[#05aeed]">車號</span>
-              <span>{{ item.carNo }}</span>
-            </div>
-            <div class="flex gap-8 items-center">
-              <span class="text-[#05aeed]">姓名</span>
-              <span>{{ item.name }}</span>
-            </div>
-            <div class="flex gap-8 items-center">
-              <span class="text-[#05aeed]">編號</span>
-              <span>{{ item.code }}</span>
-            </div>
-            <div class="flex gap-8 items-center">
-              <span class="text-[#05aeed]">手機</span>
-              <span>{{ item.phone }}</span>
-            </div>
-          </div>
-        </div>
-        }
-      </div>
-    </div>
+    <app-taxi-duplicate [taxiInfoList]="taxiInfoList"></app-taxi-duplicate>
   </ng-template>
 
   <ng-template #infoNoData>

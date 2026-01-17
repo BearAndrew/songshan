@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TaxiService } from '../../../../service/taxi.service';
 import { TaxiInfo } from '../../../../../../models/taxi.model';
+import { TaxiDuplicateComponent } from "../../../common/taxi-duplicate/taxi-duplicate.component";
 
 @Component({
   selector: 'app-read-taxi-info',
-  imports: [CommonModule],
+  imports: [CommonModule, TaxiDuplicateComponent],
   templateUrl: './read-taxi-info.component.html',
   styleUrl: './read-taxi-info.component.scss',
 })

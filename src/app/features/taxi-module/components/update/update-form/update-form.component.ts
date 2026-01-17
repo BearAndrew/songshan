@@ -1,5 +1,5 @@
 import { SearchTaxiData } from './../../../service/taxi.interface';
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { ApiService } from '../../../../../core/services/api-service.service';
 import { DropdownSecondaryComponent } from '../../../../../shared/components/dropdown-secondary/dropdown-secondary.component';
 import { Option } from '../../../../../shared/components/dropdown/dropdown.component';
@@ -28,6 +28,8 @@ import { parseTwDateTime } from '../../../../../core/utils/parse-tw-datetime';
   styleUrl: './update-form.component.scss',
 })
 export class UpdateFormComponent {
+  @Input() editTaxiInfo!: TaxiInfo;
+
   form!: FormGroup;
 
   options: Option[] = [];
@@ -48,6 +50,12 @@ export class UpdateFormComponent {
     private taxiService: TaxiService
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['editTaxiInfo']?.currentValue && this.form) {
+      this.patchForm(changes['editTaxiInfo'].currentValue);
+    }
+  }
+
   ngOnInit(): void {
     this.form = this.fb.group({
       regPlate: ['', Validators.required],
@@ -56,6 +64,26 @@ export class UpdateFormComponent {
       driverPhone: [''],
       remark: [''],
     });
+
+    if (this.editTaxiInfo) {
+      this.patchForm(this.editTaxiInfo);
+    }
+  }
+
+  private patchForm(taxi: TaxiInfo): void {
+    this.form.patchValue({
+      regPlate: taxi.regPlate,
+      driverNo: taxi.driverNo,
+      driverName: taxi.driverName,
+      driverPhone: taxi.driverPhone,
+      remark: taxi.remark,
+    });
+    this.hasSearch = true;
+    const searchTaxiData: SearchTaxiData = {
+      searchRegPlate: this.form.value.regPlate,
+      taxiInfoList: [this.editTaxiInfo],
+    };
+    this.taxiService.afterSearchTaxi(searchTaxiData);
   }
 
   /** 查詢資料 */
@@ -82,6 +110,7 @@ export class UpdateFormComponent {
 
       if (res.length == 0 || res.length > 1) {
         this.taxiService.afterSearchTaxi(searchTaxiData);
+        this.hasSearch = false;
         return;
       }
 
