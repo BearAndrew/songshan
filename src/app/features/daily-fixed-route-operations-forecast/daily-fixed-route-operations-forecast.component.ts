@@ -30,8 +30,8 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '到站', value: 0, total: 0 },
         { label: '離站', value: 0, total: 0 },
+        { label: '到站', value: 0, total: 0 },
       ],
     },
     {
@@ -41,8 +41,8 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '到站', value: 0, total: 0 },
         { label: '離站', value: 0, total: 0 },
+        { label: '到站', value: 0, total: 0 },
       ],
     },
     {
@@ -52,8 +52,8 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '到站', value: 0, total: 0 },
         { label: '離站', value: 0, total: 0 },
+        { label: '到站', value: 0, total: 0 },
       ],
     },
     {
@@ -63,8 +63,8 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '到站', value: 0, total: 0 },
         { label: '離站', value: 0, total: 0 },
+        { label: '到站', value: 0, total: 0 },
       ],
     },
     {
@@ -74,8 +74,8 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '到站', value: 0, total: 0 },
         { label: '離站', value: 0, total: 0 },
+        { label: '到站', value: 0, total: 0 },
       ],
     },
   ];
@@ -163,16 +163,16 @@ export class DailyFixedRouteOperationsForecastComponent {
       res.crossStrait_Predict.noOfPax_Inbound +
       res.intl_Predict.noOfPax_Inbound;
 
-    this.chartData[0].flightData[0].value =
+    this.chartData[0].flightData[1].value =
       res.crossStrait_Arrived.noOfFlight_Inbound +
       res.intl_Arrived.noOfFlight_Inbound;
-    this.chartData[0].flightData[0].total =
+    this.chartData[0].flightData[1].total =
       res.crossStrait_Predict.noOfFlight_Inbound +
       res.intl_Predict.noOfFlight_Inbound;
-    this.chartData[0].flightData[1].value =
+    this.chartData[0].flightData[0].value =
       res.crossStrait_Arrived.noOfFlight_Outbound +
       res.intl_Arrived.noOfFlight_Outbound;
-    this.chartData[0].flightData[1].total =
+    this.chartData[0].flightData[0].total =
       res.crossStrait_Predict.noOfFlight_Outbound +
       res.intl_Predict.noOfFlight_Outbound;
 
@@ -185,11 +185,11 @@ export class DailyFixedRouteOperationsForecastComponent {
     this.chartData[1].passengerData[1].value = res.intl_Arrived.noOfPax_Inbound;
     this.chartData[1].passengerData[1].total = res.intl_Predict.noOfPax_Inbound;
 
-    this.chartData[1].flightData[0].value = res.intl_Arrived.noOfFlight_Inbound;
-    this.chartData[1].flightData[0].total = res.intl_Predict.noOfFlight_Inbound;
-    this.chartData[1].flightData[1].value =
+    this.chartData[1].flightData[1].value = res.intl_Arrived.noOfFlight_Inbound;
+    this.chartData[1].flightData[1].total = res.intl_Predict.noOfFlight_Inbound;
+    this.chartData[1].flightData[0].value =
       res.intl_Arrived.noOfFlight_Outbound;
-    this.chartData[1].flightData[1].total =
+    this.chartData[1].flightData[0].total =
       res.intl_Predict.noOfFlight_Outbound;
 
     // 2, 兩岸線
@@ -202,13 +202,13 @@ export class DailyFixedRouteOperationsForecastComponent {
     this.chartData[2].passengerData[1].total =
       res.crossStrait_Predict.noOfPax_Inbound;
 
-    this.chartData[2].flightData[0].value =
-      res.crossStrait_Arrived.noOfFlight_Inbound;
-    this.chartData[2].flightData[0].total =
-      res.crossStrait_Predict.noOfFlight_Inbound;
     this.chartData[2].flightData[1].value =
-      res.crossStrait_Arrived.noOfFlight_Outbound;
+      res.crossStrait_Arrived.noOfFlight_Inbound;
     this.chartData[2].flightData[1].total =
+      res.crossStrait_Predict.noOfFlight_Inbound;
+    this.chartData[2].flightData[0].value =
+      res.crossStrait_Arrived.noOfFlight_Outbound;
+    this.chartData[2].flightData[0].total =
       res.crossStrait_Predict.noOfFlight_Outbound;
 
     // 3, 國內線
@@ -221,13 +221,13 @@ export class DailyFixedRouteOperationsForecastComponent {
     this.chartData[3].passengerData[1].total =
       res.domestic_Predict.noOfPax_Inbound;
 
-    this.chartData[3].flightData[0].value =
-      res.domestic_Arrived.noOfFlight_Inbound;
-    this.chartData[3].flightData[0].total =
-      res.domestic_Predict.noOfFlight_Inbound;
     this.chartData[3].flightData[1].value =
-      res.domestic_Arrived.noOfFlight_Outbound;
+      res.domestic_Arrived.noOfFlight_Inbound;
     this.chartData[3].flightData[1].total =
+      res.domestic_Predict.noOfFlight_Inbound;
+    this.chartData[3].flightData[0].value =
+      res.domestic_Arrived.noOfFlight_Outbound;
+    this.chartData[3].flightData[0].total =
       res.domestic_Predict.noOfFlight_Outbound;
 
     // 4, 總數
@@ -248,19 +248,19 @@ export class DailyFixedRouteOperationsForecastComponent {
       res.intl_Predict.noOfPax_Inbound +
       res.domestic_Predict.noOfPax_Inbound;
 
-    this.chartData[4].flightData[0].value =
+    this.chartData[4].flightData[1].value =
       res.crossStrait_Arrived.noOfFlight_Inbound +
       res.intl_Arrived.noOfFlight_Inbound +
       res.domestic_Arrived.noOfFlight_Inbound;
-    this.chartData[4].flightData[0].total =
+    this.chartData[4].flightData[1].total =
       res.crossStrait_Predict.noOfFlight_Inbound +
       res.intl_Predict.noOfFlight_Inbound +
       res.domestic_Predict.noOfFlight_Inbound;
-    this.chartData[4].flightData[1].value =
+    this.chartData[4].flightData[0].value =
       res.crossStrait_Arrived.noOfFlight_Outbound +
       res.intl_Arrived.noOfFlight_Outbound +
       res.domestic_Arrived.noOfFlight_Outbound;
-    this.chartData[4].flightData[1].total =
+    this.chartData[4].flightData[0].total =
       res.crossStrait_Predict.noOfFlight_Outbound +
       res.intl_Predict.noOfFlight_Outbound +
       res.domestic_Predict.noOfFlight_Outbound;
