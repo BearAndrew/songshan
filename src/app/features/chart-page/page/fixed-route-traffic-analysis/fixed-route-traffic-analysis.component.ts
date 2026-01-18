@@ -267,7 +267,7 @@ export class FixedRouteTrafficAnalysisComponent  {
     };
 
     // console.log(payload);
-    // // this.handleFlightTrafficAnalysis(fakeData);
+    // this.handleFlightTrafficAnalysis(fakeData);
     // return;
 
     // 呼叫 API

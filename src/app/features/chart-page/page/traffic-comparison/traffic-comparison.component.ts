@@ -242,8 +242,9 @@ export class TrafficComparisonComponent {
       this.thirdDateRangeLabel =
         this.formData.thirdYear?.toString() + '年' || '';
     }
+
     // console.log(payload);
-    // // this.handleFlightTrafficAnalysis(fakeData);
+    // this.handleFlightTrafficAnalysis(fakeData);
     // return;
 
     // 呼叫 API

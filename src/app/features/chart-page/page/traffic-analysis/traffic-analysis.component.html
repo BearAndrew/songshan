@@ -217,7 +217,7 @@
         </div>
 
         <!-- Rows -->
-        @for (row of barData[0].data; track row.key) {
+        @for (row of barData[0].data; let rowIndex = $index; track row.key) {
         <!-- 日期 -->
         <div class="border p-2 text-center">
           {{ row.key }}
@@ -226,7 +226,7 @@
         <!-- 各年份數值 -->
         @for (col of barData.slice().reverse(); track col.label) {
         <div class="border p-2 text-center">
-          {{ col.data[0].value }}
+          {{ col.data[rowIndex].value }}
         </div>
         } }
       </div>
@@ -253,7 +253,7 @@
         </div>
 
         <!-- Rows -->
-        @for (row of lineData[0].data; track row.key) {
+        @for (row of lineData[0].data; let rowIndex = $index; track row.key) {
         <!-- 日期 -->
         <div class="border p-2 text-center">
           {{ row.key }}
@@ -262,7 +262,7 @@
         <!-- 各年份數值 -->
         @for (col of lineData.slice().reverse(); track col.label) {
         <div class="border p-2 text-center">
-          {{ col.data[0].value }}
+          {{ col.data[rowIndex].value }}
         </div>
         } }
       </div>

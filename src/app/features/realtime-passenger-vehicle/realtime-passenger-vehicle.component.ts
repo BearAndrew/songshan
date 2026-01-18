@@ -138,13 +138,27 @@ export class RealtimePassengerVehicleComponent {
   }
 
   private buildTaxiLocationGroups(items: RealTimeTrafficFlowItem[]) {
-    this.locationGroups = items.flatMap((location) => {
-      return location.data.map((taxi, pointIndex) => ({
-        locationName: taxi.label, // label 當作新的 locationName
-        images: [] as LocationImage[], // 目前沒有 image，先給空陣列
-        currentIndex: 0,
-      }));
+    const groups = items.flatMap((location) => {
+      return location.data.map((taxi, pointIndex) => {
+        const images = (taxi.image ?? []).map((img, imageIndex) => ({
+          src: img,
+          label: '',
+          pointIndex,
+          imageIndex,
+        }));
+
+        return {
+          locationName: taxi.label,
+          images,
+          currentIndex: 0,
+        };
+      });
     });
+
+    // 移除最後一筆（不需要顯示）
+    this.locationGroups = groups.slice(0, -1);
+
+    console.log(this.locationGroups);
   }
 
   /** 每 10 秒全部 location 一起切換圖片 */

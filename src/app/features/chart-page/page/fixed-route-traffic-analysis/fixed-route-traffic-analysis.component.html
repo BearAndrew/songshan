@@ -196,7 +196,9 @@
     <!-- 手機版 -->
     <div class="flex flex-col gap-4 sm:hidden w-full max-w-100">
       <h2 class="text-2xl text-center font-semibold">人數</h2>
-      <div class="grid grid-cols-3 border border-gray-300">
+      <div
+        class="grid grid-cols-3 border border-gray-300"
+      >
         <!-- Header -->
         <div
           class="flex items-center justify-center text-center border p-2 font-semibold"
@@ -215,7 +217,7 @@
         </div>
 
         <!-- Rows -->
-        @for (row of barData[0].data; track row.key) {
+        @for (row of barData[0].data; let rowIndex = $index; track row.key) {
         <!-- 日期 -->
         <div class="border p-2 text-center">
           {{ row.key }}
@@ -224,13 +226,15 @@
         <!-- 各年份數值 -->
         @for (col of barData.slice().reverse(); track col.label) {
         <div class="border p-2 text-center">
-          {{ col.data[0].value }}
+          {{ col.data[rowIndex].value }}
         </div>
         } }
       </div>
 
       <h2 class="mt-8 text-2xl text-center font-semibold">架次</h2>
-      <div class="grid grid-cols-3 border border-gray-300">
+      <div
+        class="grid grid-cols-3 border border-gray-300"
+      >
         <!-- Header -->
         <div
           class="flex items-center justify-center text-center border p-2 font-semibold"
@@ -249,7 +253,7 @@
         </div>
 
         <!-- Rows -->
-        @for (row of lineData[0].data; track row.key) {
+        @for (row of lineData[0].data; let rowIndex = $index; track row.key) {
         <!-- 日期 -->
         <div class="border p-2 text-center">
           {{ row.key }}
@@ -258,7 +262,7 @@
         <!-- 各年份數值 -->
         @for (col of lineData.slice().reverse(); track col.label) {
         <div class="border p-2 text-center">
-          {{ col.data[0].value }}
+          {{ col.data[rowIndex].value }}
         </div>
         } }
       </div>
