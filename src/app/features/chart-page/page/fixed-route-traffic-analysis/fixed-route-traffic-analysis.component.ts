@@ -9,7 +9,7 @@ import { DataSetWithDataArray } from '../../../../core/lib/chart-tool';
 import { Option } from '../../../../shared/components/dropdown/dropdown.component';
 import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
-import { FlightDirection, FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse, FlightTrafficType } from '../../../../models/flight-traffic-analysis.model';
+import { FlightDirection, FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse } from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
 
 
@@ -259,7 +259,7 @@ export class FixedRouteTrafficAnalysisComponent  {
           this.formData.endMonth,
           this.formData.endDay
         ) || '',
-      type: (this.type as FlightTrafficType) || '',
+      type: (this.formData.flightClass) || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.flightType as FlightDirection) || '',
       peer: this.formData.route! || '',

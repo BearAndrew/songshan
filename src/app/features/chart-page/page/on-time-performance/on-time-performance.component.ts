@@ -13,7 +13,6 @@ import {
   FlightDirection,
   FlightTrafficAnalysisRequest,
   FlightTrafficAnalysisResponse,
-  FlightTrafficType,
 } from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
 import {
@@ -265,7 +264,7 @@ export class OnTimePerformanceComponent {
           this.formData.endMonth,
           this.formData.endDay
         ) || '',
-      type: (this.type as FlightTrafficType) || '',
+      type: (this.formData.flightClass) || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.flightType as FlightDirection) || '',
       peer: this.formData.route! || '',

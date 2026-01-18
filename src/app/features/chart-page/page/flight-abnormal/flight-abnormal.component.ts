@@ -12,12 +12,6 @@ import {
 import { Option } from '../../../../shared/components/dropdown/dropdown.component';
 import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
-import {
-  FlightDirection,
-  FlightTrafficAnalysisRequest,
-  FlightTrafficAnalysisResponse,
-  FlightTrafficType,
-} from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
 import { PieChartComponent } from '../../../../shared/chart/pie-chart/pie-chart.component';
 import { IrregularAnalysisRequest, IrregularAnalysisResponse } from '../../../../models/irregular-analysis.model';
@@ -282,7 +276,7 @@ export class FlightAbnormalComponent {
           this.formData.endMonth,
           this.formData.endDay
         ) || '',
-      type: (this.type as FlightTrafficType) || '',
+      type: (this.formData.flightClass) || '',
       airline: this.formData.airline! || '',
       peer: this.formData.route! || '',
       flightType: (this.formData.flightType as TabType) || '',

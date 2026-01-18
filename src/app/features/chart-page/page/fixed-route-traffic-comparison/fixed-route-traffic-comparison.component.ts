@@ -11,7 +11,6 @@ import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
 import {
   FlightDirection,
-  FlightTrafficType,
 } from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
 import {
@@ -228,7 +227,7 @@ export class FixedRouteTrafficComparisonComponent {
       year1: this.formData.firstYear?.toString() || '',
       year2: this.formData.secondYear?.toString() || '',
       year3: this.formData.thirdYear?.toString() || '',
-      type: (this.type as FlightTrafficType) || '',
+      type: (this.formData.flightClass) || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.flightType as FlightDirection) || '',
       peer: this.formData.route! || '',

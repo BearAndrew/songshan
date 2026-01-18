@@ -15,7 +15,6 @@ import {
   YearlyTrafficAnalysisResponse,
 } from '../../../../models/yearly-traffic-analysis.model';
 import {
-  FlightTrafficType,
   FlightDirection,
 } from '../../../../models/flight-traffic-analysis.model';
 import { extractAfterSlash } from '../../../../core/utils/extract-slash';
@@ -229,7 +228,7 @@ export class TrafficComparisonComponent {
       year1: this.formData.firstYear?.toString() || '',
       year2: this.formData.secondYear?.toString() || '',
       year3: this.formData.thirdYear?.toString() || '',
-      type: (this.type as FlightTrafficType) || '',
+      type: (this.formData.flightClass) || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.flightType as FlightDirection) || '',
       peer: this.formData.route! || '',

@@ -57,7 +57,7 @@
 </div>
 
 <ng-template #dropdown>
-  @if (isTrafficAnalysisRoute()) {
+  <!-- @if (isTrafficAnalysisRoute()) {
   <app-dropdown
     class=""
     [options]="flightTypeList"
@@ -65,8 +65,8 @@
     [showIcon]="true"
     (selectionChange)="onFlightTypeChange($event)"
   ></app-dropdown>
-  }
-  @else if (!isHideAirportDropdown()) {
+  } -->
+  @if (!isHideAirportDropdown()) {
   <app-dropdown
     class=""
     [options]="airportList"

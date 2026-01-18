@@ -9,7 +9,7 @@ import { DataSetWithDataArray } from '../../../../core/lib/chart-tool';
 import { Option } from '../../../../shared/components/dropdown/dropdown.component';
 import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
-import { FlightDirection, FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse, FlightTrafficType } from '../../../../models/flight-traffic-analysis.model';
+import { FlightDirection, FlightTrafficAnalysisRequest, FlightTrafficAnalysisResponse } from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
 
 @Component({
@@ -137,9 +137,6 @@ export class TrafficAnalysisComponent {
     private apiService: ApiService,
     private commonService: CommonService
   ) {
-    this.commonService.getSelectedFlightType().subscribe((res) => {
-      this.type = res;
-    });
   }
 
   ngOnInit(): void {
@@ -256,7 +253,7 @@ export class TrafficAnalysisComponent {
           this.formData.endMonth,
           this.formData.endDay
         ) || '',
-      type: (this.type as FlightTrafficType) || '',
+      type: (this.formData.flightClass) || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.direction as FlightDirection) || '',
       peer: this.formData.route! || '',
