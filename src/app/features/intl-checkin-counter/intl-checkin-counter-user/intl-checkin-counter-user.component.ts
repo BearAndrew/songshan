@@ -63,15 +63,108 @@ export class IntlCheckinCounterUserComponent {
   form!: FormGroup;
   formData = {
     flightInfo: '',
+    departureTimeHour: '',
+    departureTimeMin: '',
     departureTime: '',
+    applyTimeStartHour: '',
+    applyTimeStartMin: '',
     applyTimeStart: '',
+    applyTimeEndHour: '',
+    applyTimeEndMin: '',
     applyTimeEnd: '',
     applyDateStart: null,
     applyDateEnd: null,
   };
 
   seasonOptions: Option[] = [];
-
+  hourOptions: Option[] = [
+    { label: '00', value: '00' },
+    { label: '01', value: '01' },
+    { label: '02', value: '02' },
+    { label: '03', value: '03' },
+    { label: '04', value: '04' },
+    { label: '05', value: '05' },
+    { label: '06', value: '06' },
+    { label: '07', value: '07' },
+    { label: '08', value: '08' },
+    { label: '09', value: '09' },
+    { label: '10', value: '10' },
+    { label: '11', value: '11' },
+    { label: '12', value: '12' },
+    { label: '13', value: '13' },
+    { label: '14', value: '14' },
+    { label: '15', value: '15' },
+    { label: '16', value: '16' },
+    { label: '17', value: '17' },
+    { label: '18', value: '18' },
+    { label: '19', value: '19' },
+    { label: '20', value: '20' },
+    { label: '21', value: '21' },
+    { label: '22', value: '22' },
+    { label: '23', value: '23' },
+  ];
+  minOptions: Option[] = [
+    { label: '00', value: '00' },
+    { label: '01', value: '01' },
+    { label: '02', value: '02' },
+    { label: '03', value: '03' },
+    { label: '04', value: '04' },
+    { label: '05', value: '05' },
+    { label: '06', value: '06' },
+    { label: '07', value: '07' },
+    { label: '08', value: '08' },
+    { label: '09', value: '09' },
+    { label: '10', value: '10' },
+    { label: '11', value: '11' },
+    { label: '12', value: '12' },
+    { label: '13', value: '13' },
+    { label: '14', value: '14' },
+    { label: '15', value: '15' },
+    { label: '16', value: '16' },
+    { label: '17', value: '17' },
+    { label: '18', value: '18' },
+    { label: '19', value: '19' },
+    { label: '20', value: '20' },
+    { label: '21', value: '21' },
+    { label: '22', value: '22' },
+    { label: '23', value: '23' },
+    { label: '24', value: '24' },
+    { label: '25', value: '25' },
+    { label: '26', value: '26' },
+    { label: '27', value: '27' },
+    { label: '28', value: '28' },
+    { label: '29', value: '29' },
+    { label: '30', value: '30' },
+    { label: '31', value: '31' },
+    { label: '32', value: '32' },
+    { label: '33', value: '33' },
+    { label: '34', value: '34' },
+    { label: '35', value: '35' },
+    { label: '36', value: '36' },
+    { label: '37', value: '37' },
+    { label: '38', value: '38' },
+    { label: '39', value: '39' },
+    { label: '40', value: '40' },
+    { label: '41', value: '41' },
+    { label: '42', value: '42' },
+    { label: '43', value: '43' },
+    { label: '44', value: '44' },
+    { label: '45', value: '45' },
+    { label: '46', value: '46' },
+    { label: '47', value: '47' },
+    { label: '48', value: '48' },
+    { label: '49', value: '49' },
+    { label: '50', value: '50' },
+    { label: '51', value: '51' },
+    { label: '52', value: '52' },
+    { label: '53', value: '53' },
+    { label: '54', value: '54' },
+    { label: '55', value: '55' },
+    { label: '56', value: '56' },
+    { label: '57', value: '57' },
+    { label: '58', value: '58' },
+    { label: '59', value: '59' },
+  ];
   isEdit: boolean = false;
 
   getWeekControl(key: string): FormControl {
@@ -103,7 +196,7 @@ export class IntlCheckinCounterUserComponent {
     private apiService: ApiService,
     private counterService: CounterService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -129,85 +222,34 @@ export class IntlCheckinCounterUserComponent {
 
     // 取得 isEdit
     this.route.queryParamMap.subscribe((params) => {
-      const isEditParam = params.get('isEdit');
-      this.isEdit = isEditParam === 'Y';
-      // 取得其他參數
-      const applyRequest: CounterApplyEditRequest = {
+      this.isEdit = params.get('isEdit') === 'Y';
+
+      const counterInfo: CounterInfo = {
         requestId: params.get('requestId') || '',
+        agent: params.get('agent') || '',
         airlineIata: params.get('airlineIata') || '',
         flightNo: params.get('flightNo') || '',
         season: params.get('season') || '',
-        apply_for_period: params.get('apply_for_period') || '',
-        startDate: params.get('startDate') || '',
-        endDate: params.get('endDate') || '',
+        applyForPeriod: params.get('apply_for_period') || '',
+        applicationDate: params.get('applicationDate') || '',
         dayOfWeek: params.get('dayOfWeek') || '',
         startTime: params.get('startTime') || '',
         endTime: params.get('endTime') || '',
+        status: params.get('status') || '',
+        assignedBy: params.get('assignedBy') || '',
+        appliedBy: params.get('appliedBy'),
+        assignedCounterArea: params.get('assignedCounterArea') || '',
       };
 
-      this.requestId = applyRequest.requestId;
-      this.season = applyRequest.season;
-
-      // 轉換成表單需要的格式
-      const flightInfo = applyRequest.airlineIata + applyRequest.flightNo;
-      const departureTime = '';
-      const applyTimeStart = applyRequest.startTime.slice(0, -3) || '';
-      const applyTimeEnd = applyRequest.endTime.slice(0, -3) || '';
-      const applyDateStart = applyRequest.apply_for_period
-        ? applyRequest.apply_for_period.split('~')[0]
-        : '';
-      const applyDateEnd = applyRequest.apply_for_period
-        ? applyRequest.apply_for_period.split('~')[1]
-        : '';
-
-      // weekDays
-      const weekDaysMap = {
-        mon: false,
-        tue: false,
-        wed: false,
-        thu: false,
-        fri: false,
-        sat: false,
-        sun: false,
+      const item: ScheduleItem = {
+        date: params.get('date') || '',
+        flightNo: counterInfo.flightNo,
+        time: `${counterInfo.startTime}-${counterInfo.endTime}`,
+        status: counterInfo.status,
+        counterInfo,
       };
-      if (applyRequest.dayOfWeek) {
-        applyRequest.dayOfWeek.split(',').forEach((d) => {
-          switch (d) {
-            case '1':
-              weekDaysMap.mon = true;
-              break;
-            case '2':
-              weekDaysMap.tue = true;
-              break;
-            case '3':
-              weekDaysMap.wed = true;
-              break;
-            case '4':
-              weekDaysMap.thu = true;
-              break;
-            case '5':
-              weekDaysMap.fri = true;
-              break;
-            case '6':
-              weekDaysMap.sat = true;
-              break;
-            case '7':
-              weekDaysMap.sun = true;
-              break;
-          }
-        });
-      }
 
-      // patch 表單
-      this.form.patchValue({
-        flightInfo,
-        departureTime,
-        applyTimeStart,
-        applyTimeEnd,
-        applyDateStart,
-        applyDateEnd,
-        weekDays: weekDaysMap,
-      });
+      this.selectItem(item);
     });
 
     this.getAllCounter();
@@ -241,7 +283,7 @@ export class IntlCheckinCounterUserComponent {
     // 格式化成 yyyy-mm-dd
     const formatDate = (d: Date) =>
       `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
-        d.getDate()
+        d.getDate(),
       ).padStart(2, '0')}`;
 
     this.searchDateFrom = formatDate(sunday);
@@ -271,7 +313,7 @@ export class IntlCheckinCounterUserComponent {
       // 建立 7 天空陣列，Sun=0 ... Sat=6
       weekMap.set(
         weekIndex,
-        Array.from({ length: 7 }, () => [])
+        Array.from({ length: 7 }, () => []),
       );
     }
 
@@ -420,14 +462,31 @@ export class IntlCheckinCounterUserComponent {
     // flightInfo
     const flightInfo = info.airlineIata + info.flightNo;
 
-    // departureTime 暫時留空或自行設定
-    const departureTime = '';
+    // ===== 時間拆分工具（區域用） =====
+    const splitTime = (time?: string): { hour: string; min: string } => {
+      if (!time || !time.includes(':')) {
+        return { hour: '', min: '' };
+      }
+      const [hour, min] = time.slice(0, 5).split(':');
+      return { hour, min };
+    };
 
-    // applyTimeStart / applyTimeEnd 去掉秒
-    const applyTimeStart = info.startTime ? info.startTime.slice(0, 5) : '';
-    const applyTimeEnd = info.endTime ? info.endTime.slice(0, 5) : '';
+    // ===== 拆時間 =====
+    const departure = splitTime(''); // 目前沒有來源
+    const applyStart = splitTime(info.startTime);
+    const applyEnd = splitTime(info.endTime);
 
-    // applyDateStart / applyDateEnd 從 applyForPeriod 拆分
+    // ===== 分配給 formData（不是 form） =====
+    this.formData.departureTimeHour = departure.hour;
+    this.formData.departureTimeMin = departure.min;
+
+    this.formData.applyTimeStartHour = applyStart.hour;
+    this.formData.applyTimeStartMin = applyStart.min;
+
+    this.formData.applyTimeEndHour = applyEnd.hour;
+    this.formData.applyTimeEndMin = applyEnd.min;
+
+    // ===== 期間 =====
     const applyDateStart = info.applyForPeriod
       ? info.applyForPeriod.split('~')[0]
       : '';
@@ -435,7 +494,7 @@ export class IntlCheckinCounterUserComponent {
       ? info.applyForPeriod.split('~')[1]
       : '';
 
-    // weekDays
+    // ===== weekDays =====
     const weekDaysMap = {
       mon: false,
       tue: false,
@@ -474,18 +533,15 @@ export class IntlCheckinCounterUserComponent {
       });
     }
 
-    // patch 表單
+    // ===== patch 非時間欄位給 form =====
     this.form.patchValue({
       flightInfo,
-      departureTime,
-      applyTimeStart,
-      applyTimeEnd,
       applyDateStart,
       applyDateEnd,
       weekDays: weekDaysMap,
     });
 
-    // 如果你需要存 requestId / season
+    // ===== 其他狀態 =====
     this.requestId = info.requestId;
     this.season = info.season;
   }
@@ -589,5 +645,33 @@ export class IntlCheckinCounterUserComponent {
 
   onSearchDateChange(date: Date) {
     this.getAllCounter(date);
+  }
+
+  /** 時間改變更改 form */
+  onTimeChange(controlName: string, type: 'HH' | 'mm', option: Option): void {
+    // option.value 預期為字串，例如 '08' 或 '30'
+    const v = option && option.value ? String(option.value) : '';
+
+    // 儲存 hour/min 到 this.formData 中對應的欄位（例如 departureTimeHour / departureTimeMin）
+    const hourKey = `${controlName}Hour`;
+    const minKey = `${controlName}Min`;
+    (this.formData as any)[type === 'HH' ? hourKey : minKey] = v;
+
+    // 由目前存的 hour/min 組成時間字串，若兩者皆為空則設定為空字串
+    const hh = ((this.formData as any)[hourKey] || '').toString();
+    const mm = ((this.formData as any)[minKey] || '').toString();
+
+    let combined = '';
+    if (hh !== '' || mm !== '') {
+      const paddedH = (hh === '' ? '00' : hh).padStart(2, '0');
+      const paddedM = (mm === '' ? '00' : mm).padStart(2, '0');
+      combined = `${paddedH}:${paddedM}`;
+    }
+
+    // 更新表單與 formData 的對應欄位
+    if (this.form && this.form.get(controlName)) {
+      this.form.get(controlName)!.setValue(combined);
+    }
+    (this.formData as any)[controlName] = combined;
   }
 }
