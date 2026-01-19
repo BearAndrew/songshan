@@ -14,6 +14,17 @@ import { CommonService } from '../../core/services/common.service';
 import { TabType } from '../../core/enums/tab-type.enum';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
+import {
+  BehaviorSubject,
+  EMPTY,
+  interval,
+  Observable,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-traffic-forecast',
@@ -306,9 +317,12 @@ export class TrafficForecastComponent {
   tomorrowPax = 0;
   twoDayPax = 0;
 
+  private refreshTrigger$ = new BehaviorSubject<void>(undefined);
+  private destroy$ = new Subject<void>();
+
   constructor(
     private apiService: ApiService,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {
     //預設取得不分機場總數
     this.commonService.getSelectedAirport().subscribe((airportId) => {
@@ -322,94 +336,128 @@ export class TrafficForecastComponent {
   }
 
   ngOnInit() {
-    this.getData();
+    // 監聽選擇的機場
+    this.commonService
+      .getSelectedAirport()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((airportId) => {
+        if (airportId === -1) return;
+        this.airportId =
+          this.commonService.getAirportCodeById(airportId) || '-1';
+        this.refreshTrigger$.next(); // 立即觸發
+      });
+
+    // 30 秒輪詢 + refreshTrigger$ 觸發
+    this.refreshTrigger$
+      .pipe(
+        startWith(0), // 預設立即執行一次
+        switchMap(() =>
+          interval(30000).pipe(
+            startWith(0),
+            switchMap(() => this.getData()),
+          ),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
-  getData(): void {
-    this.apiService
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private getData(): Observable<FlightTrafficPredictResponse> {
+    if (!this.airportId) return EMPTY;
+
+    return this.apiService
       .getFlightTrafficPredict(
         this.airportId,
         this.dayData[this.dayActiveIndex].value,
-        this.data[this.activeIndex].value
+        this.data[this.activeIndex].value,
       )
-      .subscribe((res: FlightTrafficPredictResponse) => {
-        // --- Mapping tableOut & tableIn ---
-        this.tableOut = res.outboundFlight.map((f: PredictFlightItem) => ({
-          flightNumber: f.flightNo,
-          airline: f.airlineName,
-          departureTime: f.schTime,
-          destination: f.airportName,
-          passengerCount: f.noOfPax,
-        }));
+      .pipe(
+        tap((res) => {
+          // --- Mapping tableOut & tableIn ---
+          this.tableOut = res.outboundFlight.map((f: PredictFlightItem) => ({
+            flightNumber: f.flightNo,
+            airline: f.airlineName,
+            departureTime: f.schTime,
+            destination: f.airportName,
+            passengerCount: f.noOfPax,
+          }));
 
-        this.tableIn = res.inboundFlight.map((f: PredictFlightItem) => ({
-          flightNumber: f.flightNo,
-          airline: f.airlineName,
-          departureTime: f.schTime,
-          destination: f.airportName,
-          passengerCount: f.noOfPax,
-        }));
+          this.tableIn = res.inboundFlight.map((f: PredictFlightItem) => ({
+            flightNumber: f.flightNo,
+            airline: f.airlineName,
+            departureTime: f.schTime,
+            destination: f.airportName,
+            passengerCount: f.noOfPax,
+          }));
 
-        // --- Mapping barData ---
-        this.barData = [
-          {
-            label: '明日預報人數',
-            data: (res.tomorrowStatByHour ?? []).map(
-              (s: PredictStatByHour) => ({
-                key: s.hour,
-                value: s.numOfPax,
-              })
-            ),
-            colors: ['#00d6c8'],
-          },
-          {
-            label: '後日預報人數',
-            data: (res.twoDayStatByHour ?? []).map((s: PredictStatByHour) => ({
-              key: s.hour,
-              value: s.numOfPax,
-            })),
-            colors: ['#fbb441'],
-          },
-        ];
+          // --- Mapping barData ---
+          this.barData = [
+            {
+              label: '明日預報人數',
+              data: (res.tomorrowStatByHour ?? []).map(
+                (s: PredictStatByHour) => ({
+                  key: s.hour,
+                  value: s.numOfPax,
+                }),
+              ),
+              colors: ['#00d6c8'],
+            },
+            {
+              label: '後日預報人數',
+              data: (res.twoDayStatByHour ?? []).map(
+                (s: PredictStatByHour) => ({
+                  key: s.hour,
+                  value: s.numOfPax,
+                }),
+              ),
+              colors: ['#fbb441'],
+            },
+          ];
 
-        // --- Mapping lineData (實際人數) ---
-        this.lineData = [
-          {
-            label: '明日預報架次',
-            data: (res.tomorrowStatByHour ?? []).map(
-              (s: PredictStatByHour) => ({
-                key: s.hour,
-                value: s.numOfFlight, // 如果有實際人數欄位，可改成實際
-              })
-            ),
-            colors: ['#00d6c8'],
-          },
-          {
-            label: '後日預報架次',
-            data: (res.twoDayStatByHour ?? []).map((s: PredictStatByHour) => ({
-              key: s.hour,
-              value: s.numOfFlight,
-            })),
-            colors: ['#fbb441'],
-          },
-        ];
+          // --- Mapping lineData ---
+          this.lineData = [
+            {
+              label: '明日預報架次',
+              data: (res.tomorrowStatByHour ?? []).map(
+                (s: PredictStatByHour) => ({
+                  key: s.hour,
+                  value: s.numOfFlight,
+                }),
+              ),
+              colors: ['#00d6c8'],
+            },
+            {
+              label: '後日預報架次',
+              data: (res.twoDayStatByHour ?? []).map(
+                (s: PredictStatByHour) => ({
+                  key: s.hour,
+                  value: s.numOfFlight,
+                }),
+              ),
+              colors: ['#fbb441'],
+            },
+          ];
 
-        console.log(this.barData);
-
-        this.tomorrowFlight = res.tomorrowFlight;
-        this.twoDayFlight = res.twoDayFlight;
-        this.tomorrowPax = res.tomorrowPax;
-        this.twoDayPax = res.twoDayPax;
-      });
+          this.tomorrowFlight = res.tomorrowFlight;
+          this.twoDayFlight = res.twoDayFlight;
+          this.tomorrowPax = res.tomorrowPax;
+          this.twoDayPax = res.twoDayPax;
+        }),
+      );
   }
 
   onTabClick(newIndex: number): void {
     this.activeIndex = newIndex;
-    this.getData();
+    this.refreshTrigger$.next();
   }
 
   onDayTabClick(newIndex: number): void {
     this.dayActiveIndex = newIndex;
-    this.getData();
+    this.refreshTrigger$.next();
   }
 }

@@ -9,6 +9,16 @@ import {
 import { TabType } from '../../core/enums/tab-type.enum';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
 import { environment } from '../../../environments/environment';
+import {
+  BehaviorSubject,
+  EMPTY,
+  interval,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-daily-abnormal-flight-info',
@@ -145,8 +155,22 @@ export class DailyAbnormalFlightInfoComponent {
     estPax: 560,
   };
 
+  private refreshTrigger$ = new BehaviorSubject<void>(undefined);
+  private destroy$ = new Subject<void>();
+
   constructor(private apiService: ApiService) {
-    this.getIrregularInboundFlight();
+    interval(30000)
+      .pipe(
+        startWith(0), // 立即執行一次
+        takeUntil(this.destroy$),
+        switchMap(() => this.getIrregularInboundFlight()),
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
@@ -161,24 +185,37 @@ export class DailyAbnormalFlightInfoComponent {
 
       this.flightStatusOptions.unshift({ label: '全部', value: '', normal: 0 });
     });
+
+    this.refreshTrigger$
+      .pipe(
+        startWith(undefined), // 預設立即執行一次
+        switchMap(() =>
+          interval(30000).pipe(
+            startWith(0),
+            switchMap(() => this.getIrregularInboundFlight()),
+          ),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   getIrregularInboundFlight() {
-    // console.trace();
-    // this.setTableData(this.MOCK_IRREGULAR_INBOUND);
-    // return;
+    const airportValue = this.data[this.activeIndex]?.value;
+    if (!airportValue) return EMPTY;
 
-    this.apiService
+    return this.apiService
       .getIrregularInboundFlight(
-        this.data[this.activeIndex].value,
+        airportValue,
         this.paramDirection,
-        this.paramDelayCode
+        this.paramDelayCode,
       )
-      .subscribe((res) => {
-        this.setTableData(res);
-      });
-
-    this.setCSVUrl();
+      .pipe(
+        tap((res) => {
+          this.setTableData(res);
+          this.setCSVUrl();
+        }),
+      );
   }
 
   setTableData(data: IrregularInboundFlight) {
@@ -217,18 +254,16 @@ export class DailyAbnormalFlightInfoComponent {
 
   onTabClick(newIndex: number) {
     this.activeIndex = newIndex;
-    this.getIrregularInboundFlight();
+    this.refreshTrigger$.next();
   }
 
-  /** 異常狀態選擇 */
   onFlightStatusChange(option: Option) {
     this.paramDelayCode = option.value;
-    this.getIrregularInboundFlight();
+    this.refreshTrigger$.next();
   }
 
-  /** 異常狀態選擇 */
   onFlightDirectionChange(option: Option) {
     this.paramDirection = option.value;
-    this.getIrregularInboundFlight();
+    this.refreshTrigger$.next();
   }
 }

@@ -8,6 +8,7 @@ import { TodayPredict } from '../../models/today-predict.model';
 import { ForecastInput } from '../../models/forcast-input.model';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
+import { interval, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-daily-fixed-route-operations-forecast',
@@ -110,26 +111,44 @@ export class DailyFixedRouteOperationsForecastComponent {
   forecastInput!: ForecastInput;
 
   res!: TodayPredict;
+  private destroy$ = new Subject<void>();
   isMobile = false;
 
   constructor(
     private apiService: ApiService,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {
-    //預設取得不分機場總數
-    // this.getTodayPredict();
-    this.commonService.getSelectedAirport().subscribe((airportId) => {
-      // 根據選擇的機場ID執行相應的操作，例如重新載入資料
-      if (airportId === -1) {
-        // this.getTodayPredict();
-        return;
-      }
-      this.getTodayPredictByCode(airportId);
-    });
+    // 依選擇的機場，每 30 秒重新呼叫
+    this.commonService
+      .getSelectedAirport()
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap((airportId) => {
+          if (airportId === -1) {
+            return []; // 不呼叫 API
+          }
 
-    this.commonService.observeScreenSize().subscribe((size) => {
-      this.isMobile = size == 'sm';
-    });
+          return interval(30000).pipe(
+            startWith(0), // 立即執行一次
+            takeUntil(this.destroy$),
+            switchMap(() => this.getTodayPredictByCode(airportId)),
+          );
+        }),
+      )
+      .subscribe();
+
+    // 螢幕尺寸
+    this.commonService
+      .observeScreenSize()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((size) => {
+        this.isMobile = size === 'sm';
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getTodayPredict() {
@@ -140,9 +159,12 @@ export class DailyFixedRouteOperationsForecastComponent {
 
   getTodayPredictByCode(value: number) {
     const code = this.commonService.getAirportCodeById(value);
-    this.apiService.getTodayPredictByAirport(code).subscribe((res) => {
-      this.setPredictData(res);
-    });
+
+    return this.apiService.getTodayPredictByAirport(code).pipe(
+      tap((res) => {
+        this.setPredictData(res);
+      }),
+    );
   }
 
   setPredictData(res: TodayPredict) {

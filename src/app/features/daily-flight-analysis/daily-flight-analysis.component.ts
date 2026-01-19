@@ -20,6 +20,7 @@ import {
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
 import { TabType } from '../../core/enums/tab-type.enum';
+import { EMPTY, interval, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-daily-flight-analysis',
@@ -200,21 +201,44 @@ export class DailyFlightAnalysisComponent {
   abnormalOutData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
   abnormalAllData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private apiService: ApiService,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {
-    //取得機場代碼
-    this.commonService.getSelectedAirport().subscribe((airportId) => {
-      // 根據選擇的機場ID執行相應的操作，例如重新載入資料
-      if (airportId === -1) {
-        this.getTodayPredict();
-        return;
-      }
-      this.getTodayPredictByCode(airportId);
-    });
-    this.getTodayPredict();
-    this.getTodayDelayStat();
+    // ===== 機場輪詢 getTodayPredictByCode =====
+    this.commonService
+      .getSelectedAirport()
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap((airportId) => {
+          if (airportId === -1) {
+            return EMPTY;
+          }
+
+          return interval(30000).pipe(
+            startWith(0), // 立即執行一次
+            takeUntil(this.destroy$),
+            switchMap(() => this.getTodayPredictByCode(airportId)),
+          );
+        }),
+      )
+      .subscribe();
+
+    // ===== 固定 30 秒輪詢 getTodayDelayStat =====
+    interval(30000)
+      .pipe(
+        startWith(0), // 立即執行一次
+        takeUntil(this.destroy$),
+        switchMap(() => this.getTodayDelayStat()),
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /** 切換分頁重新呼叫 api */
@@ -231,17 +255,18 @@ export class DailyFlightAnalysisComponent {
 
   getTodayPredictByCode(value: number) {
     const code = this.commonService.getAirportCodeById(value);
-    this.apiService.getTodayPredictByAirport(code).subscribe((res) => {
-      this.setPredictData(res);
-    });
+    // 回傳 Observable
+    return this.apiService
+      .getTodayPredictByAirport(code)
+      .pipe(tap((res) => this.setPredictData(res)));
   }
 
   getTodayDelayStat() {
-    this.apiService
-      .getTodayDelayStat(this.data[this.activeIndex].value)
-      .subscribe((res) => {
-        this.setDelayData(res);
-      });
+    const airportValue = this.data[this.activeIndex]?.value;
+    if (!airportValue) return EMPTY; // 防止 undefined
+    return this.apiService
+      .getTodayDelayStat(airportValue)
+      .pipe(tap((res) => this.setDelayData(res)));
   }
 
   setPredictData(res: TodayPredict) {
@@ -596,7 +621,6 @@ export class DailyFlightAnalysisComponent {
         status: item.reason,
       });
     });
-
 
     res.outTop3Airport?.forEach((item) => {
       if (item === null) {

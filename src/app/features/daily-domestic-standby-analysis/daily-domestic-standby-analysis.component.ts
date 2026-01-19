@@ -8,6 +8,15 @@ import {
   StandbyAirlineSummary,
   StandbySummaryItem,
 } from '../../models/standby.model';
+import {
+  EMPTY,
+  interval,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-daily-domestic-standby-analysis',
@@ -88,38 +97,45 @@ export class DailyDomesticStandbyAnalysisComponent {
     },
   ];
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private apiService: ApiService,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {
+    // ===== 預設機場立即呼叫 =====
     if (this.commonService.realAirportValue !== -1) {
-      this.getStandbySummary(this.commonService.realAirportValue);
+      this.getStandbySummary(this.commonService.realAirportValue); // 立即執行一次
     }
-    //預設取得不分機場總數
-    this.commonService.getSelectedAirport().subscribe((airportId) => {
-      // 根據選擇的機場ID執行相應的操作，例如重新載入資料
-      if (airportId === -1) {
-        return;
-      }
-      this.getStandbySummary(airportId);
-    });
+
+    // ===== 機場輪詢 =====
+    this.commonService
+      .getSelectedAirport()
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap((airportId) => {
+          if (airportId === -1) return EMPTY;
+
+          return interval(30000).pipe(
+            startWith(0), // 立即執行一次
+            takeUntil(this.destroy$),
+            switchMap(() => this.getStandbySummary(airportId)),
+          );
+        }),
+      )
+      .subscribe();
   }
 
-  ngOnInit(): void {
-    // this.getStandbySummary(0);
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getStandbySummary(value: number) {
     const code = this.commonService.getAirportCodeById(value);
-
-    // console.log(this.MOCK_STANDBY_SUMMARY);
-    // this.setTableData(this.MOCK_STANDBY_SUMMARY);
-    // return;
-    this.apiService.getStandbySummary(code).subscribe({
-      next: (res) => {
-        this.setTableData(res);
-      }
-    });
+    return this.apiService
+      .getStandbySummary(code)
+      .pipe(tap((res) => this.setTableData(res)));
   }
 
   setTableData(data: StandbySummaryItem[]) {
@@ -170,7 +186,7 @@ export class DailyDomesticStandbyAnalysisComponent {
             flown: detail.pax_Departed,
             filled: detail.standby_OK,
           });
-        }
+        },
       );
     });
 
@@ -178,7 +194,7 @@ export class DailyDomesticStandbyAnalysisComponent {
     this.tableData.forEach((group) => {
       group.maxWaitlist = Math.max(...group.details.map((d) => d.waitlist));
       group.maxNextFlights = Math.max(
-        ...group.details.map((d) => d.nextFlights)
+        ...group.details.map((d) => d.nextFlights),
       );
       group.maxFlown = Math.max(...group.details.map((d) => d.flown));
       group.maxFilled = Math.max(...group.details.map((d) => d.filled));

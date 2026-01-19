@@ -6,6 +6,7 @@ import { DataSetWithData } from '../../core/lib/chart-tool';
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
 import { TodayStatus } from '../../models/today-status.model';
+import { interval, startWith, Subject, takeUntil } from 'rxjs';
 
 interface DailyFixedRouteOperationData {
   type: string;
@@ -42,18 +43,30 @@ export class DailyFixedRouteOperationsComponent {
   flightTotal: number = 0;
   passengerTotal: number = 0;
 
+  private destroy$ = new Subject<void>();
+
   isMobile = false;
 
   constructor(
     private apiService: ApiService,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {
-    //預設取得不分機場總數
-    this.getTodayStatus();
+    // 30 秒輪詢（進來先跑一次）
+    interval(30000)
+      .pipe(
+        startWith(0), // 立即執行一次
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        this.getTodayStatus();
+      });
 
-    this.commonService.observeScreenSize().subscribe((size) => {
-      this.isMobile = size == 'sm';
-    });
+    this.commonService
+      .observeScreenSize()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((size) => {
+        this.isMobile = size === 'sm';
+      });
 
     // this.commonService.getSelectedAirport().subscribe(airportId => {
     //   // 根據選擇的機場ID執行相應的操作，例如重新載入資料
@@ -63,6 +76,11 @@ export class DailyFixedRouteOperationsComponent {
     //   }
     //   this.getTodayStatusByCode(airportId);
     // });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getTodayStatus() {

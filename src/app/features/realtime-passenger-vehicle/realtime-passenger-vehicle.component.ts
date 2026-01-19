@@ -5,6 +5,17 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { RealTimeTrafficFlowItem } from '../../models/real-time-traffic-flow.model';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
+import {
+  BehaviorSubject,
+  EMPTY,
+  interval,
+  Observable,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 export interface LocationImage {
   src: string;
@@ -60,61 +71,75 @@ export class RealtimePassengerVehicleComponent {
 
   locationGroups: LocationImageGroup[] = [];
   private timerId?: number | null;
+  private refreshTrigger$ = new BehaviorSubject<void>(undefined);
+  private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
     private apiService: ApiService,
-    private realTimeService: RealTimeService
+    private realTimeService: RealTimeService,
   ) {}
 
   ngOnInit(): void {
     const currentUrl = this.router.url;
-
     const index = this.data.findIndex((item) =>
-      currentUrl.startsWith(item.routerLink)
+      currentUrl.startsWith(item.routerLink),
     );
-
     if (index !== -1) {
       this.activeIndex = index;
     }
 
-    this.getData();
+    // ===== 統一輪詢 =====
+    this.refreshTrigger$
+      .pipe(
+        startWith(0), // 預設立即執行一次
+        switchMap(() =>
+          interval(30000).pipe(
+            startWith(0),
+            switchMap(() => this.getData()),
+          ),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
 
-    this.realTimeService.events$.subscribe((event) => {
-      if (event.type === 'IMAGE_SELECT') {
-        this.onImageSelected(event.payload);
-      }
-    });
+    this.realTimeService.events$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        if (event.type === 'IMAGE_SELECT') {
+          this.onImageSelected(event.payload);
+        }
+      });
   }
 
   ngOnDestroy() {
     if (this.timerId) {
       clearInterval(this.timerId);
     }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  private getData() {
-    if (this.activeIndex < 3) {
-      // 先停止輪播
-      this.stopRotation();
+  private getData(): Observable<any> {
+    if (this.activeIndex >= 3) {
+      return EMPTY; // 不輪詢
+    }
 
-      this.apiService
-        .getRealTimeTrafficFlow(this.data[this.activeIndex].value)
-        .subscribe((res) => {
-          // 更新資料
+    return this.apiService
+      .getRealTimeTrafficFlow(this.data[this.activeIndex].value)
+      .pipe(
+        tap((res) => {
           this.realTimeService.setRealTimeData(res);
-          if (this.activeIndex == 2) {
+
+          if (this.activeIndex === 2) {
             this.buildTaxiLocationGroups(res);
           } else {
             this.buildLocationGroups(res);
           }
 
-          // 資料更新完成後再啟動輪播
-          this.startRotation();
-        });
-
-      this.now = new Date();
-    }
+          this.now = new Date();
+        }),
+      );
   }
 
   /** 將 API 資料依 location 分組並攤平 images */
@@ -126,7 +151,7 @@ export class RealtimePassengerVehicleComponent {
           label: point.label,
           pointIndex,
           imageIndex,
-        }))
+        })),
       );
 
       return {
@@ -192,7 +217,8 @@ export class RealtimePassengerVehicleComponent {
       const foundIndex = this.data.findIndex((item) => item.value === index);
       this.activeIndex = foundIndex !== -1 ? foundIndex : 0;
     }
-    this.getData();
+
+    this.refreshTrigger$.next(); // 立即刷新資料
     this.router.navigateByUrl(this.data[this.activeIndex].routerLink);
   }
 
@@ -209,7 +235,7 @@ export class RealtimePassengerVehicleComponent {
     const flatIndex = group.images.findIndex(
       (img) =>
         img.pointIndex === payload.pointIndex &&
-        img.imageIndex === payload.imageIndex
+        img.imageIndex === payload.imageIndex,
     );
 
     if (flatIndex === -1) return;
