@@ -351,6 +351,12 @@ export class FixedRouteTrafficAnalysisComponent {
 
     const hasAnyData = queryStat.length > 0 || compareStat.length > 0;
 
+
+    this.totalFlight = query?.totalFlight ?? 0;
+    this.totalPax = query?.totalPax ?? 0;
+    this.compareTotalFlight = compare?.totalFlight ?? 0;
+    this.compareTotalPax = compare?.totalPax ?? 0;
+
     // === 兩邊都沒資料 ===
     if (!hasAnyData) {
       this.barData = [];
@@ -417,10 +423,5 @@ export class FixedRouteTrafficAnalysisComponent {
     }
 
     this.lineData = lineSeries;
-
-    this.totalFlight = query?.totalFlight ?? 0;
-    this.totalPax = query?.totalPax ?? 0;
-    this.compareTotalFlight = compare?.totalFlight ?? 0;
-    this.compareTotalPax = compare?.totalPax ?? 0;
   }
 }

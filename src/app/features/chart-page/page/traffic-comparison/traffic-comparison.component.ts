@@ -308,6 +308,13 @@ export class TrafficComparisonComponent {
     const hasAnyData =
       firstStat.length > 0 || secondStat.length > 0 || thirdStat.length > 0;
 
+    this.totalFlight = firstYear?.totalFlight ?? 0;
+    this.totalPax = firstYear?.totalPax ?? 0;
+    this.secondYearTotalFlight = secondYear?.totalFlight ?? 0;
+    this.secondYearTotalPax = secondYear?.totalPax ?? 0;
+    this.thirdYearTotalFlight = thirdYear?.totalFlight ?? 0;
+    this.thirdYearTotalPax = thirdYear?.totalPax ?? 0;
+
     // === 兩邊都沒資料 ===
     if (!hasAnyData) {
       this.barData = [];
@@ -394,12 +401,5 @@ export class TrafficComparisonComponent {
       };
       this.lineData.push(item);
     }
-
-    this.totalFlight = firstYear?.totalFlight ?? 0;
-    this.totalPax = firstYear?.totalPax ?? 0;
-    this.secondYearTotalFlight = secondYear?.totalFlight ?? 0;
-    this.secondYearTotalPax = secondYear?.totalPax ?? 0;
-    this.thirdYearTotalFlight = thirdYear?.totalFlight ?? 0;
-    this.thirdYearTotalPax = thirdYear?.totalPax ?? 0;
   }
 }

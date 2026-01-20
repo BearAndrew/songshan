@@ -365,18 +365,6 @@ export class FlightAbnormalComponent {
 
     const hasAnyData = queryStat.length > 0;
 
-    // === 兩邊都沒資料 ===
-    if (!hasAnyData) {
-      this.barData1 = [];
-      this.lineData2 = [];
-      this.barData2 = [];
-      this.lineData2 = [];
-      this.totalFlight = 0;
-      this.totalPax = 0;
-      this.isNoData = true;
-      return;
-    }
-
     this.isNoData = false;
     this.dateRangeLabel = this.buildDateRangeLabel();
     this.compareTotalFlight = query.totalFlight;
@@ -428,6 +416,19 @@ export class FlightAbnormalComponent {
         unitText: '%',
       },
     ];
+
+
+    // === 兩邊都沒資料 ===
+    if (!hasAnyData) {
+      this.barData1 = [];
+      this.lineData2 = [];
+      this.barData2 = [];
+      this.lineData2 = [];
+      this.totalFlight = 0;
+      this.totalPax = 0;
+      this.isNoData = true;
+      return;
+    }
 
     //左上圖表
     // ================= Bar：架次比例 =================
