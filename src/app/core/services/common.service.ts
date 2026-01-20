@@ -30,14 +30,6 @@ export class CommonService {
     return this.selectedAirport.asObservable();
   }
 
-  setSelectedFlightType(flightType: string) {
-    this.selectedFlightType.next(flightType);
-  }
-
-  getSelectedFlightType() {
-    return this.selectedFlightType.asObservable();
-  }
-
   getSelectedAirportValue() {
     return this.realAirportValue;
   }

@@ -107,7 +107,6 @@ export class OnTimePerformanceComponent {
 
   defaultOptionValue = '';
 
-  type: string = '';
   dateRangeLabel = '';
   onTimeRate: number = 0;
   totalFlight: number = 0;
@@ -141,14 +140,7 @@ export class OnTimePerformanceComponent {
 
   isNoData: boolean = false;
 
-  constructor(
-    private apiService: ApiService,
-    private commonService: CommonService
-  ) {
-    this.commonService.getSelectedFlightType().subscribe((res) => {
-      this.type = res;
-    });
-  }
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -208,7 +200,7 @@ export class OnTimePerformanceComponent {
   onMonthOrYearChange(
     type: 'start' | 'end',
     year: number | null,
-    month: number | null
+    month: number | null,
   ) {
     if (!year || !month) return;
 
@@ -256,15 +248,15 @@ export class OnTimePerformanceComponent {
         this.formatDate(
           this.formData.startYear,
           this.formData.startMonth,
-          this.formData.startDay
+          this.formData.startDay,
         ) || '',
       dateTo:
         this.formatDate(
           this.formData.endYear,
           this.formData.endMonth,
-          this.formData.endDay
+          this.formData.endDay,
         ) || '',
-      type: (this.formData.flightClass) || '',
+      type: this.formData.flightClass || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.flightType as FlightDirection) || '',
       peer: this.formData.route! || '',
@@ -290,7 +282,7 @@ export class OnTimePerformanceComponent {
   private formatDisplayDate(
     year?: number | null,
     month?: number | null,
-    day?: number | null
+    day?: number | null,
   ): string {
     if (!year) return '';
 
@@ -316,13 +308,13 @@ export class OnTimePerformanceComponent {
     const start = this.formatDisplayDate(
       this.formData.startYear,
       this.formData.startMonth,
-      this.formData.startDay
+      this.formData.startDay,
     );
 
     const end = this.formatDisplayDate(
       this.formData.endYear,
       this.formData.endMonth,
-      this.formData.endDay
+      this.formData.endDay,
     );
 
     if (start && end) {
@@ -335,7 +327,7 @@ export class OnTimePerformanceComponent {
   private formatDate(
     year?: number | null,
     month?: number | null,
-    day?: number | null
+    day?: number | null,
   ): string {
     const y = year ?? 0;
     const m = month ? String(month).padStart(2, '0') : '0';
@@ -377,7 +369,7 @@ export class OnTimePerformanceComponent {
           value: item.OnTimeRate,
         })),
         colors: ['#f08622'],
-        unitText: '%'
+        unitText: '%',
       });
     }
 

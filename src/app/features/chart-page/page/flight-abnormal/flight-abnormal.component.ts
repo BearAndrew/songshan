@@ -14,7 +14,10 @@ import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
 import { fakeData } from './fake-data';
 import { PieChartComponent } from '../../../../shared/chart/pie-chart/pie-chart.component';
-import { IrregularAnalysisRequest, IrregularAnalysisResponse } from '../../../../models/irregular-analysis.model';
+import {
+  IrregularAnalysisRequest,
+  IrregularAnalysisResponse,
+} from '../../../../models/irregular-analysis.model';
 
 @Component({
   selector: 'app-flight-abnormal',
@@ -85,10 +88,8 @@ export class FlightAbnormalComponent {
 
   lineData2: DataSetWithDataArray[] = [];
 
-  pieData1: DataSetWithData[] = [
-  ];
-  pieData2: DataSetWithData[] = [
-  ];
+  pieData1: DataSetWithData[] = [];
+  pieData2: DataSetWithData[] = [];
 
   // 年、月、日 options
   yearOptions: Option[] = [];
@@ -115,9 +116,8 @@ export class FlightAbnormalComponent {
     { label: '入境', value: 'INBOUND' },
   ];
 
-  defaultOptionValue='';
+  defaultOptionValue = '';
 
-  type: string = '';
   dateRangeLabel = '';
   totalFlight: number = 0;
   totalPax: number = 0;
@@ -153,14 +153,7 @@ export class FlightAbnormalComponent {
 
   isNoData: boolean = false;
 
-  constructor(
-    private apiService: ApiService,
-    private commonService: CommonService
-  ) {
-    this.commonService.getSelectedFlightType().subscribe((res) => {
-      this.type = res;
-    });
-  }
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -220,7 +213,7 @@ export class FlightAbnormalComponent {
   onMonthOrYearChange(
     type: 'start' | 'end',
     year: number | null,
-    month: number | null
+    month: number | null,
   ) {
     if (!year || !month) return;
 
@@ -268,15 +261,15 @@ export class FlightAbnormalComponent {
         this.formatDate(
           this.formData.startYear,
           this.formData.startMonth,
-          this.formData.startDay
+          this.formData.startDay,
         ) || '',
       dateTo:
         this.formatDate(
           this.formData.endYear,
           this.formData.endMonth,
-          this.formData.endDay
+          this.formData.endDay,
         ) || '',
-      type: (this.formData.flightClass) || '',
+      type: this.formData.flightClass || '',
       airline: this.formData.airline! || '',
       peer: this.formData.route! || '',
       flightType: (this.formData.flightType as TabType) || '',
@@ -301,7 +294,7 @@ export class FlightAbnormalComponent {
   private formatDisplayDate(
     year?: number | null,
     month?: number | null,
-    day?: number | null
+    day?: number | null,
   ): string {
     if (!year) return '';
 
@@ -327,13 +320,13 @@ export class FlightAbnormalComponent {
     const start = this.formatDisplayDate(
       this.formData.startYear,
       this.formData.startMonth,
-      this.formData.startDay
+      this.formData.startDay,
     );
 
     const end = this.formatDisplayDate(
       this.formData.endYear,
       this.formData.endMonth,
-      this.formData.endDay
+      this.formData.endDay,
     );
 
     if (start && end) {
@@ -346,7 +339,7 @@ export class FlightAbnormalComponent {
   private formatDate(
     year?: number | null,
     month?: number | null,
-    day?: number | null
+    day?: number | null,
   ): string {
     const y = year ?? 0;
     const m = month ? String(month).padStart(2, '0') : '0';
@@ -387,49 +380,49 @@ export class FlightAbnormalComponent {
 
     //右下圓餅圖
     this.pieData1 = [
-    {
-      label: '0~30min',
-      data: { value: query.IrregularFlightRate0 },
-      colors: ['#03c5ce'],
-      unitText: '%',
-    },
-    {
-      label: '30~60min',
-      data: { value: query.IrregularFlightRate30 },
-      colors: ['#e7376a'],
-      unitText: '%',
-    },
-    {
-      label: '60~',
-      data: { value: query.IrregularFlightRate60 },
-      colors: ['#a4dd46'],
-      unitText: '%',
-    },
-  ];
+      {
+        label: '0~30min',
+        data: { value: query.IrregularFlightRate0 },
+        colors: ['#03c5ce'],
+        unitText: '%',
+      },
+      {
+        label: '30~60min',
+        data: { value: query.IrregularFlightRate30 },
+        colors: ['#e7376a'],
+        unitText: '%',
+      },
+      {
+        label: '60~',
+        data: { value: query.IrregularFlightRate60 },
+        colors: ['#a4dd46'],
+        unitText: '%',
+      },
+    ];
 
-  this.pieData2 = [
-    {
-      label: '0~30min',
-      data: { value: query.IrregularPaxRate0 },
-      colors: ['#03c5ce'],
-      unitText: '%',
-    },
-    {
-      label: '30~60min',
-      data: { value: query.IrregularPaxRate30 },
-      colors: ['#e7376a'],
-      unitText: '%',
-    },
-    {
-      label: '60~',
-      data: { value: query.IrregularPaxRate60 },
-      colors: ['#a4dd46'],
-      unitText: '%',
-    },
-  ];
+    this.pieData2 = [
+      {
+        label: '0~30min',
+        data: { value: query.IrregularPaxRate0 },
+        colors: ['#03c5ce'],
+        unitText: '%',
+      },
+      {
+        label: '30~60min',
+        data: { value: query.IrregularPaxRate30 },
+        colors: ['#e7376a'],
+        unitText: '%',
+      },
+      {
+        label: '60~',
+        data: { value: query.IrregularPaxRate60 },
+        colors: ['#a4dd46'],
+        unitText: '%',
+      },
+    ];
 
-  //左上圖表
-  // ================= Bar：架次比例 =================
+    //左上圖表
+    // ================= Bar：架次比例 =================
     const barSeries: any[] = [];
 
     if (queryStat.length > 0) {
@@ -440,7 +433,7 @@ export class FlightAbnormalComponent {
           value: item.IrregularRate,
         })),
         colors: ['#f08622'],
-        unitText: '%'
+        unitText: '%',
       });
     }
 
@@ -462,8 +455,8 @@ export class FlightAbnormalComponent {
 
     this.lineData1 = lineSeries;
 
-  //右上圖表
-  // ================= Bar：人數比例 =================
+    //右上圖表
+    // ================= Bar：人數比例 =================
     const barSeries2: any[] = [];
 
     if (queryStat.length > 0) {
@@ -474,7 +467,7 @@ export class FlightAbnormalComponent {
           value: item.IrregularPaxRate,
         })),
         colors: ['#61ABF3'],
-        unitText: '%'
+        unitText: '%',
       });
     }
 
@@ -495,5 +488,5 @@ export class FlightAbnormalComponent {
     }
 
     this.lineData2 = lineSeries2;
-}
+  }
 }

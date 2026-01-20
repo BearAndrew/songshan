@@ -6,7 +6,15 @@ import { DataSetWithData } from '../../core/lib/chart-tool';
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
 import { TodayStatus } from '../../models/today-status.model';
-import { interval, startWith, Subject, takeUntil } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  interval,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 
 interface DailyFixedRouteOperationData {
   type: string;
@@ -51,14 +59,23 @@ export class DailyFixedRouteOperationsComponent {
     private apiService: ApiService,
     private commonService: CommonService,
   ) {
-    // 30 秒輪詢（進來先跑一次）
-    interval(30000)
+    this.commonService
+      .getSelectedAirport()
       .pipe(
-        startWith(0), // 立即執行一次
         takeUntil(this.destroy$),
+        filter((airportId) => airportId !== -1),
+        distinctUntilChanged(),
+        switchMap(() =>
+          interval(30000).pipe(
+            startWith(0),
+            switchMap(
+              () => this.apiService.getTodayStatus(),
+            ),
+          ),
+        ),
       )
-      .subscribe(() => {
-        this.getTodayStatus();
+      .subscribe((res) => {
+        this.setData(res);
       });
 
     this.commonService
@@ -67,34 +84,11 @@ export class DailyFixedRouteOperationsComponent {
       .subscribe((size) => {
         this.isMobile = size === 'sm';
       });
-
-    // this.commonService.getSelectedAirport().subscribe(airportId => {
-    //   // 根據選擇的機場ID執行相應的操作，例如重新載入資料
-    //   if (airportId === -1) {
-    //     this.getTodayStatus();
-    //     return;
-    //   }
-    //   this.getTodayStatusByCode(airportId);
-    // });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  getTodayStatus() {
-    this.apiService.getTodayStatus().subscribe((res) => {
-      console.log(res);
-      this.setData(res);
-    });
-  }
-
-  getTodayStatusByCode(value: number) {
-    const code = this.commonService.getAirportCodeById(value);
-    this.apiService.getTodayStatusByAirport(code).subscribe((res) => {
-      this.setData(res);
-    });
   }
 
   setData(res: TodayStatus) {

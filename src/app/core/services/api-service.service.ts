@@ -1,5 +1,6 @@
+import { CommonService } from './common.service';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Airline } from '../../models/airline.model';
 import { Airport } from '../../models/airport.model';
@@ -62,7 +63,16 @@ import {
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  airportCode = '';
+
+  constructor(
+    private http: HttpClient,
+    private commonService: CommonService,
+  ) {
+    this.commonService.selectedAirport.subscribe((res) => {
+      this.airportCode = this.commonService.getAirportCodeById(res);
+    });
+  }
 
   // ========= 基本資料 =========
 
@@ -90,7 +100,9 @@ export class ApiService {
 
   /** 全場今日狀態 */
   getTodayStatus(): Observable<TodayStatus> {
-    return this.http.get<TodayStatus>('GetTodayStatus');
+    console.trace()
+    const params = new HttpParams().set('currAirport', this.airportCode);
+    return this.http.get<TodayStatus>('GetTodayStatus', { params });
   }
 
   /** 指定機場今日狀態 */
@@ -136,7 +148,7 @@ export class ApiService {
   getIrregularInboundFlight(
     type: string,
     direction: string,
-    delayCode: string | null
+    delayCode: string | null,
   ): Observable<IrregularInboundFlight> {
     const url =
       `IrregularInboundFlight/${type}/${direction}` +
@@ -147,7 +159,7 @@ export class ApiService {
   /** 即時人流資訊 */
   getRealTimeTrafficFlow(type: string): Observable<RealTimeTrafficFlowItem[]> {
     return this.http.get<RealTimeTrafficFlowItem[]>(
-      `RealTimeTrafficFlow/${type}`
+      `RealTimeTrafficFlow/${type}`,
     );
   }
 
@@ -167,10 +179,10 @@ export class ApiService {
   getFlightTrafficPredict(
     airport: string,
     day: string,
-    type: string
+    type: string,
   ): Observable<FlightTrafficPredictResponse> {
     return this.http.get<FlightTrafficPredictResponse>(
-      `FlightTrafficPredict/${airport}/${day}/${type}`
+      `FlightTrafficPredict/${airport}/${day}/${type}`,
     );
   }
 
@@ -179,11 +191,11 @@ export class ApiService {
    * 回傳結構尚未定義，暫時使用 any
    */
   postFlightTrafficAnalysis(
-    payload: FlightTrafficAnalysisRequest
+    payload: FlightTrafficAnalysisRequest,
   ): Observable<FlightTrafficAnalysisResponse> {
     return this.http.post<FlightTrafficAnalysisResponse>(
       'FlightTrafficAnalysis',
-      payload
+      payload,
     );
   }
 
@@ -191,11 +203,11 @@ export class ApiService {
    * 定航運量分析. 與9不一樣是能選航點
    */
   postFlightTrafficAnalysisSch(
-    payload: FlightTrafficAnalysisRequest
+    payload: FlightTrafficAnalysisRequest,
   ): Observable<FlightTrafficAnalysisResponse> {
     return this.http.post<FlightTrafficAnalysisResponse>(
       'FlightTrafficAnalysisSch',
-      payload
+      payload,
     );
   }
 
@@ -204,11 +216,11 @@ export class ApiService {
    * POST {apiBaseUrl}/YearlyTrafficAnalysis
    */
   postYearlyTrafficAnalysis(
-    payload: YearlyTrafficAnalysisRequest
+    payload: YearlyTrafficAnalysisRequest,
   ): Observable<YearlyTrafficAnalysisResponse[]> {
     return this.http.post<YearlyTrafficAnalysisResponse[]>(
       'YearlyTrafficAnalysis',
-      payload
+      payload,
     );
   }
 
@@ -217,11 +229,11 @@ export class ApiService {
    *定航運量對比資料
    */
   postYearlyTrafficAnalysisSch(
-    payload: YearlyTrafficAnalysisRequest
+    payload: YearlyTrafficAnalysisRequest,
   ): Observable<YearlyTrafficAnalysisResponse[]> {
     return this.http.post<YearlyTrafficAnalysisResponse[]>(
       'YearlyTrafficAnalysisSch',
-      payload
+      payload,
     );
   }
 
@@ -230,7 +242,7 @@ export class ApiService {
    * POST {apiBaseUrl}/OTPAnalysis
    */
   postOtpAnalysis(
-    payload: OtpAnalysisRequest
+    payload: OtpAnalysisRequest,
   ): Observable<OtpAnalysisResponse> {
     return this.http.post<OtpAnalysisResponse>('OTPAnalysis', payload);
   }
@@ -240,11 +252,11 @@ export class ApiService {
    * POST {apiBaseUrl}/IrregularAnalysis
    */
   postIrregularAnalysis(
-    payload: IrregularAnalysisRequest
+    payload: IrregularAnalysisRequest,
   ): Observable<IrregularAnalysisResponse> {
     return this.http.post<IrregularAnalysisResponse>(
       'IrregularAnalysis',
-      payload
+      payload,
     );
   }
 
@@ -253,11 +265,11 @@ export class ApiService {
    * POST {apiBaseUrl}/GetHistoricStandbySummary
    */
   postHistoricStandbySummary(
-    payload: HistoricStandbySummaryRequest
+    payload: HistoricStandbySummaryRequest,
   ): Observable<HistoricStandbySummaryItem[]> {
     return this.http.post<HistoricStandbySummaryItem[]>(
       'GetHistoricStandbySummary',
-      payload
+      payload,
     );
   }
 
@@ -267,11 +279,11 @@ export class ApiService {
    */
   postHistoricStandbyList(
     airport: string,
-    payload: HistoricStandbyListRequest
+    payload: HistoricStandbyListRequest,
   ): Observable<HistoricStandbyListItem[]> {
     return this.http.post<HistoricStandbyListItem[]>(
       `GetStandbyHistoricList/${airport}`,
-      payload
+      payload,
     );
   }
 
@@ -285,7 +297,7 @@ export class ApiService {
    */
   postWebhookFlightUpdate(
     payload: FlightUpdateWebhookRequest,
-    signature: string
+    signature: string,
   ): Observable<any> {
     const headers = new HttpHeaders({
       'X-signature': signature,
@@ -342,7 +354,7 @@ export class ApiService {
   /** 更新黑/灰名單記錄 */
   updateTaxiViolation(
     rid: number,
-    payload: TaxiViolation
+    payload: TaxiViolation,
   ): Observable<TaxiViolation> {
     return this.http.put<TaxiViolation>(`TaxiViolation/${rid}`, payload);
   }
@@ -371,10 +383,10 @@ export class ApiService {
   getTop6Taxi(
     sortBy: string,
     dateFrom: string,
-    dateTo: string
+    dateTo: string,
   ): Observable<TaxiStatusInfo[]> {
     return this.http.get<TaxiStatusInfo[]>(
-      `Taxi/Top6Taxi/${sortBy}/${dateFrom}/${dateTo}`
+      `Taxi/Top6Taxi/${sortBy}/${dateFrom}/${dateTo}`,
     );
   }
 
@@ -387,9 +399,9 @@ export class ApiService {
   /** 報到櫃台 - 取得全部 */
   getAllCounter(payload: CounterGetAllRequest): Observable<CounterInfo[]> {
     return this.http
-      .get<CounterInfoRaw[]>(
-        `Counter/GetAll/${payload.status}/${payload.agent}/${payload.dateFrom}/${payload.dateTo}`
-      )
+      .get<
+        CounterInfoRaw[]
+      >(`Counter/GetAll/${payload.status}/${payload.agent}/${payload.dateFrom}/${payload.dateTo}`)
       .pipe(
         map((res) =>
           res.map((item) => ({
@@ -407,14 +419,14 @@ export class ApiService {
             assignedBy: item.assigned_by,
             appliedBy: item.applied_by,
             assignedCounterArea: item.assigned_counter_area,
-          }))
-        )
+          })),
+        ),
       );
   }
 
   /** 新增手動申請 */
   addCounterApplication(
-    payload: CounterApplicationManualRequest
+    payload: CounterApplicationManualRequest,
   ): Observable<void> {
     return this.http.post<void>('/Counter/ApplicationManual', payload);
   }

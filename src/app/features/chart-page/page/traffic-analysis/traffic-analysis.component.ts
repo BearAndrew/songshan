@@ -97,7 +97,6 @@ export class TrafficAnalysisComponent {
 
   optionDefaultValue = '';
 
-  type: string = '';
   dateRangeLabel = '';
   totalFlight: number = 0;
   totalPax: number = 0;

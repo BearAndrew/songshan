@@ -14,9 +14,7 @@ import {
   YearlyTrafficAnalysisRequest,
   YearlyTrafficAnalysisResponse,
 } from '../../../../models/yearly-traffic-analysis.model';
-import {
-  FlightDirection,
-} from '../../../../models/flight-traffic-analysis.model';
+import { FlightDirection } from '../../../../models/flight-traffic-analysis.model';
 import { extractAfterSlash } from '../../../../core/utils/extract-slash';
 
 @Component({
@@ -75,7 +73,6 @@ export class TrafficComparisonComponent {
 
   optionDefaultValue = '';
 
-
   barData: DataSetWithDataArray[] = [];
 
   lineData: DataSetWithDataArray[] = [];
@@ -107,7 +104,6 @@ export class TrafficComparisonComponent {
 
   defaultOptionValue = '';
 
-  type: string = '';
   firstDateRangeLabel = '';
   secondDateRangeLabel = '';
   thirdDateRangeLabel = '';
@@ -141,14 +137,7 @@ export class TrafficComparisonComponent {
 
   isNoData: boolean = false;
 
-  constructor(
-    private apiService: ApiService,
-    private commonService: CommonService
-  ) {
-    this.commonService.getSelectedFlightType().subscribe((res) => {
-      this.type = res;
-    });
-  }
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -228,7 +217,7 @@ export class TrafficComparisonComponent {
       year1: this.formData.firstYear?.toString() || '',
       year2: this.formData.secondYear?.toString() || '',
       year3: this.formData.thirdYear?.toString() || '',
-      type: (this.formData.flightClass) || '',
+      type: this.formData.flightClass || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.flightType as FlightDirection) || '',
       peer: this.formData.route! || '',
@@ -262,7 +251,7 @@ export class TrafficComparisonComponent {
   private formatDisplayDate(
     year?: number | null,
     month?: number | null,
-    day?: number | null
+    day?: number | null,
   ): string {
     if (!year) return '';
 
@@ -283,20 +272,19 @@ export class TrafficComparisonComponent {
     return result;
   }
 
-
   private handleFlightTrafficAnalysis(res: YearlyTrafficAnalysisResponse[]) {
     console.log('處理資料', res);
 
     const firstYear = res.find(
-      (item) => item.year === this.formData.firstYear?.toString()
+      (item) => item.year === this.formData.firstYear?.toString(),
     )?.data;
 
     const secondYear = res.find(
-      (item) => item.year === this.formData.secondYear?.toString()
+      (item) => item.year === this.formData.secondYear?.toString(),
     )?.data;
 
     const thirdYear = res.find(
-      (item) => item.year === this.formData.thirdYear?.toString()
+      (item) => item.year === this.formData.thirdYear?.toString(),
     )?.data;
 
     const firstStat = Array.isArray(firstYear?.stat) ? firstYear.stat : [];
@@ -307,8 +295,8 @@ export class TrafficComparisonComponent {
       firstStat.length > 0
         ? firstStat
         : secondStat.length > 0
-        ? secondStat
-        : thirdStat;
+          ? secondStat
+          : thirdStat;
 
     const hasAnyData =
       firstStat.length > 0 || secondStat.length > 0 || thirdStat.length > 0;
@@ -344,7 +332,7 @@ export class TrafficComparisonComponent {
         stat.map((item) => [
           extractAfterSlash((item as any).label),
           getValue(item),
-        ])
+        ]),
       );
 
       // 補齊 baseKeys

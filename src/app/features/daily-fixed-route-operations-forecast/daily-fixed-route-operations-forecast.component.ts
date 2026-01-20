@@ -8,7 +8,7 @@ import { TodayPredict } from '../../models/today-predict.model';
 import { ForecastInput } from '../../models/forcast-input.model';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
-import { interval, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { distinctUntilChanged, filter, interval, Observable, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-daily-fixed-route-operations-forecast',
@@ -123,17 +123,16 @@ export class DailyFixedRouteOperationsForecastComponent {
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        switchMap((airportId) => {
-          if (airportId === -1) {
-            return []; // 不呼叫 API
-          }
-
-          return interval(30000).pipe(
-            startWith(0), // 立即執行一次
-            takeUntil(this.destroy$),
-            switchMap(() => this.getTodayPredictByCode(airportId)),
-          );
-        }),
+        filter((airportId) => airportId !== -1),
+        distinctUntilChanged(),
+        switchMap((airportId) =>
+          interval(30000).pipe(
+            startWith(0),
+            switchMap(
+              () => this.getTodayPredictByCode(airportId),
+            ),
+          ),
+        ),
       )
       .subscribe();
 
@@ -151,13 +150,7 @@ export class DailyFixedRouteOperationsForecastComponent {
     this.destroy$.complete();
   }
 
-  getTodayPredict() {
-    this.apiService.getTodayPredict().subscribe((res) => {
-      this.setPredictData(res);
-    });
-  }
-
-  getTodayPredictByCode(value: number) {
+  getTodayPredictByCode(value: number): Observable<TodayPredict> {
     const code = this.commonService.getAirportCodeById(value);
 
     return this.apiService.getTodayPredictByAirport(code).pipe(
@@ -167,7 +160,7 @@ export class DailyFixedRouteOperationsForecastComponent {
     );
   }
 
-  setPredictData(res: TodayPredict) {
+  setPredictData(res: TodayPredict): void {
     this.res = res;
     // 在這裡處理 API 回傳的資料
     //0, 國際兩岸線

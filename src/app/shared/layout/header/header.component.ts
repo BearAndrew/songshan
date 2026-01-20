@@ -52,7 +52,7 @@ export class HeaderComponent {
 
     this.loadRoutes();
     this.getCurrentRouteTitle();
-    this.airportList.push({ label: '所有機場', value: -1, code: '' });
+    // this.airportList.push({ label: '所有機場', value: -1, code: '' });
     this.loadAirportList();
   }
 
@@ -133,12 +133,6 @@ export class HeaderComponent {
       this.commonService.setAirportList(this.airportList);
       this.commonService.setSelectedAirport(this.airportDefault);
     });
-  }
-
-  /** 下拉選單更新 */
-  onFlightTypeChange(selected: Option) {
-    console.log(selected);
-    this.commonService.setSelectedFlightType(selected.value);
   }
 
   onAirportChange(selected: Option) {

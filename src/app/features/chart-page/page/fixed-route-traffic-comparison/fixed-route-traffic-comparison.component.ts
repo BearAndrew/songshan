@@ -9,9 +9,7 @@ import { DataSetWithDataArray } from '../../../../core/lib/chart-tool';
 import { Option } from '../../../../shared/components/dropdown/dropdown.component';
 import { Airport } from '../../../../models/airport.model';
 import { Airline } from '../../../../models/airline.model';
-import {
-  FlightDirection,
-} from '../../../../models/flight-traffic-analysis.model';
+import { FlightDirection } from '../../../../models/flight-traffic-analysis.model';
 import { fakeData } from './fake-data';
 import {
   YearlyTrafficAnalysisRequest,
@@ -106,7 +104,6 @@ export class FixedRouteTrafficComparisonComponent {
 
   defaultOptionValue = '';
 
-  type: string = '';
   firstDateRangeLabel = '';
   secondDateRangeLabel = '';
   thirdDateRangeLabel = '';
@@ -140,14 +137,7 @@ export class FixedRouteTrafficComparisonComponent {
 
   isNoData: boolean = false;
 
-  constructor(
-    private apiService: ApiService,
-    private commonService: CommonService
-  ) {
-    this.commonService.getSelectedFlightType().subscribe((res) => {
-      this.type = res;
-    });
-  }
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -227,7 +217,7 @@ export class FixedRouteTrafficComparisonComponent {
       year1: this.formData.firstYear?.toString() || '',
       year2: this.formData.secondYear?.toString() || '',
       year3: this.formData.thirdYear?.toString() || '',
-      type: (this.formData.flightClass) || '',
+      type: this.formData.flightClass || '',
       airline: this.formData.airline! || '',
       direction: (this.formData.flightType as FlightDirection) || '',
       peer: this.formData.route! || '',
@@ -261,7 +251,7 @@ export class FixedRouteTrafficComparisonComponent {
   private formatDisplayDate(
     year?: number | null,
     month?: number | null,
-    day?: number | null
+    day?: number | null,
   ): string {
     if (!year) return '';
 
@@ -298,7 +288,7 @@ export class FixedRouteTrafficComparisonComponent {
   private formatDate(
     year?: number | null,
     month?: number | null,
-    day?: number | null
+    day?: number | null,
   ): string {
     const y = year ?? 0;
     const m = month ? String(month).padStart(2, '0') : '0';
@@ -311,15 +301,15 @@ export class FixedRouteTrafficComparisonComponent {
     console.log('處理資料', res);
 
     const firstYear = res.find(
-      (item) => item.year === this.formData.firstYear?.toString()
+      (item) => item.year === this.formData.firstYear?.toString(),
     )?.data;
 
     const secondYear = res.find(
-      (item) => item.year === this.formData.secondYear?.toString()
+      (item) => item.year === this.formData.secondYear?.toString(),
     )?.data;
 
     const thirdYear = res.find(
-      (item) => item.year === this.formData.thirdYear?.toString()
+      (item) => item.year === this.formData.thirdYear?.toString(),
     )?.data;
 
     const firstStat = Array.isArray(firstYear?.stat) ? firstYear.stat : [];
@@ -330,8 +320,8 @@ export class FixedRouteTrafficComparisonComponent {
       firstStat.length > 0
         ? firstStat
         : secondStat.length > 0
-        ? secondStat
-        : thirdStat;
+          ? secondStat
+          : thirdStat;
 
     const hasAnyData =
       firstStat.length > 0 || secondStat.length > 0 || thirdStat.length > 0;
@@ -367,7 +357,7 @@ export class FixedRouteTrafficComparisonComponent {
         stat.map((item) => [
           extractAfterSlash((item as any).label),
           getValue(item),
-        ])
+        ]),
       );
 
       // 補齊 baseKeys
