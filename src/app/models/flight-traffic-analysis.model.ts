@@ -1,6 +1,6 @@
 import { TabType } from "../core/enums/tab-type.enum";
 
-export type FlightDirection = 'INBOUND' | 'OUTBOUND';
+export type FlightDirection = 'INBOUND' | 'OUTBOUND' | '';
 
 export interface FlightTrafficAnalysisRequest {
   dateFrom: string;    // e.g. "2025-12-10 10:00:00"

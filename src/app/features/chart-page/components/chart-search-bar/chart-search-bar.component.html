@@ -1,0 +1,211 @@
+<div class="fixed top-14 sm:hidden mb-2 w-[calc(50vw-1.25rem)] z-50">
+  <app-dropdown
+    class="pl-4 w-full"
+    [value]="formData.flightType"
+    [options]="tabList"
+    (selectionChange)="onScopeChange($event.value)"
+  ></app-dropdown>
+</div>
+
+<div class="flex flex-col gap-4 w-full">
+  <div class="hidden sm:flex gap-8 h-fit">
+    @for (tab of tabList; track tab.label) {
+      <button
+        class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
+        [ngClass]="{
+          'bg-[#b2b2b2]': formData.flightType !== tab.value,
+          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]':
+            formData.flightType == tab.value,
+        }"
+        type="button"
+        (click)="onScopeChange(tab.value)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  <div
+    class="flex flex-col sm:flex-row gap-y-4 items-center justify-between text-[#aaa]"
+  >
+    <!-- 指定期間 -->
+    <ng-container [ngTemplateOutlet]="isDate ? datePicker : yearPicker"></ng-container>
+
+
+    <!-- 航點、航班類別、航空公司、飛航類型 -->
+    <div
+      class="grid grid-cols-[65px_1fr_65px_1fr] sm:flex items-center gap-2 w-full sm:w-fit"
+    >
+      <label>航空公司</label>
+      <app-dropdown
+        class="w-full sm:w-27"
+        [options]="airlineOptions"
+        [value]="formData.airline"
+        (selectionChange)="onSelectionChange('airline', $event)"
+      >
+      </app-dropdown>
+
+      @if (!isSchedule) {
+        <label>航班類別</label>
+        <app-dropdown
+          class="w-full sm:w-27"
+          [options]="flightClassOptions"
+          [value]="formData.flightClass"
+          (selectionChange)="onSelectionChange('flightClass', $event)"
+        >
+        </app-dropdown>
+      }
+
+      <label class="[text-align-last:justify]">航點</label>
+      <app-dropdown
+        class="w-full sm:w-27"
+        [options]="routeOptions"
+        [value]="formData.route"
+        (selectionChange)="onSelectionChange('route', $event)"
+      >
+      </app-dropdown>
+
+      <label>飛航類型</label>
+      <app-dropdown
+        class="w-full sm:w-20"
+        [options]="directionOptions"
+        [value]="formData.direction"
+        (selectionChange)="onSelectionChange('direction', $event)"
+      >
+      </app-dropdown>
+
+      <button
+        class="col-start-4 px-3 min-h-8 text-white bg-[#318dce] rounded-sm cursor-pointer"
+        (click)="onConfirm()"
+      >
+        確認
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #datePicker>
+  <div class="flex flex-col sm:flex-row items-center gap-x-2 w-full sm:w-fit">
+    <label class="mb-2 sm:mb-0 w-full sm:w-fit whitespace-nowrap"
+      >指定期間</label
+    >
+    <div class="flex items-center gap-2 w-full sm:fit">
+      <!-- 起始年份 -->
+      <app-dropdown
+        class="flex-1 sm:flex-none min-w-0 sm:w-27"
+        [options]="yearOptions"
+        [value]="formData.startYear"
+        (selectionChange)="
+          onSelectionChange('startYear', $event);
+          onMonthOrYearChange('start', $event.value, formData.startMonth)
+        "
+      ></app-dropdown>
+      <span>年</span>
+
+      <!-- 起始月份 -->
+      <app-dropdown
+        class="w-20"
+        [options]="monthOptions"
+        [value]="formData.startMonth"
+        [disabeld]="formData.startYear == null"
+        (selectionChange)="
+          onSelectionChange('startMonth', $event);
+          onMonthOrYearChange('start', formData.startYear, $event.value)
+        "
+      ></app-dropdown>
+      <span>月</span>
+
+      <!-- 起始日期 -->
+      <app-dropdown
+        class="w-20"
+        [options]="startDayOptions"
+        [value]="formData.startDay"
+        [disabeld]="formData.startMonth == null"
+        (selectionChange)="onSelectionChange('startDay', $event)"
+      ></app-dropdown>
+      <span>日</span>
+    </div>
+
+    <span class="">~</span>
+
+    <div class="flex items-center gap-2 w-full sm:fit">
+      <!-- 結束年份 -->
+      <app-dropdown
+        class="flex-1 sm:flex-none min-w-0 sm:w-27"
+        [options]="yearOptions"
+        [value]="formData.endYear"
+        [disabeld]="formData.startYear == null"
+        (selectionChange)="
+          onSelectionChange('endYear', $event);
+          onMonthOrYearChange('end', $event.value, formData.endMonth)
+        "
+      ></app-dropdown>
+      <span>年</span>
+
+      <!-- 結束月份 -->
+      <app-dropdown
+        class="w-20"
+        [options]="monthOptions"
+        [value]="formData.endMonth"
+        [disabeld]="formData.endYear == null"
+        (selectionChange)="
+          onSelectionChange('endMonth', $event);
+          onMonthOrYearChange('end', formData.endYear, $event.value)
+        "
+      ></app-dropdown>
+      <span>月</span>
+
+      <!-- 結束日期 -->
+      <app-dropdown
+        class="w-20"
+        [options]="endDayOptions"
+        [value]="formData.endDay"
+        [disabeld]="formData.endMonth == null"
+        (selectionChange)="onSelectionChange('endDay', $event)"
+      ></app-dropdown>
+      <span>日</span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #yearPicker>
+  <!-- 指定期間 -->
+  <div class="flex flex-col sm:flex-row items-center gap-x-2 w-full sm:w-fit">
+    <label class="mb-2 sm:mb-0 w-full sm:w-fit whitespace-nowrap"
+      >指定年份</label
+    >
+    <div class="flex items-center gap-2 w-full sm:fit">
+      <!-- 第一年份 -->
+      <app-dropdown
+        class="w-30"
+        [options]="yearOptions"
+        [value]="formData.firstYear"
+        [disabeldOptions]="[formData.secondYear, formData.thirdYear]"
+        (selectionChange)="onSelectionChange('firstYear', $event)"
+      ></app-dropdown>
+      <span>年</span>
+
+      <!-- 第二年份 -->
+      <app-dropdown
+        class="w-30"
+        [options]="yearOptions"
+        [value]="formData.secondYear"
+        [disabeld]="formData.firstYear == null"
+        [disabeldOptions]="[formData.firstYear, formData.thirdYear]"
+        (selectionChange)="onSelectionChange('secondYear', $event)"
+      ></app-dropdown>
+      <span>年</span>
+
+      <!-- 第三年份 -->
+      <app-dropdown
+        class="w-30"
+        [options]="yearOptions"
+        [value]="formData.thirdYear"
+        [disabeld]="formData.secondYear == null"
+        [disabeldOptions]="[formData.secondYear, formData.firstYear]"
+        (selectionChange)="onSelectionChange('thirdYear', $event)"
+      ></app-dropdown>
+      <span>年</span>
+    </div>
+  </div>
+</ng-template>

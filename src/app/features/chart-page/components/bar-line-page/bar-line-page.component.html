@@ -1,0 +1,231 @@
+<div class="flex flex-col gap-4 w-full h-full">
+  <div class="card flex flex-col flex-1 gap-2 items-center p-4 min-h-0">
+    @if (barData.length > 0 && !isNoData) {
+      <div class="hidden sm:flex flex-1 flex-col items-center gap-2 w-full">
+        <div class="flex items-center gap-4">
+          @for (bar of barData; let i = $index; track bar) {
+            <div class="flex items-center gap-1">
+              <div
+                class="w-4 h-4 rounded-full"
+                [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
+              ></div>
+              <div>{{ lineData[i].label }}</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <div
+                class="w-4 h-2"
+                [ngStyle]="{ 'background-color': bar.colors?.[0] }"
+              ></div>
+              <div>{{ bar.label }}</div>
+            </div>
+          }
+        </div>
+
+        <div class="flex flex-1 items-center gap-2 w-full min-h-0 relative">
+          <div class="text-xl [writing-mode:vertical-rl]">人數</div>
+          <app-bar-line-chart
+            class="flex-1 h-full"
+            [barData]="barData"
+            [lineData]="lineData"
+            [showLegend]="false"
+          ></app-bar-line-chart>
+          <div class="text-xl [writing-mode:vertical-rl]">架次</div>
+        </div>
+      </div>
+
+      <!-- 手機版 -->
+      <ng-container [ngTemplateOutlet]="isDate ? date: year"></ng-container>
+    } @else if (!isNoData) {
+      <div class="flex flex-1 items-center justify-center text-[30px]">
+        請輸入查詢條件
+      </div>
+    } @else {
+      <div class="flex flex-1 items-center justify-center text-[30px]">
+        查無資料
+      </div>
+    }
+
+    <ng-content></ng-content>
+  </div>
+</div>
+
+<ng-template #date>
+  <div class="flex flex-col gap-4 sm:hidden w-full max-w-100">
+    <h2 class="text-2xl text-center font-semibold">人數</h2>
+    <div class="grid grid-cols-3 border border-gray-300">
+      <!-- Header -->
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        日期
+      </div>
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        2019年
+      </div>
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        {{ dateRangeLabel }}
+      </div>
+
+      <!-- Rows -->
+      @for (row of barData[0].data; let rowIndex = $index; track row) {
+        <!-- 日期 -->
+        <div class="border p-2 text-center">
+          {{ row.key }}
+        </div>
+
+        <!-- 各年份數值 -->
+        @for (col of barData.slice().reverse(); track col) {
+          <div class="border p-2 text-center">
+            {{ col.data[rowIndex].value }}
+          </div>
+        }
+      }
+    </div>
+
+    <h2 class="mt-8 text-2xl text-center font-semibold">架次</h2>
+    <div class="grid grid-cols-3 border border-gray-300">
+      <!-- Header -->
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        日期
+      </div>
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        2019年
+      </div>
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        {{ dateRangeLabel }}
+      </div>
+
+      <!-- Rows -->
+      @for (row of lineData[0].data; let rowIndex = $index; track row) {
+        <!-- 日期 -->
+        <div class="border p-2 text-center">
+          {{ row.key }}
+        </div>
+
+        <!-- 各年份數值 -->
+        @for (col of lineData.slice().reverse(); track col) {
+          <div class="border p-2 text-center">
+            {{ col.data[rowIndex].value }}
+          </div>
+        }
+      }
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #year>
+  <!-- 手機版 -->
+  <div class="flex flex-col gap-4 sm:hidden w-full max-w-100">
+    <h2 class="text-2xl text-center font-semibold">人數</h2>
+    <div
+      class="grid border border-gray-300"
+      [ngClass]="{
+        'grid-cols-2': barData.length == 1,
+        'grid-cols-3': barData.length == 2,
+        'grid-cols-4': barData.length == 3,
+      }"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        日期
+      </div>
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        {{ firstDateRangeLabel }}
+      </div>
+      @if (barData.length > 1) {
+        <div
+          class="flex items-center justify-center text-center border p-2 font-semibold"
+        >
+          {{ secondDateRangeLabel }}
+        </div>
+      }
+      @if (barData.length > 2) {
+        <div
+          class="flex items-center justify-center text-center border p-2 font-semibold"
+        >
+          {{ thirdDateRangeLabel }}
+        </div>
+      }
+
+      <!-- Rows -->
+      @for (row of barData[0].data; let rowIndex = $index; track row) {
+        <!-- 日期 -->
+        <div class="border p-2 text-center">
+          {{ row.key }}
+        </div>
+
+        <!-- 各年份數值 -->
+        @for (col of barData; track col) {
+          <div class="border p-2 text-center">
+            {{ col.data[rowIndex].value }}
+          </div>
+        }
+      }
+    </div>
+
+    <h2 class="mt-8 text-2xl text-center font-semibold">架次</h2>
+    <div
+      class="grid border border-gray-300"
+      [ngClass]="{
+        'grid-cols-2': barData.length == 1,
+        'grid-cols-3': barData.length == 2,
+        'grid-cols-4': barData.length == 3,
+      }"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        日期
+      </div>
+      <div
+        class="flex items-center justify-center text-center border p-2 font-semibold"
+      >
+        {{ firstDateRangeLabel }}
+      </div>
+      @if (lineData.length > 1) {
+        <div
+          class="flex items-center justify-center text-center border p-2 font-semibold"
+        >
+          {{ secondDateRangeLabel }}
+        </div>
+      }
+      @if (lineData.length > 2) {
+        <div
+          class="flex items-center justify-center text-center border p-2 font-semibold"
+        >
+          {{ thirdDateRangeLabel }}
+        </div>
+      }
+
+      <!-- Rows -->
+      @for (row of lineData[0].data; let rowIndex = $index; track row) {
+        <!-- 日期 -->
+        <div class="border p-2 text-center">
+          {{ row.key }}
+        </div>
+
+        <!-- 各年份數值 -->
+        @for (col of lineData; track col) {
+          <div class="border p-2 text-center">
+            {{ col.data[rowIndex].value }}
+          </div>
+        }
+      }
+    </div>
+  </div>
+</ng-template>

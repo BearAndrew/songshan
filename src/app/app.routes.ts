@@ -26,6 +26,7 @@ import { IntlCheckinCounterAdminComponent } from './features/intl-checkin-counte
 import { IntlCheckinCounterTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-table/intl-checkin-counter-table.component';
 import { IntlCheckinCounterUserTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-user-table/intl-checkin-counter-user-table.component';
 import { IntlCheckinCounterAdminTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-admin-table/intl-checkin-counter-admin-table.component';
+import { TestPageComponent } from './features/chart-page/page/test-page/test-page.component';
 
 export const routes: Routes = [
   {
@@ -116,6 +117,11 @@ export const routes: Routes = [
         path: 'traffic-forecast',
         component: TrafficForecastComponent,
         data: { title: '運量預報', theme: 'dark' },
+      },
+      {
+        path: 'test-chart-page',
+        component: TestPageComponent,
+        data: { title: '測試圖表', theme: 'dark' },
       },
       {
         path: 'traffic-analysis',
