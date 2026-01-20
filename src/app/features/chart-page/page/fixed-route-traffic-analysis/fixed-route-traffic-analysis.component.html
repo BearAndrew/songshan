@@ -118,7 +118,7 @@
       <app-dropdown
         class="w-full sm:w-27"
         [options]="airlineOptions"
-        [value]="optionDefaultValue"
+        [value]="formData.airline"
         (selectionChange)="onSelectionChange('airline', $event)"
       >
       </app-dropdown>

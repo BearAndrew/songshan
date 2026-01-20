@@ -58,7 +58,7 @@ export class IntlCheckinCounterTableComponent {
 
   ngOnInit(): void {
     // 取得航空公司清單
-    this.apiService.getAirlineList().subscribe((res: Airline[]) => {
+    this.apiService.getAirlineList('intl').subscribe((res: Airline[]) => {
       this.airlineOptions = res.map((airline) => ({
         label: airline.name_zhTW,
         value: airline.iata,

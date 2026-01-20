@@ -166,14 +166,21 @@ export class OnTimePerformanceComponent {
       this.routeOptions.unshift({ label: '全部', value: '' });
     });
 
-    // 取得航空公司清單
-    this.apiService.getAirlineList().subscribe((res: Airline[]) => {
-      this.airlineOptions = res.map((airline) => ({
-        label: airline.name_zhTW,
-        value: airline.iata,
-      }));
-      this.airlineOptions.unshift({ label: '全部', value: '' });
-    });
+    this.getAirlineList();
+  }
+
+  // 取得航空公司清單
+  getAirlineList() {
+    this.apiService
+      .getAirlineList(this.data[this.activeIndex].value)
+      .subscribe((res: Airline[]) => {
+        this.airlineOptions = res.map((airline) => ({
+          label: airline.name_zhTW,
+          value: airline.iata,
+        }));
+        this.airlineOptions.unshift({ label: '全部', value: '' });
+        this.formData.airline = '';
+      });
   }
 
   // 選擇事件
@@ -233,6 +240,7 @@ export class OnTimePerformanceComponent {
   onScopeChange(index: number) {
     this.activeIndex = index;
     this.formData.flightType = this.data[index].value;
+    this.getAirlineList();
   }
 
   // 確認按鈕

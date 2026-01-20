@@ -87,8 +87,8 @@ export class ApiService {
   }
 
   /** 取得航空公司清單 */
-  getAirlineList(): Observable<Airline[]> {
-    return this.http.get<Airline[]>('GetAirlineList');
+  getAirlineList(type: string): Observable<Airline[]> {
+    return this.http.get<Airline[]>(`GetAirlineListByType/${type}`);
   }
 
   /** 取得飛航異常狀態清單 */
