@@ -32,37 +32,48 @@
   <div></div>
 
   <!-- 後面 row：chartData -->
-  @for(data of chartData; track data.label) {
-  <!-- 第一列：label -->
-  <div
-    class="font-semibold mr-2"
-    [ngClass]="size === 'sm' ? 'text-md' : 'text-2xl'"
-  >
-    {{ data.label }}
-  </div>
-
-  <!-- 第二列：進度條 -->
-  <div
-    class="bg-[#dedede] rounded-md relative overflow-hidden"
-    [ngClass]="size === 'sm' ? 'h-7' : 'h-12'"
-  >
+  @for (data of chartData; track data.label) {
+    <!-- 第一列：label -->
     <div
-      class="h-full rounded-md relative"
-      [ngClass]="colorClass"
-      [ngStyle]="{ width: (data.value / data.total) * 100 + '%' }"
+      class="font-semibold mr-2"
+      [ngClass]="size === 'sm' ? 'text-md' : 'text-2xl'"
+    >
+      {{ data.label }}
+    </div>
+
+    <!-- 第二列：進度條 -->
+    <div
+      class="bg-[#dedede] rounded-md relative overflow-hidden"
+      [ngClass]="size === 'sm' ? 'h-7' : 'h-12'"
     >
       <div
-        class="absolute right-0 top-1/2 transform -translate-y-1/2 text-white font-bold pr-2"
-        [ngClass]="size === 'sm' ? 'text-md' : 'text-3xl'"
+        class="rounded-md relative bg-gray-300"
+        [ngClass]="size === 'sm' ? 'h-7' : 'h-12'"
+        #container
       >
-        {{ data.value | number }}
+        <div
+          class="h-full rounded-md relative bg-blue-500"
+          [ngStyle]="{ width: (data.value / data.total) * 100 + '%' }"
+          #bar
+        >
+          <div
+            class="absolute top-1/2 transform -translate-y-1/2 font-bold"
+            [ngClass]="size === 'sm' ? 'text-md' : 'text-3xl'"
+            #label
+            [ngStyle]="getLabelStyle(bar.offsetWidth, label.offsetWidth)"
+          >
+            {{ data.value | number }}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 第三列：總數 -->
-  <div class="font-semibold" [ngClass]="size === 'sm' ? 'text-md' : 'text-3xl'">
-    {{ data.total | number }}
-  </div>
+    <!-- 第三列：總數 -->
+    <div
+      class="font-semibold"
+      [ngClass]="size === 'sm' ? 'text-md' : 'text-3xl'"
+    >
+      {{ data.total | number }}
+    </div>
   }
 </div>
