@@ -323,17 +323,7 @@ export class TrafficForecastComponent {
   constructor(
     private apiService: ApiService,
     private commonService: CommonService,
-  ) {
-    //預設取得不分機場總數
-    this.commonService.getSelectedAirport().subscribe((airportId) => {
-      // 根據選擇的機場ID執行相應的操作，例如重新載入資料
-      if (airportId === -1) {
-        return;
-      }
-      this.airportId = this.commonService.getAirportCodeById(airportId) || '-1';
-      this.getData();
-    });
-  }
+  ) {}
 
   ngOnInit() {
     // 監聽選擇的機場
@@ -341,9 +331,8 @@ export class TrafficForecastComponent {
       .getSelectedAirport()
       .pipe(takeUntil(this.destroy$))
       .subscribe((airportId) => {
-        if (airportId === -1) return;
-        this.airportId =
-          this.commonService.getAirportCodeById(airportId) || '-1';
+        if (airportId === '') return;
+        this.airportId = airportId;
         this.refreshTrigger$.next(); // 立即觸發
       });
 

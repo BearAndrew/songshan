@@ -43,7 +43,6 @@ export class DropdownComponent {
   constructor(
     private overlay: Overlay,
     private vcr: ViewContainerRef,
-    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -108,7 +107,6 @@ export class DropdownComponent {
     this.value = item.value;
     this.selectedLabel = item.label;
     this.selectionChange.emit(item);
-    this.commonService.setSelectedAirport(item.value);
     this.close();
   }
 }

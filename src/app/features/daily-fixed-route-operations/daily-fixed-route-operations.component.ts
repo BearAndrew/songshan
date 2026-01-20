@@ -63,10 +63,11 @@ export class DailyFixedRouteOperationsComponent {
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        filter((airportId) => airportId !== -1),
+        filter((airportId) => airportId !== ''),
         distinctUntilChanged(),
         switchMap(() =>
           interval(30000).pipe(
+            takeUntil(this.destroy$),
             startWith(0),
             switchMap(
               () => this.apiService.getTodayStatus(),

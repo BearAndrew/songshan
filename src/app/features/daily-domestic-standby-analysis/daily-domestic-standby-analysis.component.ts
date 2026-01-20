@@ -9,8 +9,11 @@ import {
   StandbySummaryItem,
 } from '../../models/standby.model';
 import {
+  distinctUntilChanged,
   EMPTY,
+  filter,
   interval,
+  Observable,
   startWith,
   Subject,
   switchMap,
@@ -103,27 +106,24 @@ export class DailyDomesticStandbyAnalysisComponent {
     private apiService: ApiService,
     private commonService: CommonService,
   ) {
-    // ===== 預設機場立即呼叫 =====
-    if (this.commonService.realAirportValue !== -1) {
-      this.getStandbySummary(this.commonService.realAirportValue); // 立即執行一次
-    }
-
     // ===== 機場輪詢 =====
     this.commonService
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        switchMap((airportId) => {
-          if (airportId === -1) return EMPTY;
-
-          return interval(30000).pipe(
-            startWith(0), // 立即執行一次
+        filter((airportId) => airportId !== ''),
+        distinctUntilChanged(),
+        switchMap((airportId) =>
+          interval(30000).pipe(
             takeUntil(this.destroy$),
+            startWith(0),
             switchMap(() => this.getStandbySummary(airportId)),
-          );
-        }),
+          ),
+        ),
       )
-      .subscribe();
+      .subscribe((res) => {
+        this.setTableData(res);
+      });
   }
 
   ngOnDestroy(): void {
@@ -131,11 +131,8 @@ export class DailyDomesticStandbyAnalysisComponent {
     this.destroy$.complete();
   }
 
-  getStandbySummary(value: number) {
-    const code = this.commonService.getAirportCodeById(value);
-    return this.apiService
-      .getStandbySummary(code)
-      .pipe(tap((res) => this.setTableData(res)));
+  getStandbySummary(code: string): Observable<StandbySummaryItem[]> {
+    return this.apiService.getStandbySummary(code);
   }
 
   setTableData(data: StandbySummaryItem[]) {

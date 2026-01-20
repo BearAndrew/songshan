@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, fromEvent, map, startWith } from 'rxjs';
+import { Option } from '../../shared/components/dropdown/dropdown.component';
 
 @Injectable({
   providedIn: 'root',
@@ -8,12 +9,10 @@ import { BehaviorSubject, fromEvent, map, startWith } from 'rxjs';
 export class CommonService {
   constructor(private http: HttpClient) {}
 
-  airportList: { label: string; value: number; code: string }[] = [];
-  selectedAirport: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
-  selectedFlightType: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  realAirportValue: number = -1;
+  private airportList: Option[] = [];
+  private selectedAirport$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  setAirportList(data: { label: string; value: number; code: string }[]) {
+  setAirportList(data: Option[]) {
     this.airportList = data;
   }
 
@@ -21,22 +20,12 @@ export class CommonService {
     return this.airportList;
   }
 
-  setSelectedAirport(airportId: number) {
-    this.selectedAirport.next(airportId);
-    this.realAirportValue = airportId;
+  setSelectedAirport(airportCode: string) {
+    this.selectedAirport$.next(airportCode);
   }
 
   getSelectedAirport() {
-    return this.selectedAirport.asObservable();
-  }
-
-  getSelectedAirportValue() {
-    return this.realAirportValue;
-  }
-
-  getAirportCodeById(airportId: number): string {
-    const airport = this.airportList.find((a) => a.value === airportId);
-    return airport ? airport.code : '';
+    return this.selectedAirport$.asObservable();
   }
 
   observeScreenSize() {

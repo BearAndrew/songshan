@@ -123,13 +123,14 @@ export class DailyFixedRouteOperationsForecastComponent {
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        filter((airportId) => airportId !== -1),
+        filter((airportId) => airportId !== ''),
         distinctUntilChanged(),
-        switchMap((airportId) =>
+        switchMap(() =>
           interval(30000).pipe(
+            takeUntil(this.destroy$),
             startWith(0),
             switchMap(
-              () => this.getTodayPredictByCode(airportId),
+              () => this.getTodayPredictByCode(),
             ),
           ),
         ),
@@ -150,10 +151,8 @@ export class DailyFixedRouteOperationsForecastComponent {
     this.destroy$.complete();
   }
 
-  getTodayPredictByCode(value: number): Observable<TodayPredict> {
-    const code = this.commonService.getAirportCodeById(value);
-
-    return this.apiService.getTodayPredictByAirport(code).pipe(
+  getTodayPredictByCode(): Observable<TodayPredict> {
+    return this.apiService.getTodayPredictByAirport().pipe(
       tap((res) => {
         this.setPredictData(res);
       }),

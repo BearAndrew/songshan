@@ -63,14 +63,14 @@ import {
   providedIn: 'root',
 })
 export class ApiService {
-  airportCode = '';
+  airportCode: HttpParams = new HttpParams();
 
   constructor(
     private http: HttpClient,
     private commonService: CommonService,
   ) {
-    this.commonService.selectedAirport.subscribe((res) => {
-      this.airportCode = this.commonService.getAirportCodeById(res);
+    this.commonService.getSelectedAirport().subscribe((res) => {
+      this.airportCode = new HttpParams().set('currAirport', res);
     });
   }
 
@@ -100,9 +100,9 @@ export class ApiService {
 
   /** 全場今日狀態 */
   getTodayStatus(): Observable<TodayStatus> {
-    console.trace()
-    const params = new HttpParams().set('currAirport', this.airportCode);
-    return this.http.get<TodayStatus>('GetTodayStatus', { params });
+    return this.http.get<TodayStatus>('GetTodayStatus', {
+      params: this.airportCode,
+    });
   }
 
   /** 指定機場今日狀態 */
@@ -116,27 +116,35 @@ export class ApiService {
   }
 
   /** 指定機場今日預測 */
-  getTodayPredictByAirport(airport: string | null): Observable<TodayPredict> {
-    return this.http.get<TodayPredict>(`GetTodayPredictByAirport/${airport}`);
+  getTodayPredictByAirport(): Observable<TodayPredict> {
+    return this.http.get<TodayPredict>(
+      `GetTodayPredictByAirport/${this.airportCode}`,
+    );
   }
 
   // ========= 延誤統計 =========
 
   /** 今日延誤統計 */
   getTodayDelayStat(type: TabType): Observable<TodayDelayStat> {
-    return this.http.get<TodayDelayStat>(`GetTodayDelayStat/${type}`);
+    return this.http.get<TodayDelayStat>(`GetTodayDelayStat/${type}`, {
+      params: this.airportCode,
+    });
   }
 
   // ========= 候補旅客 =========
 
   /** 指定機場候補總覽 */
   getStandbySummary(airport: string | null): Observable<StandbySummaryItem[]> {
-    return this.http.get<StandbySummaryItem[]>(`GetStandbySummary/${airport}`);
+    return this.http.get<StandbySummaryItem[]>(`GetStandbySummary`, {
+      params: this.airportCode,
+    });
   }
 
   /** 指定機場候補名單 */
   getStandbyList(airport: string | null): Observable<StandbyListItem[]> {
-    return this.http.get<StandbyListItem[]>(`GetStandbyList/${airport}`);
+    return this.http.get<StandbyListItem[]>(`GetStandbyList/${airport}`, {
+      params: this.airportCode,
+    });
   }
 
   // ========= 不正常/即時狀況 =========
@@ -153,7 +161,9 @@ export class ApiService {
     const url =
       `IrregularInboundFlight/${type}/${direction}` +
       (delayCode ? `/${delayCode}` : '');
-    return this.http.get<IrregularInboundFlight>(url);
+    return this.http.get<IrregularInboundFlight>(url, {
+      params: this.airportCode,
+    });
   }
 
   /** 即時人流資訊 */
@@ -183,6 +193,9 @@ export class ApiService {
   ): Observable<FlightTrafficPredictResponse> {
     return this.http.get<FlightTrafficPredictResponse>(
       `FlightTrafficPredict/${airport}/${day}/${type}`,
+      {
+        params: this.airportCode,
+      },
     );
   }
 
@@ -196,6 +209,9 @@ export class ApiService {
     return this.http.post<FlightTrafficAnalysisResponse>(
       'FlightTrafficAnalysis',
       payload,
+      {
+        params: this.airportCode,
+      },
     );
   }
 
@@ -208,6 +224,9 @@ export class ApiService {
     return this.http.post<FlightTrafficAnalysisResponse>(
       'FlightTrafficAnalysisSch',
       payload,
+      {
+        params: this.airportCode,
+      },
     );
   }
 
@@ -221,6 +240,9 @@ export class ApiService {
     return this.http.post<YearlyTrafficAnalysisResponse[]>(
       'YearlyTrafficAnalysis',
       payload,
+      {
+        params: this.airportCode,
+      },
     );
   }
 
@@ -234,6 +256,9 @@ export class ApiService {
     return this.http.post<YearlyTrafficAnalysisResponse[]>(
       'YearlyTrafficAnalysisSch',
       payload,
+      {
+        params: this.airportCode,
+      },
     );
   }
 
@@ -244,7 +269,9 @@ export class ApiService {
   postOtpAnalysis(
     payload: OtpAnalysisRequest,
   ): Observable<OtpAnalysisResponse> {
-    return this.http.post<OtpAnalysisResponse>('OTPAnalysis', payload);
+    return this.http.post<OtpAnalysisResponse>('OTPAnalysis', payload, {
+      params: this.airportCode,
+    });
   }
 
   /**
@@ -257,6 +284,9 @@ export class ApiService {
     return this.http.post<IrregularAnalysisResponse>(
       'IrregularAnalysis',
       payload,
+      {
+        params: this.airportCode,
+      },
     );
   }
 
@@ -270,6 +300,9 @@ export class ApiService {
     return this.http.post<HistoricStandbySummaryItem[]>(
       'GetHistoricStandbySummary',
       payload,
+      {
+        params: this.airportCode,
+      },
     );
   }
 
@@ -284,6 +317,9 @@ export class ApiService {
     return this.http.post<HistoricStandbyListItem[]>(
       `GetStandbyHistoricList/${airport}`,
       payload,
+      {
+        params: this.airportCode,
+      },
     );
   }
 

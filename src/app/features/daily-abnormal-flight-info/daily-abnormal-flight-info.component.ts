@@ -11,14 +11,19 @@ import { Option } from '../../shared/components/dropdown/dropdown.component';
 import { environment } from '../../../environments/environment';
 import {
   BehaviorSubject,
+  distinctUntilChanged,
   EMPTY,
+  filter,
   interval,
+  merge,
+  Observable,
   startWith,
   Subject,
   switchMap,
   takeUntil,
   tap,
 } from 'rxjs';
+import { CommonService } from '../../core/services/common.service';
 
 @Component({
   selector: 'app-daily-abnormal-flight-info',
@@ -72,6 +77,7 @@ export class DailyAbnormalFlightInfoComponent {
   /** 下載 CSV */
   baseUrl = environment.apiBaseUrl + '/IrregularInboundFlightExport';
   csvUrl = '';
+  airportCode = '';
 
   mobileOptions: Option[] = [
     {
@@ -158,14 +164,36 @@ export class DailyAbnormalFlightInfoComponent {
   private refreshTrigger$ = new BehaviorSubject<void>(undefined);
   private destroy$ = new Subject<void>();
 
-  constructor(private apiService: ApiService) {
-    interval(30000)
+  constructor(
+    private apiService: ApiService,
+    private commonService: CommonService,
+  ) {
+    this.commonService
+      .getSelectedAirport()
       .pipe(
-        startWith(0), // 立即執行一次
         takeUntil(this.destroy$),
-        switchMap(() => this.getIrregularInboundFlight()),
+        filter((airportId) => airportId !== ''),
+        distinctUntilChanged(),
+        switchMap((airportId) => {
+          this.airportCode = airportId;
+          // interval 30 秒 + 手動刷新 trigger
+          return merge(this.refreshTrigger$, interval(30000)).pipe(
+            switchMap(() => this.getIrregularInboundFlight()),
+            startWith(null), // 這裡只放一次，觸發立即呼叫
+          );
+        }),
       )
-      .subscribe();
+      .subscribe((res) => {
+        if(!res) return;
+        this.setTableData(res);
+        this.setCSVUrl();
+      });
+  }
+
+  ngOnInit(): void {
+    this.apiService.getFlightStatus().subscribe(res => {
+      this.flightStatusOptions = res.filter(item => item.normal == 0).map(item => ({label: item.title, value: item.id}))
+    });
   }
 
   ngOnDestroy(): void {
@@ -173,49 +201,15 @@ export class DailyAbnormalFlightInfoComponent {
     this.destroy$.complete();
   }
 
-  ngOnInit(): void {
-    this.apiService.getFlightStatus().subscribe((res) => {
-      this.flightStatusOptions = res
-        .filter((item) => item.normal === 0)
-        .map((item) => ({
-          label: item.title,
-          value: item.id,
-          normal: item.normal, // 保留額外資訊（可選）
-        }));
-
-      this.flightStatusOptions.unshift({ label: '全部', value: '', normal: 0 });
-    });
-
-    this.refreshTrigger$
-      .pipe(
-        startWith(undefined), // 預設立即執行一次
-        switchMap(() =>
-          interval(30000).pipe(
-            startWith(0),
-            switchMap(() => this.getIrregularInboundFlight()),
-          ),
-        ),
-        takeUntil(this.destroy$),
-      )
-      .subscribe();
-  }
-
-  getIrregularInboundFlight() {
+  getIrregularInboundFlight(): Observable<IrregularInboundFlight> {
     const airportValue = this.data[this.activeIndex]?.value;
     if (!airportValue) return EMPTY;
 
-    return this.apiService
-      .getIrregularInboundFlight(
-        airportValue,
-        this.paramDirection,
-        this.paramDelayCode,
-      )
-      .pipe(
-        tap((res) => {
-          this.setTableData(res);
-          this.setCSVUrl();
-        }),
-      );
+    return this.apiService.getIrregularInboundFlight(
+      airportValue,
+      this.paramDirection,
+      this.paramDelayCode,
+    );
   }
 
   setTableData(data: IrregularInboundFlight) {
@@ -249,7 +243,10 @@ export class DailyAbnormalFlightInfoComponent {
     this.csvUrl =
       this.baseUrl +
       `/${this.data[this.activeIndex].value}/${this.paramDirection}` +
-      (this.paramDelayCode ? `/${this.paramDelayCode}` : '');
+      (this.paramDelayCode ? `/${this.paramDelayCode}` : '') +
+      `?currAirport=${this.airportCode}`;
+
+      console.log(this.csvUrl);
   }
 
   onTabClick(newIndex: number) {

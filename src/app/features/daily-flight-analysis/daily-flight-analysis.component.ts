@@ -20,7 +20,18 @@ import {
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
 import { TabType } from '../../core/enums/tab-type.enum';
-import { EMPTY, interval, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  distinctUntilChanged,
+  EMPTY,
+  filter,
+  forkJoin,
+  interval,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-daily-flight-analysis',
@@ -201,39 +212,51 @@ export class DailyFlightAnalysisComponent {
   abnormalOutData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
   abnormalAllData: DailyFlightAnalysisAbnormalData = { info: [], top3: [] };
 
+  isMobile: boolean = false;
   private destroy$ = new Subject<void>();
 
   constructor(
     private apiService: ApiService,
     private commonService: CommonService,
   ) {
-    // ===== 機場輪詢 getTodayPredictByCode =====
     this.commonService
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        switchMap((airportId) => {
-          if (airportId === -1) {
-            return EMPTY;
-          }
-
-          return interval(30000).pipe(
-            startWith(0), // 立即執行一次
+        filter((airportId) => airportId !== ''),
+        distinctUntilChanged(),
+        switchMap((airportId) =>
+          interval(30000).pipe(
             takeUntil(this.destroy$),
-            switchMap(() => this.getTodayPredictByCode(airportId)),
-          );
-        }),
-      )
-      .subscribe();
+            startWith(0),
+            switchMap(() => {
+              const tabValue = this.data[this.activeIndex]?.value;
 
-    // ===== 固定 30 秒輪詢 getTodayDelayStat =====
-    interval(30000)
-      .pipe(
-        startWith(0), // 立即執行一次
-        takeUntil(this.destroy$),
-        switchMap(() => this.getTodayDelayStat()),
+              if (!tabValue) return EMPTY;
+
+              // 同時呼叫兩個 API
+              return forkJoin({
+                predict: this.apiService.getTodayPredictByAirport(),
+                delay: this.apiService.getTodayDelayStat(tabValue),
+              });
+            }),
+          ),
+        ),
       )
-      .subscribe();
+      .subscribe({
+        next: ({ predict, delay }) => {
+          this.setPredictData(predict);
+          this.setDelayData(delay);
+        },
+      });
+
+    // ===== 螢幕尺寸監控 =====
+    this.commonService
+      .observeScreenSize()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((size) => {
+        this.isMobile = size === 'sm';
+      });
   }
 
   ngOnDestroy(): void {
@@ -241,32 +264,14 @@ export class DailyFlightAnalysisComponent {
     this.destroy$.complete();
   }
 
-  /** 切換分頁重新呼叫 api */
-  onTabChange(index: number) {
-    this.activeIndex = index;
-    this.getTodayDelayStat();
-  }
-
-  getTodayPredict() {
-    this.apiService.getTodayPredict().subscribe((res) => {
-      this.setPredictData(res);
-    });
-  }
-
-  getTodayPredictByCode(value: number) {
-    const code = this.commonService.getAirportCodeById(value);
-    // 回傳 Observable
-    return this.apiService
-      .getTodayPredictByAirport(code)
-      .pipe(tap((res) => this.setPredictData(res)));
+  getTodayPredictByCode() {
+    return this.apiService.getTodayPredictByAirport();
   }
 
   getTodayDelayStat() {
     const airportValue = this.data[this.activeIndex]?.value;
-    if (!airportValue) return EMPTY; // 防止 undefined
-    return this.apiService
-      .getTodayDelayStat(airportValue)
-      .pipe(tap((res) => this.setDelayData(res)));
+    if (!airportValue) return EMPTY;
+    return this.apiService.getTodayDelayStat(airportValue);
   }
 
   setPredictData(res: TodayPredict) {
@@ -826,5 +831,15 @@ export class DailyFlightAnalysisComponent {
       this.abnormalOutData.info = [];
       this.abnormalOutData.top3 = [];
     }
+  }
+
+  /** 切換分頁時立刻刷新 */
+  onTabChange(index: number) {
+    this.activeIndex = index;
+
+    // 立刻呼叫 getTodayDelayStat
+    this.getTodayDelayStat().subscribe((res) => {
+      this.setDelayData(res);
+    });
   }
 }

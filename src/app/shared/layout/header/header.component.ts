@@ -28,14 +28,8 @@ export class HeaderComponent {
   menuRoutes: Array<{ path: string; title: string; theme: string }> = [];
   title: string = '';
   airportListData: Airport[] = [];
-  airportList: { label: string; value: number; code: string }[] = [];
-  airportDefault = 15;
-  flightTypeList: { label: string; value: string }[] = [
-    { label: 'ALL', value: 'ALL' },
-    { label: 'SCHEDULE', value: 'SCHEDULE' },
-    { label: 'COMM', value: 'COMM' },
-    { label: 'OTHER', value: 'OTHER' },
-  ];
+  airportList: Option[] = [];
+  airportDefault = 'TSA'; // 台北
   isProd = environment.production;
 
   constructor(
@@ -106,10 +100,6 @@ export class HeaderComponent {
     });
   }
 
-  toggleMenu() {
-    this.menuOpen = !this.menuOpen;
-  }
-
   closeMenu() {
     this.menuOpen = false;
   }
@@ -122,11 +112,10 @@ export class HeaderComponent {
   loadAirportList() {
     this.apiService.GetAirportListTaiwan().subscribe((res) => {
       this.airportListData = res;
-      this.airportListData.forEach((airport, index) => {
+      this.airportListData.forEach((airport) => {
         this.airportList.push({
           label: airport.name_zhTW,
-          value: index,
-          code: airport.iata,
+          value: airport.iata,
         });
       });
       this.airportList = [...this.airportList];
@@ -135,7 +124,7 @@ export class HeaderComponent {
     });
   }
 
-  onAirportChange(selected: Option) {
-    console.log(selected);
+  onAirportChange(option: Option) {
+    this.commonService.setSelectedAirport(option.value);
   }
 }
