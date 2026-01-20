@@ -38,4 +38,8 @@ export class CssBarChartComponent {
       };
     }
   }
+
+  getPercent(data: any): number {
+    return data.total ? (data.value / data.total) * 100 : 0;
+  }
 }

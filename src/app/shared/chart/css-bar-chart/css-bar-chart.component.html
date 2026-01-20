@@ -52,8 +52,9 @@
         #container
       >
         <div
-          class="h-full rounded-md relative bg-blue-500"
-          [ngStyle]="{ width: (data.value / data.total) * 100 + '%' }"
+          class="h-full rounded-md relative"
+          [ngClass]="colorClass"
+          [style.width.%]="getPercent(data)"
           #bar
         >
           <div
