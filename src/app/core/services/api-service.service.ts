@@ -64,6 +64,7 @@ import {
 })
 export class ApiService {
   airportCode: HttpParams = new HttpParams();
+  airportCodeString: string = '';
 
   constructor(
     private http: HttpClient,
@@ -71,6 +72,7 @@ export class ApiService {
   ) {
     this.commonService.getSelectedAirport().subscribe((res) => {
       this.airportCode = new HttpParams().set('currAirport', res);
+      this.airportCodeString = res;
     });
   }
 
@@ -118,7 +120,7 @@ export class ApiService {
   /** 指定機場今日預測 */
   getTodayPredictByAirport(): Observable<TodayPredict> {
     return this.http.get<TodayPredict>(
-      `GetTodayPredictByAirport/${this.airportCode}`,
+      `GetTodayPredictByAirport/${this.airportCodeString}`,
     );
   }
 
