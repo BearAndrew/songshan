@@ -104,7 +104,6 @@ export class DailyAbnormalFlightInfoComponent {
 
   /** 異常狀態下拉選單 */
   flightStatusOptions: Option[] = [];
-
   flightStatusDefault = '';
 
   /** 飛航類型下拉選單 */
@@ -192,7 +191,8 @@ export class DailyAbnormalFlightInfoComponent {
 
   ngOnInit(): void {
     this.apiService.getFlightStatus().subscribe(res => {
-      this.flightStatusOptions = res.filter(item => item.normal == 0).map(item => ({label: item.title, value: item.id}))
+      this.flightStatusOptions = res.filter(item => item.normal == 0).map(item => ({label: item.title, value: item.id}));
+      this.flightStatusOptions.unshift({label: '全部', value: ''});
     });
   }
 
