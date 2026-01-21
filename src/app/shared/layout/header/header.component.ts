@@ -110,7 +110,7 @@ export class HeaderComponent {
   }
 
   loadAirportList() {
-    this.apiService.GetAirportListTaiwan().subscribe((res) => {
+    this.apiService.getAirportListTaiwan().subscribe((res) => {
       this.airportListData = res;
       this.airportListData.forEach((airport) => {
         this.airportList.push({

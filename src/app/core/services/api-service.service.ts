@@ -83,8 +83,15 @@ export class ApiService {
     return this.http.get<Airport[]>('GetAirportList');
   }
 
+  /**
+   *  依航班類型與航空公司取得機場清單
+   */
+  getAirportListByTypeAirline(type: string, airline: string): Observable<Airport[]> {
+    return this.http.get<Airport[]>(`GetAirportListByTypeAirline/${type}/${airline}`);
+  }
+
   /** 取得台灣機場清單 */
-  GetAirportListTaiwan(): Observable<Airport[]> {
+  getAirportListTaiwan(): Observable<Airport[]> {
     return this.http.get<Airport[]>('GetAirportListTaiwan');
   }
 

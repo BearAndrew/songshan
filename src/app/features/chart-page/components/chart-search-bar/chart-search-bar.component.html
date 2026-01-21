@@ -41,7 +41,7 @@
         class="w-full sm:w-27"
         [options]="airlineOptions"
         [value]="formData.airline"
-        (selectionChange)="onSelectionChange('airline', $event)"
+        (selectionChange)="onSelectionChange('airline', $event); onAirlineChange()"
       >
       </app-dropdown>
 

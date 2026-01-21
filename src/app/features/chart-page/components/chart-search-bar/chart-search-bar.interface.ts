@@ -13,7 +13,7 @@ export interface ChartSearchBarForm {
   thirdYear: number | null;
   route: string | null;
   flightClass: string | null;
-  airline: string | null;
+  airline: string;
   direction: FlightDirection;
   flightType: TabType;
 }
