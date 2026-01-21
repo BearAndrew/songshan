@@ -132,7 +132,7 @@
       <!-- 結束年份 -->
       <app-dropdown
         class="flex-1 sm:flex-none min-w-0 sm:w-27"
-        [options]="yearOptions"
+        [options]="endYearOptions"
         [value]="formData.endYear"
         [disabeld]="formData.startYear == null"
         (selectionChange)="
@@ -145,9 +145,9 @@
       <!-- 結束月份 -->
       <app-dropdown
         class="w-20"
-        [options]="monthOptions"
+        [options]="endMonthOptions"
         [value]="formData.endMonth"
-        [disabeld]="formData.endYear == null"
+        [disabeld]="formData.endYear == null || formData.startMonth == null"
         (selectionChange)="
           onSelectionChange('endMonth', $event);
           onMonthOrYearChange('end', formData.endYear, $event.value)
@@ -160,7 +160,7 @@
         class="w-20"
         [options]="endDayOptions"
         [value]="formData.endDay"
-        [disabeld]="formData.endMonth == null"
+        [disabeld]="formData.endMonth == null || (formData.startDay == null && formData.endDay == null)"
         (selectionChange)="onSelectionChange('endDay', $event)"
       ></app-dropdown>
       <span>日</span>
