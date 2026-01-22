@@ -230,8 +230,8 @@ export class UpdateFormComponent {
       dateTo: this.dateTo,
       violationType: type,
       reason: this.form.value.remark,
-      driverNo: this.form.value.driverNo,
-      driverName: this.form.value.driverName,
+      driver_no: this.form.value.driverNo,
+      driver_name: this.form.value.driverName,
     };
     this.apiService.postTaxiViolation(payload).subscribe(() => {});
   }
@@ -244,8 +244,8 @@ export class UpdateFormComponent {
       dateTo: this.dateTo,
       violationType: type,
       reason: this.form.value.remark,
-      driverNo: this.form.value.driverNo,
-      driverName: this.form.value.driverName,
+      driver_no: this.form.value.driverNo,
+      driver_name: this.form.value.driverName,
     };
     this.apiService.updateTaxiViolation(this.rid, payload).subscribe(() => {});
   }

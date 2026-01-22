@@ -32,10 +32,10 @@ export interface TaxiViolation {
   reason: string;
 
   /** 司機編號 */
-  driverNo: string;
+  driver_no: string;
 
   /** 司機姓名 */
-  driverName: string;
+  driver_name: string;
 }
 
 export interface TaxiStat {

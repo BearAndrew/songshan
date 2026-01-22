@@ -312,32 +312,13 @@
             <div
               class="sm:col-start-2 col-span-3 flex items-center gap-x-2 sm:gap-x-4"
             >
-              <!-- <label
-                class="flex flex-shrink-0 items-center gap-2 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  class="hidden"
-                  formControlName="checked"
-                />
-
-                <span
-                  class="w-4 h-4 rounded-full border-2 flex items-center justify-center bg-white"
-                >
-                  @if (ctrl.value.checked) {
-                  <span class="w-3 h-3 rounded-full bg-[#0a80c4]"></span>
-                  }
-                </span>
-
-                <span class="text-[#97e0fb] select-none">島櫃</span>
-              </label> -->
-
               <span class="flex-shrink-0 text-[#97e0fb] select-none">島櫃</span>
               <input
                 type="text"
                 class="bg-[#193652] rounded px-2 py-1 flex-1 w-0"
                 formControlName="assignedCounterArea"
               />
+              <app-dropdown-secondary [options]="islandOptions" (selectionChange)="onSeasonChange($event)"></app-dropdown-secondary>
 
               <label class="flex-shrink-0 text-[#97e0fb]">櫃檯</label>
 

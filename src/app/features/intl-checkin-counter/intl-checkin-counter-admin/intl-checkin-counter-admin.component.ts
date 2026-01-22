@@ -93,9 +93,6 @@ export class IntlCheckinCounterAdminComponent {
     { label: '4', value: '4' },
     { label: '5', value: '5' },
     { label: '6', value: '6' },
-    { label: '7', value: '7' },
-    { label: '8', value: '8' },
-    { label: '9', value: '9' },
   ];
   hourOptions: Option[] = [
     { label: '00', value: '00' },
@@ -294,7 +291,7 @@ export class IntlCheckinCounterAdminComponent {
 
     this.apiService.getAllCounter(payload).subscribe((res) => {
       console.log(res);
-      this.ganttDays = this.mapCounterToGantt(res, dateFrom, dateTo);
+      this.ganttDays = this.mapCounterToGantt(res);
       this.infoCardList = this.mapCounterToInfoCards(res, dateFrom, dateTo);
       console.log(this.ganttDays);
     });
@@ -328,61 +325,105 @@ export class IntlCheckinCounterAdminComponent {
     });
   }
 
-  private mapCounterToGantt(
-    data: CounterInfo[],
-    dateFrom: string,
-    dateTo: string,
-  ): GanttDay[] {
+  // 舊版
+  // private mapCounterToGantt(
+  //   data: CounterInfo[],
+  //   dateFrom: string,
+  //   dateTo: string,
+  // ): GanttDay[] {
+  //   const ganttMap = new Map<string, GanttDay>();
+
+  //   const start = new Date(dateFrom);
+  //   const end = new Date(dateTo);
+
+  //   data.forEach((item) => {
+  //     /** row 來源：assignedCounterArea */
+  //     const row = Number(item.assignedCounterArea);
+
+  //     // 條件：必須是 1~6 的數字
+  //     if (!row || isNaN(row) || row < 1 || row > 6) {
+  //       return; // 直接忽略這筆
+  //     }
+
+  //     /** dayOfWeek → Set<number> */
+  //     const weekSet = new Set(
+  //       (item.dayOfWeek || '').split(',').map((d) => Number(d)),
+  //     );
+
+  //     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+  //       // JS: Sun=0 → API: Sun=7
+  //       const apiDay = d.getDay() === 0 ? 7 : d.getDay();
+  //       if (!weekSet.has(apiDay)) continue;
+
+  //       const yyyy = d.getFullYear();
+  //       const mm = String(d.getMonth() + 1).padStart(2, '0');
+  //       const dd = String(d.getDate()).padStart(2, '0');
+  //       const dateKey = `${yyyy}/${mm}/${dd}`;
+
+  //       if (!ganttMap.has(dateKey)) {
+  //         ganttMap.set(dateKey, {
+  //           date: dateKey,
+  //           items: [],
+  //         });
+  //       }
+
+  //       ganttMap.get(dateKey)!.items.push({
+  //         row, //  對應 assignedCounterArea
+  //         data: {
+  //           flightNo: `${item.airlineIata}${item.flightNo}`,
+  //           time: `${item.startTime?.slice(0, 5)}-${item.endTime?.slice(0, 5)}`,
+  //         },
+  //       });
+  //     }
+  //   });
+
+  //   /** 轉陣列 + 日期排序 */
+  //   return Array.from(ganttMap.values()).sort((a, b) =>
+  //     a.date.localeCompare(b.date),
+  //   );
+  // }
+
+  private mapCounterToGantt(data: CounterInfo[]): GanttDay[] {
     const ganttMap = new Map<string, GanttDay>();
 
-    const start = new Date(dateFrom);
-    const end = new Date(dateTo);
-
     data.forEach((item) => {
-      /** row 來源：assignedCounterArea */
+      // ✅ 只處理 APPROVE
+      if (item.status !== 'APPROVE') return;
+
       const row = Number(item.assignedCounterArea);
+      if (!row || isNaN(row) || row < 1 || row > 6) return;
 
-      // 條件：必須是 1~6 的數字
-      if (!row || isNaN(row) || row < 1 || row > 6) {
-        return; // 直接忽略這筆
-      }
+      if (!item.applicationDate) return;
 
-      /** dayOfWeek → Set<number> */
-      const weekSet = new Set(
-        (item.dayOfWeek || '').split(',').map((d) => Number(d)),
-      );
+      const dateKey = this.formatApplicationDate(item.applicationDate);
 
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        // JS: Sun=0 → API: Sun=7
-        const apiDay = d.getDay() === 0 ? 7 : d.getDay();
-        if (!weekSet.has(apiDay)) continue;
-
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const dd = String(d.getDate()).padStart(2, '0');
-        const dateKey = `${yyyy}/${mm}/${dd}`;
-
-        if (!ganttMap.has(dateKey)) {
-          ganttMap.set(dateKey, {
-            date: dateKey,
-            items: [],
-          });
-        }
-
-        ganttMap.get(dateKey)!.items.push({
-          row, //  對應 assignedCounterArea
-          data: {
-            flightNo: `${item.airlineIata}${item.flightNo}`,
-            time: `${item.startTime?.slice(0, 5)}-${item.endTime?.slice(0, 5)}`,
-          },
+      if (!ganttMap.has(dateKey)) {
+        ganttMap.set(dateKey, {
+          date: dateKey,
+          items: [],
         });
       }
+
+      ganttMap.get(dateKey)!.items.push({
+        row,
+        data: {
+          flightNo: `${item.airlineIata}${item.flightNo}`,
+          time: `${item.startTime?.slice(0, 5)}-${item.endTime?.slice(0, 5)}`,
+        },
+      });
     });
 
-    /** 轉陣列 + 日期排序 */
     return Array.from(ganttMap.values()).sort((a, b) =>
       a.date.localeCompare(b.date),
     );
+  }
+
+  private formatApplicationDate(appDate: string): string {
+    // "2026/1/19 上午 12:00:00"
+    const datePart = appDate.split(' ')[0]; // 2026/1/19
+    const [y, m, d] = datePart.split('/');
+
+    return `${y}/${m.padStart(2, '0')}/${d.padStart(2, '0')}`;
   }
 
   selectItem(item: CounterInfo): void {
@@ -481,7 +522,7 @@ export class IntlCheckinCounterAdminComponent {
     };
 
     this.apiService.adminApproval(payload).subscribe({
-      next: () => console.log('核准成功'),
+      next: () => ( this.getAllCounter()),
       error: (err) => console.error('核准失敗', err),
     });
   }
@@ -583,5 +624,10 @@ export class IntlCheckinCounterAdminComponent {
       this.form.get(controlName)!.setValue(combined);
     }
     (this.formData as any)[controlName] = combined;
+  }
+
+  /** 島櫃下拉選單變更 */
+  onSeasonChange(option: Option): void {
+    this.form.value.assignedCounterArea = option.value;
   }
 }

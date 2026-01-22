@@ -488,7 +488,7 @@ export class ApiService {
 
   /** 櫃檯申請－使用者撤回 */
   userWithdraw(requestId: string | number): Observable<void> {
-    return this.http.post<void>(`/Withdraw/${requestId}`, {});
+    return this.http.delete<void>(`/Withdraw/${requestId}`, {});
   }
 
   /** 取得各季時間 */

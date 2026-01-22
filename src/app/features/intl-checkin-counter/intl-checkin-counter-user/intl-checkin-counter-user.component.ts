@@ -1,14 +1,17 @@
+import { STATUS_COLOR_MAP } from './../checkin-color-mapping';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { DropdownSecondaryComponent } from '../../../shared/components/dropdown-secondary/dropdown-secondary.component';
 import { Option } from '../../../shared/components/dropdown/dropdown.component';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
@@ -24,6 +27,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { CounterService } from '../service/counter.service';
 import { parseTwDateTime } from '../../../core/utils/parse-tw-datetime';
+import { take } from 'rxjs';
+import { CommonService } from '../../../core/services/common.service';
 
 interface ScheduleItem {
   date: string; // YYYY-MM-DD
@@ -31,6 +36,13 @@ interface ScheduleItem {
   time: string;
   status: string;
   counterInfo: CounterInfo;
+}
+
+function atLeastOneWeekDay(control: AbstractControl): ValidationErrors | null {
+  const week = control.value;
+  if (!week) return { required: true };
+  const selected = Object.values(week).some((v) => v === true);
+  return selected ? null : { required: true };
 }
 
 @Component({
@@ -166,6 +178,7 @@ export class IntlCheckinCounterUserComponent {
     { label: '59', value: '59' },
   ];
   isEdit: boolean = false;
+  isSubmitted: boolean = false;
 
   getWeekControl(key: string): FormControl {
     return this.form.get('weekDays.' + key) as FormControl;
@@ -191,24 +204,26 @@ export class IntlCheckinCounterUserComponent {
   requestId: string = '';
   searchDate: Date = new Date();
 
+  STATUS_COLOR_MAP = STATUS_COLOR_MAP;
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private counterService: CounterService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
+    private commonService: CommonService
   ) {}
 
   ngOnInit() {
     /** 申請內容 */
     this.form = this.fb.group({
-      flightInfo: [''],
-      departureTime: [''],
-      applyTimeStart: [''],
-      applyTimeEnd: [''],
-      seasonType: ['all'],
-      applyDateStart: [''],
-      applyDateEnd: [''],
+      flightInfo: ['', Validators.required],
+      departureTimeHour: [''],
+      departureTimeMin: [''],
+      applyTimeStartHour: ['', Validators.required],
+      applyTimeStartMin: ['', Validators.required],
+      applyTimeEndHour: ['', Validators.required],
+      applyTimeEndMin: ['', Validators.required],
+      seasonType: ['all', Validators.required],
       weekDays: this.fb.group({
         mon: [false],
         tue: [false],
@@ -219,6 +234,7 @@ export class IntlCheckinCounterUserComponent {
         sun: [false],
       }),
     });
+    (this.form.get('weekDays') as FormGroup).setValidators(atLeastOneWeekDay);
 
     // 取得 isEdit
     this.route.queryParamMap.subscribe((params) => {
@@ -309,47 +325,46 @@ export class IntlCheckinCounterUserComponent {
     const weekMap = new Map<number, ScheduleItem[][]>();
     const weekIndex = 0;
 
-    if (!weekMap.has(weekIndex)) {
-      // 建立 7 天空陣列，Sun=0 ... Sat=6
-      weekMap.set(
-        weekIndex,
-        Array.from({ length: 7 }, () => []),
-      );
-    }
+    // 建立 7 天空陣列（Sun=0 ... Sat=6）
+    weekMap.set(
+      weekIndex,
+      Array.from({ length: 7 }, () => []),
+    );
 
     const weekArray = weekMap.get(weekIndex)!;
 
-    // 確認 this.searchDateFrom 與 this.searchDateTo 已經是 Date 物件
-    const sunday = new Date(this.searchDateFrom); // 週日
-    // const saturday = new Date(this.searchDateTo); // 不一定需要用到
-
     for (const item of data) {
-      // dayOfWeek 字串拆成數字
-      const days = item.dayOfWeek.split(',').map((n) => parseInt(n, 10));
+      if (item.status == 'WITHDRAW' || item.status == 'REJECT') continue;
+      if (!item.applicationDate) continue;
 
-      for (let day of days) {
-        // 對應陣列索引：Sun=0, Mon=1 ... Sat=6
-        let index = day === 0 || day === 7 ? 0 : day;
+      // applicationDate → Date
+      const appDate = this.parseApplicationDate(item.applicationDate);
 
-        // 對應日期 = this.searchDateFrom + index 天
-        const itemDate = new Date(sunday);
-        itemDate.setDate(sunday.getDate() + index);
-        const yyyy = itemDate.getFullYear();
-        const mm = String(itemDate.getMonth() + 1).padStart(2, '0');
-        const dd = String(itemDate.getDate()).padStart(2, '0');
-        const dateStr = `${yyyy}-${mm}-${dd}`;
+      // JS: Sun=0 ... Sat=6
+      const dayIndex = appDate.getDay();
 
-        weekArray[index].push({
-          date: dateStr,
-          flightNo: item.airlineIata + item.flightNo,
-          time: `${item.startTime.slice(0, -3)}-${item.endTime.slice(0, -3)}`,
-          status: statusMap[item.status],
-          counterInfo: item,
-        });
-      }
+      const yyyy = appDate.getFullYear();
+      const mm = String(appDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(appDate.getDate()).padStart(2, '0');
+      const dateStr = `${yyyy}-${mm}-${dd}`;
+
+      weekArray[dayIndex].push({
+        date: dateStr,
+        flightNo: item.airlineIata + item.flightNo,
+        time: `${item.startTime.slice(0, 5)}-${item.endTime.slice(0, 5)}`,
+        status: statusMap[item.status],
+        counterInfo: item,
+      });
     }
 
     return Array.from(weekMap.values());
+  }
+
+  private parseApplicationDate(appDate: string): Date {
+    // 保險做法：只取日期部分
+    const datePart = appDate.split(' ')[0]; // 2026/1/19
+    const [y, m, d] = datePart.split('/').map(Number);
+    return new Date(y, m - 1, d);
   }
 
   private getMonday(date: Date): Date {
@@ -547,7 +562,23 @@ export class IntlCheckinCounterUserComponent {
   }
 
   onCreate() {
-    const week = this.form.value.weekDays; // { mon: true, tue: false ... }
+    this.isSubmitted = true;
+    this.form.markAllAsTouched(); // 標記所有欄位為 touched，顯示錯誤訊息
+    if (this.form.invalid) {
+      const invalidControls = Object.entries(this.form.controls)
+        .filter(([_, control]) => control.invalid)
+        .map(([name, control]) => ({
+          name,
+          value: control.value,
+          errors: control.errors,
+        }));
+
+      console.log('Invalid fields:', invalidControls);
+      return; // 停止送 API
+    }
+
+    const formValue = this.form.value;
+    // 生成 day_of_week
     const dayMap: Record<string, number> = {
       mon: 1,
       tue: 2,
@@ -555,40 +586,43 @@ export class IntlCheckinCounterUserComponent {
       thu: 4,
       fri: 5,
       sat: 6,
-      sun: 0, // Sunday = 0
+      sun: 0,
     };
-
-    const selectedDays = Object.entries(week)
-      .filter(([key, value]) => value)
-      .map(([key]) => dayMap[key]);
-
+    const selectedDays = Object.entries(formValue.weekDays)
+      .filter(([_, v]) => v)
+      .map(([k]) => dayMap[k]);
     const day_of_week = selectedDays.join(',');
 
+    // flightInfo 拆 airline / number
     let airline_iata = '';
     let flight_no = '';
-    const flightInfo = this.form.value.flightInfo || '';
-    const match = flightInfo.match(/^([A-Z]+)(\d+)$/i);
+    const match = (formValue.flightInfo || '').match(/^([A-Z]+)(\d+)$/i);
     if (match) {
-      airline_iata = match[1].toUpperCase(); // 前面字母
-      flight_no = match[2]; // 後面數字
+      airline_iata = match[1].toUpperCase();
+      flight_no = match[2];
     }
 
-    // 組 payload
     const payload: CounterApplicationManualRequest = {
       agent: '',
-      airline_iata: airline_iata || '', // 對應 flightInfo
-      flight_no: flight_no || '', // 也可以拆成航班號和航空公司
-      season: this.season,
-      day_of_week: day_of_week,
+      airline_iata,
+      flight_no,
+      season: formValue.seasonType,
+      day_of_week,
       apply_for_period: '',
-      startDate: this.dateFrom || '',
-      endDate: this.dateTo || '',
-      start_time: this.formatTime(this.form.value.applyTimeStart),
-      end_time: this.formatTime(this.form.value.applyTimeEnd),
+      startDate: formValue.applyDateStart,
+      endDate: formValue.applyDateEnd,
+      start_time: this.formatTime(
+        formValue.applyTimeStartHour + ':' + formValue.applyTimeStartMin,
+      ),
+      end_time: this.formatTime(
+        formValue.applyTimeEndHour + ':' + formValue.applyTimeEndMin,
+      ),
     };
-    console.log(payload);
+
     this.apiService.addCounterApplication(payload).subscribe((res) => {
-      console.log(res);
+      this.commonService.openDialog({ title: '申請成功', message: '已申請內容，請等待審核', confirmText: '確定', cancelText: '' }).pipe(take(1)).subscribe();
+    }, err => {
+      this.commonService.openDialog({ title: '申請失敗', message: err, confirmText: '確定', cancelText: '' }).pipe(take(1)).subscribe();
     });
   }
 
@@ -640,38 +674,31 @@ export class IntlCheckinCounterUserComponent {
 
   onWithdraw() {
     if (this.requestId == '') return;
-    this.apiService.userWithdraw(this.requestId).subscribe();
+    this.apiService.userWithdraw(this.requestId).subscribe(() => {
+      this.getAllCounter();
+    });
   }
 
   onSearchDateChange(date: Date) {
     this.getAllCounter(date);
   }
 
-  /** 時間改變更改 form */
-  onTimeChange(controlName: string, type: 'HH' | 'mm', option: Option): void {
-    // option.value 預期為字串，例如 '08' 或 '30'
-    const v = option && option.value ? String(option.value) : '';
+  /** 時間改變，只更新對應 FormControl 與 formData */
+  onTimeChange(controlName: string, option: Option): void {
+    const v = option?.value ? String(option.value) : '';
 
-    // 儲存 hour/min 到 this.formData 中對應的欄位（例如 departureTimeHour / departureTimeMin）
-    const hourKey = `${controlName}Hour`;
-    const minKey = `${controlName}Min`;
-    (this.formData as any)[type === 'HH' ? hourKey : minKey] = v;
+    // 更新 formData
+    (this.formData as any)[controlName] = v;
 
-    // 由目前存的 hour/min 組成時間字串，若兩者皆為空則設定為空字串
-    const hh = ((this.formData as any)[hourKey] || '').toString();
-    const mm = ((this.formData as any)[minKey] || '').toString();
-
-    let combined = '';
-    if (hh !== '' || mm !== '') {
-      const paddedH = (hh === '' ? '00' : hh).padStart(2, '0');
-      const paddedM = (mm === '' ? '00' : mm).padStart(2, '0');
-      combined = `${paddedH}:${paddedM}`;
+    // 更新對應 FormControl
+    if (this.form?.get(controlName)) {
+      this.form.get(controlName)!.setValue(v);
     }
+  }
 
-    // 更新表單與 formData 的對應欄位
-    if (this.form && this.form.get(controlName)) {
-      this.form.get(controlName)!.setValue(combined);
-    }
-    (this.formData as any)[controlName] = combined;
+  get isWeekDaysInvalid(): boolean {
+    const weekDays = this.form.get('weekDays')?.value || {};
+    // 至少要有一天選中
+    return !Object.values(weekDays).some((v) => v) && this.form.touched;
   }
 }
