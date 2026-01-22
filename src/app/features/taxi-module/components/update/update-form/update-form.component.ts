@@ -15,6 +15,8 @@ import {
 } from '@angular/forms';
 import { fakeData } from './fake-data';
 import { parseTwDateTime } from '../../../../../core/utils/parse-tw-datetime';
+import { take } from 'rxjs';
+import { CommonService } from '../../../../../core/services/common.service';
 
 @Component({
   selector: 'app-update-form',
@@ -36,6 +38,7 @@ export class UpdateFormComponent {
   modifyContentOption: Option = { label: '變更為無違規紀錄', value: '0' };
 
   hasSearch: boolean = false;
+  hasError: boolean = false;
   rid: number = 0;
   // 用於回傳後端
   dateFrom: string = '';
@@ -47,7 +50,8 @@ export class UpdateFormComponent {
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private taxiService: TaxiService
+    private taxiService: TaxiService,
+    private commonService: CommonService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -87,20 +91,6 @@ export class UpdateFormComponent {
 
   /** 查詢資料 */
   onSearch() {
-    // this.hasSearch = true;
-    // const searchTaxiData: SearchTaxiData = {
-    //   searchRegPlate: this.form.value.regPlate,
-    //   taxiInfoList: fakeData.map((item) => ({
-    //     ...item,
-    //     modifyContent: this.modifyContentOption, // 修改內容 欄位
-    //     suspensionPeriod: '', // 新增欄位
-    //   })),
-    // };
-    // this.form.controls['remark'].setValue(searchTaxiData.taxiInfoList[0].remark);
-    // this.form.controls['driverNo'].setValue(searchTaxiData.taxiInfoList[0].driverNo);
-    // this.taxiService.afterSearchTaxi(searchTaxiData);
-    // return;
-
     this.apiService.searchTaxi(this.form.value.regPlate).subscribe((res) => {
       const searchTaxiData: SearchTaxiData = {
         searchRegPlate: this.form.value.regPlate,
@@ -137,8 +127,11 @@ export class UpdateFormComponent {
       searchTaxiData.taxiInfoList[0].status?.includes('GREYLIST')
     ) {
       this.apiService.getTaxiViolationAll('ALL').subscribe((res) => {
-        const taxiInfo = res.find((item) => item.regPlate == res[0].regPlate);
-        this.rid = res[0].rid;
+        const taxiInfo = res.find(
+          (item) => item.regPlate == searchTaxiData.taxiInfoList[0].regPlate,
+        );
+        console.log(taxiInfo);
+        this.rid = taxiInfo?.rid || 0;
 
         this.options = [];
         if (taxiInfo?.violationType.includes('BLACKLIST')) {
@@ -155,8 +148,12 @@ export class UpdateFormComponent {
         this.onDateChange('start', this.dateStart);
         this.onDateChange('end', this.dateEnd);
 
-        searchTaxiData.taxiInfoList[0]['startDate'] = this.form.value.dateFrom;
-        searchTaxiData.taxiInfoList[0]['endDate'] = this.form.value.dateTo;
+        searchTaxiData.taxiInfoList[0]['startDate'] = this.formatDate(
+          this.dateStart,
+        );
+        searchTaxiData.taxiInfoList[0]['endDate'] = this.formatDate(
+          this.dateEnd,
+        );
         this.taxiService.afterSearchTaxi(searchTaxiData);
       });
     } else {
@@ -169,10 +166,10 @@ export class UpdateFormComponent {
       this.dateEnd = null;
 
       this.form.controls['remark'].setValue(
-        searchTaxiData.taxiInfoList[0].remark
+        searchTaxiData.taxiInfoList[0].remark,
       );
       this.form.controls['driverNo'].setValue(
-        searchTaxiData.taxiInfoList[0].driverNo
+        searchTaxiData.taxiInfoList[0].driverNo,
       );
       this.taxiService.afterSearchTaxi(searchTaxiData);
     }
@@ -180,6 +177,10 @@ export class UpdateFormComponent {
 
   /** 呼叫修改API */
   onModify() {
+    if (!this.dateFrom || !this.dateTo) {
+      this.hasError = true;
+      return;
+    }
     let status = '';
     switch (this.modifyContentOption.value) {
       case '0': {
@@ -261,6 +262,9 @@ export class UpdateFormComponent {
     } else {
       this.dateTo = formatted || '';
     }
+    if (this.dateFrom && this.dateTo) {
+      this.hasError = false;
+    }
   }
 
   onFileSelected(event: Event) {
@@ -279,7 +283,14 @@ export class UpdateFormComponent {
       file.type === 'application/vnd.ms-excel';
 
     if (!isExcel) {
-      alert('請上傳 Excel 檔案 (.xls, .xlsx)');
+      this.commonService
+        .openDialog({
+          message: '請上傳 Excel 檔案 (.xls, .xlsx)',
+          confirmText: '確定',
+          cancelText: '',
+        })
+        .pipe(take(1))
+        .subscribe();
       input.value = '';
       return;
     }
@@ -291,14 +302,34 @@ export class UpdateFormComponent {
     // ✔ 呼叫 API
     this.apiService.importTaxi(formData).subscribe({
       next: (res) => {
-        console.log('匯入成功', res);
-        alert('Excel 匯入成功');
+        this.commonService
+          .openDialog({
+            message: 'Excel 匯入成功',
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
         input.value = ''; // 清空 input，避免同檔案無法再選
       },
       error: (err) => {
-        console.error('匯入失敗', err);
-        alert('Excel 匯入失敗');
+        this.commonService
+          .openDialog({
+            title: 'Excel 匯入失敗',
+            message: '錯誤訊息:' + err,
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
       },
     });
+  }
+
+  private formatDate(date: Date): string {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}/${m}/${d}`;
   }
 }

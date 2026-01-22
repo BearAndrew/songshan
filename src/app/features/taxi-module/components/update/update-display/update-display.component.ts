@@ -21,6 +21,7 @@ export class UpdateDisplayComponent {
       this.hasSearch = true;
       this.searchRegPlate = res.searchRegPlate;
       this.taxiInfoList = res.taxiInfoList;
+      console.log(res)
     });
 
     this.taxiService.update$.subscribe((res) => {

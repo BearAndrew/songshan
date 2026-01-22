@@ -126,7 +126,7 @@
           <input
             type="text"
             class="w-full bg-[#193652] rounded px-2 py-1"
-            [value]="afterTaxiInfo.regPlate"
+            [value]="afterTaxiInfo?.regPlate"
             disabled
           />
         </div>
@@ -137,7 +137,7 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="afterTaxiInfo.driverNo"
+          [value]="afterTaxiInfo?.driverNo"
           disabled
         />
 
@@ -147,19 +147,19 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="getViolationLabel(afterTaxiInfo.status)"
+          [value]="getViolationLabel(afterTaxiInfo?.status || null)"
           disabled
         />
 
-        @if(afterTaxiInfo.status?.includes('BLACKLIST') ||
-        afterTaxiInfo.status?.includes('GREYLIST')) {
+        @if(afterTaxiInfo?.status?.includes('BLACKLIST') ||
+        afterTaxiInfo?.status?.includes('GREYLIST')) {
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
           >停權期間</label
         >
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="afterTaxiInfo['startDate']"
+          [value]="afterTaxiInfo?.['startDate']"
           disabled
         />
         <label
@@ -168,7 +168,7 @@
         <input
           type="text"
           class="w-full bg-[#193652] rounded px-2 py-1"
-          [value]="afterTaxiInfo['endDate']"
+          [value]="afterTaxiInfo?.['endDate']"
           disabled
         />
         }

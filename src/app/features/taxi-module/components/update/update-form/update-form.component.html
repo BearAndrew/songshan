@@ -25,72 +25,77 @@
     </div>
 
     @if (hasSearch) {
-    <!-- 編號 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
-      編號
-    </label>
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="driverNo"
-    />
+      <!-- 編號 -->
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+        編號
+      </label>
+      <input
+        type="text"
+        class="w-full bg-[#193652] rounded px-2 py-1"
+        formControlName="driverNo"
+      />
 
-    <!-- 修改內容 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
-      修改內容
-    </label>
-    <app-dropdown-secondary
-      [value]="modifyContentOption.value"
-      [options]="options"
-      (selectionChange)="modifyContentOption = $event"
-    ></app-dropdown-secondary>
+      <!-- 修改內容 -->
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+        修改內容
+      </label>
+      <app-dropdown-secondary
+        [value]="modifyContentOption.value"
+        [options]="options"
+        (selectionChange)="modifyContentOption = $event"
+      ></app-dropdown-secondary>
 
-    <!-- 修改原因 -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
-      修改原因
-    </label>
-    <input
-      type="text"
-      class="w-full bg-[#193652] rounded px-2 py-1"
-      formControlName="remark"
-    />
+      <!-- 修改原因 -->
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+        修改原因
+      </label>
+      <input
+        type="text"
+        class="w-full bg-[#193652] rounded px-2 py-1"
+        formControlName="remark"
+      />
 
-    @if(modifyContentOption.value != '0') {
-    <!-- 停權期間（起） -->
-    <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
-      停權期間
-    </label>
-    <app-calendar-trigger
-      [selectedDate]="dateStart"
-      [isAllDay]="true"
-      [placeholder]="'-- -- --'"
-      [title]="'日期(起)'"
-      (dateChange)="onDateChange('start', $event)"
-    ></app-calendar-trigger>
+      @if (modifyContentOption.value != "0") {
+        <!-- 停權期間（起） -->
+        <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+          停權期間
+        </label>
+        <app-calendar-trigger
+          [selectedDate]="dateStart"
+          [isAllDay]="true"
+          [placeholder]="'-- -- --'"
+          [title]="'日期(起)'"
+          (dateChange)="onDateChange('start', $event)"
+        ></app-calendar-trigger>
 
-    <div></div>
+        <div></div>
 
-    <!-- 停權期間（迄） -->
-    <app-calendar-trigger
-      [selectedDate]="dateEnd"
-      [isAllDay]="true"
-      [placeholder]="'-- -- --'"
-      [title]="'日期(迄)'"
-      (dateChange)="onDateChange('end', $event)"
-    ></app-calendar-trigger>
-    } }
+        <!-- 停權期間（迄） -->
+        <app-calendar-trigger
+          [selectedDate]="dateEnd"
+          [isAllDay]="true"
+          [placeholder]="'-- -- --'"
+          [title]="'日期(迄)'"
+          (dateChange)="onDateChange('end', $event)"
+        ></app-calendar-trigger>
+
+        @if (hasError) {
+          <span class="col-start-2 text-red-500 text-xl">請選擇日期</span>
+        }
+      }
+    }
   </div>
 
   <!-- 底部按鈕 -->
   <div class="flex-1 flex flex-col gap-6 justify-end w-full sm:px-6">
     @if (hasSearch) {
-    <button
-      type="submit"
-      class="text-sm sm:text-2xl mx-auto px-12 py-2 h-fit w-fit bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
-      (click)="onModify()"
-    >
-      確定送出
-    </button>
+      <button
+        type="submit"
+        class="text-sm sm:text-2xl mx-auto px-12 py-2 h-fit w-fit bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+        (click)="onModify()"
+      >
+        確定送出
+      </button>
     }
     <!-- 隱藏的檔案選擇器 -->
     <input
