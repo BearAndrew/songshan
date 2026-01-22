@@ -10,6 +10,8 @@ import { ApiService } from './../../../../../core/services/api-service.service';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaxiInfo } from '../../../../../models/taxi.model';
+import { CommonService } from '../../../../../core/services/common.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-create-form',
@@ -24,7 +26,8 @@ export class CreateFormComponent {
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private taxiService: TaxiService
+    private taxiService: TaxiService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +81,14 @@ export class CreateFormComponent {
       file.type === 'application/vnd.ms-excel';
 
     if (!isExcel) {
-      alert('請上傳 Excel 檔案 (.xls, .xlsx)');
+      this.commonService
+        .openDialog({
+          message: '請上傳 Excel 檔案 (.xls, .xlsx)',
+          confirmText: '確定',
+          cancelText: '',
+        })
+        .pipe(take(1))
+        .subscribe();
       input.value = '';
       return;
     }
@@ -90,13 +100,27 @@ export class CreateFormComponent {
     // ✔ 呼叫 API
     this.apiService.importTaxi(formData).subscribe({
       next: (res) => {
-        console.log('匯入成功', res);
-        alert('Excel 匯入成功');
+        this.commonService
+          .openDialog({
+            message: 'Excel 匯入成功',
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
+
         input.value = ''; // 清空 input，避免同檔案無法再選
       },
       error: (err) => {
-        console.error('匯入失敗', err);
-        alert('Excel 匯入失敗');
+        this.commonService
+          .openDialog({
+            title: 'Excel 匯入失敗',
+            message: '錯誤訊息:' + err,
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
       },
     });
   }

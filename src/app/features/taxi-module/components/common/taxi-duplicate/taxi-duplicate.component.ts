@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 import { TaxiInfo } from '../../../../../models/taxi.model';
 import { ApiService } from '../../../../../core/services/api-service.service';
 import { TaxiService } from '../../../service/taxi.service';
-import { Subject, takeUntil } from 'rxjs';
+import { CommonService } from '../../../../../core/services/common.service';
+import { Subject, takeUntil, take } from 'rxjs';
 
 @Component({
   selector: 'app-taxi-duplicate',
@@ -15,8 +16,9 @@ export class TaxiDuplicateComponent {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private apiService: ApiService,
-    private taxiService: TaxiService
+  private apiService: ApiService,
+  private taxiService: TaxiService,
+  private commonService: CommonService,
   ) {}
 
   ngOnDestroy(): void {
@@ -29,19 +31,35 @@ export class TaxiDuplicateComponent {
   }
 
   onDelete(plate: string) {
-    this.apiService
-      .deleteTaxi(plate)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        const index = this.taxiInfoList.findIndex(
-          (taxi) => taxi.regPlate === plate
-        );
+    // open confirm dialog and wait for user result via CommonService
+    this.commonService
+      .openDialog({ message: `確認刪除車牌 ${plate} ?`, confirmText: '確定', cancelText: '取消' })
+      .pipe(take(1))
+      .subscribe((ok) => {
+        if (!ok) return;
 
-        if (index !== -1) {
-          this.taxiInfoList.splice(index, 1);
-        }
+        this.apiService
+          .deleteTaxi(plate)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              const index = this.taxiInfoList.findIndex(
+                (taxi) => taxi.regPlate === plate,
+              );
 
-        this.taxiService.afterDelete();
+              if (index !== -1) {
+                this.taxiInfoList.splice(index, 1);
+              }
+
+              this.taxiService.afterDelete();
+              // show success dialog
+              this.commonService.openDialog({ message: '刪除成功', confirmText: '確定', cancelText: '' }).pipe(take(1)).subscribe();
+            },
+            error: (err) => {
+              const msg = err?.error?.message || err?.message || '請再次嘗試';
+              this.commonService.openDialog({ title: '刪除失敗', message: `錯誤訊息：${msg}`, confirmText: '確定', cancelText: '' }).pipe(take(1)).subscribe();
+            },
+          });
       });
   }
 }
