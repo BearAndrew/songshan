@@ -25,6 +25,19 @@ import {
 } from 'rxjs';
 import { CommonService } from '../../core/services/common.service';
 
+export interface FlightTableItem {
+  flightNumber: string;
+  direction: string;
+  spot: string;
+  gate: string;
+  scheduledArrival: string;
+  actualArrival: string;
+  delayTime: string;
+  status: string;
+  reason: string;
+  handle: string;
+}
+
 @Component({
   selector: 'app-daily-abnormal-flight-info',
   imports: [CommonModule, DropdownComponent],
@@ -57,18 +70,7 @@ export class DailyAbnormalFlightInfoComponent {
     },
   ];
 
-  table: {
-    flightNumber: string;
-    arrivalPort: string;
-    departurePort: string;
-    gate: string;
-    scheduledArrival: string;
-    actualArrival: string;
-    delayTime: string;
-    status: string;
-    reason: string;
-    handle: string;
-  }[] = [];
+  table: FlightTableItem[] = [];
 
   actualFlight: number = 0;
   actualPax: number = 0;
@@ -79,6 +81,7 @@ export class DailyAbnormalFlightInfoComponent {
   baseUrl = environment.apiBaseUrl + '/IrregularInboundFlightExport';
   csvUrl = '';
   airportCode = '';
+  airportName = '';
 
   mobileOptions: Option[] = [
     {
@@ -123,7 +126,7 @@ export class DailyAbnormalFlightInfoComponent {
     flightinfo: [
       {
         flightNo: 'CI123',
-        arrivalPort: '',
+        arrivalPort: '台北',
         departurePort: '東京成田',
         gate: 'A12',
         sta: '2026-01-02 08:30',
@@ -135,7 +138,7 @@ export class DailyAbnormalFlightInfoComponent {
       },
       {
         flightNo: 'BR807',
-        arrivalPort: '',
+        arrivalPort: '台北',
         departurePort: '香港',
         gate: 'B5',
         sta: '2026-01-02 10:00',
@@ -147,7 +150,7 @@ export class DailyAbnormalFlightInfoComponent {
       },
       {
         flightNo: 'JL809',
-        arrivalPort: '',
+        arrivalPort: '台北',
         departurePort: '大阪關西',
         gate: 'C3',
         sta: '2026-01-02 11:20',
@@ -179,6 +182,9 @@ export class DailyAbnormalFlightInfoComponent {
         distinctUntilChanged(),
         switchMap((airportId) => {
           this.airportCode = airportId;
+          this.airportName = this.commonService.getSelectedAirportName(
+            this.airportCode,
+          );
           // interval 30 秒 + 手動刷新 trigger
           return merge(this.refreshTrigger$, interval(30000)).pipe(
             switchMap(() => this.getIrregularInboundFlight()),
@@ -187,16 +193,18 @@ export class DailyAbnormalFlightInfoComponent {
         }),
       )
       .subscribe((res) => {
-        if(!res) return;
+        if (!res) return;
         this.setTableData(res);
         this.setCSVUrl();
       });
   }
 
   ngOnInit(): void {
-    this.apiService.getFlightStatus().subscribe(res => {
-      this.flightStatusOptions = res.filter(item => item.normal == 0).map(item => ({label: item.title, value: item.id}));
-      this.flightStatusOptions.unshift({label: '全部', value: ''});
+    this.apiService.getFlightStatus().subscribe((res) => {
+      this.flightStatusOptions = res
+        .filter((item) => item.normal == 0)
+        .map((item) => ({ label: item.title, value: item.id }));
+      this.flightStatusOptions.unshift({ label: '全部', value: '' });
     });
   }
 
@@ -205,6 +213,7 @@ export class DailyAbnormalFlightInfoComponent {
     this.destroy$.complete();
   }
 
+  /** 取得 api 資料 */
   getIrregularInboundFlight(): Observable<IrregularInboundFlight> {
     const airportValue = this.data[this.activeIndex]?.value;
     if (!airportValue) return EMPTY;
@@ -216,6 +225,7 @@ export class DailyAbnormalFlightInfoComponent {
     );
   }
 
+  /** 設定表格資料 */
   setTableData(data: IrregularInboundFlight) {
     this.table = [];
     this.actualFlight = 0;
@@ -224,10 +234,11 @@ export class DailyAbnormalFlightInfoComponent {
     this.estPax = 0;
 
     data.flightinfo.forEach((item: IrregularFlightItem, index: number) => {
+      const isInbound = item.arrivalPort === this.airportName;
       this.table.push({
         flightNumber: item.flightNo,
-        arrivalPort: item.arrivalPort,
-        departurePort: item.departurePort,
+        direction: isInbound ? '到站' : '離站',
+        spot: isInbound ? item.departurePort : item.arrivalPort,
         gate: item.gate,
         scheduledArrival: item.sta,
         actualArrival: item.ata,
@@ -251,7 +262,7 @@ export class DailyAbnormalFlightInfoComponent {
       (this.paramDelayCode ? `/${this.paramDelayCode}` : '') +
       `?currAirport=${this.airportCode}`;
 
-      console.log(this.csvUrl);
+    console.log(this.csvUrl);
   }
 
   onTabClick(newIndex: number) {

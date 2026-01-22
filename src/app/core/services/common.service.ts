@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, fromEvent, map, startWith, Subject } from 'rxjs';
+import { BehaviorSubject, fromEvent, map, Observable, startWith, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
@@ -25,12 +25,19 @@ export class CommonService {
     return this.airportList;
   }
 
+  /** 設定選擇的機場代碼 */
   setSelectedAirport(airportCode: string) {
     this.selectedAirport$.next(airportCode);
   }
 
-  getSelectedAirport() {
+  /** 取得選擇的機場代碼 */
+  getSelectedAirport(): Observable<string> {
     return this.selectedAirport$.asObservable();
+  }
+
+  /** 取得選擇的機場名稱 */
+  getSelectedAirportName(airportCode: string): string {
+    return this.airportList.find(item => item.value == airportCode)?.label || '';
   }
 
   observeScreenSize() {
@@ -52,7 +59,7 @@ export class CommonService {
     );
   }
 
-  // open a message dialog using CDK overlay and return observable<boolean>
+  /** 開啟彈窗 */
   openDialog(data: OverlayData) {
     const overlayRef = this.overlay.create({
       hasBackdrop: true,

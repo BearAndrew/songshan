@@ -91,8 +91,8 @@
             [ngClass]="{ 'bg-[#333333]': i % 2 === 1 }"
           >
             <div class="p-2">{{ row.flightNumber }}</div>
-            <div class="p-2">{{ row.arrivalPort ? '離站' : '到站' }}</div>
-            <div class="p-2">{{ row.arrivalPort || row.departurePort }}</div>
+            <div class="p-2">{{ row.direction }}</div>
+            <div class="p-2">{{ row.spot }}</div>
             <div class="p-2 flex justify-center">
               <div
                 class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border border-[#27c4a9] rounded-xs"
