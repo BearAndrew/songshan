@@ -94,6 +94,10 @@ export class ChartSearchBarComponent {
     flightType: TabType.NONDOMESTIC,
   };
 
+  // 驗證錯誤訊息
+  dateError: string | null = null;
+  yearError: string | null = null;
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
@@ -523,6 +527,21 @@ export class ChartSearchBarComponent {
       }
     }
 
+    // 清除對應錯誤
+    if (this.isDate) {
+      if (
+        this.formData.startYear !== null && this.formData.endYear !== null
+      ) {
+        this.dateError = null;
+      }
+    } else {
+      if (
+        this.formData.firstYear !== null && this.formData.secondYear !== null
+      ) {
+        this.yearError = null;
+      }
+    }
+
     this.formChange.emit(this.formData);
   }
 
@@ -534,6 +553,24 @@ export class ChartSearchBarComponent {
 
   // 確認按鈕
   onConfirm() {
+    // validation
+    if (this.isDate) {
+      const required = [this.formData.startYear, this.formData.endYear];
+      const anyEmpty = required.some((v) => v == null);
+      if (anyEmpty) {
+        this.dateError = '請完整選擇起訖日期';
+        return;
+      }
+    } else {
+      if (this.formData.firstYear == null || this.formData.secondYear == null) {
+        this.yearError = '請選擇至少兩個年份';
+        return;
+      }
+    }
+
+    // clear errors and emit
+    this.dateError = null;
+    this.yearError = null;
     this.submit.emit(this.formData);
   }
 }

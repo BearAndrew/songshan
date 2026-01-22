@@ -34,7 +34,7 @@
       </div>
 
       <!-- 手機版 -->
-      <ng-container [ngTemplateOutlet]="isDate ? date: year"></ng-container>
+      <ng-container [ngTemplateOutlet]="isDate ? date : year"></ng-container>
     } @else if (!isNoData) {
       <div class="flex flex-1 items-center justify-center text-[30px]">
         請輸入查詢條件
@@ -52,18 +52,21 @@
 <ng-template #date>
   <div class="flex flex-col gap-4 sm:hidden w-full max-w-100">
     <h2 class="text-2xl text-center font-semibold">人數</h2>
-    <div class="grid grid-cols-3 border border-gray-300">
+    <div class="grid border border-gray-300"
+    [ngClass]="isShowCompare ? 'grid-cols-3' : 'grid-cols-2'">
       <!-- Header -->
       <div
         class="flex items-center justify-center text-center border p-2 font-semibold"
       >
         日期
       </div>
-      <div
-        class="flex items-center justify-center text-center border p-2 font-semibold"
-      >
-        2019年
-      </div>
+      @if (isShowCompare) {
+        <div
+          class="flex items-center justify-center text-center border p-2 font-semibold"
+        >
+          2019年
+        </div>
+      }
       <div
         class="flex items-center justify-center text-center border p-2 font-semibold"
       >
@@ -87,18 +90,21 @@
     </div>
 
     <h2 class="mt-8 text-2xl text-center font-semibold">架次</h2>
-    <div class="grid grid-cols-3 border border-gray-300">
+    <div class="grid border border-gray-300"
+    [ngClass]="isShowCompare ? 'grid-cols-3' : 'grid-cols-2'">
       <!-- Header -->
       <div
         class="flex items-center justify-center text-center border p-2 font-semibold"
       >
         日期
       </div>
-      <div
-        class="flex items-center justify-center text-center border p-2 font-semibold"
-      >
-        2019年
-      </div>
+      @if (isShowCompare) {
+        <div
+          class="flex items-center justify-center text-center border p-2 font-semibold"
+        >
+          2019年
+        </div>
+      }
       <div
         class="flex items-center justify-center text-center border p-2 font-semibold"
       >
@@ -124,7 +130,6 @@
 </ng-template>
 
 <ng-template #year>
-  <!-- 手機版 -->
   <div class="flex flex-col gap-4 sm:hidden w-full max-w-100">
     <h2 class="text-2xl text-center font-semibold">人數</h2>
     <div

@@ -1,10 +1,11 @@
-<div class="flex flex-col gap-4 w-full h-full">
+<div class="flex flex-col gap-2 w-full h-full">
   <app-chart-search-bar [isDate]="false" (submit)="onSubmit($event)"></app-chart-search-bar>
   <app-bar-line-page
     class="flex-1"
     [barData]="barData"
     [lineData]="lineData"
     [isNoData]="isNoData"
+    [isDate]="false"
     [firstDateRangeLabel]="firstDateRangeLabel"
     [secondDateRangeLabel]="secondDateRangeLabel"
     [thirdDateRangeLabel]="thirdDateRangeLabel"

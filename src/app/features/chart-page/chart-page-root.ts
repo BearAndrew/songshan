@@ -5,6 +5,7 @@ import { FlightTrafficAnalysisResponse } from '../../models/flight-traffic-analy
 import { YearlyTrafficAnalysisResponse } from '../../models/yearly-traffic-analysis.model';
 import { ChartSearchBarForm } from './components/chart-search-bar/chart-search-bar.interface';
 import { Directive } from '@angular/core';
+import { OtpAnalysisResponse } from '../../models/otp-analysis.model';
 
 @Directive()
 export class ChartPageRootComponent {
@@ -23,6 +24,8 @@ export class ChartPageRootComponent {
 
   compareTotalFlight: number = 0;
   compareTotalPax: number = 0;
+
+  onTimeRate: number = 0;
   isNoData: boolean = false;
   formData!: ChartSearchBarForm;
 
@@ -241,6 +244,60 @@ export class ChartPageRootComponent {
       };
       this.lineData.push(item);
     }
+  }
+
+  /** 準點率 */
+  protected handleOntimePerformance(res: OtpAnalysisResponse) {
+    const query = res?.queryData;
+    const queryStat = Array.isArray(query?.stat) ? query.stat : [];
+    const hasAnyData = queryStat.length > 0;
+
+    this.onTimeRate = query?.OnTimeRate ?? 0;
+    this.totalFlight = query?.totalFlight ?? 0;
+
+    // === 兩邊都沒資料 ===
+    if (!hasAnyData) {
+      this.barData = [];
+      this.lineData = [];
+      this.isNoData = true;
+      return;
+    }
+
+    this.isNoData = false;
+    this.dateRangeLabel = this.buildDateRangeLabel();
+
+    // ================= Bar：架次 =================
+    const barSeries: any[] = [];
+
+    if (queryStat.length > 0) {
+      barSeries.push({
+        label: `${this.dateRangeLabel}準點率`,
+        data: queryStat.map((item) => ({
+          key: item.label,
+          value: item.OnTimeRate,
+        })),
+        colors: ['#f08622'],
+        unitText: '%',
+      });
+    }
+
+    this.barData = barSeries;
+
+    // ================= Line：準點率 =================
+    const lineSeries: any[] = [];
+
+    if (queryStat.length > 0) {
+      lineSeries.push({
+        label: `${this.dateRangeLabel}架次`,
+        data: queryStat.map((item) => ({
+          key: item.label,
+          value: item.OnTimeFlight,
+        })),
+        colors: ['#0279ce'],
+      });
+    }
+
+    this.lineData = lineSeries;
   }
 
   protected buildDateRangeLabel(): string {
