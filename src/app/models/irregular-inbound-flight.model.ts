@@ -1,5 +1,8 @@
 export interface IrregularFlightItem {
   flightNo: string;
+  /** 目的地（離站、出境用） */
+  arrivalPort: string;
+  /** 出發地（到站、入境用） */
   departurePort: string;
   gate: string;
   sta: string;

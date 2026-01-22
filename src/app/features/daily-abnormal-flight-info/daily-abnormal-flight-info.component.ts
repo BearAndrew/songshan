@@ -59,7 +59,8 @@ export class DailyAbnormalFlightInfoComponent {
 
   table: {
     flightNumber: string;
-    origin: string;
+    arrivalPort: string;
+    departurePort: string;
     gate: string;
     scheduledArrival: string;
     actualArrival: string;
@@ -122,6 +123,7 @@ export class DailyAbnormalFlightInfoComponent {
     flightinfo: [
       {
         flightNo: 'CI123',
+        arrivalPort: '',
         departurePort: '東京成田',
         gate: 'A12',
         sta: '2026-01-02 08:30',
@@ -133,6 +135,7 @@ export class DailyAbnormalFlightInfoComponent {
       },
       {
         flightNo: 'BR807',
+        arrivalPort: '',
         departurePort: '香港',
         gate: 'B5',
         sta: '2026-01-02 10:00',
@@ -144,6 +147,7 @@ export class DailyAbnormalFlightInfoComponent {
       },
       {
         flightNo: 'JL809',
+        arrivalPort: '',
         departurePort: '大阪關西',
         gate: 'C3',
         sta: '2026-01-02 11:20',
@@ -222,7 +226,8 @@ export class DailyAbnormalFlightInfoComponent {
     data.flightinfo.forEach((item: IrregularFlightItem, index: number) => {
       this.table.push({
         flightNumber: item.flightNo,
-        origin: item.departurePort,
+        arrivalPort: item.arrivalPort,
+        departurePort: item.departurePort,
         gate: item.gate,
         scheduledArrival: item.sta,
         actualArrival: item.ata,

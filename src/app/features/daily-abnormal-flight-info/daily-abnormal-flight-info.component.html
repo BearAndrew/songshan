@@ -10,22 +10,24 @@
 <div class="flex flex-col gap-4 w-full h-full">
   <div class="flex justify-between">
     <div class="hidden sm:flex gap-8 h-fit">
-      @for(button of data; track button.label; let i = $index) {
-      <button
-        class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
-        [ngClass]="{
-          'bg-[#b2b2b2]': activeIndex !== i,
-          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
-        }"
-        type="button"
-        (click)="onTabClick(i)"
-      >
-        {{ button.label }}
-      </button>
+      @for (button of data; track button.label; let i = $index) {
+        <button
+          class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
+          [ngClass]="{
+            'bg-[#b2b2b2]': activeIndex !== i,
+            'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i,
+          }"
+          type="button"
+          (click)="onTabClick(i)"
+        >
+          {{ button.label }}
+        </button>
       }
     </div>
 
-    <div class="grid grid-cols-2 sm:flex items-center gap-x-2 gap-y-4 w-full sm:w-fit">
+    <div
+      class="grid grid-cols-2 sm:flex items-center gap-x-2 gap-y-4 w-full sm:w-fit"
+    >
       <div class="flex flex-col sm:flex-row sm:items-center gap-2">
         <label class="text-[#aaa]">異常狀態</label>
         <app-dropdown
@@ -59,10 +61,19 @@
     <!-- table -->
     <div class="flex-1 w-full min-h-0 mb-12 overflow-auto">
       <div
-        class="sticky w-full min-w-[1440px] sm:min-w-none grid grid-cols-9 bg-[#00b2ee] text-lg sm:text-2xl font-semibold text-center z-10"
+        class="sticky w-full min-w-[1440px] sm:min-w-none grid grid-cols-10 bg-[#00b2ee] text-lg sm:text-xl font-semibold text-center z-10"
       >
         <div class="p-2">航班編號</div>
-        <div class="p-2">出發地</div>
+        <div class="p-2">飛航類型</div>
+        <div class="p-2">
+          {{
+            paramDirection == "all"
+              ? "出發地/目的地"
+              : paramDirection == "inbound"
+                ? "出發地"
+                : "目的地"
+          }}
+        </div>
         <div class="p-2">登機門</div>
         <div class="p-2">表定抵達</div>
         <div class="p-2">實際抵達</div>
@@ -72,27 +83,30 @@
         <div class="p-2">處理方式</div>
       </div>
 
-      <div class="min-w-[1440px] sm:min-w-none py-1 text-md sm:text-xl">
+      <div class="min-w-[1440px] sm:min-w-none py-1 text-md sm:text-lg">
         <!-- 明細 -->
-        @for (row of table; let i = $index; track row;) {
-        <div
-          class="grid grid-cols-9 text-center hover:bg-[#494746]"
-          [ngClass]="{ 'bg-[#333333]': i % 2 === 1 }"
-        >
-          <div class="p-2">{{ row.flightNumber }}</div>
-          <div class="p-2">{{ row.origin }}</div>
-          <div class="p-2 flex justify-center">
-            <div class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border border-[#27c4a9] rounded-xs">
-              <span class="text-sm sm:text-xl">{{ row.gate }}</span>
+        @for (row of table; let i = $index; track row) {
+          <div
+            class="grid grid-cols-10 text-center hover:bg-[#494746]"
+            [ngClass]="{ 'bg-[#333333]': i % 2 === 1 }"
+          >
+            <div class="p-2">{{ row.flightNumber }}</div>
+            <div class="p-2">{{ row.arrivalPort ? '離站' : '到站' }}</div>
+            <div class="p-2">{{ row.arrivalPort || row.departurePort }}</div>
+            <div class="p-2 flex justify-center">
+              <div
+                class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border border-[#27c4a9] rounded-xs"
+              >
+                <span class="text-sm sm:text-xl">{{ row.gate }}</span>
+              </div>
             </div>
+            <div class="p-2">{{ row.scheduledArrival }}</div>
+            <div class="p-2">{{ row.actualArrival }}</div>
+            <div class="p-2">{{ row.delayTime }}</div>
+            <div class="p-2 text-[#be985b]">{{ row.status }}</div>
+            <div class="p-2 text-[#27c4a9]">{{ row.reason }}</div>
+            <div class="p-2 text-[#27c4a9]">{{ row.handle }}</div>
           </div>
-          <div class="p-2">{{ row.scheduledArrival }}</div>
-          <div class="p-2">{{ row.actualArrival }}</div>
-          <div class="p-2">{{ row.delayTime }}</div>
-          <div class="p-2 text-[#be985b]">{{ row.status }}</div>
-          <div class="p-2 text-[#27c4a9]">{{ row.reason }}</div>
-          <div class="p-2 text-[#27c4a9]">{{ row.handle }}</div>
-        </div>
         }
       </div>
     </div>
