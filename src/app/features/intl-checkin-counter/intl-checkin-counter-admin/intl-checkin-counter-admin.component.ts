@@ -9,6 +9,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { ApiService } from '../../../core/services/api-service.service';
 import {
@@ -18,16 +19,12 @@ import {
   CounterInfo,
   statusMap,
 } from '../../../models/counter.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
-
-interface SeasonCounterItem {
-  checked: boolean; // 是否被選取
-  type: string; // 顯示文字（島櫃）
-  islandNo: string; // 第一個 input
-  counterFrom: string; // 櫃檯起
-  counterTo: string; // 櫃檯迄
-}
+import { MOCK_COUNTER_INFO } from './fake-data';
+import { take } from 'rxjs';
+import { CommonService } from '../../../core/services/common.service';
+import { environment } from '../../../../environments/environment';
 
 export interface GanttItem {
   row: number; // 1~6
@@ -58,6 +55,7 @@ export interface InfoCard {
     ReactiveFormsModule,
     DropdownSecondaryComponent,
     CalendarTriggerComponent,
+    RouterLink,
   ],
   templateUrl: './intl-checkin-counter-admin.component.html',
   styleUrl: './intl-checkin-counter-admin.component.scss',
@@ -182,6 +180,12 @@ export class IntlCheckinCounterAdminComponent {
     { label: '58', value: '58' },
     { label: '59', value: '59' },
   ];
+  exportOptions: Option[] = [
+    { label: '當周', value: 'WEEK' },
+    { label: '雙周', value: 'BIWEEK' },
+    { label: '當月', value: 'MONTH' },
+    { label: '當季', value: 'SEASON' },
+  ];
 
   season: string = '';
   currentWeekRange: string = '';
@@ -201,11 +205,20 @@ export class IntlCheckinCounterAdminComponent {
     { key: 'sat', label: '六' },
     { key: 'sun', label: '日' },
   ];
+  /** 是否送出核准或駁回 */
+  isSubmitted = false;
+  /** 是否有選擇資料 */
+  hasData = false;
+
+  /** 下載 CSV */
+  baseUrl = environment.apiBaseUrl + '/CounterExport';
+  csvUrl = '';
 
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
     private route: ActivatedRoute,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit() {
@@ -230,8 +243,15 @@ export class IntlCheckinCounterAdminComponent {
         sun: [false],
       }),
     });
+    this.form.disable();
+    this.form.get('reason')?.enable();
 
     this.route.queryParamMap.subscribe((params) => {
+      if (!params || !params.keys.length) {
+        return; // 沒有路由參數就直接返回
+      }
+
+      console.log(params); // 有參數才處理
       const item: CounterInfo = {
         requestId: params.get('requestId') || '',
         agent: '',
@@ -290,10 +310,8 @@ export class IntlCheckinCounterAdminComponent {
     };
 
     this.apiService.getAllCounter(payload).subscribe((res) => {
-      console.log(res);
       this.ganttDays = this.mapCounterToGantt(res);
       this.infoCardList = this.mapCounterToInfoCards(res, dateFrom, dateTo);
-      console.log(this.ganttDays);
     });
   }
 
@@ -387,7 +405,6 @@ export class IntlCheckinCounterAdminComponent {
     const ganttMap = new Map<string, GanttDay>();
 
     data.forEach((item) => {
-      // ✅ 只處理 APPROVE
       if (item.status !== 'APPROVE') return;
 
       const row = Number(item.assignedCounterArea);
@@ -428,6 +445,7 @@ export class IntlCheckinCounterAdminComponent {
 
   selectItem(item: CounterInfo): void {
     if (!item) return;
+    this.hasData = true;
 
     // ===== flightInfo =====
     const flightInfo = item.airlineIata + item.flightNo;
@@ -512,6 +530,12 @@ export class IntlCheckinCounterAdminComponent {
 
   /** 核准或駁回 */
   onApproval(isApprove: boolean) {
+    const areaCtrl = this.form.get('assignedCounterArea');
+    if (isApprove && areaCtrl?.value == '') {
+      this.isSubmitted = true;
+      return;
+    }
+
     const payload: CounterAdminApprovalRequest = {
       requestId: this.requestId,
       reason: this.form.value.reason,
@@ -522,8 +546,53 @@ export class IntlCheckinCounterAdminComponent {
     };
 
     this.apiService.adminApproval(payload).subscribe({
-      next: () => ( this.getAllCounter()),
-      error: (err) => console.error('核准失敗', err),
+      next: () => {
+        this.getAllCounter();
+        if (isApprove) {
+          this.commonService
+            .openDialog({
+              title: '核准成功',
+              message: '已核准申請內容',
+              confirmText: '確定',
+              cancelText: '',
+            })
+            .pipe(take(1))
+            .subscribe();
+        } else {
+          this.commonService
+            .openDialog({
+              title: '駁回成功',
+              message: '已駁回申請內容',
+              confirmText: '確定',
+              cancelText: '',
+            })
+            .pipe(take(1))
+            .subscribe();
+        }
+      },
+      error: (err) => {
+        if (isApprove) {
+          this.commonService
+            .openDialog({
+              title: '核准失敗',
+              message: '錯誤訊息:' + err,
+              confirmText: '確定',
+              cancelText: '',
+            })
+            .pipe(take(1))
+            .subscribe();
+        } else {
+          this.commonService
+            .openDialog({
+              title: '駁回失敗',
+              message: '錯誤訊息:' + err,
+              confirmText: '確定',
+              cancelText: '',
+            })
+            .pipe(take(1))
+            .subscribe();
+        }
+      },
     });
   }
 
@@ -628,6 +697,74 @@ export class IntlCheckinCounterAdminComponent {
 
   /** 島櫃下拉選單變更 */
   onSeasonChange(option: Option): void {
-    this.form.value.assignedCounterArea = option.value;
+    const ctrl = this.form.get('assignedCounterArea');
+    ctrl?.setValue(option?.value ?? '');
+  }
+
+  /** 匯入 */
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+
+    // ✔ 檢查是否為 Excel
+    const isExcel =
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+      file.type === 'application/vnd.ms-excel';
+
+    if (!isExcel) {
+      this.commonService
+        .openDialog({
+          message: '請上傳 Excel 檔案 (.xls, .xlsx)',
+          confirmText: '確定',
+          cancelText: '',
+        })
+        .pipe(take(1))
+        .subscribe();
+      input.value = '';
+      return;
+    }
+
+    // ✔ 建立 FormData
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // ✔ 呼叫 API
+    this.apiService.importCounter(formData).subscribe({
+      next: (res) => {
+        this.commonService
+          .openDialog({
+            message: 'Excel 匯入成功',
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
+
+        input.value = ''; // 清空 input，避免同檔案無法再選
+      },
+      error: (err) => {
+        this.commonService
+          .openDialog({
+            title: 'Excel 匯入失敗',
+            message: '錯誤訊息:' + err,
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
+      },
+    });
+  }
+
+  /** 匯出區間選擇 */
+  onExportIntervalChange(option: Option) {
+    this.csvUrl = this.baseUrl + `/${option.value}`;
+    console.log(this.csvUrl);
   }
 }

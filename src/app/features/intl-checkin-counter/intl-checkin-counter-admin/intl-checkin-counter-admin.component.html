@@ -1,18 +1,26 @@
 <div class="card flex flex-col sm:flex-row gap-8 h-full p-4">
   <div class="flex-4 flex flex-col overflow-hidden">
-    <!-- 日期區間 -->
-    <div class="flex items-center gap-2 ml-auto mb-1">
-      <span class="text-sm font-semibold text-right">{{
-        currentWeekRange
-      }}</span>
-      <app-calendar-trigger
-        class="w-60"
-        [selectedDate]="searchDate"
-        [isAllDay]="true"
-        [placeholder]="'-- -- --'"
-        [title]="'日期(起)'"
-        (dateChange)="onSearchDateChange($event)"
-      ></app-calendar-trigger>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <a
+        class="self-end w-30 h-fit text-md sm:text-lg text-center py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+        routerLink="/intl-checkin-counter-admin-table"
+      >
+        歷史查詢
+      </a>
+      <!-- 日期區間 -->
+      <div class="flex flex-col sm:flex-row items-center gap-2 sm:ml-auto mb-1">
+        <span class="text-md sm:text-sm font-semibold text-right">{{
+          currentWeekRange
+        }}</span>
+        <app-calendar-trigger
+          class="w-60"
+          [selectedDate]="searchDate"
+          [isAllDay]="true"
+          [placeholder]="'-- -- --'"
+          [title]="'日期(起)'"
+          (dateChange)="onSearchDateChange($event)"
+        ></app-calendar-trigger>
+      </div>
     </div>
 
     <!-- 航班 -->
@@ -113,7 +121,7 @@
   </div>
 
   <!-- 申請內容 -->
-  <div class="flex-3 flex flex-col flex-shrink-0 items-center pb-8 sm:pb-14">
+  <div class="flex-3 flex flex-col flex-shrink-0 items-center pb-8 sm:pb-0">
     <h2
       class="text-2xl sm:text-4xl text-center w-[90%] py-4 sm:py-8 sm:mb-4 border-b-2 border-[#e69d30]"
     >
@@ -121,7 +129,7 @@
     </h2>
 
     <form
-      class="flex flex-col gap-4 flex-1 min-h-0 w-full px-0.5 sm:px-13 mt-3 rounded-lg space-y-4 text-md sm:text-2xl"
+      class="flex flex-col gap-4 flex-1 min-h-0 w-full px-0.5 sm:px-13 mt-3 rounded-lg text-md sm:text-2xl"
       [formGroup]="form"
     >
       <div class="flex flex-col gap-4 flex-1 h-0 sm:pr-1 sm:py-1 overflow-auto">
@@ -144,19 +152,31 @@
         >
           <label class="text-[#97e0fb] font-semibold">起飛時間</label>
           <div class="flex items-center gap-1">
-            <app-dropdown-secondary
+            <!-- <app-dropdown-secondary
               class="w-full"
               [value]="formData.departureTimeHour"
               [options]="hourOptions"
               (selectionChange)="onTimeChange('departureTime', 'HH', $event)"
-            ></app-dropdown-secondary>
+            ></app-dropdown-secondary> -->
+            <input
+              type="text"
+              class="w-full bg-[#193652] rounded px-2 py-1"
+              [value]="formData.departureTimeHour"
+              disabled
+            />
             <span>:</span>
-            <app-dropdown-secondary
+            <!-- <app-dropdown-secondary
               class="w-full"
               [value]="formData.departureTimeMin"
               [options]="minOptions"
               (selectionChange)="onTimeChange('departureTime', 'mm', $event)"
-            ></app-dropdown-secondary>
+            ></app-dropdown-secondary> -->
+            <input
+              type="text"
+              class="w-full bg-[#193652] rounded px-2 py-1"
+              [value]="formData.departureTimeMin"
+              disabled
+            />
           </div>
         </div>
 
@@ -168,35 +188,59 @@
             >申請時段</label
           >
           <div class="flex flex-1 items-center gap-1">
-            <app-dropdown-secondary
+            <!-- <app-dropdown-secondary
               class="w-full"
               [value]="formData.startTimeHour"
               [options]="hourOptions"
               (selectionChange)="onTimeChange('startTime', 'HH', $event)"
-            ></app-dropdown-secondary>
+            ></app-dropdown-secondary> -->
+            <input
+              type="text"
+              class="w-full bg-[#193652] rounded px-2 py-1"
+              [value]="formData.startTimeHour"
+              disabled
+            />
             <span>:</span>
-            <app-dropdown-secondary
+            <!-- <app-dropdown-secondary
               class="w-full"
               [value]="formData.startTimeMin"
               [options]="minOptions"
               (selectionChange)="onTimeChange('startTime', 'mm', $event)"
-            ></app-dropdown-secondary>
+            ></app-dropdown-secondary> -->
+            <input
+              type="text"
+              class="w-full bg-[#193652] rounded px-2 py-1"
+              [value]="formData.startTimeMin"
+              disabled
+            />
           </div>
 
           <div class="col-span-2 flex flex-1 items-center gap-1">
-            <app-dropdown-secondary
+            <!-- <app-dropdown-secondary
               class="w-full"
               [value]="formData.endTimeHour"
               [options]="hourOptions"
               (selectionChange)="onTimeChange('endTime', 'HH', $event)"
-            ></app-dropdown-secondary>
+            ></app-dropdown-secondary> -->
+            <input
+              type="text"
+              class="w-full bg-[#193652] rounded px-2 py-1"
+              [value]="formData.endTimeHour"
+              disabled
+            />
             <span>:</span>
-            <app-dropdown-secondary
+            <!-- <app-dropdown-secondary
               class="w-full"
               [value]="formData.endTimeMin"
               [options]="minOptions"
               (selectionChange)="onTimeChange('endTime', 'mm', $event)"
-            ></app-dropdown-secondary>
+            ></app-dropdown-secondary> -->
+            <input
+              type="text"
+              class="w-full bg-[#193652] rounded px-2 py-1"
+              [value]="formData.endTimeMin"
+              disabled
+            />
           </div>
         </div>
 
@@ -255,127 +299,98 @@
           <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
             >申請項目</label
           >
-          <ng-container>
-            <!-- @for (ctrl of seasonCountersFA.controls; track $index) {
-            <div
-              [formGroupName]="$index"
-              class="sm:col-start-2 col-span-3 flex items-center gap-x-2 sm:gap-x-4"
-            >
-              <label
-                class="flex flex-shrink-0 items-center gap-2 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  class="hidden"
-                  formControlName="checked"
-                />
-
-                <span
-                  class="w-4 h-4 rounded-full border-2 flex items-center justify-center bg-white"
-                >
-                  @if (ctrl.value.checked) {
-                  <span class="w-3 h-3 rounded-full bg-[#0a80c4]"></span>
-                  }
-                </span>
-
-                <span class="text-[#97e0fb] select-none">島櫃</span>
-              </label>
-
-              <input
-                type="text"
-                class="bg-[#193652] rounded px-2 py-1 w-12"
-                formControlName="assignedCounterArea"
-                [disabled]="!ctrl.value.checked"
-              />
-
-              <label class="flex-shrink-0 text-[#97e0fb] font-semibold"
-                >櫃檯</label
-              >
-
-              <div class="flex items-center gap-2">
-                <input
-                  type="text"
-                  class="bg-[#193652] rounded px-2 py-1 w-full"
-                  formControlName="counterFrom"
-                  [disabled]="!ctrl.value.checked"
-                />
-                <span>-</span>
-                <input
-                  type="text"
-                  class="bg-[#193652] rounded px-2 py-1 w-full"
-                  formControlName="counterTo"
-                  [disabled]="!ctrl.value.checked"
-                />
-              </div>
-            </div>
-            } -->
-            <div
-              class="sm:col-start-2 col-span-3 flex items-center gap-x-2 sm:gap-x-4"
-            >
-              <span class="flex-shrink-0 text-[#97e0fb] select-none">島櫃</span>
-              <input
-                type="text"
-                class="bg-[#193652] rounded px-2 py-1 flex-1 w-0"
-                formControlName="assignedCounterArea"
-              />
-              <app-dropdown-secondary [options]="islandOptions" (selectionChange)="onSeasonChange($event)"></app-dropdown-secondary>
-
-              <label class="flex-shrink-0 text-[#97e0fb]">櫃檯</label>
-
-              <input
-                type="text"
-                class="bg-[#193652] rounded px-2 py-1 flex-1 w-0"
-                formControlName="assignedCounterBooth"
-              />
-            </div>
-          </ng-container>
+          <div class="sm:col-start-2 flex items-center gap-x-2 sm:gap-x-4">
+            <span class="flex-shrink-0 text-[#97e0fb] select-none">島櫃</span>
+            <app-dropdown-secondary
+              class="flex-1"
+              [options]="islandOptions"
+              (selectionChange)="onSeasonChange($event)"
+            ></app-dropdown-secondary>
+          </div>
+          <!-- 錯誤訊息（固定高度） -->
+          <div
+            class="col-start-2 sm:col-start-3 text-red-500 text-xs mt-1 min-h-[1rem]"
+          >
+            {{
+              form.get("assignedCounterArea")?.value == "" && isSubmitted
+                ? "請選擇島櫃"
+                : " "
+            }}
+          </div>
         </div>
       </div>
 
-      <div class="flex flex-col gap-4">
-        <div class="sm:px-15 grid grid-cols-3 gap-4 w-full">
-          <button
-            class="text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
-            (click)="onApproval(true)"
-          >
-            核准
-          </button>
-          <button
-            class="text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
-            (click)="onApproval(false)"
-          >
-            駁回
-          </button>
-          <button
-            class="text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
-            (click)="onModify()"
-          >
-            修改
-          </button>
-        </div>
+      @if (hasData) {
+        <div class="flex flex-col gap-4">
+          <div class="sm:px-15 grid grid-cols-2 gap-4 w-full">
+            <button
+              class="text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+              (click)="onApproval(true)"
+            >
+              核准
+            </button>
+            <button
+              class="text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+              (click)="onApproval(false)"
+            >
+              駁回
+            </button>
+          </div>
 
-        <!-- Row 6：駁回理由 -->
-        <div
-          class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-4 items-center w-full"
-        >
-          <label class="text-[#97e0fb] font-semibold">駁回理由</label>
-          <input
-            type="text"
-            class="sm:col-span-3 w-full bg-[#193652] rounded px-2 py-1 w-24"
-            formControlName="reason"
-          />
+          <!-- Row 6：駁回理由 -->
+          <div
+            class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-4 items-center w-full"
+          >
+            <label class="text-[#97e0fb] font-semibold">駁回理由</label>
+            <input
+              type="text"
+              class="sm:col-span-3 w-full bg-[#193652] rounded px-2 py-1 w-24"
+              formControlName="reason"
+            />
+          </div>
         </div>
-      </div>
+      }
     </form>
 
     <div class="w-[90%] my-4 sm:my-6 border-b-2 border-[#e69d30]"></div>
 
-    <div class="sm:px-15 grid grid-cols-3 gap-4 w-full">
-      <button
-        class="col-start-2 text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
-      >
-        匯出EXCEL
-      </button>
+    <!-- 隱藏的檔案選擇器 -->
+    <input
+      type="file"
+      #fileInput
+      class="hidden"
+      accept=".xlsx,.xls"
+      (change)="onFileSelected($event)"
+    />
+    <div
+      class="px-10 sm:px-15 flex flex-col-reverse sm:flex-row items-center justify-center gap-4 w-full"
+    >
+      <div class="flex items-center gap-2 sm:gap-4 w-full">
+        <button
+          class="flex-1 text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+          (click)="fileInput.click()"
+        >
+          匯入EXCEL
+        </button>
+        <a
+          class="flex-1 text-center text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+          [href]="csvUrl"
+        >
+          匯出EXCEL
+        </a>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-4 w-full sm:w-fit">
+        <label
+          class="text-lg sm:text-2xl text-[#97e0fb] font-semibold whitespace-nowrap text-align-last:justify]"
+          >匯出區間</label
+        >
+        <app-dropdown-secondary
+          class="flex-1 sm:flex-none sm:w-25"
+          [value]="'WEEK'"
+          [options]="exportOptions"
+          (selectionChange)="onExportIntervalChange($event)"
+        ></app-dropdown-secondary>
+      </div>
     </div>
   </div>
 </div>

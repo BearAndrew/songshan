@@ -495,4 +495,9 @@ export class ApiService {
   getSeasons(): Observable<CounterSeason[]> {
     return this.http.get<CounterSeason[]>('/Counter/GetSeasons');
   }
+
+  /** 匯入櫃檯資料 (multipart/form-data) */
+  importCounter(formData: FormData): Observable<any> {
+    return this.http.post<any>('Counter/import', formData);
+  }
 }

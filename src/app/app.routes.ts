@@ -179,7 +179,7 @@ export const routes: Routes = [
         data: { title: '國際線報到櫃檯模組', theme: 'dark' },
       },
       {
-        path: 'intl-checkin-counter-admintable',
+        path: 'intl-checkin-counter-admin-table',
         component: IntlCheckinCounterAdminTableComponent,
         data: { title: '國際線報到櫃檯模組', theme: 'dark' },
       },

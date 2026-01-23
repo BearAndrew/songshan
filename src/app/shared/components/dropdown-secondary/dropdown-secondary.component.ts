@@ -24,7 +24,7 @@ export interface Option {
   selector: 'app-dropdown-secondary',
   imports: [CommonModule],
   templateUrl: './dropdown-secondary.component.html',
-  styleUrl: './dropdown-secondary.component.scss'
+  styleUrl: './dropdown-secondary.component.scss',
 })
 export class DropdownSecondaryComponent {
   @Input() options: Option[] = [];
@@ -44,7 +44,7 @@ export class DropdownSecondaryComponent {
   constructor(
     private overlay: Overlay,
     private vcr: ViewContainerRef,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +79,15 @@ export class DropdownSecondaryComponent {
           overlayX: 'start',
           overlayY: 'top',
         },
-      ]);
+        {
+          originX: 'start',
+          originY: 'top', // 若下方空間不足，自動改到上方
+          overlayX: 'start',
+          overlayY: 'bottom',
+        },
+      ])
+      .withFlexibleDimensions(false) // 允許 overlay 自身大小自適應
+      .withPush(true); // 超出螢幕會自動調整
 
     const triggerWidth = this.trigger.nativeElement.offsetWidth;
 
@@ -110,4 +118,3 @@ export class DropdownSecondaryComponent {
     this.close();
   }
 }
-
