@@ -1,7 +1,8 @@
 export const statusMap: Record<string, string> = {
   APPLY: '核准中',
   APPROVE: '已核准',
-  REJECT: '駁回'
+  REJECT: '駁回',
+  WITHDRAW: ''
 };
 
 

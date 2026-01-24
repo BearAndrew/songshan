@@ -336,7 +336,7 @@ export class IntlCheckinCounterUserComponent {
     const weekArray = weekMap.get(weekIndex)!;
 
     for (const item of data) {
-      if (item.status == 'WITHDRAW' || item.status == 'REJECT') continue;
+      if (item.status == 'WITHDRAW') continue;
       if (!item.applicationDate) continue;
 
       // applicationDate → Date

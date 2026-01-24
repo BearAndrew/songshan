@@ -33,6 +33,22 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     appliedBy: 'userB',
     assignedCounterArea: '3',
   },
+    {
+    requestId: 'REQ-20260102-002',
+    agent: 'CHINA_AIR',
+    airlineIata: 'BR',
+    flightNo: '123',
+    season: '2026S',
+    applyForPeriod: 'SEASON',
+    applicationDate: '2026/01/20 上午 12:00:00',
+    dayOfWeek: '2,4', // Tue, Thu
+    startTime: '10:00',
+    endTime: '12:30',
+    status: 'APPLY',
+    assignedBy: '',
+    appliedBy: 'userB',
+    assignedCounterArea: '3',
+  },
   {
     requestId: 'REQ-20260103-003',
     agent: 'JAPAN_AIR',
