@@ -593,6 +593,7 @@ export class DailyFlightAnalysisComponent {
 
       this.abnormalOutData.info.push({
         flightNumber: item.flightNo,
+        direction: '出境',
         destination: item.airportName,
         scheduledTime: item.schTime,
         affectedPeople: +item.pax,
@@ -606,6 +607,7 @@ export class DailyFlightAnalysisComponent {
 
       this.abnormalInData.info.push({
         flightNumber: item.flightNo,
+        direction: '入境',
         destination: item.airportName,
         scheduledTime: item.schTime,
         affectedPeople: +item.pax,
@@ -613,19 +615,19 @@ export class DailyFlightAnalysisComponent {
       });
     });
 
-    res.allDelayFlights.forEach((item) => {
-      if (item === null) {
-        return;
-      }
+    // res.allDelayFlights.forEach((item) => {
+    //   if (item === null) {
+    //     return;
+    //   }
 
-      this.abnormalAllData.info.push({
-        flightNumber: item.flightNo,
-        destination: item.airportName,
-        scheduledTime: item.schTime,
-        affectedPeople: +item.pax,
-        status: item.reason,
-      });
-    });
+    //   this.abnormalAllData.info.push({
+    //     flightNumber: item.flightNo,
+    //     destination: item.airportName,
+    //     scheduledTime: item.schTime,
+    //     affectedPeople: +item.pax,
+    //     status: item.reason,
+    //   });
+    // });
 
     res.outTop3Airport?.forEach((item) => {
       if (item === null) {

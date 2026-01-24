@@ -25,6 +25,7 @@ import { MOCK_COUNTER_INFO } from './fake-data';
 import { take } from 'rxjs';
 import { CommonService } from '../../../core/services/common.service';
 import { environment } from '../../../../environments/environment';
+import { STATUS_COLOR_MAP } from '../checkin-color-mapping';
 
 export interface GanttItem {
   row: number; // 1~6
@@ -214,6 +215,8 @@ export class IntlCheckinCounterAdminComponent {
   baseUrl = environment.apiBaseUrl + '/CounterExport';
   csvUrl = '';
 
+  STATUS_COLOR_MAP = STATUS_COLOR_MAP;
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -245,6 +248,7 @@ export class IntlCheckinCounterAdminComponent {
     });
     this.form.disable();
     this.form.get('reason')?.enable();
+    this.onExportIntervalChange({ label: '當周', value: 'WEEK' }); // 主動觸發一次
 
     this.route.queryParamMap.subscribe((params) => {
       if (!params || !params.keys.length) {
@@ -310,6 +314,7 @@ export class IntlCheckinCounterAdminComponent {
     };
 
     this.apiService.getAllCounter(payload).subscribe((res) => {
+      // res = MOCK_COUNTER_INFO
       this.ganttDays = this.mapCounterToGantt(res);
       this.infoCardList = this.mapCounterToInfoCards(res, dateFrom, dateTo);
     });
@@ -766,5 +771,9 @@ export class IntlCheckinCounterAdminComponent {
   onExportIntervalChange(option: Option) {
     this.csvUrl = this.baseUrl + `/${option.value}`;
     console.log(this.csvUrl);
+  }
+
+  print( ) {
+    console.log(this.csvUrl)
   }
 }

@@ -29,6 +29,7 @@ import { CounterService } from '../service/counter.service';
 import { parseTwDateTime } from '../../../core/utils/parse-tw-datetime';
 import { take } from 'rxjs';
 import { CommonService } from '../../../core/services/common.service';
+import { MOCK_COUNTER_INFO } from './fake-data';
 
 interface ScheduleItem {
   date: string; // YYYY-MM-DD
@@ -315,6 +316,7 @@ export class IntlCheckinCounterUserComponent {
     };
 
     this.apiService.getAllCounter(payload).subscribe((res) => {
+      // res = MOCK_COUNTER_INFO;
       this.rawData = res;
       this.weeks = this.buildWeeks(this.rawData);
       this.setCurrentWeek(0);

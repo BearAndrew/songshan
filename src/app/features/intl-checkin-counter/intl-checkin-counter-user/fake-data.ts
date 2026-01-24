@@ -1,0 +1,68 @@
+import { CounterInfo } from "../../../models/counter.model";
+
+export const MOCK_COUNTER_INFO: CounterInfo[] = [
+  {
+    requestId: 'REQ-20260101-001',
+    agent: 'EVA_GROUND',
+    airlineIata: 'BR',
+    flightNo: '801',
+    season: '2026S',
+    applyForPeriod: 'SEASON',
+    applicationDate: '2026/01/19 上午 12:00:00',
+    dayOfWeek: '1,3,5', // Mon, Wed, Fri
+    startTime: '06:30',
+    endTime: '09:00',
+    status: 'APPROVE',
+    assignedBy: 'admin01',
+    appliedBy: 'userA',
+    assignedCounterArea: '1',
+  },
+  {
+    requestId: 'REQ-20260102-002',
+    agent: 'CHINA_AIR',
+    airlineIata: 'CI',
+    flightNo: '918',
+    season: '2026S',
+    applyForPeriod: 'SEASON',
+    applicationDate: '2026/01/20 上午 12:00:00',
+    dayOfWeek: '2,4', // Tue, Thu
+    startTime: '10:00',
+    endTime: '12:30',
+    status: 'APPLY',
+    assignedBy: '',
+    appliedBy: 'userB',
+    assignedCounterArea: '3',
+  },
+  {
+    requestId: 'REQ-20260103-003',
+    agent: 'JAPAN_AIR',
+    airlineIata: 'JL',
+    flightNo: '96',
+    season: '2026S',
+    applyForPeriod: 'SEASON',
+    applicationDate: '2026/01/21 上午 12:00:00',
+    dayOfWeek: '7', // Sun
+    startTime: '14:15',
+    endTime: '16:00',
+    status: 'REJECT',
+    assignedBy: 'admin02',
+    appliedBy: 'userC',
+    assignedCounterArea: '5',
+  },
+  {
+    requestId: 'REQ-20260104-004',
+    agent: 'KOREAN_AIR',
+    airlineIata: 'KE',
+    flightNo: '692',
+    season: '2026S',
+    applyForPeriod: 'SEASON',
+    applicationDate: '2026/01/22 上午 12:00:00',
+    dayOfWeek: '1,2,3,4,5', // Weekdays
+    startTime: '05:45',
+    endTime: '08:15',
+    status: 'WITHDRAW',
+    assignedBy: '',
+    appliedBy: null,
+    assignedCounterArea: '2',
+  },
+];

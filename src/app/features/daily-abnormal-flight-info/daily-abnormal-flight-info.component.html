@@ -88,7 +88,7 @@
         @for (row of table; let i = $index; track row) {
           <div
             class="grid grid-cols-10 text-center hover:bg-[#494746]"
-            [ngClass]="{ 'bg-[#333333]': i % 2 === 1 }"
+            [ngClass]="{ 'bg-[#333333]': i % 2 === 1, 'text-[#FFED97]' : delayStyle(row.delayTime) == '30', 'text-[#FF8040]' : delayStyle(row.delayTime) == '60' }"
           >
             <div class="p-2">{{ row.flightNumber }}</div>
             <div class="p-2">{{ row.direction }}</div>

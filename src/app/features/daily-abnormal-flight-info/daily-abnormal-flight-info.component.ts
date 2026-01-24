@@ -131,7 +131,7 @@ export class DailyAbnormalFlightInfoComponent {
         gate: 'A12',
         sta: '2026-01-02 08:30',
         ata: '2026-01-02 09:10',
-        delay: '40 分鐘',
+        delay: '40',
         status: '延誤',
         reason: '天候不佳',
         handle: '已通知旅客',
@@ -143,7 +143,7 @@ export class DailyAbnormalFlightInfoComponent {
         gate: 'B5',
         sta: '2026-01-02 10:00',
         ata: '2026-01-02 10:45',
-        delay: '45 分鐘',
+        delay: '105',
         status: '延誤',
         reason: '機務檢修',
         handle: '安排餐點',
@@ -155,7 +155,7 @@ export class DailyAbnormalFlightInfoComponent {
         gate: 'C3',
         sta: '2026-01-02 11:20',
         ata: '2026-01-02 11:20',
-        delay: '準點',
+        delay: '0',
         status: '已到達',
         reason: '—',
         handle: '正常作業',
@@ -166,7 +166,8 @@ export class DailyAbnormalFlightInfoComponent {
     estFlight: 4,
     estPax: 560,
   };
-
+// #FFED97 淡黃
+// #FF8040 淡紅
   private refreshTrigger$ = new BehaviorSubject<void>(undefined);
   private destroy$ = new Subject<void>();
 
@@ -278,5 +279,14 @@ export class DailyAbnormalFlightInfoComponent {
   onFlightDirectionChange(option: Option) {
     this.paramDirection = option.value;
     this.refreshTrigger$.next();
+  }
+
+  delayStyle(delay: string): string {
+    if (Number(delay) >= 30 && Number(delay) < 60) {
+      return '30';
+    } else if (Number(delay) >= 60) {
+      return '60';
+    }
+    return '';
   }
 }

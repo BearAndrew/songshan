@@ -45,7 +45,11 @@
                 infoCard.date
               }}</span>
               <span
-                class="w-full py-1 text-center text-md sm:text-2xl rounded-sm bg-[#c8c8c8]"
+                class="w-full py-1 text-center text-md sm:text-2xl rounded-sm"
+                [ngStyle]="{
+                  'background-color':
+                    STATUS_COLOR_MAP[infoCard.status] || '#c8c8c8',
+                }"
                 >{{ infoCard.status }}</span
               >
             </div>

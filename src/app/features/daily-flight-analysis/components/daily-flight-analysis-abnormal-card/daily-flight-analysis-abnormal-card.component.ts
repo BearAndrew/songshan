@@ -13,20 +13,24 @@ export class DailyFlightAnalysisAbnormalCardComponent extends DailyFlightAnalysi
   toggleIndex: number = 0;
   @Input() inData!: DailyFlightAnalysisAbnormalData;
   @Input() outData!: DailyFlightAnalysisAbnormalData;
-  @Input() allData!: DailyFlightAnalysisAbnormalData;
+  // @Input() allData!: DailyFlightAnalysisAbnormalData;
+  allData!: DailyFlightAnalysisAbnormalData;
 
   displayData!: DailyFlightAnalysisAbnormalData;
 
   ngOnInit(): void {
+    this.mergeAllData();
     this.displayData = this.outData;
   }
 
   ngOnChanges(): void {
+    this.mergeAllData();
     this.onIndexChange(this.toggleIndex);
   }
 
   onIndexChange(index: number): void {
     this.toggleIndex = index;
+    this.mergeAllData();
     switch (index) {
       case 0:
         this.displayData = this.outData;
@@ -39,4 +43,18 @@ export class DailyFlightAnalysisAbnormalCardComponent extends DailyFlightAnalysi
         break;
     }
   }
+
+  private mergeAllData(): void {
+  this.allData = {
+    info: [
+      ...(this.inData.info ?? []),
+      ...(this.outData.info ?? []),
+    ],
+    top3: [
+      ...(this.inData.top3 ?? []),
+      ...(this.outData.top3 ?? []),
+    ],
+  };
+}
+
 }

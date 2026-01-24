@@ -15,6 +15,7 @@ export interface DailyFlightAnalysisData {
 export interface DailyFlightAnalysisAbnormalData {
   info: {
     flightNumber: string;
+    direction: string;
     destination: string;
     scheduledTime: string;
     affectedPeople: number;

@@ -27,10 +27,11 @@
     <h3 class="text-lg sm:text-xl">異常航班資訊</h3>
     <div class="flex-1 min-w-0 flex flex-col overflow-hidden">
       <div
-        class="grid grid-cols-5 bg-[#535353] text-sm font-semibold text-center"
+        class="grid grid-cols-6 bg-[#535353] text-sm font-semibold text-center"
       >
         <div class="p-0.5">航班編號</div>
-        <div class="p-0.5">目的地</div>
+        <div class="p-0.5">飛航類型</div>
+        <div class="p-0.5">{{toggleIndex == 0 ? '目的地' : toggleIndex == 1 ? '出發地' : '地點' }}</div>
         <div class="p-0.5">表定時間</div>
         <div class="p-0.5">影響人數</div>
         <div class="p-0.5">異常狀況</div>
@@ -39,10 +40,11 @@
       <div class="overflow-y-auto flex-1">
         @for (item of displayData.info; let i = $index; track item) {
         <div
-          class="grid grid-cols-5 items-center text-sm text-center"
+          class="grid grid-cols-6 items-center text-sm text-center"
           [ngClass]="i % 2 === 1 ? 'bg-[#535353]' : 'bg-transparent'"
         >
           <div class="p-0.5">{{ item.flightNumber }}</div>
+          <div class="p-0.5">{{ item.direction }}</div>
           <div class="p-0.5">{{ item.destination }}</div>
           <div class="p-0.5">{{ item.scheduledTime }}</div>
           <div class="p-0.5">{{ item.affectedPeople | number }}</div>
