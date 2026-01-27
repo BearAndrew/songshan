@@ -2,7 +2,7 @@
   <div class="flex-4 flex flex-col overflow-hidden">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
       <a
-        class="self-end w-30 h-fit text-md sm:text-lg text-center py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
+        class="self-end sm:self-center w-30 h-fit text-md sm:text-lg text-center py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
         routerLink="/intl-checkin-counter-admin-table"
       >
         歷史查詢
@@ -367,8 +367,44 @@
       (change)="onFileSelected($event)"
     />
     <div
-      class="px-10 sm:px-15 flex flex-col-reverse sm:flex-row items-center justify-center gap-4 w-full"
+      class="px-10 sm:px-15 flex flex-col items-center justify-center gap-4 w-full"
     >
+      <div
+        class="grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_1fr] items-center gap-2 sm:gap-4 w-full"
+      >
+        <label
+          class="text-lg sm:text-2xl text-[#97e0fb] font-semibold whitespace-nowrap text-align-last:justify]"
+          >匯出區間</label
+        >
+        <app-dropdown-secondary
+          class="flex-1 sm:flex-none w-full"
+          [value]="csvParam"
+          [options]="exportOptions"
+          (selectionChange)="onExportIntervalChange($event)"
+        ></app-dropdown-secondary>
+
+        @if (csvParam == "CUSTOM") {
+          <div class="sm:col-start-2 col-span-2 grid grid-cols-1 sm:grid-cols-2 items-center gap-2 sm:gap-4 w-full">
+            <app-calendar-trigger
+              class="w-full"
+              [selectedDate]="today"
+              [isAllDay]="true"
+              [placeholder]="'-- -- --'"
+              [title]="'日期(起)'"
+              (dateChange)="onExportDateChange('start', $event)"
+            ></app-calendar-trigger>
+            <app-calendar-trigger
+              class="w-full"
+              [selectedDate]="today"
+              [isAllDay]="true"
+              [placeholder]="'-- -- --'"
+              [title]="'日期(迄)'"
+              (dateChange)="onExportDateChange('end', $event)"
+            ></app-calendar-trigger>
+          </div>
+        }
+      </div>
+
       <div class="flex items-center gap-2 sm:gap-4 w-full">
         <button
           class="flex-1 text-sm sm:text-2xl py-1 bg-[#f5a830] rounded-sm cursor-pointer hover:bg-[#f2a020]"
@@ -382,18 +418,6 @@
         >
           匯出EXCEL
         </a>
-      </div>
-      <div class="flex items-center gap-2 sm:gap-4 w-full sm:w-fit">
-        <label
-          class="text-lg sm:text-2xl text-[#97e0fb] font-semibold whitespace-nowrap text-align-last:justify]"
-          >匯出區間</label
-        >
-        <app-dropdown-secondary
-          class="flex-1 sm:flex-none sm:w-25"
-          [value]="'WEEK'"
-          [options]="exportOptions"
-          (selectionChange)="onExportIntervalChange($event)"
-        ></app-dropdown-secondary>
       </div>
     </div>
   </div>

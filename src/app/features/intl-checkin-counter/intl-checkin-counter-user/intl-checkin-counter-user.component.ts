@@ -199,8 +199,6 @@ export class IntlCheckinCounterUserComponent {
   searchDateTo: string = '';
 
   // 申請內容
-  dateFrom: string = '';
-  dateTo: string = '';
   season: string = '';
   requestId: string = '';
   searchDate: Date = new Date();
@@ -211,7 +209,7 @@ export class IntlCheckinCounterUserComponent {
     private fb: FormBuilder,
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {}
 
   ngOnInit() {
@@ -224,6 +222,8 @@ export class IntlCheckinCounterUserComponent {
       applyTimeStartMin: ['', Validators.required],
       applyTimeEndHour: ['', Validators.required],
       applyTimeEndMin: ['', Validators.required],
+      applyDateStart: [''],
+      applyDateEnd: [''],
       seasonType: ['all', Validators.required],
       weekDays: this.fb.group({
         mon: [false],
@@ -236,6 +236,28 @@ export class IntlCheckinCounterUserComponent {
       }),
     });
     (this.form.get('weekDays') as FormGroup).setValidators(atLeastOneWeekDay);
+
+    /** 監聽 seasonType 變化 */
+    this.form.get('seasonType')?.valueChanges.subscribe((value) => {
+      const startCtrl = this.form.get('applyDateStart');
+      const endCtrl = this.form.get('applyDateEnd');
+
+      if (!startCtrl || !endCtrl) return;
+
+      if (value === 'all') {
+        // 取消必填
+        startCtrl.clearValidators();
+        endCtrl.clearValidators();
+      } else {
+        // 設為必填
+        startCtrl.setValidators([Validators.required]);
+        endCtrl.setValidators([Validators.required]);
+      }
+
+      // ⭐ 一定要呼叫，不然 validator 不會重算
+      startCtrl.updateValueAndValidity();
+      endCtrl.updateValueAndValidity();
+    });
 
     // 取得 isEdit
     this.route.queryParamMap.subscribe((params) => {
@@ -449,15 +471,20 @@ export class IntlCheckinCounterUserComponent {
 
   /** 日期更改 */
   onDateChange(type: 'start' | 'end', event: Date) {
+    if (!event) return;
+
     const yyyy = event.getFullYear();
-    const mm = String(event.getMonth() + 1).padStart(2, '0'); // 月份要 +1
+    const mm = String(event.getMonth() + 1).padStart(2, '0');
     const dd = String(event.getDate()).padStart(2, '0');
 
     const formatted = `${yyyy}-${mm}-${dd}`;
+
     if (type === 'start') {
-      this.dateFrom = formatted || '';
+      this.form.get('applyDateStart')?.patchValue(formatted);
+      this.form.get('applyDateStart')?.markAsTouched();
     } else {
-      this.dateTo = formatted || '';
+      this.form.get('applyDateEnd')?.patchValue(formatted);
+      this.form.get('applyDateEnd')?.markAsTouched();
     }
   }
 
@@ -550,17 +577,34 @@ export class IntlCheckinCounterUserComponent {
       });
     }
 
-    // ===== patch 非時間欄位給 form =====
-    this.form.patchValue({
+    // ===== patch 給 form（先不放日期）=====
+    const patchData: any = {
       flightInfo,
-      applyDateStart,
-      applyDateEnd,
       weekDays: weekDaysMap,
-    });
+
+      departureTimeHour: departure.hour,
+      departureTimeMin: departure.min,
+
+      applyTimeStartHour: applyStart.hour,
+      applyTimeStartMin: applyStart.min,
+
+      applyTimeEndHour: applyEnd.hour,
+      applyTimeEndMin: applyEnd.min,
+    };
+
+    // ===== 期間（有值才加）=====
+    if (info.applyForPeriod) {
+      const [applyDateStart, applyDateEnd] = info.applyForPeriod.split('~');
+
+      patchData.applyDateStart = applyDateStart;
+      patchData.applyDateEnd = applyDateEnd;
+    }
+
+    this.form.patchValue(patchData);
 
     // ===== 其他狀態 =====
     this.requestId = info.requestId;
-    this.season = info.season;
+    this.season = info.season ? info.season : this.seasonOptions[0].value;
   }
 
   onCreate() {
@@ -621,11 +665,30 @@ export class IntlCheckinCounterUserComponent {
       ),
     };
 
-    this.apiService.addCounterApplication(payload).subscribe((res) => {
-      this.commonService.openDialog({ title: '申請成功', message: '已申請內容，請等待審核', confirmText: '確定', cancelText: '' }).pipe(take(1)).subscribe();
-    }, err => {
-      this.commonService.openDialog({ title: '申請失敗', message: err, confirmText: '確定', cancelText: '' }).pipe(take(1)).subscribe();
-    });
+    this.apiService.addCounterApplication(payload).subscribe(
+      (res) => {
+        this.commonService
+          .openDialog({
+            title: '申請成功',
+            message: '已申請內容，請等待審核',
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
+      },
+      (err) => {
+        this.commonService
+          .openDialog({
+            title: '申請失敗',
+            message: err,
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
+      },
+    );
   }
 
   onModify() {
@@ -662,8 +725,8 @@ export class IntlCheckinCounterUserComponent {
       season: this.season,
       dayOfWeek: day_of_week,
       apply_for_period: '',
-      startDate: this.dateFrom || '',
-      endDate: this.dateTo || '',
+      startDate: this.form.value.applyDateStart || '',
+      endDate: this.form.value.applyDateEnd || '',
       startTime: this.formatTime(this.form.value.applyTimeStart),
       endTime: this.formatTime(this.form.value.applyTimeEnd),
     };

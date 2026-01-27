@@ -360,6 +360,18 @@
               (dateChange)="onDateChange('end', $event)"
             ></app-calendar-trigger>
           </div>
+            <!-- 錯誤訊息（固定高度） -->
+  <div class="col-span-full text-red-500 text-xs mt-1 min-h-[1rem]">
+    {{
+      (form.get('applyDateStart')?.touched ||
+        form.get('applyDateEnd')?.touched ||
+        isSubmitted) &&
+      (form.get('applyDateStart')?.invalid ||
+        form.get('applyDateEnd')?.invalid)
+        ? '請選擇完整申請期間'
+        : ' '
+    }}
+  </div>
         }
       </div>
     </form>

@@ -67,7 +67,7 @@ export class ChartSearchBarComponent {
     { label: '全部', value: '' },
     { label: '定航', value: 'SCHEDULE' },
     { label: '商務機', value: 'BJ' },
-    { label: '軍機', value: 'MILITARY' },
+    // { label: '軍機', value: 'MILITARY' },
     { label: '其他', value: 'OTHER' },
   ];
   directionOptions: Option[] = [

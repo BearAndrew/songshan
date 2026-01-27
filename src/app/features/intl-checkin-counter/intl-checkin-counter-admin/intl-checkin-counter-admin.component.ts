@@ -182,6 +182,7 @@ export class IntlCheckinCounterAdminComponent {
     { label: '59', value: '59' },
   ];
   exportOptions: Option[] = [
+    { label: '指定', value: 'CUSTOM' },
     { label: '當周', value: 'WEEK' },
     { label: '雙周', value: 'BIWEEK' },
     { label: '當月', value: 'MONTH' },
@@ -193,6 +194,7 @@ export class IntlCheckinCounterAdminComponent {
   searchDate: Date = new Date();
   searchDateFrom: string = '';
   searchDateTo: string = '';
+  today: Date = new Date();
 
   getWeekControl(key: string): FormControl {
     return this.form.get('weekDays.' + key) as FormControl;
@@ -212,8 +214,11 @@ export class IntlCheckinCounterAdminComponent {
   hasData = false;
 
   /** 下載 CSV */
+  csvParam = 'WEEK';
   baseUrl = environment.apiBaseUrl + '/CounterExport';
   csvUrl = '';
+  exportStart: string = '';
+  exportEnd: string = '';
 
   STATUS_COLOR_MAP = STATUS_COLOR_MAP;
 
@@ -348,6 +353,19 @@ export class IntlCheckinCounterAdminComponent {
     });
   }
 
+  /** 將「2026/1/27 上午 12:00:00」轉成 yyyy-MM-dd */
+  private parseChineseDateToYMD(input?: string): string {
+    if (!input) return '';
+
+    // 只取日期：2026/1/27
+    const datePart = input.split(' ')[0];
+    const [y, m, d] = datePart.split('/').map(Number);
+
+    if (!y || !m || !d) return '';
+
+    return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+
   // 舊版
   // private mapCounterToGantt(
   //   data: CounterInfo[],
@@ -480,7 +498,10 @@ export class IntlCheckinCounterAdminComponent {
     this.formData.endTimeMin = end.min;
 
     // ===== 期間 =====
-    const applyTimeInterval = item.applyForPeriod || '';
+    console.log(item.applicationDate);
+    console.log(this.parseChineseDateToYMD(item.applicationDate));
+    const applyDateInterval =
+      this.parseChineseDateToYMD(item.applicationDate) || '';
 
     // ===== weekDays =====
     const weekDaysMap = {
@@ -524,7 +545,7 @@ export class IntlCheckinCounterAdminComponent {
     // ===== patch 非時間欄位 =====
     this.form.patchValue({
       flightInfo,
-      applyTimeInterval,
+      applyDateInterval,
       weekDays: weekDaysMap,
     });
 
@@ -544,11 +565,12 @@ export class IntlCheckinCounterAdminComponent {
     const payload: CounterAdminApprovalRequest = {
       requestId: this.requestId,
       reason: this.form.value.reason,
-      assignedCounterArea: this.form.value.assignedCounterArea,
-      assignedCounterBooth: this.form.value.assignedCounterBooth,
+      assignedCounterArea: areaCtrl?.value,
+      assignedCounterBooth: '',
       assignedBy: '',
       status: isApprove ? 'APPROVE' : 'REJECT',
     };
+    console.log(payload);
 
     this.apiService.adminApproval(payload).subscribe({
       next: () => {
@@ -704,6 +726,7 @@ export class IntlCheckinCounterAdminComponent {
   onSeasonChange(option: Option): void {
     const ctrl = this.form.get('assignedCounterArea');
     ctrl?.setValue(option?.value ?? '');
+    console.log(ctrl?.value);
   }
 
   /** 匯入 */
@@ -769,11 +792,76 @@ export class IntlCheckinCounterAdminComponent {
 
   /** 匯出區間選擇 */
   onExportIntervalChange(option: Option) {
-    this.csvUrl = this.baseUrl + `/${option.value}`;
-    console.log(this.csvUrl);
+    this.csvParam = option.value;
+    this.csvUrl = `${this.baseUrl}/${option.value}`;
+
+    if (option.value === 'CUSTOM') {
+      const today = new Date();
+
+      // JS：0=週日, 1=週一, ..., 6=週六
+      const day = today.getDay();
+      const diffToMonday = day === 0 ? -6 : 1 - day;
+
+      // 計算週一
+      const monday = new Date(today);
+      monday.setDate(today.getDate() + diffToMonday);
+
+      // 計算週日
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+
+      // 日期格式化 yyyy-MM-dd
+      const formatYMD = (d: Date) =>
+        `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+      this.exportStart = formatYMD(monday);
+      this.exportEnd = formatYMD(sunday);
+
+      console.log('Start:', this.exportStart, 'End:', this.exportEnd);
+
+      // 同步更新 csvUrl
+      this.csvUrl = `${this.baseUrl}/${option.value}/${this.exportStart}/${this.exportEnd}`;
+    }
+
+    console.log('CSV URL:', this.csvUrl);
   }
 
-  print( ) {
-    console.log(this.csvUrl)
+  /** 匯出指定週 */
+  onExportDateChange(type: 'start' | 'end', date: Date) {
+    if (!date) return;
+
+    const target = new Date(date);
+
+    // JS：0=週日, 1=週一, ..., 6=週六
+    const day = target.getDay();
+    const diffToMonday = day === 0 ? -6 : 1 - day;
+
+    // 週一
+    const monday = new Date(target);
+    monday.setDate(target.getDate() + diffToMonday);
+
+    // 週日
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    // 日期格式化 yyyy-MM-dd
+    const formatYMD = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+    if (type === 'start') {
+      this.exportStart = formatYMD(monday);
+    } else if (type === 'end') {
+      this.exportEnd = formatYMD(sunday);
+    }
+
+    // 如果你想即時組 URL（可選）
+    this.csvUrl = `${this.baseUrl}/CUSTOM/${this.exportStart || ''}/${this.exportEnd || ''}`;
+
+    console.log('Start:', this.exportStart, 'End:', this.exportEnd);
+    console.log('CSV URL:', this.csvUrl);
+  }
+
+  print() {
+    console.log(this.csvUrl);
   }
 }
