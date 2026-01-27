@@ -78,3 +78,13 @@ export interface TaxiStat {
   avgWaitTaxi: number;
   avgWaitPax: number;
 }
+
+
+export interface TaxiEventData {
+  regPlate: string;
+  driverName: string;
+  inTime: string;   // ISO string
+  outTime: string;
+  image: string;
+  [key: string]: any;
+}

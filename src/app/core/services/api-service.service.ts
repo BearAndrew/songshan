@@ -26,6 +26,7 @@ import {
   TaxiViolation,
   TaxiStat,
   TaxiStatusInfo,
+  TaxiEventData,
 } from '../../models/taxi.model';
 import { TabType } from '../enums/tab-type.enum';
 import { FlightStatus } from '../../models/flight-status.model';
@@ -86,8 +87,13 @@ export class ApiService {
   /**
    *  依航班類型與航空公司取得機場清單
    */
-  getAirportListByTypeAirline(type: string, airline: string): Observable<Airport[]> {
-    return this.http.get<Airport[]>(`GetAirportListByTypeAirline/${type}/${airline}`);
+  getAirportListByTypeAirline(
+    type: string,
+    airline: string,
+  ): Observable<Airport[]> {
+    return this.http.get<Airport[]>(
+      `GetAirportListByTypeAirline/${type}/${airline}`,
+    );
   }
 
   /** 取得台灣機場清單 */
@@ -385,7 +391,7 @@ export class ApiService {
   }
 
   /** 計程車黑/灰名單全部列表
-   * violationType = BLACKLIST | GREYLIST
+   * violationType = BLACKLIST | GREYLIST | ALL
    */
   getTaxiViolationAll(violationType: string): Observable<TaxiViolation[]> {
     return this.http.get<TaxiViolation[]>(`TaxiViolationAll/${violationType}`);
@@ -433,6 +439,19 @@ export class ApiService {
     return this.http.get<TaxiStatusInfo[]>(
       `Taxi/Top6Taxi/${sortBy}/${dateFrom}/${dateTo}`,
     );
+  }
+
+  /** Taxi Event Data */
+  getTaxiEventData(
+    regPlate: string,
+    dateFrom: string,
+    dateTo: string,
+  ): Observable<TaxiEventData[]> {
+    return this.http.post<TaxiEventData[]>('Taxi/EventData', {
+      regPlate,
+      dateFrom,
+      dateTo,
+    });
   }
 
   /** 現時在場的車 */

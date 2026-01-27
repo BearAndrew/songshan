@@ -19,12 +19,14 @@
         searchCondition == '0'
           ? info
           : searchCondition == '1'
-          ? list
-          : searchCondition == '2'
-          ? list
-          : searchCondition == '3'
-          ? top6
-          : null
+            ? list
+            : searchCondition == '2'
+              ? list
+              : searchCondition == '3'
+                ? top6
+                : searchCondition == '4'
+                  ? daliy
+                  : null
       "
     ></ng-container>
 
@@ -38,15 +40,6 @@
         class="w-full bg-[#193652] rounded px-2 py-1"
         formControlName="regPlate"
       />
-
-      <!-- <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-        >編號</label
-      >
-      <input
-        type="text"
-        class="w-full bg-[#193652] rounded px-2 py-1"
-        formControlName="driverNo"
-      /> -->
     </ng-template>
 
     <!-- 黑/灰名單 -->
@@ -62,6 +55,15 @@
 
     <!-- 出勤前六名 -->
     <ng-template #top6>
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+        >排列方式</label
+      >
+      <app-dropdown-secondary
+        [value]="top6SortType"
+        [options]="top6Options"
+        (selectionChange)="top6SortType = $event.value"
+      ></app-dropdown-secondary>
+
       <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
         開始日期
       </label>
@@ -75,7 +77,6 @@
       <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
         結束日期
       </label>
-
       <app-calendar-trigger
         [isAllDay]="true"
         [placeholder]="'-- -- --'"
@@ -83,14 +84,45 @@
         (dateChange)="onDateChange('end', $event)"
       ></app-calendar-trigger>
 
+      <div class="col-start-2 w-full h-5 text-red-500 text-sm">
+        <span *ngIf="hasError">請填寫完整日期</span>
+      </div>
+    </ng-template>
+
+    <!-- 每日計程車資訊 -->
+    <ng-template #daliy>
       <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-        >排列方式</label
+        >車號</label
       >
-      <app-dropdown-secondary
-        [value]="top6SortType"
-        [options]="top6Options"
-        (selectionChange)="top6SortType = $event.value"
-      ></app-dropdown-secondary>
+      <input
+        type="text"
+        class="w-full bg-[#193652] rounded px-2 py-1"
+        formControlName="regPlate"
+      />
+
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+        開始日期
+      </label>
+      <app-calendar-trigger
+        [isAllDay]="true"
+        [placeholder]="'-- -- --'"
+        [title]="''"
+        (dateChange)="onDateChange('start', $event)"
+      ></app-calendar-trigger>
+
+      <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
+        結束日期
+      </label>
+      <app-calendar-trigger
+        [isAllDay]="true"
+        [placeholder]="'-- -- --'"
+        [title]="''"
+        (dateChange)="onDateChange('end', $event)"
+      ></app-calendar-trigger>
+
+      <div class="col-start-2 w-full h-5 text-red-500 text-sm">
+        <span *ngIf="hasError">請填寫完整日期</span>
+      </div>
     </ng-template>
   </form>
 

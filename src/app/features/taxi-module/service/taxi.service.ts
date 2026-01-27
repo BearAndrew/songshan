@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
+  TaxiEventData,
   TaxiInfo,
   TaxiStatusInfo,
   TaxiViolation,
 } from '../../../models/taxi.model';
-import { SearchTaxiData } from './taxi.interface';
+import { SearchDailyTaxiData, SearchTaxiData } from './taxi.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +64,15 @@ export class TaxiService {
     this.top6Subject.next(top6);
   }
 
+  // 每日計程車查詢 Subject
+  private dailySubject = new Subject<SearchDailyTaxiData>();
+  // 暴露 Observable 給其他元件訂閱
+  dailySubject$ = this.dailySubject.asObservable();
+  // 發送查詢出勤前六名
+  afterDaily(daily: SearchDailyTaxiData) {
+    this.dailySubject.next(daily);
+  }
+
   // 刪除發送 Subject
   private deleteSubject = new Subject<string>();
   // 暴露 Observable 給其他元件訂閱
@@ -73,11 +83,14 @@ export class TaxiService {
   }
 
   // 編輯發送 Subject
-  private editSubject = new Subject<{activeTab: string, taxiInfo: TaxiInfo}>();
+  private editSubject = new Subject<{
+    activeTab: string;
+    taxiInfo: TaxiInfo;
+  }>();
   // 暴露 Observable 給其他元件訂閱
   editSubject$ = this.editSubject.asObservable();
   // 發送點擊編輯事件
   clickEdit(taxiInfo: TaxiInfo) {
-    this.editSubject.next({activeTab: 'update', taxiInfo});
+    this.editSubject.next({ activeTab: 'update', taxiInfo });
   }
 }

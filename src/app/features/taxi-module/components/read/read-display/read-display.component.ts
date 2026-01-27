@@ -5,10 +5,11 @@ import { ReadTaxiInfoComponent } from "./read-taxi-info/read-taxi-info.component
 import { ReadBlackListComponent } from "./read-black-list/read-black-list.component";
 import { ReadGrayListComponent } from "./read-gray-list/read-gray-list.component";
 import { ReadTop6Component } from "./read-top6/read-top6.component";
+import { ReadDailyTaxiComponent } from "./read-daily-taxi/read-daily-taxi.component";
 
 @Component({
   selector: 'app-read-display',
-  imports: [CommonModule, ReadTaxiInfoComponent, ReadBlackListComponent, ReadGrayListComponent, ReadTop6Component],
+  imports: [CommonModule, ReadTaxiInfoComponent, ReadBlackListComponent, ReadGrayListComponent, ReadTop6Component, ReadDailyTaxiComponent],
   templateUrl: './read-display.component.html',
   styleUrl: './read-display.component.scss',
 })

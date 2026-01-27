@@ -1,0 +1,41 @@
+<!-- 灰名單 -->
+<div class="flex flex-col gap-4 w-full">
+  <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">
+    每日計程車資訊
+  </h2>
+
+  <div class="flex flex-col w-full sm:h-0 min-h-[300px] max-h-[800px]">
+    <!-- 滾動容器 -->
+    <div
+      class="flex-1 overflow-auto border border-white text-center rounded px-4"
+    >
+      <!-- sticky header -->
+      <div
+        class="grid grid-cols-[1fr_1fr_1fr_2fr] gap-4 min-w-250 text-xl font-semibold sticky top-0 z-10 px-2 py-4 border-b border-[#f5a830] text-[#05aeed] bg-[#252525]"
+      >
+        <div>車號</div>
+        <div>進入時間</div>
+        <div>離開時間</div>
+        <div>照片</div>
+      </div>
+
+      <!-- 資料列 -->
+      @for (item of dailyDataWithViolation; track item) {
+        <div
+          class="grid grid-cols-[1fr_1fr_1fr_2fr] gap-4 min-w-250 border-b border-white p-2 h-fit items-center text-lg"
+          [ngClass]="{
+            'text-red-500': item['violationType'] == 'BLACKLIST',
+            'text-orange-300': item['violationType'] == 'GREYLIST',
+          }"
+        >
+          <div>{{ item.regPlate }}</div>
+          <div>{{ item.inTime | date: "yyyy-MM-dd HH:mm" }}</div>
+          <div>{{ item.outTime | date: "yyyy-MM-dd HH:mm" }}</div>
+          <div class="flex items-center justify-center h-30">
+            <img class="object-contain" [src]="item.image">
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

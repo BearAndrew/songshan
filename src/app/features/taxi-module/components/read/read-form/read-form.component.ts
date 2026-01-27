@@ -4,7 +4,7 @@ import { DropdownSecondaryComponent } from '../../../../../shared/components/dro
 import { Option } from '../../../../../shared/components/dropdown/dropdown.component';
 import { CommonModule } from '@angular/common';
 import { TaxiService } from '../../../service/taxi.service';
-import { SearchTaxiData } from '../../../service/taxi.interface';
+import { SearchDailyTaxiData, SearchTaxiData } from '../../../service/taxi.interface';
 import { taxiInfoFakeData } from './fake-data';
 import {
   FormBuilder,
@@ -13,6 +13,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CalendarTriggerComponent } from '../../../../../shared/components/calendar-trigger/calendar-trigger.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-read-form',
@@ -34,6 +35,7 @@ export class ReadFormComponent {
     { label: '黑名單清單', value: '1' },
     { label: '灰名單清單', value: '2' },
     { label: '出勤前六名', value: '3' },
+    { label: '每日計程車資訊', value: '4' },
   ];
 
   searchCondition: string = '0';
@@ -49,11 +51,12 @@ export class ReadFormComponent {
 
   dateFrom: string = '';
   dateTo: string = '';
+  hasError: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private taxiService: TaxiService
+    private taxiService: TaxiService,
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +67,9 @@ export class ReadFormComponent {
   }
 
   onReadTypeChange(event: Option) {
+    this.hasError = false;
+    this.dateFrom = '';
+    this.dateTo = '';
     this.searchCondition = event.value;
     this.taxiService.afterReadType(this.searchCondition);
   }
@@ -82,6 +88,9 @@ export class ReadFormComponent {
         break;
       case '3':
         this.searchTop6();
+        break;
+      case '4':
+        this.searchDaily();
     }
   }
 
@@ -113,27 +122,45 @@ export class ReadFormComponent {
   }
 
   searchTop6() {
-    let dateFrom = this.dateFrom;
-    let dateTo = this.dateTo;
-
-    // 如果沒有設定，就給預設值
-    if (!dateFrom || dateFrom === '') {
-      const today = new Date();
-      dateFrom = today.toISOString().split('T')[0]; // yyyy-mm-dd
-    }
-
-    if (!dateTo || dateTo === '') {
-      const fromDateObj = new Date(dateFrom);
-      const nextMonth = new Date(fromDateObj);
-      nextMonth.setMonth(fromDateObj.getMonth() + 1);
-      dateTo = nextMonth.toISOString().split('T')[0]; // yyyy-mm-dd
+    if (!this.dateFrom || !this.dateTo) {
+      this.hasError = true;
+      console.error('dateFrom 或 dateTo 未設定');
+      return;
     }
 
     this.apiService
-      .getTop6Taxi(this.top6SortType, dateFrom, dateTo)
+      .getTop6Taxi(this.top6SortType, this.dateFrom, this.dateTo)
       .subscribe((res) => {
         this.taxiService.afterTop6(res);
       });
+  }
+
+  searchDaily() {
+    if (!this.dateFrom || !this.dateTo) {
+      this.hasError = true;
+      console.error('dateFrom 或 dateTo 未設定');
+      return;
+    }
+
+    forkJoin({
+      eventData: this.apiService.getTaxiEventData(
+        this.form.value.regPlate,
+        this.dateFrom,
+        this.dateTo,
+      ),
+      violationAll: this.apiService.getTaxiViolationAll('ALL'),
+    }).subscribe({
+      next: ({ eventData, violationAll }) => {
+        const daily: SearchDailyTaxiData = {
+          eventData: eventData,
+          violationData: violationAll
+        }
+        this.taxiService.afterDaily(daily);
+      },
+      error: (err) => {
+        console.error('API 發生錯誤', err);
+      },
+    });
   }
 
   /** 日期更改 */
@@ -147,6 +174,11 @@ export class ReadFormComponent {
       this.dateFrom = formatted || '';
     } else {
       this.dateTo = formatted || '';
+    }
+
+    // 取消錯誤
+    if (this.dateFrom && this.dateTo) {
+      this.hasError = false;
     }
   }
 }

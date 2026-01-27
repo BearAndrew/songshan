@@ -60,9 +60,22 @@ export class CreateFormComponent {
       status: '',
     };
 
-    this.apiService.postTaxi(payload).subscribe(() => {
-      this.taxiService.afterCreateTaxi(payload);
-    });
+    this.apiService.postTaxi(payload).subscribe(
+      () => {
+        this.taxiService.afterCreateTaxi(payload);
+      },
+      (err) => {
+        this.commonService
+          .openDialog({
+            title: '建立失敗',
+            message: '已有相同車號',
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
+      },
+    );
   }
 
   onFileSelected(event: Event) {
