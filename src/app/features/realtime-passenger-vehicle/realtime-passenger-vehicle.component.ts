@@ -133,6 +133,8 @@ export class RealtimePassengerVehicleComponent {
 
           if (this.activeIndex === 2) {
             this.buildTaxiLocationGroups(res);
+          } else if (this.activeIndex === 1) {
+            this.buildSplitLocationGroups(res);
           } else {
             this.buildLocationGroups(res);
           }
@@ -162,6 +164,29 @@ export class RealtimePassengerVehicleComponent {
     });
   }
 
+  /** 區分華信跟立榮的行李托運照片 */
+  private buildSplitLocationGroups(items: RealTimeTrafficFlowItem[]) {
+    this.locationGroups = items.flatMap((location) => {
+      return location.data.map((point, pointIndex) => {
+        const images = (point.image ?? []).map((img, imageIndex) => ({
+          src: img,
+          label: point.label,
+          pointIndex,
+          imageIndex,
+        }));
+
+        return {
+          locationName: point.label
+            ? `${location.locationName}(${point.label})`
+            : location.locationName,
+          images,
+          currentIndex: 0,
+        };
+      });
+    });
+  }
+
+  /** 區分計程車的照片 */
   private buildTaxiLocationGroups(items: RealTimeTrafficFlowItem[]) {
     const groups = items.flatMap((location) => {
       return location.data.map((taxi, pointIndex) => {
