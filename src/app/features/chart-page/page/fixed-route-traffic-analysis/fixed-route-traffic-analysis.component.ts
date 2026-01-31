@@ -36,7 +36,7 @@ export class FixedRouteTrafficAnalysisComponent extends ChartPageRootComponent {
     // 呼叫 API
     this.apiService.postFlightTrafficAnalysisSch(payload).subscribe({
       next: (res: FlightTrafficAnalysisResponse) => {
-        this.handleFlightTrafficAnalysis(res);
+        this.handleFlightTrafficAnalysis(res, false);
       },
     });
   }

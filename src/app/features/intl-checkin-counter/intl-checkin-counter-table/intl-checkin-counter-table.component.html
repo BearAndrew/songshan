@@ -1,5 +1,18 @@
 <div class="flex flex-col gap-4 w-full h-full">
   <div class="flex items-center justify-between gap-2">
+
+    <a
+      class="flex items-center gap-2 px-2 py-1 rounded-md bg-[#318dce] cursor-pointer"
+      [routerLink]="redirectURL"
+    >
+      <span>回上一頁</span>
+      <img
+        class="w-4 -rotate-90"
+        src="icons/white-down-arrow.png"
+        alt="arrow"
+      />
+    </a>
+
     <div
       class="flex flex-col sm:flex-row items-center gap-4 text-[#aaa] w-full sm:w-fit sm:ml-auto"
     >
@@ -59,18 +72,6 @@
         確認
       </button>
     </div>
-
-    <!-- <a
-      class="flex items-center gap-2 px-2 py-1 rounded-md bg-[#318dce] cursor-pointer"
-      [routerLink]="redirectURL"
-    >
-      <span>回上一頁</span>
-      <img
-        class="w-4 -rotate-90"
-        src="icons/white-down-arrow.png"
-        alt="arrow"
-      />
-    </a> -->
   </div>
 
   <div class="card flex flex-1 flex-col flex-shrink-0 gap-2 p-4 h-0 relative">
@@ -81,7 +82,7 @@
         <div class="p-2">航空公司</div>
         <div class="p-2">航班資訊</div>
         <div class="p-2">申請時段</div>
-        <div class="p-2">項目</div>
+        <div class="p-2">島櫃</div>
         <div class="p-2">狀態</div>
         <div class="p-2">操作人員</div>
         <div class="p-2"></div>

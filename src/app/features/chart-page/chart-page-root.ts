@@ -44,7 +44,7 @@ export class ChartPageRootComponent {
   }
 
   /** 日期比較使用 */
-  protected handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse) {
+  protected handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse, isShowCompare = true) {
     const query = res?.queryData;
     const compare = res?.compareData;
     const queryStat = Array.isArray(query?.stat) ? query.stat : [];
@@ -81,7 +81,7 @@ export class ChartPageRootComponent {
       });
     }
 
-    if (compareStat.length > 0) {
+    if (compareStat.length > 0 && isShowCompare) {
       barSeries.push({
         label: '2019年人數',
         data: compareStat.map((item) => ({
@@ -108,7 +108,7 @@ export class ChartPageRootComponent {
       });
     }
 
-    if (compareStat.length > 0) {
+    if (compareStat.length > 0 && isShowCompare) {
       lineSeries.push({
         label: '2019年架次',
         data: compareStat.map((item) => ({
