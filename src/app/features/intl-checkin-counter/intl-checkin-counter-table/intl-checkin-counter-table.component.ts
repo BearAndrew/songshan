@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../../core/services/api-service.service';
 import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
 import {
@@ -48,15 +48,21 @@ export class IntlCheckinCounterTableComponent {
   dateTo: string = '';
   statusMap = statusMap;
 
+  /** 權限管控 */
+  agent: string = '';
   redirectURL: string = '';
 
   constructor(
     private router: Router,
-    private counterService: CounterService,
+    private route: ActivatedRoute,
     private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      this.agent = params.get('user') || 'ALL';
+    });
+
     // 取得航空公司清單
     this.apiService.getAirlineList('intl').subscribe((res: Airline[]) => {
       this.airlineOptions = res.map((airline) => ({
@@ -100,7 +106,7 @@ export class IntlCheckinCounterTableComponent {
       dateFrom: this.dateFrom || '',
       dateTo: this.dateTo || '',
       status: 'ALL',
-      agent: this.airline,
+      agent: this.agent,
     };
 
     this.apiService.getAllCounter(payload).subscribe((res) => {

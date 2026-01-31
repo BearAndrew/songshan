@@ -220,6 +220,8 @@ export class IntlCheckinCounterAdminComponent {
   exportStart: string = '';
   exportEnd: string = '';
 
+  /** 權限管控 */
+  agent: string = '';
   STATUS_COLOR_MAP = STATUS_COLOR_MAP;
 
   constructor(
@@ -260,10 +262,11 @@ export class IntlCheckinCounterAdminComponent {
         return; // 沒有路由參數就直接返回
       }
 
-      console.log(params); // 有參數才處理
+      this.agent = params.get('user') || 'ALL';
+
       const item: CounterInfo = {
         requestId: params.get('requestId') || '',
-        agent: '',
+        agent: this.agent,
         airlineIata: params.get('airlineIata') || '',
         flightNo: params.get('flightNo') || '',
         season: params.get('season') || '',
@@ -315,7 +318,7 @@ export class IntlCheckinCounterAdminComponent {
       dateFrom,
       dateTo,
       status: 'ALL',
-      agent: 'ALL',
+      agent: this.agent,
     };
 
     this.apiService.getAllCounter(payload).subscribe((res) => {
