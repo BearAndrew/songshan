@@ -88,3 +88,13 @@ export interface TaxiEventData {
   image: string;
   [key: string]: any;
 }
+
+
+export interface CurrentTaxi {
+  regPlate: string;      // 車牌
+  driverName: string;    // 司機姓名
+  violation: string;     // 違規狀態（黑名單 / 灰名單 / 空字串）
+  inTime: string;        // 進場時間（ISO string）
+  location: string;     // 區域
+  image: string;        // 圖片 URL / base64
+}

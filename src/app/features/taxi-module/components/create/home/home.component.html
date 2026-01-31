@@ -1,0 +1,49 @@
+<!-- 外層：一定要有高度 -->
+<div class="flex flex-col gap-4 h-full">
+  <h1 class="text-xl sm:text-3xl text-blue-200 font-semibold">
+    現場排班計程車資訊
+  </h1>
+
+  <!-- Grid：高度撐滿 -->
+  <div class="flex-1 grid grid-cols-4 grid-rows-4 gap-1 h-0">
+    <!-- Card -->
+    @for (taxi of taxis; track taxi) {
+      <div
+        class="border border-gray-500 rounded-lg px-3 py-1 flex items-end justify-between"
+      >
+        <!-- 左側：車牌 / 司機 -->
+        <div
+          class="flex flex-col flex-shrink-0 items-center justify-between h-full"
+        >
+          <div class="text-lg font-semibold">{{ taxi.regPlate }}</div>
+          <div class="text-md">{{ taxi.driverName }}</div>
+        </div>
+
+        <!-- 右側：區域（relative） -->
+        <div
+          class="relative flex items-end w-[120px] h-fit rounded-full bg-[#01a7e7]"
+        >
+          <!-- 區域 -->
+          <span
+            class="flex items-center w-4/5 h-10 px-3 py-1 text-md text-white leading-none overflow-hidden line-clamp-2"
+          >
+            {{ taxi.location }}
+          </span>
+
+          <!-- 狀態（可選） -->
+          @if (taxi.violation == "BLACKLIST" || taxi.violation == "GREYLIST") {
+            <span
+              class="absolute -top-6 -right-2 w-10 h-10 flex items-center justify-center rounded-full bg-white border-2 border-orange-400"
+            >
+              <span class="text-xs text-black font-bold">
+                {{ taxi.violation == 'BLACKLIST' ? '黑名單' : '灰名單'}}
+              </span>
+            </span>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- 補到 16 張 -->
+  </div>
+</div>

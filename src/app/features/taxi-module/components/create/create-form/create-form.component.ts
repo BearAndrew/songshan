@@ -62,7 +62,18 @@ export class CreateFormComponent {
 
     this.apiService.postTaxi(payload).subscribe(
       () => {
-        this.taxiService.afterCreateTaxi(payload);
+        this.commonService
+          .openDialog({
+            title: '建立成功',
+            message: `車號：${this.form.value.regPlate}
+            編號：${this.form.value.driverNo}
+            姓名：${this.form.value.driverName}
+            聯絡電話：${this.form.value.driverPhone}`,
+            confirmText: '確定',
+            cancelText: '',
+          })
+          .pipe(take(1))
+          .subscribe();
       },
       (err) => {
         this.commonService
