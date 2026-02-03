@@ -685,7 +685,7 @@ export class IntlCheckinCounterUserComponent {
         this.commonService
           .openDialog({
             title: '申請失敗',
-            message: err,
+            message: err.error,
             confirmText: '確定',
             cancelText: '',
           })

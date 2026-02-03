@@ -605,7 +605,7 @@ export class IntlCheckinCounterAdminComponent {
           this.commonService
             .openDialog({
               title: '核准失敗',
-              message: '錯誤訊息:' + err,
+              message: err.error,
               confirmText: '確定',
               cancelText: '',
             })
@@ -615,7 +615,7 @@ export class IntlCheckinCounterAdminComponent {
           this.commonService
             .openDialog({
               title: '駁回失敗',
-              message: '錯誤訊息:' + err,
+              message: err.error,
               confirmText: '確定',
               cancelText: '',
             })
