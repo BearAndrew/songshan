@@ -1,0 +1,64 @@
+<div
+  class="flex flex-col gap-4 p-6 bg-white text-gray-800 rounded shadow-md w-[80vw] max-w-[1500px] min-h-[60vh] max-h-[80vh]"
+>
+  <h1 class="text-3xl font-bold">異常事件通知</h1>
+
+  <!-- 表頭：3 欄 -->
+  <div class="grid grid-cols-3 font-semibold text-lg border-b pb-2">
+    <div>車號</div>
+    <div>當日進場次數</div>
+    <div>狀態</div>
+  </div>
+
+  <!-- 清單 -->
+  <div class="flex-1 overflow-auto select-none">
+    @for (item of taxiList; track item.regPlate) {
+
+      <!-- 主列：3 欄 -->
+      <div
+        class="grid grid-cols-3 items-center p-2 cursor-pointer hover:bg-gray-100 rounded"
+        (click)="toggle(item.regPlate)"
+      >
+        <div class="font-medium">{{ item.regPlate }}</div>
+        <div>{{ item.recCount }}</div>
+
+        <!-- 狀態欄（＋／－） -->
+        <div class="text-center text-2xl font-bold select-none">
+          {{ expandedPlate === item.regPlate ? '－' : '＋' }}
+        </div>
+      </div>
+
+      <!-- 摺疊內容 -->
+      @if (expandedPlate === item.regPlate) {
+        <!-- 同樣 3 欄，左 1 空，右 2 對齊 -->
+        <div class="grid grid-cols-3 py-2">
+          <div></div>
+
+          <div class="col-span-2">
+            <div class="grid grid-cols-2 font-semibold text-sm text-gray-600 mb-1">
+              <div>進場時間</div>
+              <div>離場時間</div>
+            </div>
+
+            @for (t of item.timeLists; track $index) {
+              <div class="grid grid-cols-2 text-sm py-1">
+                <div>{{ t.intime | date:'yyyy/M/d HH:mm' }}</div>
+                <div>{{ t.outtime | date:'yyyy/M/d HH:mm' }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- 底部按鈕 -->
+  <div class="flex justify-end gap-4 text-xl">
+    <button
+      class="px-4 py-2 rounded bg-[#01a7e7] text-white transition duration-200 hover:bg-[#029cd8]"
+      (click)="onConfirm()"
+    >
+      確認
+    </button>
+  </div>
+</div>

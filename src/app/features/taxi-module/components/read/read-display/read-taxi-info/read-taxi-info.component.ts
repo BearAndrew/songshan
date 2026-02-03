@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TaxiService } from '../../../../service/taxi.service';
-import { TaxiInfo } from '../../../../../../models/taxi.model';
-import { TaxiDuplicateComponent } from "../../../common/taxi-duplicate/taxi-duplicate.component";
+import { TaxiException, TaxiInfo } from '../../../../../../models/taxi.model';
+import { TaxiDuplicateComponent } from '../../../common/taxi-duplicate/taxi-duplicate.component';
+import { ApiService } from '../../../../../../core/services/api-service.service';
+import { forkJoin, map, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-read-taxi-info',
@@ -11,51 +13,49 @@ import { TaxiDuplicateComponent } from "../../../common/taxi-duplicate/taxi-dupl
   styleUrl: './read-taxi-info.component.scss',
 })
 export class ReadTaxiInfoComponent {
-  items = [
-    {
-      id: 1,
-      carNo: '1234',
-      code: '0001',
-      name: '王小明',
-      phone: '0900123456',
-    },
-    {
-      id: 2,
-      carNo: '5678',
-      code: '0002',
-      name: '李小華',
-      phone: '0911222333',
-    },
-    {
-      id: 3,
-      carNo: '9012',
-      code: '0003',
-      name: '陳美麗',
-      phone: '0922333444',
-    },
-    {
-      id: 4,
-      carNo: '3456',
-      code: '0004',
-      name: '林志強',
-      phone: '0933444555',
-    },
-    {
-      id: 5,
-      carNo: '7890',
-      code: '0005',
-      name: '張雅婷',
-      phone: '0944555666',
-    },
-  ];
-
   hasSearch: boolean = false;
   taxiInfoList!: TaxiInfo[];
+  exceptionDetail: TaxiException | null = null;
 
-  constructor(private taxiService: TaxiService) {
-    this.taxiService.searchTaxi$.subscribe((res) => {
-      this.hasSearch = true;
-      this.taxiInfoList = res.taxiInfoList;
-    });
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private taxiService: TaxiService,
+    private apiService: ApiService,
+  ) {
+    this.taxiService.searchTaxi$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.hasSearch = true;
+        this.taxiInfoList = res.taxiInfoList;
+
+        const regPlate = this.taxiInfoList?.[0]?.regPlate;
+        if (regPlate) {
+          this.loadExceptionData(regPlate);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadExceptionData(regPlate: string): void {
+    forkJoin({
+      notReg: this.apiService.getTaxiException('NOTREG'),
+      blackList: this.apiService.getTaxiException('BLACKLIST'),
+    })
+      .pipe(
+        map(({ notReg, blackList }) => {
+          const merged = [...notReg, ...blackList];
+
+          // 找出符合車牌的那一筆
+          return merged.find((item) => item.regPlate === regPlate) || null;
+        }),
+      )
+      .subscribe((result) => {
+        this.exceptionDetail = result;
+      });
   }
 }

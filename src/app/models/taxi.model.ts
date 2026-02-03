@@ -98,3 +98,15 @@ export interface CurrentTaxi {
   location: string;     // 區域
   image: string;        // 圖片 URL / base64
 }
+
+
+export interface TaxiExceptionTime {
+  intime: string;    // ISO datetime
+  outtime: string;   // ISO datetime
+}
+
+export interface TaxiException {
+  regPlate: string;
+  recCount: number;
+  timeLists: TaxiExceptionTime[];
+}

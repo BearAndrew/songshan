@@ -9,10 +9,10 @@
       !hasSearch
         ? infoInit
         : taxiInfoList.length == 0
-        ? infoNoData
-        : taxiInfoList.length == 1
-        ? infoData
-        : infoDuplicate
+          ? infoNoData
+          : taxiInfoList.length == 1
+            ? infoData
+            : infoDuplicate
     "
   ></ng-container>
 
@@ -30,9 +30,12 @@
   </ng-template>
 
   <ng-template #infoData>
-    <div class="flex items-center w-full h-full min-h-[200px] sm:min-h-[300px]">
+    <div
+      class="flex flex-col sm:flex-row w-full min-h-[200px] sm:min-h-[300px] gap-8 px-6 sm:px-12"
+    >
+      <!-- 左：車輛 / 司機資訊 -->
       <div
-        class="grid grid-cols-[auto_1fr] gap-4 sm:gap-8 px-6 sm:px-12 text-md sm:text-2xl"
+        class="grid grid-cols-[auto_1fr] gap-4 sm:gap-8 text-md sm:text-2xl py-4 flex-2"
       >
         <label class="text-[#05aeed] [text-align-last:justify]">車號</label>
         <span>{{ taxiInfoList[0].regPlate }}</span>
@@ -45,6 +48,37 @@
 
         <label class="text-[#05aeed] [text-align-last:justify]">手機</label>
         <span>{{ taxiInfoList[0].driverPhone }}</span>
+      </div>
+
+      <!-- 右：單一車號進出場時間 -->
+      <div class="flex-3 border-l pl-6 py-4 flex flex-col">
+        <h3
+          class="text-lg sm:text-2xl font-semibold mb-4 text-[#05aeed] shrink-0"
+        >
+          進出場紀錄
+        </h3>
+
+        <!-- 表頭 -->
+        <div
+          class="grid grid-cols-2 text-sm sm:text-lg font-semibold text-gray-600 mb-2 shrink-0"
+        >
+          <div>進場時間</div>
+          <div>離場時間</div>
+        </div>
+
+        <!-- 可滾動內容 -->
+        <div class="flex-1 overflow-y-auto">
+          @if (exceptionDetail?.timeLists?.length) {
+            @for (t of exceptionDetail?.timeLists; track $index) {
+              <div class="grid grid-cols-2 py-1">
+                <div>{{ t.intime | date: "yyyy/M/d HH:mm" }}</div>
+                <div>{{ t.outtime | date: "yyyy/M/d HH:mm" }}</div>
+              </div>
+            }
+          } @else {
+            <div class="text-gray-400">尚無進出場紀錄</div>
+          }
+        </div>
       </div>
     </div>
   </ng-template>

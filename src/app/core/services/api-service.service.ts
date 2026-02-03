@@ -28,6 +28,7 @@ import {
   TaxiStatusInfo,
   TaxiEventData,
   CurrentTaxi,
+  TaxiException,
 } from '../../models/taxi.model';
 import { TabType } from '../enums/tab-type.enum';
 import { FlightStatus } from '../../models/flight-status.model';
@@ -458,6 +459,11 @@ export class ApiService {
   /** 現時在場的車 */
   getCurrentTaxi(): Observable<CurrentTaxi[]> {
     return this.http.get<CurrentTaxi[]>('Taxi/CurrentTaxi');
+  }
+
+  /** 例外車輛清單 */
+  getTaxiException(type: string): Observable<TaxiException[]> {
+    return this.http.get<TaxiException[]>(`Taxi/Exception/${type}`);
   }
 
   // ========= 報到櫃台 =========

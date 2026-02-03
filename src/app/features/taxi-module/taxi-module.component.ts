@@ -12,6 +12,7 @@ import { ReadDisplayComponent } from './components/read/read-display/read-displa
 import { ApiService } from '../../core/services/api-service.service';
 import { TaxiInfo, TaxiStat } from '../../models/taxi.model';
 import { Subject, takeUntil } from 'rxjs';
+import { TaxiAbnormalComponent } from "./components/common/taxi-abnormal/taxi-abnormal.component";
 
 export type TabType = 'create' | 'read' | 'update' | 'delete';
 
@@ -27,7 +28,8 @@ export type TabType = 'create' | 'read' | 'update' | 'delete';
     UpdateDisplayComponent,
     DeleteDisplayComponent,
     ReadDisplayComponent,
-  ],
+    TaxiAbnormalComponent
+],
   templateUrl: './taxi-module.component.html',
   styleUrl: './taxi-module.component.scss',
 })

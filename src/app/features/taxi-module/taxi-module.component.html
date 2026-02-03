@@ -26,18 +26,6 @@
         修改
       </button>
 
-      <!-- <button
-        class="flex-1 py-1 rounded border border-[#f5a830] cursor-pointer"
-        [ngClass]="
-          activeTab === 'delete'
-            ? 'bg-[#f5a830] text-white'
-            : 'bg-[#231716] text-[#4d4c4e]'
-        "
-        (click)="setTab('delete')"
-      >
-        刪除
-      </button> -->
-
       <button
         class="flex-1 py-1 rounded border border-[#f5a830] cursor-pointer"
         [ngClass]="
@@ -52,15 +40,22 @@
     </div>
 
     <!-- Form -->
-    <div class="flex-1 rounded shadow sm:p-6">
-      @if (activeTab === 'create') {
-      <app-create-form></app-create-form>
-      } @else if (activeTab === 'update') {
-      <app-update-form [editTaxiInfo]="editTaxiInfo"></app-update-form>
-      } @else if (activeTab === 'delete') {
-      <app-delete-form></app-delete-form>
-      } @else if (activeTab === 'read') {
-      <app-read-form></app-read-form>
+    <div class="flex flex-col flex-1 gap-4 rounded shadow sm:p-6">
+      @if (activeTab === "create") {
+        <app-create-form class="flex-1"></app-create-form>
+      } @else if (activeTab === "update") {
+        <app-update-form
+          class="flex-1"
+          [editTaxiInfo]="editTaxiInfo"
+        ></app-update-form>
+      } @else if (activeTab === "delete") {
+        <app-delete-form class="flex-1"></app-delete-form>
+      } @else if (activeTab === "read") {
+        <app-read-form class="flex-1"></app-read-form>
+      }
+
+      @if(activeTab === "create" || activeTab === "read") {
+        <app-taxi-abnormal></app-taxi-abnormal>
       }
     </div>
   </div>
@@ -68,14 +63,14 @@
   <div class="flex-2 card flex flex-col gap-4 p-4 sm:p-6">
     <div class="flex-1 h-0">
       <!-- Content -->
-      @if (activeTab === 'create') {
-      <app-create-display></app-create-display>
-      } @else if (activeTab === 'update') {
-      <app-update-display></app-update-display>
-      } @else if (activeTab === 'delete') {
-      <app-delete-display></app-delete-display>
-      } @else if (activeTab === 'read') {
-      <app-read-display></app-read-display>
+      @if (activeTab === "create") {
+        <app-create-display></app-create-display>
+      } @else if (activeTab === "update") {
+        <app-update-display></app-update-display>
+      } @else if (activeTab === "delete") {
+        <app-delete-display></app-delete-display>
+      } @else if (activeTab === "read") {
+        <app-read-display></app-read-display>
       }
     </div>
 
@@ -192,7 +187,7 @@
           >
             <div class="flex flex-col items-center gap-y-2">
               <span class="text-5xl text-[#87c8ee] font-bold">
-                {{ taxiStat?.avgTaxiPerHour | number : "1.0-1" }}
+                {{ taxiStat?.avgTaxiPerHour | number: "1.0-1" }}
               </span>
               <span class="text-xl text-[#9e9f9f]">平均車輛數/時</span>
             </div>
@@ -208,7 +203,7 @@
             <div class="flex flex-col items-center gap-y-2">
               <div>
                 <span class="text-5xl text-[#87c8ee] font-bold mr-2 sm:mr-4">
-                  {{ taxiStat?.avgWaitTaxi | number : "1.0-1" }}
+                  {{ taxiStat?.avgWaitTaxi | number: "1.0-1" }}
                 </span>
                 <span class="text-xl">min</span>
               </div>
@@ -226,7 +221,7 @@
             <div class="flex flex-col items-center gap-y-2">
               <div>
                 <span class="text-5xl text-[#87c8ee] font-bold mr-2 sm:mr-4">
-                  {{ taxiStat?.avgWaitPax | number : "1.0-1" }}
+                  {{ taxiStat?.avgWaitPax | number: "1.0-1" }}
                 </span>
                 <span class="text-xl">min</span>
               </div>

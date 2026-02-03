@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center gap-4 sm:gap-6 w-full h-full">
+<div class="flex flex-col items-center gap-6 sm:gap-8 w-full h-full">
   <form
     [formGroup]="form"
     (ngSubmit)="onSubmit()"
@@ -18,8 +18,8 @@
         [class.border-red-400]="isInvalid('regPlate')"
       />
       <div class="h-5 mt-1">
-        @if (isInvalid('regPlate')) {
-        <p class="text-red-400 text-sm">車號為必填</p>
+        @if (isInvalid("regPlate")) {
+          <p class="text-red-400 text-sm">車號為必填</p>
         }
       </div>
     </div>
@@ -38,8 +38,8 @@
         [class.border-red-400]="isInvalid('driverNo')"
       />
       <div class="h-5 mt-1">
-        @if (isInvalid('driverNo')) {
-        <p class="text-red-400 text-sm">編號為必填</p>
+        @if (isInvalid("driverNo")) {
+          <p class="text-red-400 text-sm">編號為必填</p>
         }
       </div>
     </div>
@@ -58,8 +58,8 @@
         [class.border-red-400]="isInvalid('driverName')"
       />
       <div class="h-5 mt-1">
-        @if (isInvalid('driverName')) {
-        <p class="text-red-400 text-sm">姓名為必填</p>
+        @if (isInvalid("driverName")) {
+          <p class="text-red-400 text-sm">姓名為必填</p>
         }
       </div>
     </div>
@@ -78,8 +78,8 @@
         [class.border-red-400]="isInvalid('driverPhone')"
       />
       <div class="h-5 mt-1">
-        @if (isInvalid('driverPhone')) {
-        <p class="text-red-400 text-sm">聯絡電話為必填</p>
+        @if (isInvalid("driverPhone")) {
+          <p class="text-red-400 text-sm">聯絡電話為必填</p>
         }
       </div>
     </div>
@@ -112,20 +112,4 @@
   >
     上傳排班計程車資料
   </button>
-
-  <span class="text-lg sm:text-2xl font-semibold">異常事件通知</span>
-
-  <div class="flex gap-4">
-    <button
-      class="px-6 py-1 text-md sm:text-xl font-semibold rounded border border-[#999] bg-[#231716] text-[#4d4c4e] cursor-pointer"
-    >
-      未註冊車牌
-    </button>
-
-    <button
-      class="px-6 py-1 text-md sm:text-xl font-semibold rounded border border-[#999] bg-[#231716] text-[#4d4c4e] cursor-pointer"
-    >
-      違規車牌
-    </button>
-  </div>
 </div>
