@@ -137,7 +137,7 @@ export class CreateFormComponent {
         this.commonService
           .openDialog({
             title: 'Excel 匯入失敗',
-            message: '錯誤訊息:' + err,
+            message: err.error,
             confirmText: '確定',
             cancelText: '',
           })
