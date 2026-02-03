@@ -3,6 +3,8 @@ import { RealTimeTrafficFlowItem, RealTimeTrafficPoint } from '../../../../model
 import { RealTimeService } from '../../services/real-time.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TaxiData } from '../../realtime-passenger-vehicle.component';
+import { CameraDialogComponent } from '../camera-dialog/camera-dialog.component';
+import { CommonService } from '../../../../core/services/common.service';
 
 @Component({
   selector: 'app-realtime-passenger-vehicle-taxi',
@@ -19,7 +21,7 @@ export class RealtimePassengerVehicleTaxiComponent {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private realTimeService: RealTimeService) {}
+  constructor(private realTimeService: RealTimeService, private commonService: CommonService) {}
 
   ngOnInit(): void {
     this.realTimeService.realTimeData$
@@ -48,5 +50,19 @@ export class RealtimePassengerVehicleTaxiComponent {
       people: p.population ??  0,
       time: p.waitTime ?? 0,
     }));
+  }
+
+  onPeopleCountClick(itemIndex: number) {
+    const data = this.realTimeService.getRealTimeData();
+    const location = data[0];
+    const point = location?.data?.[itemIndex];
+    const images = (point?.image ?? []).map((img: string, idx: number) => ({
+      src: img,
+      label: point?.label || '',
+      pointIndex: itemIndex,
+      imageIndex: idx,
+    }));
+    // Open dialog with images
+    this.commonService.openCustomDialog(CameraDialogComponent, { imgList: images });
   }
 }

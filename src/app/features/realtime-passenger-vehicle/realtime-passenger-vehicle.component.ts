@@ -16,6 +16,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
+import { mockItems } from './mock-data';
 
 export interface LocationImage {
   src: string;
@@ -166,6 +167,7 @@ export class RealtimePassengerVehicleComponent {
 
   /** 區分華信跟立榮的行李托運照片 */
   private buildSplitLocationGroups(items: RealTimeTrafficFlowItem[]) {
+    // items = mockItems;
     this.locationGroups = items.flatMap((location) => {
       return location.data.map((point, pointIndex) => {
         const images = (point.image ?? []).map((img, imageIndex) => ({
@@ -175,10 +177,14 @@ export class RealtimePassengerVehicleComponent {
           imageIndex,
         }));
 
+        const isBaggage = location.locationName === '行李托運';
+
         return {
-          locationName: point.label
-            ? `${location.locationName}(${point.label})`
-            : location.locationName,
+          locationName:
+            isBaggage && point.label
+              ? `${location.locationName}(${point.label})`
+              : location.locationName,
+
           images,
           currentIndex: 0,
         };

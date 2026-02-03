@@ -5,6 +5,8 @@ import {
 } from '../../../../models/real-time-traffic-flow.model';
 import { RealTimeService } from './../../services/real-time.service';
 import { Component } from '@angular/core';
+import { CommonService } from '../../../../core/services/common.service';
+import { CameraDialogComponent } from '../camera-dialog/camera-dialog.component';
 
 @Component({
   selector: 'app-realtime-passenger-vehicle-international',
@@ -37,7 +39,7 @@ export class RealtimePassengerVehicleInternationalComponent {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private realTimeService: RealTimeService) {}
+  constructor(private realTimeService: RealTimeService, private commonService: CommonService) {}
 
   ngOnInit(): void {
     this.realTimeService.realTimeData$
@@ -72,14 +74,22 @@ export class RealtimePassengerVehicleInternationalComponent {
   }
 
   onItemClick(locationIndex: number, itemIndex: number) {
-    this.realTimeService.emitEvent({
-      type: 'IMAGE_SELECT',
-      payload: {
-        locationIndex,
-        imageIndex: 0,
-        pointIndex: itemIndex
-      },
-    });
-    // console.log(`locationIndex: ${locationIndex}, imageIndex: ${itemIndex}`)
+    // 取得目前的 realtime data，找到對應 location -> point 的 images
+    const data = this.realTimeService.getRealTimeData();
+    const location = data[locationIndex];
+    const point = location?.data?.[itemIndex];
+    const images = (point?.image ?? []).map((img: string, idx: number) => ({ src: img, label: point?.label || '', pointIndex: itemIndex, imageIndex: idx }));
+    // 傳入 images 陣列到 dialog
+    this.commonService.openCustomDialog(CameraDialogComponent, { imgList: images });
+
+    // 也觸發選取事件，讓父元件或其他 listener 可以同步切換
+    // this.realTimeService.emitEvent({
+    //   type: 'IMAGE_SELECT',
+    //   payload: {
+    //     locationIndex,
+    //     imageIndex: 0,
+    //     pointIndex: itemIndex,
+    //   },
+    // });
   }
 }

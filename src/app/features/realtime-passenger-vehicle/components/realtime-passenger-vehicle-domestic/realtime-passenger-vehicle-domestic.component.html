@@ -13,9 +13,9 @@
         <span class="text-[100px] leading-none">{{data1[0].people}}</span>
         <span class="text-2xl leading-none mb-3">人</span>
       </div>
-      <div class="w-full max-w-80 mx-auto p-1 text-center border rounded-full">
+      <button class="w-full max-w-80 mx-auto p-1 text-center border rounded-full cursor-pointer" (click)="onPeopleCountClick(0, 0)">
         現場人數
-      </div>
+      </button>
     </div>
 
     <div
@@ -58,11 +58,9 @@
           <span class="text-[100px] leading-none">{{data2[0].people}}</span>
           <span class="text-2xl leading-none mb-3">人</span>
         </div>
-        <div
-          class="w-full max-w-50 mx-auto p-1 text-center border rounded-full"
-        >
+        <button class="w-full max-w-50 mx-auto p-1 text-center border rounded-full cursor-pointer" (click)="onPeopleCountClick(1, 0)">
           現場人數
-        </div>
+        </button>
       </div>
       <div
         class="flex flex-col flex-1 items-center justify-center gap-4 min-h-0 z-10"
@@ -76,11 +74,9 @@
           <span class="text-[100px] leading-none">{{data2[1].people}}</span>
           <span class="text-2xl leading-none mb-3">人</span>
         </div>
-        <div
-          class="w-full max-w-50 mx-auto p-1 text-center border rounded-full"
-        >
+        <button class="w-full max-w-50 mx-auto p-1 text-center border rounded-full cursor-pointer" (click)="onPeopleCountClick(1, 1)">
           現場人數
-        </div>
+        </button>
       </div>
     </div>
 
@@ -124,9 +120,9 @@
         <span class="text-[100px] leading-none">{{data3[0].people}}</span>
         <span class="text-2xl leading-none mb-3">人</span>
       </div>
-      <div class="w-full max-w-80 mx-auto p-1 text-center border rounded-full">
+      <button class="w-full max-w-80 mx-auto p-1 text-center border rounded-full cursor-pointer" (click)="onPeopleCountClick(2, 0)">
         現場人數
-      </div>
+      </button>
     </div>
 
     <div
