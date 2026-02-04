@@ -221,7 +221,7 @@ export class IntlCheckinCounterAdminComponent {
   exportEnd: string = '';
 
   /** 權限管控 */
-  agent: string = '';
+  agent: string = 'ALL';
   STATUS_COLOR_MAP = STATUS_COLOR_MAP;
 
   constructor(

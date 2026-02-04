@@ -49,7 +49,7 @@ export class IntlCheckinCounterTableComponent {
   statusMap = statusMap;
 
   /** 權限管控 */
-  agent: string = '';
+  agent: string = 'ALL';
   redirectURL: string = '';
 
   constructor(
