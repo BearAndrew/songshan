@@ -2,8 +2,9 @@ import { ApiService } from './../../../../core/services/api-service.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { BaggageTimeItem } from '../../../../models/baggage-time.model';
+import { mock } from './mock-data';
 
-interface FlightInfo {
+export interface FlightInfo {
   flight: string;
   from: string;
   scheduledTime: string;
@@ -11,7 +12,10 @@ interface FlightInfo {
   flightArrival: string;
   firstBaggage: string;
   lastBaggage: string;
+  firstPax: string;
+  lastPax: string;
 
+  // 行李明細
   baggageDetails: {
     subtitle: string;
     downTime: string;
@@ -20,6 +24,18 @@ interface FlightInfo {
     xrayIn: string;
     xrayOut: string;
   }[];
+
+  // 旅客明細（比照行李結構）
+  paxDetails: {
+    subtitle: string;
+    gate: string;
+    immigration: string;
+    carousel: string;
+    arrCustom: string;
+    exitCustom: string;
+    taxi: string;
+  }[];
+
   isOpen: boolean;
 }
 
@@ -36,6 +52,7 @@ export class RealtimePassengerVehicleBaggageComponent {
 
   ngOnInit() {
     this.apiService.getBaggageTime().subscribe((res: BaggageTimeItem[]) => {
+      // res = mock;
       this.items = res.map((b) => {
         const baggageDetails = [
           {
@@ -56,19 +73,41 @@ export class RealtimePassengerVehicleBaggageComponent {
           },
         ];
 
-        const flightInfo: FlightInfo = {
+        const paxDetails = [
+          {
+            subtitle: '第一位旅客',
+            gate: b.paxFirstGate,
+            immigration: b.paxFirstImmigration,
+            carousel: b.paxFirstCarousel,
+            arrCustom: b.paxFirstArrCustom,
+            exitCustom: b.paxFirstExitCustom,
+            taxi: b.paxFirstTaxi,
+          },
+          {
+            subtitle: '最後一位旅客',
+            gate: b.paxLastGate,
+            immigration: b.paxLastImmigration,
+            carousel: b.paxLastCarousel,
+            arrCustom: b.paxLastArrCustom,
+            exitCustom: b.paxLastExitCustom,
+            taxi: b.paxLastTaxi,
+          },
+        ];
+
+        return {
           flight: b.flightNo,
           from: b.departurePort,
           scheduledTime: b.sta,
           actualArrival: b.ata,
           flightArrival: b.ibt,
-          firstBaggage: b.firstBagOutXray,
-          lastBaggage: b.lastBagOutXray,
+          firstBaggage: b.firstBagDeplane,
+          lastBaggage: b.lastBagDeplane,
+          firstPax: b.paxFirstExitCustom,
+          lastPax: b.paxLastExitCustom,
           baggageDetails,
+          paxDetails,
           isOpen: false,
         };
-
-        return flightInfo;
       });
     });
   }

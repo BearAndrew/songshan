@@ -17,4 +17,20 @@ export interface BaggageTimeItem {
   lastBagOnCarousel: string;       // 最後一件行李上轉盤時間
   lastBagInXray: string;           // 最後一件行李進X光機時間
   lastBagOutXray: string;          // 最後一件行李出X光機時間
+
+  // === 旅客（第一位） ===
+  paxFirstGate: string;            // 入境登機門
+  paxFirstImmigration: string;     // 證照查驗區
+  paxFirstCarousel: string;        // 行李轉盤區查驗區
+  paxFirstArrCustom: string;       // 進入海關區
+  paxFirstExitCustom: string;      // 離開海關區
+  paxFirstTaxi: string;            // 計程車區
+
+  // === 旅客（最後一位） ===
+  paxLastGate: string;             // 入境登機門
+  paxLastImmigration: string;      // 證照查驗區
+  paxLastCarousel: string;         // 行李轉盤區查驗區
+  paxLastArrCustom: string;        // 進入海關區
+  paxLastExitCustom: string;       // 離開海關區
+  paxLastTaxi: string;             // 計程車區
 }
