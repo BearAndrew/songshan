@@ -17,7 +17,7 @@
 
     @for (item of data; track item; let i = $index) {
     <div
-      class="flex-1 items-center grid grid-cols-3 text-4xl sm:text-[50px] py-2 sm:py-0 font-bold leading-none text-center"
+      class="flex-1 items-center grid grid-cols-3 text-xl sm:text-[50px] py-4 sm:py-2 sm:py-0 font-bold leading-none text-center"
       [ngClass]="{ 'border-b border-gray-300': i !== data.length - 1 }"
     >
       <div>{{ item.out }}</div>
