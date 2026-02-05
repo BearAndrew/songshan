@@ -1,19 +1,19 @@
 <!-- 外層：一定要有高度 -->
-<div class="flex flex-col gap-4 h-full max-h-[500px]">
+<div class="flex flex-col gap-4 h-full sm:max-h-[500px]">
   <h1 class="text-xl sm:text-3xl text-blue-200 font-semibold">
     現場排班計程車資訊
   </h1>
 
   <!-- Grid：高度撐滿 -->
-  <div class="flex-1 h-0 grid grid-cols-4 grid-rows-4 gap-1">
+  <div class="flex-1 h-fit sm:h-0 grid grid-cols-1 sm:grid-cols-4 grid-rows-4 gap-2 sm:gap-1">
     <!-- Card -->
     @for (taxi of taxis; track taxi) {
       <div
-        class="border border-gray-500 rounded-lg px-3 py-1 flex items-end justify-between"
+        class="border border-gray-500 rounded-lg px-3 py-1 flex items-end justify-between min-h-[100px] sm:min-h-auto"
       >
         <!-- 左側：車牌 / 司機 -->
         <div
-          class="flex flex-col flex-shrink-0 items-center justify-between h-full"
+          class="flex flex-col flex-shrink-0 items-center justify-between h-full py-2 sm:py-1"
         >
           <div class="text-lg font-semibold">{{ taxi.regPlate }}</div>
           <div class="text-md">{{ taxi.driverName }}</div>

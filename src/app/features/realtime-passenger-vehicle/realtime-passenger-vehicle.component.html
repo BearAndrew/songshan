@@ -1,7 +1,7 @@
 <div class="fixed top-14 sm:hidden mb-2 w-[calc(50vw-1.25rem)] z-50">
   <app-dropdown
     class="pl-4 w-full"
-    [value]="'intl'"
+    [value]="data[activeIndex].value"
     [options]="data"
     (selectionChange)="onTabChange($event.value)"
   ></app-dropdown>

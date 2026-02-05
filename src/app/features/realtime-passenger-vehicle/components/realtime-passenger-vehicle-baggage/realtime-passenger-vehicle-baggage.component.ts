@@ -52,7 +52,7 @@ export class RealtimePassengerVehicleBaggageComponent {
 
   ngOnInit() {
     this.apiService.getBaggageTime().subscribe((res: BaggageTimeItem[]) => {
-      // res = mock;
+      res = mock;
       this.items = res.map((b) => {
         const baggageDetails = [
           {

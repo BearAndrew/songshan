@@ -62,7 +62,7 @@ export class RealtimePassengerVehicleComponent {
       value: 'taxi',
     },
     {
-      label: '國際線入境行李',
+      label: '國際線入境作業',
       routerLink: '/realtime-passenger-vehicle/baggage',
       value: '',
     },
