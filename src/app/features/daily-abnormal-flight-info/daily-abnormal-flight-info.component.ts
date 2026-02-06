@@ -24,6 +24,7 @@ import {
   tap,
 } from 'rxjs';
 import { CommonService } from '../../core/services/common.service';
+import { MOCK_IRREGULAR_INBOUND } from './mock-data';
 
 export interface FlightTableItem {
   flightNumber: string;
@@ -122,50 +123,6 @@ export class DailyAbnormalFlightInfoComponent {
   /** Get 請求用的參數：飛航類型 */
   paramDirection = 'all';
 
-  MOCK_IRREGULAR_INBOUND: IrregularInboundFlight = {
-    flightinfo: [
-      {
-        flightNo: 'CI123',
-        arrivalPort: '台北',
-        departurePort: '東京成田',
-        gate: 'A12',
-        sta: '2026-01-02 08:30',
-        ata: '2026-01-02 09:10',
-        delay: '40',
-        status: '延誤',
-        reason: '天候不佳',
-        handle: '已通知旅客',
-      },
-      {
-        flightNo: 'BR807',
-        arrivalPort: '台北',
-        departurePort: '香港',
-        gate: 'B5',
-        sta: '2026-01-02 10:00',
-        ata: '2026-01-02 10:45',
-        delay: '105',
-        status: '延誤',
-        reason: '機務檢修',
-        handle: '安排餐點',
-      },
-      {
-        flightNo: 'JL809',
-        arrivalPort: '台北',
-        departurePort: '大阪關西',
-        gate: 'C3',
-        sta: '2026-01-02 11:20',
-        ata: '2026-01-02 11:20',
-        delay: '0',
-        status: '已到達',
-        reason: '—',
-        handle: '正常作業',
-      },
-    ],
-    actualFlight: 3,
-    actualPax: 420,
-    estFlight: 4,
-    estPax: 560,
-  };
 // #FFED97 淡黃
 // #FF8040 淡紅
   private refreshTrigger$ = new BehaviorSubject<void>(undefined);
@@ -194,6 +151,7 @@ export class DailyAbnormalFlightInfoComponent {
         }),
       )
       .subscribe((res) => {
+        res = MOCK_IRREGULAR_INBOUND;
         if (!res) return;
         this.setTableData(res);
         this.setCSVUrl();

@@ -59,13 +59,13 @@
 
   <div class="card flex flex-1 flex-col flex-shrink-0 gap-2 p-4 w-full min-h-0">
     <!-- table -->
-    <div class="flex-1 w-full min-h-0 mb-12 overflow-auto">
+    <div class="flex-1 w-full min-h-0 mb-12 overflow-auto relative">
       <div
-        class="sticky w-full min-w-[1440px] sm:min-w-none grid grid-cols-10 bg-[#00b2ee] text-lg sm:text-xl font-semibold text-center z-10"
+        class="sticky top-0 w-full min-w-[1440px] sm:min-w-none grid grid-cols-[1.5fr_1.5fr_2fr_1fr_1.5fr_1.5fr_1.5fr_1.5fr_3fr_3fr] items-center py-2 bg-[#00b2ee] text-xl sm:text-2xl xl:text-3xl font-semibold text-center z-10 [&>*]:h-fit"
       >
-        <div class="p-2">航班編號</div>
-        <div class="p-2">飛航類型</div>
-        <div class="p-2">
+        <div>航班編號</div>
+        <div>飛航類型</div>
+        <div>
           {{
             paramDirection == "all"
               ? "出發地/目的地"
@@ -74,35 +74,35 @@
                 : "目的地"
           }}
         </div>
-        <div class="p-2">登機門</div>
-        <div class="p-2">表定抵達</div>
-        <div class="p-2">實際抵達</div>
-        <div class="p-2">延誤時間</div>
-        <div class="p-2">異常狀況</div>
-        <div class="p-2">異常原因</div>
-        <div class="p-2">處理方式</div>
+        <div>登機門</div>
+        <div>表定抵達</div>
+        <div>實際抵達</div>
+        <div>延誤時間</div>
+        <div>異常狀況</div>
+        <div>異常原因</div>
+        <div>處理方式</div>
       </div>
 
-      <div class="min-w-[1440px] sm:min-w-none py-1 text-md sm:text-lg">
+      <div class="min-w-[1440px] sm:min-w-none py-1 text-xl sm:text-2xl xl:text-4xl">
         <!-- 明細 -->
         @for (row of table; let i = $index; track row) {
           <div
-            class="grid grid-cols-10 text-center hover:bg-[#494746]"
+            class="grid grid-cols-[1.5fr_1.5fr_2fr_1fr_1.5fr_1.5fr_1.5fr_1.5fr_3fr_3fr] items-center text-center hover:bg-[#494746] [&>*]:h-fit"
             [ngClass]="{ 'bg-[#333333]': i % 2 === 1, 'text-[#FFED97]' : delayStyle(row.delayTime) == '30', 'text-[#FF8040]' : delayStyle(row.delayTime) == '60' }"
           >
-            <div class="p-2">{{ row.flightNumber }}</div>
-            <div class="p-2">{{ row.direction }}</div>
-            <div class="p-2">{{ row.spot }}</div>
+            <div>{{ row.flightNumber }}</div>
+            <div>{{ row.direction }}</div>
+            <div>{{ row.spot }}</div>
             <div class="p-2 flex justify-center">
               <div
-                class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border border-[#27c4a9] rounded-xs"
+                class="flex items-center justify-center w-8 h-8 sm:w-10 xl:w-15 sm:h-10 xl:h-15 border border-[#27c4a9] rounded-xs"
               >
-                <span class="text-sm sm:text-xl">{{ row.gate }}</span>
+                <span class="text-sm sm:text-xl xl:text-3xl">{{ row.gate }}</span>
               </div>
             </div>
-            <div class="p-2">{{ row.scheduledArrival }}</div>
-            <div class="p-2">{{ row.actualArrival }}</div>
-            <div class="p-2">{{ row.delayTime }}</div>
+            <div>{{ row.scheduledArrival }}</div>
+            <div>{{ row.actualArrival }}</div>
+            <div>{{ row.delayTime }}</div>
             <div class="p-2 text-[#be985b]">{{ row.status }}</div>
             <div class="p-2 text-[#27c4a9]">{{ row.reason }}</div>
             <div class="p-2 text-[#27c4a9]">{{ row.handle }}</div>
