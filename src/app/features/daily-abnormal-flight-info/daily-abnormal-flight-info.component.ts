@@ -151,7 +151,7 @@ export class DailyAbnormalFlightInfoComponent {
         }),
       )
       .subscribe((res) => {
-        res = MOCK_IRREGULAR_INBOUND;
+        // res = MOCK_IRREGULAR_INBOUND;
         if (!res) return;
         this.setTableData(res);
         this.setCSVUrl();
