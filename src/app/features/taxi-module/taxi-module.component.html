@@ -1,4 +1,4 @@
-<div class="flex flex-col sm:flex-row gap-4 h-full">
+<div class="flex flex-col sm:flex-row gap-4 h-full -mt-8 sm:mt-0">
   <div class="flex-1 card flex flex-col p-4 sm:p-6 h-full">
     <!-- Tabs -->
     <div class="flex justify-between gap-3 sm:gap-10 mb-4 text-md sm:text-xl">
@@ -61,7 +61,7 @@
   </div>
 
   <div class="flex-2 card flex flex-col gap-4 p-4 sm:p-6">
-    <div class="flex-1 h-0">
+    <div class="flex-1 h-fit sm:h-0">
       <!-- Content -->
       @if (activeTab === "create") {
         <app-create-display></app-create-display>

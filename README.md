@@ -1,5 +1,11 @@
 ### 松山機場
 
+#### 部署指令
+```bash
+ng build -c prod --base-href /acdm/ --deploy-url /acdm/
+
+```
+
 #### 專案架構圖
 ```
 app/

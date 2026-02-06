@@ -68,13 +68,11 @@
 
         <!-- 可滾動內容 -->
         <div class="flex-1 overflow-y-auto">
-          @if (exceptionDetail?.timeLists?.length) {
-            @for (t of exceptionDetail?.timeLists; track $index) {
-              <div class="grid grid-cols-2 py-1">
-                <div>{{ t.intime | date: "yyyy/M/d HH:mm" }}</div>
-                <div>{{ t.outtime | date: "yyyy/M/d HH:mm" }}</div>
-              </div>
-            }
+          @if (exceptionDetail) {
+            <div class="grid grid-cols-2 py-1">
+              <div>{{ exceptionDetail.inTime | date: "yyyy/M/d HH:mm" }}</div>
+              <div>{{ exceptionDetail.outTime | date: "yyyy/M/d HH:mm" }}</div>
+            </div>
           } @else {
             <div class="text-gray-400">尚無進出場紀錄</div>
           }

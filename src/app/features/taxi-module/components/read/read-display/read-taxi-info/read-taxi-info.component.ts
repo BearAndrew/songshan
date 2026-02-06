@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TaxiService } from '../../../../service/taxi.service';
-import { TaxiException, TaxiInfo } from '../../../../../../models/taxi.model';
+import { TaxiEventData, TaxiInfo } from '../../../../../../models/taxi.model';
 import { TaxiDuplicateComponent } from '../../../common/taxi-duplicate/taxi-duplicate.component';
 import { ApiService } from '../../../../../../core/services/api-service.service';
 import { forkJoin, map, Subject, takeUntil } from 'rxjs';
@@ -15,7 +15,7 @@ import { forkJoin, map, Subject, takeUntil } from 'rxjs';
 export class ReadTaxiInfoComponent {
   hasSearch: boolean = false;
   taxiInfoList!: TaxiInfo[];
-  exceptionDetail: TaxiException | null = null;
+  exceptionDetail: TaxiEventData | null = null;
 
   private destroy$ = new Subject<void>();
 
@@ -31,7 +31,8 @@ export class ReadTaxiInfoComponent {
 
         const regPlate = this.taxiInfoList?.[0]?.regPlate;
         if (regPlate) {
-          this.loadExceptionData(regPlate);
+          const today = new Date().toISOString().slice(0, 10);
+          this.loadExceptionData(regPlate, '2025-01-01', today);
         }
       });
   }
@@ -41,21 +42,16 @@ export class ReadTaxiInfoComponent {
     this.destroy$.complete();
   }
 
-  private loadExceptionData(regPlate: string): void {
-    forkJoin({
-      notReg: this.apiService.getTaxiException('NOTREG'),
-      blackList: this.apiService.getTaxiException('BLACKLIST'),
-    })
-      .pipe(
-        map(({ notReg, blackList }) => {
-          const merged = [...notReg, ...blackList];
-
-          // 找出符合車牌的那一筆
-          return merged.find((item) => item.regPlate === regPlate) || null;
-        }),
-      )
-      .subscribe((result) => {
-        this.exceptionDetail = result;
+  private loadExceptionData(
+    regPlate: string,
+    dateFrom: string,
+    dateTo: string,
+  ): void {
+    this.apiService
+      .getTaxiEventData(regPlate, dateFrom, dateTo)
+      .subscribe((res) => {
+        // 沒資料就設為 null，避免畫面壞掉
+        this.exceptionDetail = res?.length ? res[0] : null;
       });
   }
 }
