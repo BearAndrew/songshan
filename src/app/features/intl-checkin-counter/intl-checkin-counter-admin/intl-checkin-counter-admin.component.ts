@@ -344,7 +344,7 @@ export class IntlCheckinCounterAdminComponent {
           : `\u00A0`;
 
       // 日期顯示
-      const date = item.applyForPeriod || `\u00A0`;
+      const date = this.parseChineseDateToYMD(item.applicationDate) || `\u00A0`;
 
       return {
         flightNo,

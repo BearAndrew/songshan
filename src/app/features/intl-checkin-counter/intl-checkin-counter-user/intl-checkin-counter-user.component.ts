@@ -204,7 +204,7 @@ export class IntlCheckinCounterUserComponent {
   searchDate: Date = new Date();
 
   /** 權限管控 */
-  agent: string = '';
+  agent: string = 'ALL';
   STATUS_COLOR_MAP = STATUS_COLOR_MAP;
 
   constructor(
@@ -265,7 +265,7 @@ export class IntlCheckinCounterUserComponent {
     this.route.queryParamMap.subscribe((params) => {
       this.isEdit = params.get('isEdit') === 'Y';
 
-      this.agent = params.get('user') || '';
+      this.agent = params.get('user') || 'ALL';
 
       const counterInfo: CounterInfo = {
         requestId: params.get('requestId') || '',
@@ -653,7 +653,7 @@ export class IntlCheckinCounterUserComponent {
     }
 
     const payload: CounterApplicationManualRequest = {
-      agent: this.agent,
+      agent: '',
       airline_iata,
       flight_no,
       season: formValue.seasonType,

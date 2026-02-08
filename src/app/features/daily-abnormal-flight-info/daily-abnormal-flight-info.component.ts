@@ -151,7 +151,6 @@ export class DailyAbnormalFlightInfoComponent {
         }),
       )
       .subscribe((res) => {
-        // res = MOCK_IRREGULAR_INBOUND;
         if (!res) return;
         this.setTableData(res);
         this.setCSVUrl();
@@ -159,6 +158,8 @@ export class DailyAbnormalFlightInfoComponent {
   }
 
   ngOnInit(): void {
+    // 假資料
+    // this.setTableData(MOCK_IRREGULAR_INBOUND);
     this.apiService.getFlightStatus().subscribe((res) => {
       this.flightStatusOptions = res
         .filter((item) => item.normal == 0)

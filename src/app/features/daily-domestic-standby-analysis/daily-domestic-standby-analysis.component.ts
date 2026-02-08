@@ -14,6 +14,7 @@ import {
   filter,
   interval,
   Observable,
+  of,
   startWith,
   Subject,
   switchMap,
@@ -132,6 +133,7 @@ export class DailyDomesticStandbyAnalysisComponent {
   }
 
   getStandbySummary(code: string): Observable<StandbySummaryItem[]> {
+    // return of(this.MOCK_STANDBY_SUMMARY);
     return this.apiService.getStandbySummary(code);
   }
 
