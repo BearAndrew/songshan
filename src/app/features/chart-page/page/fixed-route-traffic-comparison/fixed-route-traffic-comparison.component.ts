@@ -34,7 +34,7 @@ export class FixedRouteTrafficComparisonComponent extends ChartPageRootComponent
       year3: this.formData.thirdYear?.toString() || '',
       type: this.formData.flightClass || '',
       airline: this.formData.airline! || '',
-      direction: this.formData.flightType || '',
+      direction: this.formData.direction || '',
       peer: this.formData.route! || '',
       flightType: this.formData.flightType || '',
     };

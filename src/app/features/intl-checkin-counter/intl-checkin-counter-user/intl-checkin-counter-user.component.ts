@@ -204,7 +204,7 @@ export class IntlCheckinCounterUserComponent {
   searchDate: Date = new Date();
 
   /** 權限管控 */
-  agent: string = 'ALL';
+  agent: string = '';
   STATUS_COLOR_MAP = STATUS_COLOR_MAP;
 
   constructor(
@@ -265,7 +265,7 @@ export class IntlCheckinCounterUserComponent {
     this.route.queryParamMap.subscribe((params) => {
       this.isEdit = params.get('isEdit') === 'Y';
 
-      this.agent = params.get('user') || 'ALL';
+      this.agent = params.get('user') || '';
 
       const counterInfo: CounterInfo = {
         requestId: params.get('requestId') || '',

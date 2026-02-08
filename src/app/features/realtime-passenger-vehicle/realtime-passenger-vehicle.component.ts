@@ -1,3 +1,4 @@
+import { CommonService } from './../../core/services/common.service';
 import { RealTimeService } from './services/real-time.service';
 import { ApiService } from './../../core/services/api-service.service';
 import { CommonModule } from '@angular/common';
@@ -79,6 +80,7 @@ export class RealtimePassengerVehicleComponent {
     private router: Router,
     private apiService: ApiService,
     private realTimeService: RealTimeService,
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +91,11 @@ export class RealtimePassengerVehicleComponent {
     if (index !== -1) {
       this.activeIndex = index;
     }
+
+    this.commonService.getSelectedAirport().subscribe(res => {
+      console.log(res);
+    })
+
 
     // ===== 統一輪詢 =====
     this.refreshTrigger$

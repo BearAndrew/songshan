@@ -183,7 +183,7 @@ export class ApiService {
     });
   }
 
-  /** 即時人流資訊 */
+  /** 即時人流資訊，@param type: 國際、國內 */
   getRealTimeTrafficFlow(type: string): Observable<RealTimeTrafficFlowItem[]> {
     return this.http.get<RealTimeTrafficFlowItem[]>(
       `RealTimeTrafficFlow/${type}`,
