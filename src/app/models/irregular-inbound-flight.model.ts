@@ -6,6 +6,7 @@ export interface IrregularFlightItem {
   departurePort: string;
   gate: string;
   sta: string;
+  eta: string;
   ata: string;
   delay: string;
   status: string;

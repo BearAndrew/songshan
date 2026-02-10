@@ -32,6 +32,7 @@ export interface FlightTableItem {
   spot: string;
   gate: string;
   scheduledArrival: string;
+  estimateArrival: string;
   actualArrival: string;
   delayTime: string;
   status: string;
@@ -152,6 +153,7 @@ export class DailyAbnormalFlightInfoComponent {
       )
       .subscribe((res) => {
         if (!res) return;
+        // res = MOCK_IRREGULAR_INBOUND;
         this.setTableData(res);
         this.setCSVUrl();
       });
@@ -201,6 +203,7 @@ export class DailyAbnormalFlightInfoComponent {
         spot: isInbound ? item.departurePort : item.arrivalPort,
         gate: item.gate,
         scheduledArrival: item.sta,
+        estimateArrival: item.eta,
         actualArrival: item.ata,
         delayTime: item.delay,
         status: item.status,

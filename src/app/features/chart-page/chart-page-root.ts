@@ -126,6 +126,7 @@ export class ChartPageRootComponent {
   protected handleYearFlightTrafficAnalysis(
     res: YearlyTrafficAnalysisResponse[],
   ) {
+    console.log(this.firstDateRangeLabel)
     const firstYear = res.find(
       (item) => item.year === this.formData.firstYear?.toString(),
     )?.data;

@@ -61,7 +61,7 @@
     <!-- table -->
     <div class="flex-1 w-full min-h-0 mb-12 overflow-auto relative">
       <div
-        class="sticky top-0 w-full min-w-[1440px] sm:min-w-none grid grid-cols-[1.5fr_1.5fr_2fr_1fr_1.5fr_1.5fr_1.5fr_2fr_2fr_3fr] items-center py-2 bg-[#00b2ee] text-xl sm:text-2xl xl:text-3xl font-semibold text-center z-10 [&>*]:h-fit"
+        class="sticky top-0 w-full min-w-[1440px] sm:min-w-none grid grid-cols-[1.5fr_1.5fr_2fr_1fr_1.5fr_1.5fr_1.5fr_1.5fr_2fr_2fr_2.5fr] items-center py-2 bg-[#00b2ee] text-xl sm:text-2xl font-semibold text-center z-10 [&>*]:h-fit"
       >
         <div>航班編號</div>
         <div>飛航類型</div>
@@ -87,6 +87,15 @@
         <div>
           {{
             paramDirection == "all"
+              ? "預計到/離"
+              : paramDirection == "inbound"
+                ? "預計到站"
+                : "預計離站"
+          }}
+        </div>
+        <div>
+          {{
+            paramDirection == "all"
               ? "實際到/離"
               : paramDirection == "inbound"
                 ? "實際到站"
@@ -100,12 +109,12 @@
       </div>
 
       <div
-        class="min-w-[1440px] sm:min-w-none py-1 text-xl sm:text-2xl xl:text-4xl"
+        class="min-w-[1440px] sm:min-w-none py-1 text-xl sm:text-2xl xl:text-3xl"
       >
         <!-- 明細 -->
         @for (row of table; let i = $index; track row) {
           <div
-            class="grid grid-cols-[1.5fr_1.5fr_2fr_1fr_1.5fr_1.5fr_1.5fr_2fr_2fr_3fr] items-center text-center hover:bg-[#494746] [&>*]:h-fit"
+            class="grid grid-cols-[1.5fr_1.5fr_2fr_1fr_1.5fr_1.5fr_1.5fr_1.5fr_2fr_2fr_2.5fr] items-center text-center hover:bg-[#494746] [&>*]:h-fit"
             [ngClass]="{
               'bg-[#333333]': i % 2 === 1,
               'text-[#FFED97]': delayStyle(row.delayTime) == '30',
@@ -125,6 +134,7 @@
               </div>
             </div>
             <div>{{ row.scheduledArrival }}</div>
+            <div>{{ row.estimateArrival }}</div>
             <div>{{ row.actualArrival }}</div>
             <div>{{ row.delayTime }}</div>
             <div class="p-2 text-[#be985b]">{{ row.status }}</div>

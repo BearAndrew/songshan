@@ -2,6 +2,8 @@
   <app-chart-search-bar [isDate]="false" [isSchedule]="true" (submit)="onSubmit($event)"></app-chart-search-bar>
   <app-bar-line-page
     class="flex-1"
+    [isShowCompare]="false"
+    [isDate]="false"
     [barData]="barData"
     [lineData]="lineData"
     [isNoData]="isNoData"
