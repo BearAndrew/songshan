@@ -50,10 +50,10 @@ export class CreateFormComponent {
     }
 
     const payload: TaxiInfo = {
-      regPlate: this.form.value.regPlate,
-      driverNo: this.form.value.driverNo,
-      driverName: this.form.value.driverName,
-      driverPhone: this.form.value.driverPhone,
+      regPlate: this.form.value.regPlate?.trim() || '',
+      driverNo: this.form.value.driverNo?.trim() || '',
+      driverName: this.form.value.driverName?.trim() || '',
+      driverPhone: this.form.value.driverPhone?.trim() || '',
       remark: '',
       status: '',
     };

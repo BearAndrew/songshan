@@ -135,12 +135,15 @@ export class UpdateFormComponent {
 
         this.options = [];
         if (taxiInfo?.violationType.includes('BLACKLIST')) {
-          this.options.push({ label: '更新黑名單', value: '3' });
+          this.options.push({ label: '更新停權名單', value: '3' });
+          this.options.push({ label: '取消停權名單', value: '0' });
+          this.options.push({ label: '加入黑名單', value: '2' });
         }
         if (taxiInfo?.violationType.includes('GREYLIST')) {
-          this.options.push({ label: '更新灰名單', value: '4' });
+          this.options.push({ label: '更新黑名單', value: '4' });
+          this.options.push({ label: '取消黑名單', value: '0' });
+          this.options.push({ label: '加入停權名單', value: '1' });
         }
-        this.options.push({ label: '變更為無違規紀錄', value: '0' });
         this.modifyContentOption = this.options[0];
 
         this.dateStart = parseTwDateTime(taxiInfo?.dateFrom);
@@ -158,8 +161,8 @@ export class UpdateFormComponent {
       });
     } else {
       this.options = [
-        { label: '加入黑名單', value: '1' },
-        { label: '加入灰名單', value: '2' },
+        { label: '加入停權名單', value: '1' },
+        { label: '加入黑名單', value: '2' },
       ];
       this.modifyContentOption = this.options[0];
       this.dateStart = null;
@@ -316,7 +319,7 @@ export class UpdateFormComponent {
         this.commonService
           .openDialog({
             title: 'Excel 匯入失敗',
-            message:  err.error,
+            message: err.error,
             confirmText: '確定',
             cancelText: '',
           })

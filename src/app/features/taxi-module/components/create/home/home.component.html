@@ -5,7 +5,9 @@
   </h1>
 
   <!-- Grid：高度撐滿 -->
-  <div class="flex-1 h-fit sm:h-0 grid grid-cols-1 sm:grid-cols-4 grid-rows-4 gap-2 sm:gap-1">
+  <div
+    class="flex-1 h-fit sm:h-0 grid grid-cols-1 sm:grid-cols-4 grid-rows-4 gap-2 sm:gap-1"
+  >
     <!-- Card -->
     @for (taxi of taxis; track taxi) {
       <div
@@ -22,11 +24,19 @@
         <!-- 右側：區域（relative） -->
         <div
           class="relative flex items-end w-[120px] h-fit rounded-full"
-          [ngClass]="taxi.violation =='NOTREG' ? 'bg-[#f5a830]' : ' bg-[#01a7e7]'"
+          [ngClass]="
+            taxi.violation === 'NOTREG'
+              ? 'bg-[#D0D0D0] !text-black'
+              : taxi.violation === 'BLACKLIST'
+                ? 'bg-[#FF5151]'
+                : taxi.violation === 'GREYLIST'
+                  ? 'bg-[#FFED97] !text-black'
+                  : 'bg-[#01A7E7]'
+          "
         >
           <!-- 區域 -->
           <span
-            class="flex items-center w-4/5 h-10 px-3 py-1 text-md text-white leading-none overflow-hidden line-clamp-2"
+            class="flex items-center w-4/5 h-10 px-3 py-1 text-md leading-none overflow-hidden line-clamp-2"
           >
             {{ taxi.location }}
           </span>
@@ -36,8 +46,8 @@
             <span
               class="absolute -top-6 -right-2 w-10 h-10 flex items-center justify-center rounded-full bg-white border-2 border-orange-400"
             >
-              <span class="text-xs text-black font-bold">
-                {{ taxi.violation == 'BLACKLIST' ? '黑名單' : '灰名單'}}
+              <span class="text-[9px] text-black font-bold">
+                {{ taxi.violation == "BLACKLIST" ? "停權名單" : "黑名單" }}
               </span>
             </span>
           }

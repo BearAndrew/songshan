@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
 export class TaxiAbnormalComponent {
   /** 未註冊車牌 */
   notReg: TaxiException[] = [];
-  /** 黑名單 */
+  /** 停權名單 */
   blackList: TaxiException[] = [];
 
   private destroy$ = new Subject<void>();

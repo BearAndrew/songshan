@@ -18,6 +18,7 @@ export class CreateHomeComponent implements OnInit {
     this.apiService.getCurrentTaxi().subscribe((res: CurrentTaxi[]) => {
       // 最多只取前 16 筆
       this.taxis = res.slice(0, 16).map((taxi) => ({
+        eventid: taxi.eventid || '\u00A0',
         regPlate: taxi.regPlate || '\u00A0',
         driverName: taxi.driverName || '\u00A0',
         violation: taxi.violation || '\u00A0',
@@ -28,6 +29,7 @@ export class CreateHomeComponent implements OnInit {
 
       // // 產生假資料（16 筆）
       // const mockRes = Array.from({ length: 16 }, (_, i) => ({
+      //   eventid: i.toString(),
       //   regPlate: `ABC-${1000 + i}`,
       //   driverName: `司機${i + 1}`,
       //   violation:
@@ -48,6 +50,7 @@ export class CreateHomeComponent implements OnInit {
 
       // // 最多只取前 16 筆
       // this.taxis = mockRes.slice(0, 16).map((taxi) => ({
+      //   eventid: taxi.eventid || '\u00A0',
       //   regPlate: taxi.regPlate || '\u00A0',
       //   driverName: taxi.driverName || '\u00A0',
       //   violation: taxi.violation || '\u00A0',

@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
-import { TaxiEventData, TaxiViolation } from '../../../../../../models/taxi.model';
+import {
+  TaxiEventData,
+  TaxiViolation,
+} from '../../../../../../models/taxi.model';
 import { TaxiService } from '../../../../service/taxi.service';
 import { MOCKDATA } from './fake-data';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../../../../environments/environment';
 
 @Component({
   selector: 'app-read-daily-taxi',
@@ -12,6 +16,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ReadDailyTaxiComponent {
   dailyDataWithViolation: TaxiEventData[] = [];
+  baseUrl = environment.apiBaseUrl + '/Taxi/CurrentTaxiPhotoById/';
 
   constructor(private taxiService: TaxiService) {
     this.taxiService.dailySubject$.subscribe((res) => {

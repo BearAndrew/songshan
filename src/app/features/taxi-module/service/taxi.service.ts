@@ -46,11 +46,11 @@ export class TaxiService {
     this.updateSubject.next(updateData);
   }
 
-  // 黑灰名單 Subject
+  // 黑黑名單 Subject
   private blackListSubject = new Subject<TaxiViolation[]>();
   // 暴露 Observable 給其他元件訂閱
   blackListSubject$ = this.blackListSubject.asObservable();
-  // 發送查詢黑灰名單事件
+  // 發送查詢黑黑名單事件
   afterSearchViolationList(blackList: TaxiViolation[]) {
     this.blackListSubject.next(blackList);
   }
@@ -77,7 +77,7 @@ export class TaxiService {
   private deleteSubject = new Subject<string>();
   // 暴露 Observable 給其他元件訂閱
   deleteSubject$ = this.deleteSubject.asObservable();
-  // 發送查詢黑灰名單事件
+  // 發送查詢黑黑名單事件
   afterDelete() {
     this.deleteSubject.next('');
   }

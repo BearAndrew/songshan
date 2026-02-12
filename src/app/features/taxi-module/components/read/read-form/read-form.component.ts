@@ -32,8 +32,8 @@ export class ReadFormComponent {
 
   options: Option[] = [
     { label: '計程車資訊查詢', value: '0' },
-    { label: '黑名單清單', value: '1' },
-    { label: '灰名單清單', value: '2' },
+    { label: '停權名單清單', value: '1' },
+    { label: '黑名單清單', value: '2' },
     { label: '出勤前六名', value: '3' },
     { label: '每日計程車資訊', value: '4' },
   ];
@@ -104,7 +104,7 @@ export class ReadFormComponent {
     // this.taxiService.afterSearchTaxi(searchTaxiData);
     // return;
 
-    this.apiService.searchTaxi(this.form.value.regPlate).subscribe((res) => {
+    this.apiService.searchTaxi(this.form.value.regPlate.trim() || '').subscribe((res) => {
       const searchTaxiData: SearchTaxiData = {
         searchRegPlate: this.form.value.regPlate,
         taxiInfoList: res.map((item) => ({

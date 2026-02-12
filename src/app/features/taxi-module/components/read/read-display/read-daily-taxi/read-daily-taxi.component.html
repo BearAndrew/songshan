@@ -1,4 +1,4 @@
-<!-- 灰名單 -->
+<!-- 黑名單 -->
 <div class="flex flex-col gap-4 w-full">
   <h2 class="text-xl sm:text-3xl text-[#f5a830] font-semibold">
     每日計程車資訊
@@ -31,8 +31,16 @@
           <div>{{ item.regPlate }}</div>
           <div>{{ item.inTime | date: "yyyy-MM-dd HH:mm" }}</div>
           <div>{{ item.outTime | date: "yyyy-MM-dd HH:mm" }}</div>
-          <div class="flex items-center justify-center h-30">
-            <img class="object-contain" [src]="item.image">
+          <div class="flex items-center gap-2">
+            <div class="flex flex-1 items-center justify-center h-30">
+              <img class="object-contain" [src]="item.image" />
+            </div>
+            <a
+              class="px-3 py-0.5 bg-[#01a7e7] rounded cursor-pointer hover:bg-[#029cd8]"
+              [href]="baseUrl + item.eventid"
+            >
+              下載
+          </a>
           </div>
         </div>
       }

@@ -392,19 +392,19 @@ export class ApiService {
     return this.http.post<any>('Taxi/import', formData);
   }
 
-  /** 計程車黑/灰名單全部列表
+  /** 計程車黑/黑名單全部列表
    * violationType = BLACKLIST | GREYLIST | ALL
    */
   getTaxiViolationAll(violationType: string): Observable<TaxiViolation[]> {
     return this.http.get<TaxiViolation[]>(`TaxiViolationAll/${violationType}`);
   }
 
-  /** 取得單筆黑/灰名單記錄 */
+  /** 取得單筆黑/黑名單記錄 */
   getTaxiViolation(rid: number): Observable<TaxiViolation> {
     return this.http.get<TaxiViolation>(`TaxiViolation/${rid}`);
   }
 
-  /** 更新黑/灰名單記錄 */
+  /** 更新黑/黑名單記錄 */
   updateTaxiViolation(
     rid: number,
     payload: TaxiViolation,
@@ -412,17 +412,17 @@ export class ApiService {
     return this.http.put<TaxiViolation>(`TaxiViolation/${rid}`, payload);
   }
 
-  /** 刪除黑/灰名單記錄 */
+  /** 刪除黑/黑名單記錄 */
   deleteTaxiViolation(rid: number): Observable<void> {
     return this.http.delete<void>(`TaxiViolation/${rid}`);
   }
 
-  /** 某一台計程車黑/灰名單記錄 */
+  /** 某一台計程車黑/黑名單記錄 */
   // getTaxiViolationByPlate(plate: string): Observable<TaxiViolation[]> {
   //   return this.http.get<TaxiViolation[]>(`TaxiViolation/filter/${plate}`);
   // }
 
-  /** 新增黑/灰名單記錄 */
+  /** 新增黑/黑名單記錄 */
   postTaxiViolation(payload: TaxiViolation): Observable<TaxiViolation> {
     return this.http.post<TaxiViolation>('TaxiViolation', payload);
   }

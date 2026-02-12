@@ -56,9 +56,9 @@
       />
 
       @if (modifyContentOption.value != "0") {
-        <!-- 停權期間（起） -->
+        <!-- 期間（起） -->
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]">
-          停權期間
+          期間
         </label>
         <app-calendar-trigger
           [selectedDate]="dateStart"
@@ -70,7 +70,7 @@
 
         <div></div>
 
-        <!-- 停權期間（迄） -->
+        <!-- 期間（迄） -->
         <app-calendar-trigger
           [selectedDate]="dateEnd"
           [isAllDay]="true"

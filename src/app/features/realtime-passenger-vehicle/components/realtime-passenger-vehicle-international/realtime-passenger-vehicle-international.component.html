@@ -2,27 +2,27 @@
   <div class="flex flex-col p-4 gap-4 sm:gap-0 h-full bg-[#1e293a]">
     <h3 class="text-xl text-[#04cdda] leading-none">報到櫃檯</h3>
     <div class="flex-1 grid grid-cols-[1.5fr_1fr] gap-2">
-      @for(checkin of checkinData; track checkin) {
-      <ng-container>
-        <div class="flex items-end justify-between border-b border-[#888]">
-          <button
-            class="flex items-center justify-center mb-2 w-18 h-10 text-4xl border-2 border-[#298ce1] rounded-xl cursor-pointer"
-            (click)="onItemClick(0, $index)"
-          >
-            {{ checkin.label }}
-          </button>
-          <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
-            <span class="text-right text-5xl">{{ checkin.people }}</span>
-            <span class="text-center text-xl">人</span>
+      @for (checkin of checkinData; track checkin) {
+        <ng-container>
+          <div class="flex items-end justify-between border-b border-[#888]">
+            <button
+              class="flex items-center justify-center mb-2 w-18 h-10 text-4xl border-2 border-[#298ce1] rounded-xl cursor-pointer"
+              (click)="onItemClick(0, $index)"
+            >
+              {{ checkin.label }}
+            </button>
+            <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
+              <span class="text-right text-5xl">{{ checkin.people }}</span>
+              <span class="text-center text-xl">人</span>
+            </div>
           </div>
-        </div>
-        <div
-          class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
-        >
-          <span class="text-right text-5xl">{{ checkin.time }}</span>
-          <span class="text-center text-xl">min</span>
-        </div>
-      </ng-container>
+          <div
+            class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
+          >
+            <span class="text-right text-5xl">{{ checkin.time }}</span>
+            <span class="text-center text-xl">min</span>
+          </div>
+        </ng-container>
       }
     </div>
     <div class="mt-2 grid grid-cols-[1.5fr_1fr] items-end gap-2 w-full">
@@ -40,27 +40,27 @@
     <div class="flex flex-col flex-1 p-4 gap-4 sm:gap-0 bg-[#1e293a]">
       <h3 class="text-xl text-[#04cdda] leading-none">安檢</h3>
       <div class="flex-1 grid grid-cols-[1.5fr_1fr] gap-2">
-        @for(security of securityData; track security) {
-        <ng-container>
-          <div class="flex items-end justify-between border-b border-[#888]">
-            <button
-              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
-              (click)="onItemClick(1, $index)"
-            >
-              {{ security.label }}
-            </button>
-            <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
-              <span class="text-right text-5xl">{{ security.people }}</span>
-              <span class="text-center text-xl">人</span>
+        @for (security of securityData; track security) {
+          <ng-container>
+            <div class="flex items-end justify-between border-b border-[#888]">
+              <button
+                class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
+                (click)="onItemClick(1, $index)"
+              >
+                {{ security.label }}
+              </button>
+              <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
+                <span class="text-right text-5xl">{{ security.people }}</span>
+                <span class="text-center text-xl">人</span>
+              </div>
             </div>
-          </div>
-          <div
-            class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
-          >
-            <span class="text-right text-5xl">{{ security.time }}</span>
-            <span class="text-center text-xl">min</span>
-          </div>
-        </ng-container>
+            <div
+              class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
+            >
+              <span class="text-right text-5xl">{{ security.time }}</span>
+              <span class="text-center text-xl">min</span>
+            </div>
+          </ng-container>
         }
       </div>
     </div>
@@ -68,21 +68,27 @@
     <div class="flex-shrink-0 p-4 bg-[#1e293a]">
       <h3 class="text-xl text-[#04cdda] leading-none mb-3">海關</h3>
       <div class="flex-1 grid grid-cols-[1.5fr_1fr] gap-2">
-        @for(customs of customsData; track customs) {
-        <ng-container>
-          <div class="flex items-end justify-between border-b border-[#888]">
-            <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
-              <span class="text-right text-5xl">{{ customs.people }}</span>
-              <span class="text-center text-xl">人</span>
+        @for (customs of customsData; track customs) {
+          <ng-container>
+            <div class="flex items-end justify-between border-b border-[#888]">
+              <button
+                class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
+                (click)="onItemClick(2, $index)"
+              >
+                海關
+              </button>
+              <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
+                <span class="text-right text-5xl">{{ customs.people }}</span>
+                <span class="text-center text-xl">人</span>
+              </div>
             </div>
-          </div>
-          <div
-            class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
-          >
-            <span class="text-right text-5xl">{{ customs.time }}</span>
-            <span class="text-center text-xl">min</span>
-          </div>
-        </ng-container>
+            <div
+              class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
+            >
+              <span class="text-right text-5xl">{{ customs.time }}</span>
+              <span class="text-center text-xl">min</span>
+            </div>
+          </ng-container>
         }
       </div>
       <div class="mt-2 grid grid-cols-[1.5fr_1fr] items-end gap-2 w-full">
@@ -101,54 +107,54 @@
     <div class="flex flex-col flex-1 gap-4 sm:gap-0 p-4 bg-[#1e293a]">
       <h3 class="text-xl text-[#04cdda] leading-none">出境查驗</h3>
       <div class="flex-1 grid grid-cols-[1.5fr_1fr] gap-2">
-        @for(departure of departureData; track departure) {
-        <ng-container>
-          <div class="flex items-end justify-between border-b border-[#888]">
-            <button
-              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
-              (click)="onItemClick(3, $index)"
-            >
-              {{ departure.label }}
-            </button>
-            <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
-              <span class="text-right text-5xl">{{ departure.people }}</span>
-              <span class="text-center text-xl">人</span>
+        @for (departure of departureData; track departure) {
+          <ng-container>
+            <div class="flex items-end justify-between border-b border-[#888]">
+              <button
+                class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
+                (click)="onItemClick(3, $index)"
+              >
+                {{ departure.label }}
+              </button>
+              <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
+                <span class="text-right text-5xl">{{ departure.people }}</span>
+                <span class="text-center text-xl">人</span>
+              </div>
             </div>
-          </div>
-          <div
-            class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
-          >
-            <span class="text-right text-5xl">{{ departure.time }}</span>
-            <span class="text-center text-xl">min</span>
-          </div>
-        </ng-container>
+            <div
+              class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
+            >
+              <span class="text-right text-5xl">{{ departure.time }}</span>
+              <span class="text-center text-xl">min</span>
+            </div>
+          </ng-container>
         }
       </div>
     </div>
     <div class="flex flex-col flex-1 gap-4 sm:gap-0 p-4 bg-[#1e293a]">
       <h3 class="text-xl text-[#04cdda] leading-none">入境查驗</h3>
       <div class="flex-1 grid grid-cols-[1.5fr_1fr] gap-2">
-        @for(arrival of arrivalData; track arrival) {
-        <ng-container>
-          <div class="flex items-end justify-between border-b border-[#888]">
-            <button
-              class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
-              (click)="onItemClick(4, $index)"
-            >
-              {{ arrival.label }}
-            </button>
-            <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
-              <span class="text-right text-5xl">{{ arrival.people }}</span>
-              <span class="text-center text-xl">人</span>
+        @for (arrival of arrivalData; track arrival) {
+          <ng-container>
+            <div class="flex items-end justify-between border-b border-[#888]">
+              <button
+                class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
+                (click)="onItemClick(4, $index)"
+              >
+                {{ arrival.label }}
+              </button>
+              <div class="grid grid-cols-[auto_4rem] items-end gap-4 w-full">
+                <span class="text-right text-5xl">{{ arrival.people }}</span>
+                <span class="text-center text-xl">人</span>
+              </div>
             </div>
-          </div>
-          <div
-            class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
-          >
-            <span class="text-right text-5xl">{{ arrival.time }}</span>
-            <span class="text-center text-xl">min</span>
-          </div>
-        </ng-container>
+            <div
+              class="grid grid-cols-[1.5fr_1fr] items-end gap-4 border-b border-[#888]"
+            >
+              <span class="text-right text-5xl">{{ arrival.time }}</span>
+              <span class="text-center text-xl">min</span>
+            </div>
+          </ng-container>
         }
       </div>
       <div class="mt-2 grid grid-cols-[1.5fr_1fr] items-end gap-2 w-full">

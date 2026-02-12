@@ -81,6 +81,7 @@ export interface TaxiStat {
 
 
 export interface TaxiEventData {
+  eventid: string;
   regPlate: string;
   driverName: string;
   inTime: string;   // ISO string
@@ -91,9 +92,10 @@ export interface TaxiEventData {
 
 
 export interface CurrentTaxi {
+  eventid: string;       // id
   regPlate: string;      // 車牌
   driverName: string;    // 司機姓名
-  violation: string;     // 違規狀態（黑名單 / 灰名單 / 空字串）
+  violation: string;     // 違規狀態（停權名單 / 黑名單 / 空字串）
   inTime: string;        // 進場時間（ISO string）
   location: string;     // 區域
   image: string;        // 圖片 URL / base64

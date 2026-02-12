@@ -50,6 +50,21 @@
         <span>{{ taxiInfoList[0].driverPhone }}</span>
       </div>
 
+      <div class="flex sm:flex-col items-center justify-around h-20">
+        <button
+          class="px-3 py-0.5 bg-[#01a7e7] rounded cursor-pointer hover:bg-[#029cd8]"
+          (click)="onEdit()"
+        >
+          編輯
+        </button>
+        <button
+          class="px-3 py-0.5 bg-red-400 rounded cursor-pointer hover:bg-[#ff4f54]"
+          (click)="onDelete()"
+        >
+          刪除
+        </button>
+      </div>
+
       <!-- 右：單一車號進出場時間 -->
       <div class="flex-3 border-l pl-6 py-4 flex flex-col">
         <h3

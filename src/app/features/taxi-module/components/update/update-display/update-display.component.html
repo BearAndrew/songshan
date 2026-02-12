@@ -84,11 +84,11 @@
           disabled
         />
 
-        <!-- 黑名單顯示 -->
+        <!-- 停權名單顯示 -->
         @if(taxiInfoList[0].status?.includes('BLACKLIST') ||
         taxiInfoList[0].status?.includes('GREYLIST')) {
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-          >停權期間</label
+          >期間</label
         >
         <input
           type="text"
@@ -154,7 +154,7 @@
         @if(afterTaxiInfo?.status?.includes('BLACKLIST') ||
         afterTaxiInfo?.status?.includes('GREYLIST')) {
         <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
-          >停權期間</label
+          >期間</label
         >
         <input
           type="text"

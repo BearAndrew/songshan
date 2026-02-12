@@ -33,8 +33,8 @@ export class UpdateDisplayComponent {
     if (status == null) return '';
 
     const map = [
-      { key: 'BLACKLIST', label: '黑名單' },
-      { key: 'GREYLIST', label: '灰名單' },
+      { key: 'BLACKLIST', label: '停權名單' },
+      { key: 'GREYLIST', label: '黑名單' },
     ];
 
     return map.find((m) => status.includes(m.key))?.label ?? '無違規';
