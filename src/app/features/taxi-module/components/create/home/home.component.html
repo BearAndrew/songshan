@@ -21,7 +21,8 @@
 
         <!-- 右側：區域（relative） -->
         <div
-          class="relative flex items-end w-[120px] h-fit rounded-full bg-[#01a7e7]"
+          class="relative flex items-end w-[120px] h-fit rounded-full"
+          [ngClass]="taxi.violation =='NOTREG' ? 'bg-[#f5a830]' : ' bg-[#01a7e7]'"
         >
           <!-- 區域 -->
           <span

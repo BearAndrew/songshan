@@ -13,6 +13,8 @@ export class BarLinePageComponent {
   @Input() barData: DataSetWithDataArray[] = [];
   @Input() lineData: DataSetWithDataArray[] = [];
   @Input() isNoData: boolean = false;
+  /** 是否為準點率，因為準點率後來追加規則，line&bar 資料數量會不同 */
+  @Input() isOntime: boolean = false;
   /** 是否為顯示日期，反之顯示年份，預設為true */
   @Input() isDate = true;
   /** 是否顯示比較資料(2019年)，預設為true */

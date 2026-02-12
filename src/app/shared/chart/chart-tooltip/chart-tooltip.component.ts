@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './chart-tooltip.component.scss',
 })
 export class ChartTooltipComponent {
-  items!: { label: string; value: string | number; color: string }[];
+  items!: { label: string; value: string | number; color: string, type: string}[];
   unitText: string = '';
 }

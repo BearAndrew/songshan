@@ -8,7 +8,19 @@ import { TodayPredict } from '../../models/today-predict.model';
 import { ForecastInput } from '../../models/forcast-input.model';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { Option } from '../../shared/components/dropdown/dropdown.component';
-import { distinctUntilChanged, filter, interval, Observable, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  catchError,
+  distinctUntilChanged,
+  EMPTY,
+  filter,
+  interval,
+  Observable,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-daily-fixed-route-operations-forecast',
@@ -118,19 +130,22 @@ export class DailyFixedRouteOperationsForecastComponent {
     private apiService: ApiService,
     private commonService: CommonService,
   ) {
-    // 依選擇的機場，每 30 秒重新呼叫
     this.commonService
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        filter((airportId) => airportId !== ''),
-        distinctUntilChanged(),
+        filter(Boolean),
+        distinctUntilChanged((a, b) => String(a) === String(b)),
         switchMap(() =>
           interval(30000).pipe(
-            takeUntil(this.destroy$),
             startWith(0),
-            switchMap(
-              () => this.getTodayPredictByCode(),
+            switchMap(() =>
+              this.getTodayPredictByCode().pipe(
+                catchError((err) => {
+                  console.error('[TodayPredict] auto refresh error', err);
+                  return EMPTY;
+                }),
+              ),
             ),
           ),
         ),

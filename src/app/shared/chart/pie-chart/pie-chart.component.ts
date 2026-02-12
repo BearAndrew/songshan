@@ -131,6 +131,7 @@ export class PieChartComponent {
         label: this.data[res.keyIndex].label,
         value: this.data[res.keyIndex].data.value ?? 0,
         color: this.data[res.keyIndex].colors?.[0] ?? '#999',
+        type: 'line'
       },
     ];
   }

@@ -2,7 +2,19 @@ import { Component } from '@angular/core';
 import { CommonService } from '../../../../../core/services/common.service';
 import { ApiService } from '../../../../../core/services/api-service.service';
 import { TaxiException } from '../../../../../models/taxi.model';
-import { interval, startWith, Subject, take, takeUntil } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  forkJoin,
+  interval,
+  Observable,
+  startWith,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { TaxiExceptionDialogComponent } from '../../create/components/taxi-exception-dialog/taxi-exception-dialog.component';
 import { CommonModule } from '@angular/common';
 
@@ -26,13 +38,20 @@ export class TaxiAbnormalComponent {
   ) {}
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    interval(100000)
-      .pipe(startWith(0), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.loadExceptionData();
-      });
+    interval(10000)
+      .pipe(
+        startWith(0),
+        takeUntil(this.destroy$),
+        switchMap(() =>
+          this.loadExceptionData().pipe(
+            catchError((err) => {
+              console.error('[TaxiException] polling error', err);
+              return EMPTY;
+            }),
+          ),
+        ),
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -40,14 +59,16 @@ export class TaxiAbnormalComponent {
     this.destroy$.complete();
   }
 
-  private loadExceptionData(): void {
-    this.apiService
-      .getTaxiException('NOTREG')
-      .subscribe((res) => (this.notReg = res));
-
-    this.apiService
-      .getTaxiException('BLACKLIST')
-      .subscribe((res) => (this.blackList = res));
+  private loadExceptionData(): Observable<any> {
+    return forkJoin({
+      notReg: this.apiService.getTaxiException('NOTREG'),
+      blackList: this.apiService.getTaxiException('BLACKLIST'),
+    }).pipe(
+      tap(({ notReg, blackList }) => {
+        this.notReg = notReg;
+        this.blackList = blackList;
+      }),
+    );
   }
 
   openDialog(isNotReg: boolean) {

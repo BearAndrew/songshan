@@ -61,8 +61,8 @@ export class ChartSearchBarComponent {
   endMonthOptions: Option[] = [];
 
   // 航點、航班類別、航空公司、飛航類型 options
-  routeOptions: Option[] = [];
-  airlineOptions: Option[] = [];
+  routeOptions: Option[] = [{ label: '全部', value: '' }];
+  airlineOptions: Option[] = [{ label: '全部', value: '' }];
   flightClassOptions: Option[] = [
     { label: '全部', value: '' },
     { label: '定航', value: 'SCHEDULE' },

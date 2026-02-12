@@ -9,6 +9,7 @@ import {
   StandbySummaryItem,
 } from '../../models/standby.model';
 import {
+  catchError,
   distinctUntilChanged,
   EMPTY,
   filter,
@@ -112,17 +113,24 @@ export class DailyDomesticStandbyAnalysisComponent {
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        filter((airportId) => airportId !== ''),
-        distinctUntilChanged(),
+        filter(Boolean),
+        distinctUntilChanged((a, b) => String(a) === String(b)),
         switchMap((airportId) =>
           interval(30000).pipe(
-            takeUntil(this.destroy$),
             startWith(0),
-            switchMap(() => this.getStandbySummary(airportId)),
+            switchMap(() =>
+              this.getStandbySummary(airportId).pipe(
+                catchError((err) => {
+                  console.error('[StandbySummary] auto refresh error', err);
+                  return EMPTY;
+                }),
+              ),
+            ),
           ),
         ),
       )
       .subscribe((res) => {
+        if (!res) return;
         this.setTableData(res);
       });
   }

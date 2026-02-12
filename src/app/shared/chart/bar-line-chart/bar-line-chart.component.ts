@@ -22,6 +22,8 @@ export class BarLineChartComponent {
   @Input() lineData: DataSetWithDataArray[] = [];
   @Input() flexDirection: 'v' | 'h' = 'v';
   @Input() showLegend: boolean = true;
+  /** 是否交叉排列，反之順序排列 */
+  @Input() isInterleaved: boolean = true;
 
   id: string;
   private barLineChart!: BarLineChart;
@@ -100,7 +102,7 @@ export class BarLineChartComponent {
 
     const positionStrategy = this.createTooltipPosition(
       res.element,
-      isRightSide
+      isRightSide,
     );
 
     this.overlayRef = this.overlay.create({
@@ -136,20 +138,41 @@ export class BarLineChartComponent {
       label: string;
       value: string | number;
       color: string;
+      type: 'bar' | 'line';
     }[] = [];
 
-    for (let i = 0; i < this.barData.length; i++) {
-      items.push({
-        label: this.barData[i].label,
-        value: this.barData[i].data[keyIndex]?.value ?? 0,
-        color: this.barData[i].colors?.[0] ?? ''
-      });
-
-      items.push({
-        label: this.lineData[i].label,
-        value: this.lineData[i].data[keyIndex]?.value ?? 0,
-        color: this.lineData[i].colors?.[0] ?? ''
-      });
+    if (this.isInterleaved) {
+      for (let i = 0; i < this.barData.length; i++) {
+        items.push({
+          label: this.lineData[i].label,
+          value: this.lineData[i].data[keyIndex]?.value ?? 0,
+          color: this.lineData[i].colors?.[0] ?? '',
+          type: 'line',
+        });
+        items.push({
+          label: this.barData[i].label,
+          value: this.barData[i].data[keyIndex]?.value ?? 0,
+          color: this.barData[i].colors?.[0] ?? '',
+          type: 'bar',
+        });
+      }
+    } else {
+      for (let i = 0; i < this.lineData.length; i++) {
+        items.push({
+          label: this.lineData[i].label,
+          value: this.lineData[i].data[keyIndex]?.value ?? 0,
+          color: this.lineData[i].colors?.[0] ?? '',
+          type: 'line',
+        });
+      }
+      for (let i = 0; i < this.barData.length; i++) {
+        items.push({
+          label: this.barData[i].label,
+          value: this.barData[i].data[keyIndex]?.value ?? 0,
+          color: this.barData[i].colors?.[0] ?? '',
+          type: 'bar',
+        });
+      }
     }
 
     return items;

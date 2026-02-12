@@ -14,7 +14,7 @@
       <span>未註冊車牌</span>
       @if (notReg.length > 0) {
         <div
-          class="absolute -top-5 -right-6 px-2 py-0.5 bg-red-500 text-white rounded-full"
+          class="absolute -top-5 -right-6 px-2 py-0.5 bg-red-500 text-white rounded-full min-w-10"
         >
           {{ notReg.length }}
         </div>
@@ -33,7 +33,7 @@
       <span>黑名單</span>
       @if (blackList.length > 0) {
         <div
-          class="absolute -top-5 -right-6 px-2 py-0.5 bg-red-500 text-white rounded-full"
+          class="absolute -top-5 -right-6 px-2 py-0.5 bg-red-500 text-white rounded-full min-w-10"
         >
           {{ blackList.length }}
         </div>

@@ -16,6 +16,7 @@ import { DropdownComponent } from '../../shared/components/dropdown/dropdown.com
 import { Option } from '../../shared/components/dropdown/dropdown.component';
 import {
   BehaviorSubject,
+  catchError,
   EMPTY,
   interval,
   Observable,
@@ -436,6 +437,10 @@ export class TrafficForecastComponent {
           this.twoDayFlight = res.twoDayFlight;
           this.tomorrowPax = res.tomorrowPax;
           this.twoDayPax = res.twoDayPax;
+        }),
+        catchError((err) => {
+          console.error('[FlightTrafficPredict] error', err);
+          return EMPTY;
         }),
       );
   }

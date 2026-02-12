@@ -11,6 +11,7 @@ import { Option } from '../../shared/components/dropdown/dropdown.component';
 import { environment } from '../../../environments/environment';
 import {
   BehaviorSubject,
+  catchError,
   distinctUntilChanged,
   EMPTY,
   filter,
@@ -124,8 +125,8 @@ export class DailyAbnormalFlightInfoComponent {
   /** Get 請求用的參數：飛航類型 */
   paramDirection = 'all';
 
-// #FFED97 淡黃
-// #FF8040 淡紅
+  // #FFED97 淡黃
+  // #FF8040 淡紅
   private refreshTrigger$ = new BehaviorSubject<void>(undefined);
   private destroy$ = new Subject<void>();
 
@@ -137,23 +138,28 @@ export class DailyAbnormalFlightInfoComponent {
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        filter((airportId) => airportId !== ''),
+        filter(Boolean),
         distinctUntilChanged(),
         switchMap((airportId) => {
           this.airportCode = airportId;
-          this.airportName = this.commonService.getSelectedAirportName(
-            this.airportCode,
-          );
-          // interval 30 秒 + 手動刷新 trigger
+          this.airportName =
+            this.commonService.getSelectedAirportName(airportId);
+
           return merge(this.refreshTrigger$, interval(30000)).pipe(
-            switchMap(() => this.getIrregularInboundFlight()),
-            startWith(null), // 這裡只放一次，觸發立即呼叫
+            startWith(0),
+            switchMap(() =>
+              this.getIrregularInboundFlight().pipe(
+                catchError((err) => {
+                  console.error('auto refresh error', err);
+                  return EMPTY;
+                }),
+              ),
+            ),
           );
         }),
       )
       .subscribe((res) => {
         if (!res) return;
-        // res = MOCK_IRREGULAR_INBOUND;
         this.setTableData(res);
         this.setCSVUrl();
       });

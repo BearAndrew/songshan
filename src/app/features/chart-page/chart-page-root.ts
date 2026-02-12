@@ -44,7 +44,10 @@ export class ChartPageRootComponent {
   }
 
   /** 日期比較使用 */
-  protected handleFlightTrafficAnalysis(res: FlightTrafficAnalysisResponse, isShowCompare = true) {
+  protected handleFlightTrafficAnalysis(
+    res: FlightTrafficAnalysisResponse,
+    isShowCompare = true,
+  ) {
     const query = res?.queryData;
     const compare = res?.compareData;
     const queryStat = Array.isArray(query?.stat) ? query.stat : [];
@@ -126,7 +129,7 @@ export class ChartPageRootComponent {
   protected handleYearFlightTrafficAnalysis(
     res: YearlyTrafficAnalysisResponse[],
   ) {
-    console.log(this.firstDateRangeLabel)
+    console.log(this.firstDateRangeLabel);
     const firstYear = res.find(
       (item) => item.year === this.formData.firstYear?.toString(),
     )?.data;
@@ -289,7 +292,16 @@ export class ChartPageRootComponent {
 
     if (queryStat.length > 0) {
       lineSeries.push({
-        label: `${this.dateRangeLabel}架次`,
+        label: `${this.dateRangeLabel}總架次`,
+        data: queryStat.map((item) => ({
+          key: item.label,
+          value: item.numOfFlight,
+        })),
+        colors: ['#a4dd46'],
+      });
+
+      lineSeries.push({
+        label: `${this.dateRangeLabel}準點架次`,
         data: queryStat.map((item) => ({
           key: item.label,
           value: item.OnTimeFlight,

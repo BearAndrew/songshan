@@ -5,6 +5,7 @@ import { ChartSearchBarForm } from '../../components/chart-search-bar/chart-sear
 import { CommonModule } from '@angular/common';
 import { ChartPageRootComponent } from '../../chart-page-root';
 import { OtpAnalysisRequest, OtpAnalysisResponse } from '../../../../models/otp-analysis.model';
+import { fakeData } from './fake-data';
 
 
 @Component({

@@ -21,6 +21,7 @@ import { DropdownComponent } from '../../shared/components/dropdown/dropdown.com
 import { Option } from '../../shared/components/dropdown/dropdown.component';
 import { TabType } from '../../core/enums/tab-type.enum';
 import {
+  catchError,
   distinctUntilChanged,
   EMPTY,
   filter,
@@ -223,31 +224,32 @@ export class DailyFlightAnalysisComponent {
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        filter((airportId) => airportId !== ''),
-        distinctUntilChanged(),
-        switchMap((airportId) =>
+        filter(Boolean),
+        distinctUntilChanged((a, b) => String(a) === String(b)),
+        switchMap(() =>
           interval(30000).pipe(
-            takeUntil(this.destroy$),
             startWith(0),
             switchMap(() => {
               const tabValue = this.data[this.activeIndex]?.value;
-
               if (!tabValue) return EMPTY;
 
-              // 同時呼叫兩個 API
               return forkJoin({
                 predict: this.apiService.getTodayPredictByAirport(),
                 delay: this.apiService.getTodayDelayStat(tabValue),
-              });
+              }).pipe(
+                catchError((err) => {
+                  console.error('[Predict+Delay] auto refresh error', err);
+                  return EMPTY;
+                }),
+              );
             }),
           ),
         ),
       )
-      .subscribe({
-        next: ({ predict, delay }) => {
-          this.setPredictData(predict);
-          this.setDelayData(delay);
-        },
+      .subscribe(({ predict, delay }) => {
+        if (!predict || !delay) return;
+        this.setPredictData(predict);
+        this.setDelayData(delay);
       });
 
     // ===== 螢幕尺寸監控 =====

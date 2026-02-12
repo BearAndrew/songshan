@@ -8,6 +8,7 @@ import { RealTimeTrafficFlowItem } from '../../models/real-time-traffic-flow.mod
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import {
   BehaviorSubject,
+  catchError,
   EMPTY,
   interval,
   Observable,
@@ -80,7 +81,7 @@ export class RealtimePassengerVehicleComponent {
     private router: Router,
     private apiService: ApiService,
     private realTimeService: RealTimeService,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -92,10 +93,9 @@ export class RealtimePassengerVehicleComponent {
       this.activeIndex = index;
     }
 
-    this.commonService.getSelectedAirport().subscribe(res => {
+    this.commonService.getSelectedAirport().subscribe((res) => {
       console.log(res);
-    })
-
+    });
 
     // ===== 統一輪詢 =====
     this.refreshTrigger$
@@ -133,23 +133,33 @@ export class RealtimePassengerVehicleComponent {
       return EMPTY; // 不輪詢
     }
 
-    return this.apiService
-      .getRealTimeTrafficFlow(this.data[this.activeIndex].value)
-      .pipe(
-        tap((res) => {
-          this.realTimeService.setRealTimeData(res);
+    const tabValue = this.data[this.activeIndex]?.value;
+    if (!tabValue) {
+      return EMPTY;
+    }
 
-          if (this.activeIndex === 2) {
+    return this.apiService.getRealTimeTrafficFlow(tabValue).pipe(
+      tap((res) => {
+        this.realTimeService.setRealTimeData(res);
+
+        switch (this.activeIndex) {
+          case 2:
             this.buildTaxiLocationGroups(res);
-          } else if (this.activeIndex === 1) {
+            break;
+          case 1:
             this.buildSplitLocationGroups(res);
-          } else {
+            break;
+          default:
             this.buildLocationGroups(res);
-          }
+        }
 
-          this.now = new Date();
-        }),
-      );
+        this.now = new Date();
+      }),
+      catchError((err) => {
+        console.error('[RealTimeTrafficFlow] error', err);
+        return EMPTY;
+      }),
+    );
   }
 
   /** 將 API 資料依 location 分組並攤平 images */

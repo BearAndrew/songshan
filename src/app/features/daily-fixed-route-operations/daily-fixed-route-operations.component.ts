@@ -7,7 +7,9 @@ import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
 import { TodayStatus } from '../../models/today-status.model';
 import {
+  catchError,
   distinctUntilChanged,
+  EMPTY,
   filter,
   interval,
   startWith,
@@ -63,19 +65,24 @@ export class DailyFixedRouteOperationsComponent {
       .getSelectedAirport()
       .pipe(
         takeUntil(this.destroy$),
-        filter((airportId) => airportId !== ''),
-        distinctUntilChanged(),
+        filter(Boolean),
+        distinctUntilChanged((a, b) => String(a) === String(b)),
         switchMap(() =>
           interval(30000).pipe(
-            takeUntil(this.destroy$),
             startWith(0),
-            switchMap(
-              () => this.apiService.getTodayStatus(),
+            switchMap(() =>
+              this.apiService.getTodayStatus().pipe(
+                catchError((err) => {
+                  console.error('[TodayStatus] auto refresh error', err);
+                  return EMPTY;
+                }),
+              ),
             ),
           ),
         ),
       )
       .subscribe((res) => {
+        if (!res) return;
         this.setData(res);
       });
 

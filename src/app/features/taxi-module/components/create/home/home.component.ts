@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../../../core/services/api-service.service';
 import { CurrentTaxi } from '../../../../../models/taxi.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-home',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -25,16 +26,16 @@ export class CreateHomeComponent implements OnInit {
         image: taxi.image || '\u00A0',
       }));
 
-      // 產生假資料（16 筆）
+      // // 產生假資料（16 筆）
       // const mockRes = Array.from({ length: 16 }, (_, i) => ({
       //   regPlate: `ABC-${1000 + i}`,
       //   driverName: `司機${i + 1}`,
       //   violation:
       //     i % 5 === 0
-      //       ? '超速'
+      //       ? 'NOTREG'
       //       : i % 5 === 1
-      //       ? '闖紅燈'
-      //       : '',
+      //       ? 'BLACKLIST'
+      //       : 'GREYLIST',
       //   inTime: `10:${String(i * 3).padStart(2, '0')}`,
       //   location:
       //     i % 3 === 0

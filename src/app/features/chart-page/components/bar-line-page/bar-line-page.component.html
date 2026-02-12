@@ -3,21 +3,42 @@
     @if (barData.length > 0 && !isNoData) {
       <div class="hidden sm:flex flex-1 flex-col items-center gap-2 w-full">
         <div class="flex items-center gap-4">
-          @for (bar of barData; let i = $index; track bar) {
-            <div class="flex items-center gap-1">
-              <div
-                class="w-4 h-4 rounded-full"
-                [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
-              ></div>
-              <div>{{ lineData[i].label }}</div>
-            </div>
-            <div class="flex items-center gap-1">
-              <div
-                class="w-4 h-2"
-                [ngStyle]="{ 'background-color': bar.colors?.[0] }"
-              ></div>
-              <div>{{ bar.label }}</div>
-            </div>
+          @if (!isOntime) {
+            @for (bar of barData; let i = $index; track bar) {
+              <div class="flex items-center gap-1">
+                <div
+                  class="w-4 h-4 rounded-full"
+                  [ngStyle]="{ 'background-color': lineData[i].colors?.[0] }"
+                ></div>
+                <div>{{ lineData[i].label }}</div>
+              </div>
+              <div class="flex items-center gap-1">
+                <div
+                  class="w-4 h-2"
+                  [ngStyle]="{ 'background-color': bar.colors?.[0] }"
+                ></div>
+                <div>{{ bar.label }}</div>
+              </div>
+            }
+          } @else {
+            @for (line of lineData; let i = $index; track line) {
+              <div class="flex items-center gap-1">
+                <div
+                  class="w-4 h-4 rounded-full"
+                  [ngStyle]="{ 'background-color': line.colors?.[0] }"
+                ></div>
+                <div>{{ line.label }}</div>
+              </div>
+            }
+            @for (bar of barData; let i = $index; track bar) {
+              <div class="flex items-center gap-1">
+                <div
+                  class="w-4 h-2"
+                  [ngStyle]="{ 'background-color': bar.colors?.[0] }"
+                ></div>
+                <div>{{ bar.label }}</div>
+              </div>
+            }
           }
         </div>
 
@@ -27,6 +48,7 @@
             class="flex-1 h-full"
             [barData]="barData"
             [lineData]="lineData"
+            [isInterleaved]="!isOntime"
             [showLegend]="false"
           ></app-bar-line-chart>
           <div class="text-xl [writing-mode:vertical-rl]">架次</div>
@@ -52,8 +74,10 @@
 <ng-template #date>
   <div class="flex flex-col gap-4 sm:hidden w-full max-w-100">
     <h2 class="text-2xl text-center font-semibold">人數</h2>
-    <div class="grid border border-gray-300"
-    [ngClass]="isShowCompare ? 'grid-cols-3' : 'grid-cols-2'">
+    <div
+      class="grid border border-gray-300"
+      [ngClass]="isShowCompare ? 'grid-cols-3' : 'grid-cols-2'"
+    >
       <!-- Header -->
       <div
         class="flex items-center justify-center text-center border p-2 font-semibold"
@@ -90,8 +114,10 @@
     </div>
 
     <h2 class="mt-8 text-2xl text-center font-semibold">架次</h2>
-    <div class="grid border border-gray-300"
-    [ngClass]="isShowCompare ? 'grid-cols-3' : 'grid-cols-2'">
+    <div
+      class="grid border border-gray-300"
+      [ngClass]="isShowCompare ? 'grid-cols-3' : 'grid-cols-2'"
+    >
       <!-- Header -->
       <div
         class="flex items-center justify-center text-center border p-2 font-semibold"
