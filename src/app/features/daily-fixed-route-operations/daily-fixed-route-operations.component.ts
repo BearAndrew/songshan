@@ -144,7 +144,7 @@ export class DailyFixedRouteOperationsComponent {
         in: res.intl.noOfFlight_Inbound,
       },
       {
-        type: '遊客數',
+        type: '旅客數',
         out: res.intl.noOfPax_Outbound,
         in: res.intl.noOfPax_Inbound,
       },
@@ -158,7 +158,7 @@ export class DailyFixedRouteOperationsComponent {
         in: res.crossStrait.noOfFlight_Inbound,
       },
       {
-        type: '遊客數',
+        type: '旅客數',
         out: res.crossStrait.noOfPax_Outbound,
         in: res.crossStrait.noOfPax_Inbound,
       },
@@ -172,7 +172,7 @@ export class DailyFixedRouteOperationsComponent {
         in: res.domestic.noOfFlight_Inbound,
       },
       {
-        type: '遊客數',
+        type: '旅客數',
         out: res.domestic.noOfPax_Outbound,
         in: res.domestic.noOfPax_Inbound,
       },

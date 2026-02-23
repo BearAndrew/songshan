@@ -45,6 +45,7 @@
             <div class="flex items-end justify-between border-b border-[#888]">
               <button
                 class="flex items-center justify-center mb-2 w-40 h-10 text-md border-2 border-[#6f5e9d] rounded-xl cursor-pointer"
+                [ngClass]="$last ? 'pointer-events-none' : ''"
                 (click)="onItemClick(1, $index)"
               >
                 {{ security.label }}
