@@ -491,6 +491,7 @@ export class ApiService {
             appliedBy: item.applied_by,
             assignedCounterArea: item.assigned_counter_area,
             departureIata: item.departureIata,
+            departure_time: item.departure_time,
             reason: item.reason
           })),
         ),

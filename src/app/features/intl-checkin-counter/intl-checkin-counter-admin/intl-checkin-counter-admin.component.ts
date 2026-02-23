@@ -283,6 +283,7 @@ export class IntlCheckinCounterAdminComponent {
         appliedBy: null,
         assignedCounterArea: '',
         departureIata: params.get('departureIata') || '',
+        departure_time: params.get('departure_time') || '',
         reason: params.get('reason') || '',
       };
 

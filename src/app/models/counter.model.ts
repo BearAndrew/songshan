@@ -59,6 +59,9 @@ export interface CounterInfo {
   /** 航點 */
   departureIata: string;
 
+  /** 起飛時間 */
+  departure_time: string;
+
   /** 駁回原因 */
   reason: string;
 }
@@ -79,6 +82,7 @@ export interface CounterInfoRaw {
   applied_by: string | null;
   assigned_counter_area: string;
   departureIata: string;
+  departure_time: string;
   reason: string;
 }
 
@@ -97,6 +101,8 @@ export interface CounterApplicationManualRequest {
   end_time: string;
   /** 航點 */
   departureIata: string;
+  /** 起飛時間 */
+  departure_time: string;
 }
 
 

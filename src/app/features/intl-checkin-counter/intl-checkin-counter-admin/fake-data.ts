@@ -17,6 +17,7 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     appliedBy: 'userA',
     assignedCounterArea: '1',
     departureIata: 'CMB',
+    departure_time: '09:00',
     reason: '不行',
   },
   {
@@ -35,6 +36,7 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     appliedBy: 'userB',
     assignedCounterArea: '3',
     departureIata: 'CMB',
+    departure_time: '09:00',
     reason: '不行'
   },
     {
@@ -53,6 +55,7 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     appliedBy: 'userB',
     assignedCounterArea: '3',
     departureIata: 'CMB',
+    departure_time: '09:00',
     reason: '不行'
   },
   {
@@ -71,6 +74,7 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     appliedBy: 'userC',
     assignedCounterArea: '5',
     departureIata: 'CMB',
+    departure_time: '09:00',
     reason: '不行'
   },
   {
@@ -89,6 +93,7 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     appliedBy: null,
     assignedCounterArea: '2',
     departureIata: 'CMB',
+    departure_time: '09:00',
     reason: '不行'
   },
 ];

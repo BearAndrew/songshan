@@ -287,6 +287,7 @@ export class IntlCheckinCounterUserComponent {
         appliedBy: params.get('appliedBy'),
         assignedCounterArea: params.get('assignedCounterArea') || '',
         departureIata: params.get('departureIata') || '',
+        departure_time: params.get('departure_time') || '',
         reason: params.get('reason') || ''
       };
 
@@ -522,7 +523,7 @@ export class IntlCheckinCounterUserComponent {
     };
 
     // ===== 拆時間 =====
-    const departure = splitTime(''); // 目前沒有來源
+    const departure = splitTime(info.departure_time);
     const applyStart = splitTime(info.startTime);
     const applyEnd = splitTime(info.endTime);
 
@@ -665,7 +666,10 @@ export class IntlCheckinCounterUserComponent {
       end_time: this.formatTime(
         formValue.applyTimeEndHour + ':' + formValue.applyTimeEndMin,
       ),
-      departureIata: formValue.departureIata
+      departureIata: formValue.departureIata,
+      departure_time: this.formatTime(
+        formValue.departureTimeHour + ':' + formValue.departureTimeMin,
+      )
     };
 
     this.apiService.addCounterApplication(payload).subscribe(
