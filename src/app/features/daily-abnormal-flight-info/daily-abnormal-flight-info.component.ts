@@ -18,6 +18,7 @@ import {
   interval,
   merge,
   Observable,
+  of,
   startWith,
   Subject,
   switchMap,

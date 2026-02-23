@@ -55,6 +55,12 @@ export interface CounterInfo {
 
   /** 指派櫃台區域 */
   assignedCounterArea: string;
+
+  /** 航點 */
+  departureIata: string;
+
+  /** 駁回原因 */
+  reason: string;
 }
 
 export interface CounterInfoRaw {
@@ -72,6 +78,8 @@ export interface CounterInfoRaw {
   assigned_by: string;
   applied_by: string | null;
   assigned_counter_area: string;
+  departureIata: string;
+  reason: string;
 }
 
 
@@ -87,6 +95,8 @@ export interface CounterApplicationManualRequest {
   endDate: string;   // ISO 字串
   start_time: string;
   end_time: string;
+  /** 航點 */
+  departureIata: string;
 }
 
 

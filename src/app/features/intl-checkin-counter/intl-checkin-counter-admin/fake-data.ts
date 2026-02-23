@@ -16,6 +16,8 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     assignedBy: 'admin01',
     appliedBy: 'userA',
     assignedCounterArea: '1',
+    departureIata: 'CMB',
+    reason: '不行',
   },
   {
     requestId: 'REQ-20260102-002',
@@ -32,6 +34,8 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     assignedBy: '',
     appliedBy: 'userB',
     assignedCounterArea: '3',
+    departureIata: 'CMB',
+    reason: '不行'
   },
     {
     requestId: 'REQ-20260102-002',
@@ -48,6 +52,8 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     assignedBy: '',
     appliedBy: 'userB',
     assignedCounterArea: '3',
+    departureIata: 'CMB',
+    reason: '不行'
   },
   {
     requestId: 'REQ-20260103-003',
@@ -64,6 +70,8 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     assignedBy: 'admin02',
     appliedBy: 'userC',
     assignedCounterArea: '5',
+    departureIata: 'CMB',
+    reason: '不行'
   },
   {
     requestId: 'REQ-20260104-004',
@@ -80,5 +88,7 @@ export const MOCK_COUNTER_INFO: CounterInfo[] = [
     assignedBy: '',
     appliedBy: null,
     assignedCounterArea: '2',
+    departureIata: 'CMB',
+    reason: '不行'
   },
 ];

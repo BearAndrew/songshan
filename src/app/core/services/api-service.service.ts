@@ -490,6 +490,8 @@ export class ApiService {
             assignedBy: item.assigned_by,
             appliedBy: item.applied_by,
             assignedCounterArea: item.assigned_counter_area,
+            departureIata: item.departureIata,
+            reason: item.reason
           })),
         ),
       );

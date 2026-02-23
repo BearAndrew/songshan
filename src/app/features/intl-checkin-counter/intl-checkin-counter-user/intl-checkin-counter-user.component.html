@@ -113,7 +113,7 @@
   </div>
 
   <!-- 申請內容 -->
-  <div class="flex-3 flex flex-col flex-shrink-0 items-center pb-8 sm:pb-14">
+  <div class="flex-3 flex flex-col flex-shrink-0 items-center">
     <h2
       class="text-2xl sm:text-4xl text-center w-[90%] py-4 sm:py-8 sm:mb-4 border-b-2 border-[#e69d30]"
     >
@@ -129,7 +129,9 @@
       <div
         class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-1"
       >
-        <label class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]">
+        <label
+          class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]"
+        >
           航班資訊
         </label>
         <div class="flex flex-col w-full">
@@ -141,9 +143,40 @@
           <!-- 錯誤訊息固定高度 -->
           <div class="text-red-500 text-xs mt-1 min-h-[1rem]">
             {{
-              form.get("flightInfo")?.touched && form.get("flightInfo")?.invalid && isSubmitted
+              form.get("flightInfo")?.touched &&
+              form.get("flightInfo")?.invalid &&
+              isSubmitted
                 ? "請輸入航班資訊"
                 : " "
+            }}
+          </div>
+        </div>
+      </div>
+
+      <!-- 航點 -->
+      <div
+        class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-1"
+      >
+        <label
+          class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]"
+        >
+          航點
+        </label>
+        <div class="flex flex-col w-full">
+          <app-dropdown-secondary
+            class="w-full"
+            [value]="form.get('departureIata')?.value"
+            [options]="iataOptions"
+            (selectionChange)="onIataChange($event)"
+          ></app-dropdown-secondary>
+          <!-- 錯誤訊息固定高度 -->
+          <div class="text-red-500 text-xs mt-1 min-h-[1rem]">
+            {{
+              form.get("departureIata")?.touched &&
+              form.get("departureIata")?.invalid &&
+              isSubmitted
+                ? "請輸入航點"
+                : " "
             }}
           </div>
         </div>
@@ -153,7 +186,9 @@
       <div
         class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-1"
       >
-        <label class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]">
+        <label
+          class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]"
+        >
           起飛時間
         </label>
         <div class="flex flex-col w-full">
@@ -173,9 +208,7 @@
             ></app-dropdown-secondary>
           </div>
           <!-- 錯誤訊息固定高度 -->
-          <div class="text-red-500 text-xs mt-1 min-h-[1rem]">
-
-          </div>
+          <div class="text-red-500 text-xs mt-1 min-h-[1rem]"></div>
         </div>
       </div>
 
@@ -183,7 +216,9 @@
       <div
         class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-1"
       >
-        <label class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]">
+        <label
+          class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]"
+        >
           申請時間
         </label>
         <div class="col-span-3 flex flex-col w-full gap-1">
@@ -193,18 +228,14 @@
               class="w-full"
               [value]="formData.applyTimeStartHour"
               [options]="hourOptions"
-              (selectionChange)="
-                onTimeChange('applyTimeStartHour', $event)
-              "
+              (selectionChange)="onTimeChange('applyTimeStartHour', $event)"
             ></app-dropdown-secondary>
             <span>:</span>
             <app-dropdown-secondary
               class="w-full"
               [value]="formData.applyTimeStartMin"
               [options]="minOptions"
-              (selectionChange)="
-                onTimeChange('applyTimeStartMin', $event)
-              "
+              (selectionChange)="onTimeChange('applyTimeStartMin', $event)"
             ></app-dropdown-secondary>
 
             <!-- 結束時間 -->
@@ -234,7 +265,7 @@
                 form.get("applyTimeStartMin")?.invalid ||
                 form.get("applyTimeEndHour")?.invalid ||
                 form.get("applyTimeEndMin")?.invalid) &&
-                isSubmitted
+              isSubmitted
                 ? "請選擇完整申請時間"
                 : " "
             }}
@@ -286,7 +317,8 @@
       <div
         class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-4 items-center"
       >
-        <label class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]"
+        <label
+          class="text-[#97e0fb] font-semibold h-fit translate-y-1 [text-align-last:justify]"
           >申請日期</label
         >
 
@@ -360,20 +392,35 @@
               (dateChange)="onDateChange('end', $event)"
             ></app-calendar-trigger>
           </div>
-            <!-- 錯誤訊息（固定高度） -->
-  <div class="col-span-full text-red-500 text-xs mt-1 min-h-[1rem]">
-    {{
-      (form.get('applyDateStart')?.touched ||
-        form.get('applyDateEnd')?.touched ||
-        isSubmitted) &&
-      (form.get('applyDateStart')?.invalid ||
-        form.get('applyDateEnd')?.invalid)
-        ? '請選擇完整申請期間'
-        : ' '
-    }}
-  </div>
+          <!-- 錯誤訊息（固定高度） -->
+          <div class="col-span-full text-red-500 text-xs mt-1 min-h-[1rem]">
+            {{
+              (form.get("applyDateStart")?.touched ||
+                form.get("applyDateEnd")?.touched ||
+                isSubmitted) &&
+              (form.get("applyDateStart")?.invalid ||
+                form.get("applyDateEnd")?.invalid)
+                ? "請選擇完整申請期間"
+                : " "
+            }}
+          </div>
         }
       </div>
+
+      @if (form.get('status')?.value == 'REJECT') {
+        <div
+          class="grid grid-cols-[64px_1fr] sm:grid-cols-[1fr_2fr_1fr_1fr] gap-x-2 sm:gap-x-4 gap-y-4 items-center mt-4"
+        >
+          <label class="text-[#97e0fb] font-semibold [text-align-last:justify]"
+            >駁回原因</label
+          >
+          <input
+            type="text"
+            class="sm:col-span-3 w-full bg-[#193652] rounded px-2 py-1 pointer-events-none"
+            formControlName="reason"
+          />
+        </div>
+      }
     </form>
 
     <div class="sm:px-15 mt-4 flex gap-4 w-full">

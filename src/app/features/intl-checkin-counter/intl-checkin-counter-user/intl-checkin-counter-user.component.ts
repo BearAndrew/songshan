@@ -178,6 +178,7 @@ export class IntlCheckinCounterUserComponent {
     { label: '58', value: '58' },
     { label: '59', value: '59' },
   ];
+  iataOptions: Option[] = [];
   isEdit: boolean = false;
   isSubmitted: boolean = false;
 
@@ -236,6 +237,9 @@ export class IntlCheckinCounterUserComponent {
         sat: [false],
         sun: [false],
       }),
+      departureIata: ['', Validators.required],
+      reason: [''],
+      status: ['']
     });
     (this.form.get('weekDays') as FormGroup).setValidators(atLeastOneWeekDay);
 
@@ -282,6 +286,8 @@ export class IntlCheckinCounterUserComponent {
         assignedBy: params.get('assignedBy') || '',
         appliedBy: params.get('appliedBy'),
         assignedCounterArea: params.get('assignedCounterArea') || '',
+        departureIata: params.get('departureIata') || '',
+        reason: params.get('reason') || ''
       };
 
       const item: ScheduleItem = {
@@ -295,18 +301,25 @@ export class IntlCheckinCounterUserComponent {
       this.selectItem(item);
     });
 
+    // 取得所有航點轉成下拉選單
+    this.apiService.getAirportListByTypeAirline('nondomestic', '').subscribe(res => {
+      this.iataOptions = res.map(item => {
+        return {label: item.name_zhTW, value: item.iata};
+      })
+    });
+
     this.getAllCounter();
     this.getSeasons();
   }
 
   getSeasons() {
     this.apiService.getSeasons().subscribe((res) => {
-      console.log(res);
       this.seasonList = res;
       this.seasonOptions = res.map((item) => {
         return { label: item.season, value: item.season };
       });
       this.season = res[0].season;
+      this.onSeasonChange(this.seasonOptions[0]);
     });
   }
 
@@ -445,17 +458,6 @@ export class IntlCheckinCounterUserComponent {
     return ['...', current - 1, current, current + 1, '...'];
   }
 
-  private getWeekRangeText(week: ScheduleItem[][]): string {
-    const allDates = week.flat().map((item) => new Date(item.date));
-
-    if (!allDates.length) return '';
-
-    const min = new Date(Math.min(...allDates.map((d) => d.getTime())));
-    const max = new Date(Math.max(...allDates.map((d) => d.getTime())));
-
-    return `${this.formatDate(min)} ~ ${this.formatDate(max)}`;
-  }
-
   private formatDate(date: Date, spliter: string = '/'): string {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -534,14 +536,6 @@ export class IntlCheckinCounterUserComponent {
     this.formData.applyTimeEndHour = applyEnd.hour;
     this.formData.applyTimeEndMin = applyEnd.min;
 
-    // ===== 期間 =====
-    const applyDateStart = info.applyForPeriod
-      ? info.applyForPeriod.split('~')[0]
-      : '';
-    const applyDateEnd = info.applyForPeriod
-      ? info.applyForPeriod.split('~')[1]
-      : '';
-
     // ===== weekDays =====
     const weekDaysMap = {
       mon: false,
@@ -594,6 +588,10 @@ export class IntlCheckinCounterUserComponent {
 
       applyTimeEndHour: applyEnd.hour,
       applyTimeEndMin: applyEnd.min,
+
+      departureIata: info.departureIata,
+      reason: info.reason,
+      status: info.status
     };
 
     // ===== 期間（有值才加）=====
@@ -608,7 +606,7 @@ export class IntlCheckinCounterUserComponent {
 
     // ===== 其他狀態 =====
     this.requestId = info.requestId;
-    this.season = info.season ? info.season : this.seasonOptions[0].value;
+    this.season = info.season ? info.season : this.seasonOptions[0]?.value;
   }
 
   onCreate() {
@@ -656,7 +654,7 @@ export class IntlCheckinCounterUserComponent {
       agent: '',
       airline_iata,
       flight_no,
-      season: formValue.seasonType,
+      season: this.season,
       day_of_week,
       apply_for_period: '',
       startDate: formValue.applyDateStart,
@@ -667,6 +665,7 @@ export class IntlCheckinCounterUserComponent {
       end_time: this.formatTime(
         formValue.applyTimeEndHour + ':' + formValue.applyTimeEndMin,
       ),
+      departureIata: formValue.departureIata
     };
 
     this.apiService.addCounterApplication(payload).subscribe(
@@ -763,6 +762,10 @@ export class IntlCheckinCounterUserComponent {
     if (this.form?.get(controlName)) {
       this.form.get(controlName)!.setValue(v);
     }
+  }
+
+  onIataChange(option: Option): void {
+    this.form.get('departureIata')?.setValue(option.value);
   }
 
   get isWeekDaysInvalid(): boolean {

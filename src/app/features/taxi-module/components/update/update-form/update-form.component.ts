@@ -17,6 +17,7 @@ import { fakeData } from './fake-data';
 import { parseTwDateTime } from '../../../../../core/utils/parse-tw-datetime';
 import { take } from 'rxjs';
 import { CommonService } from '../../../../../core/services/common.service';
+import { parseIsoToDate } from '../../../../../core/utils/parse-iso-to-date';
 
 @Component({
   selector: 'app-update-form',
@@ -146,8 +147,9 @@ export class UpdateFormComponent {
         }
         this.modifyContentOption = this.options[0];
 
-        this.dateStart = parseTwDateTime(taxiInfo?.dateFrom);
-        this.dateEnd = parseTwDateTime(taxiInfo?.dateTo);
+        this.dateStart = parseIsoToDate(taxiInfo?.dateFrom);
+        this.dateEnd = parseIsoToDate(taxiInfo?.dateTo);
+        console.log(this.dateStart)
         this.onDateChange('start', this.dateStart);
         this.onDateChange('end', this.dateEnd);
 

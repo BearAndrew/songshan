@@ -39,6 +39,8 @@ export class OnTimePerformanceComponent extends ChartPageRootComponent {
       peer: this.formData.route! || '',
       flightType: this.formData.flightType || '',
     };
+    // this.handleOntimePerformance(fakeData)
+    // return
     // 呼叫 API
     this.apiService.postOtpAnalysis(payload).subscribe({
       next: (res: OtpAnalysisResponse) => {

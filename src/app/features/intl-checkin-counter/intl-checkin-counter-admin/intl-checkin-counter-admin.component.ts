@@ -212,6 +212,8 @@ export class IntlCheckinCounterAdminComponent {
   isSubmitted = false;
   /** 是否有選擇資料 */
   hasData = false;
+  /** 航點選單 */
+  iataOptions: Option[] = [];
 
   /** 下載 CSV */
   csvParam = 'WEEK';
@@ -252,6 +254,7 @@ export class IntlCheckinCounterAdminComponent {
         sat: [false],
         sun: [false],
       }),
+      departureIata: ['']
     });
     this.form.disable();
     this.form.get('reason')?.enable();
@@ -279,9 +282,18 @@ export class IntlCheckinCounterAdminComponent {
         assignedBy: '',
         appliedBy: null,
         assignedCounterArea: '',
+        departureIata: params.get('departureIata') || '',
+        reason: params.get('reason') || '',
       };
 
       this.selectItem(item);
+    });
+
+    // 取得所有航點轉成下拉選單
+    this.apiService.getAirportListByTypeAirline('nondomestic', '').subscribe(res => {
+      this.iataOptions = res.map(item => {
+        return {label: item.name_zhTW, value: item.iata};
+      })
     });
 
     this.getAllCounter();
@@ -501,10 +513,10 @@ export class IntlCheckinCounterAdminComponent {
     this.formData.endTimeMin = end.min;
 
     // ===== 期間 =====
-    console.log(item.applicationDate);
-    console.log(this.parseChineseDateToYMD(item.applicationDate));
     const applyDateInterval =
       this.parseChineseDateToYMD(item.applicationDate) || '';
+
+    const departureIata = this.iataOptions.find(option => option.value == item.departureIata)?.label;
 
     // ===== weekDays =====
     const weekDaysMap = {
@@ -550,6 +562,7 @@ export class IntlCheckinCounterAdminComponent {
       flightInfo,
       applyDateInterval,
       weekDays: weekDaysMap,
+      departureIata
     });
 
     // ===== 狀態 =====
