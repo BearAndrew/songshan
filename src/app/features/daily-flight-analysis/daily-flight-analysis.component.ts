@@ -310,22 +310,22 @@ export class DailyFlightAnalysisComponent {
     ];
     this.data[0].flightData = [
       {
-        label: '到站',
-        value:
-          res.intl_Arrived.noOfFlight_Inbound +
-          res.crossStrait_Arrived.noOfFlight_Inbound,
-        total:
-          res.intl_Predict.noOfFlight_Inbound +
-          res.crossStrait_Predict.noOfFlight_Inbound,
-      },
-      {
-        label: '離站',
+        label: '出境',
         value:
           res.intl_Arrived.noOfFlight_Outbound +
           res.crossStrait_Arrived.noOfFlight_Outbound,
         total:
           res.intl_Predict.noOfFlight_Outbound +
           res.crossStrait_Predict.noOfFlight_Outbound,
+      },
+      {
+        label: '入境',
+        value:
+          res.intl_Arrived.noOfFlight_Inbound +
+          res.crossStrait_Arrived.noOfFlight_Inbound,
+        total:
+          res.intl_Predict.noOfFlight_Inbound +
+          res.crossStrait_Predict.noOfFlight_Inbound,
       },
       {
         label: '總數',
@@ -358,14 +358,14 @@ export class DailyFlightAnalysisComponent {
     ];
     this.data[1].flightData = [
       {
-        label: '到站',
-        value: res.intl_Arrived.noOfFlight_Inbound,
-        total: res.intl_Predict.noOfFlight_Inbound,
-      },
-      {
-        label: '離站',
+        label: '出境',
         value: res.intl_Arrived.noOfFlight_Outbound,
         total: res.intl_Predict.noOfFlight_Outbound,
+      },
+      {
+        label: '入境',
+        value: res.intl_Arrived.noOfFlight_Inbound,
+        total: res.intl_Predict.noOfFlight_Inbound,
       },
       {
         label: '總數',
@@ -394,14 +394,14 @@ export class DailyFlightAnalysisComponent {
     ];
     this.data[2].flightData = [
       {
-        label: '到站',
-        value: res.crossStrait_Arrived.noOfFlight_Inbound,
-        total: res.crossStrait_Predict.noOfFlight_Inbound,
-      },
-      {
-        label: '離站',
+        label: '出境',
         value: res.crossStrait_Arrived.noOfFlight_Outbound,
         total: res.crossStrait_Predict.noOfFlight_Outbound,
+      },
+      {
+        label: '入境',
+        value: res.crossStrait_Arrived.noOfFlight_Inbound,
+        total: res.crossStrait_Predict.noOfFlight_Inbound,
       },
       {
         label: '總數',
@@ -413,12 +413,12 @@ export class DailyFlightAnalysisComponent {
     //3, 國內線
     this.data[3].passengerData = [
       {
-        label: '出境',
+        label: '離站',
         value: res.domestic_Arrived.noOfPax_Outbound,
         total: res.domestic_Predict.noOfPax_Outbound,
       },
       {
-        label: '入境',
+        label: '到站',
         value: res.domestic_Arrived.noOfPax_Inbound,
         total: res.domestic_Predict.noOfPax_Inbound,
       },
@@ -430,14 +430,14 @@ export class DailyFlightAnalysisComponent {
     ];
     this.data[3].flightData = [
       {
-        label: '到站',
-        value: res.domestic_Arrived.noOfFlight_Inbound,
-        total: res.domestic_Predict.noOfFlight_Inbound,
-      },
-      {
         label: '離站',
         value: res.domestic_Arrived.noOfFlight_Outbound,
         total: res.domestic_Predict.noOfFlight_Outbound,
+      },
+      {
+        label: '到站',
+        value: res.domestic_Arrived.noOfFlight_Inbound,
+        total: res.domestic_Predict.noOfFlight_Inbound,
       },
       {
         label: '總數',
@@ -484,18 +484,7 @@ export class DailyFlightAnalysisComponent {
     ];
     this.data[4].flightData = [
       {
-        label: '到站',
-        value:
-          res.domestic_Arrived.noOfFlight_Inbound +
-          res.intl_Arrived.noOfFlight_Inbound +
-          res.crossStrait_Arrived.noOfFlight_Inbound,
-        total:
-          res.domestic_Predict.noOfFlight_Inbound +
-          res.intl_Predict.noOfFlight_Inbound +
-          res.crossStrait_Predict.noOfFlight_Inbound,
-      },
-      {
-        label: '離站',
+        label: '出境',
         value:
           res.domestic_Arrived.noOfFlight_Outbound +
           res.intl_Arrived.noOfFlight_Outbound +
@@ -504,6 +493,17 @@ export class DailyFlightAnalysisComponent {
           res.domestic_Predict.noOfFlight_Outbound +
           res.intl_Predict.noOfFlight_Outbound +
           res.crossStrait_Predict.noOfFlight_Outbound,
+      },
+      {
+        label: '入境',
+        value:
+          res.domestic_Arrived.noOfFlight_Inbound +
+          res.intl_Arrived.noOfFlight_Inbound +
+          res.crossStrait_Arrived.noOfFlight_Inbound,
+        total:
+          res.domestic_Predict.noOfFlight_Inbound +
+          res.intl_Predict.noOfFlight_Inbound +
+          res.crossStrait_Predict.noOfFlight_Inbound,
       },
       {
         label: '總數',
@@ -742,7 +742,7 @@ export class DailyFlightAnalysisComponent {
     // 長條圖
     this.inboundBarData = [
       {
-        label: '入境實際人數',
+        label: (this.activeIndex == 3 ? '到站' : '入境') + '實際人數',
         data: res.inBoundStatByHour.map((item) => ({
           key: item.hour,
           value: item.numOfPax,
@@ -750,7 +750,7 @@ export class DailyFlightAnalysisComponent {
         colors: ['#00d6c8'],
       },
       {
-        label: '入境預報人數',
+        label: (this.activeIndex == 3 ? '到站' : '入境') + '預報人數',
         data: res.inBoundPredictByHour.map((item) => ({
           key: item.hour,
           value: item.numOfPax,
@@ -762,7 +762,7 @@ export class DailyFlightAnalysisComponent {
     // 折線圖
     this.inboundLineData = [
       {
-        label: '入境實際架次',
+        label: (this.activeIndex == 3 ? '到站' : '入境') + '實際架次',
         data: res.inBoundStatByHour.map((item) => ({
           key: item.hour,
           value: item.numOfFlight,
@@ -770,7 +770,7 @@ export class DailyFlightAnalysisComponent {
         colors: ['#00d6c8'],
       },
       {
-        label: '入境預報架次',
+        label: (this.activeIndex == 3 ? '到站' : '入境') + '預報架次',
         data: res.inBoundPredictByHour.map((item) => ({
           key: item.hour,
           value: item.numOfFlight,
@@ -782,7 +782,7 @@ export class DailyFlightAnalysisComponent {
     // 長條圖
     this.outboundBarData = [
       {
-        label: '出境實際人數',
+        label: (this.activeIndex == 3 ? '離站' : '出境') + '實際人數',
         data: res.outBoundStatByHour.map((item) => ({
           key: item.hour,
           value: item.numOfPax,
@@ -790,7 +790,7 @@ export class DailyFlightAnalysisComponent {
         colors: ['#00d6c8'],
       },
       {
-        label: '出境預報人數',
+        label: (this.activeIndex == 3 ? '離站' : '出境') + '預報人數',
         data: res.outBoundPredictByHour.map((item) => ({
           key: item.hour,
           value: item.numOfPax,
@@ -802,7 +802,7 @@ export class DailyFlightAnalysisComponent {
     // 折線圖
     this.outboundLineData = [
       {
-        label: '出境實際架次',
+        label: (this.activeIndex == 3 ? '離站' : '出境') + '實際架次',
         data: res.outBoundStatByHour.map((item) => ({
           key: item.hour,
           value: item.numOfFlight,
@@ -810,7 +810,7 @@ export class DailyFlightAnalysisComponent {
         colors: ['#00d6c8'],
       },
       {
-        label: '出境預報架次',
+        label: (this.activeIndex == 3 ? '離站' : '出境') + '預報架次',
         data: res.outBoundPredictByHour.map((item) => ({
           key: item.hour,
           value: item.numOfFlight,

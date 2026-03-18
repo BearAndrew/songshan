@@ -78,28 +78,28 @@
         <div>
           {{
             paramDirection == "all"
-              ? "表定到/離"
+              ? "表定" + (activeIndex == 3 ? '到/離' : '入/出')
               : paramDirection == "inbound"
-                ? "表定到站"
-                : "表定離站"
+                ? "表定" + (activeIndex == 3 ? '到站' : '入境')
+                : "表定" + (activeIndex == 3 ? '離站' : '出境')
           }}
         </div>
         <div>
           {{
             paramDirection == "all"
-              ? "預計到/離"
+              ? "預計" + (activeIndex == 3 ? '到/離' : '入/出')
               : paramDirection == "inbound"
-                ? "預計到站"
-                : "預計離站"
+                ? "預計" + (activeIndex == 3 ? '到站' : '入境')
+                : "預計" + (activeIndex == 3 ? '離站' : '出境')
           }}
         </div>
         <div>
           {{
             paramDirection == "all"
-              ? "實際到/離"
+              ? "實際" + (activeIndex == 3 ? '到/離' : '入/出')
               : paramDirection == "inbound"
-                ? "實際到站"
-                : "實際離站"
+                ? "實際" + (activeIndex == 3 ? '到站' : '入境')
+                : "實際" + (activeIndex == 3 ? '離站' : '出境')
           }}
         </div>
         <div>延誤時間</div>

@@ -5,14 +5,14 @@
       [ngClass]="toggleIndex == 0 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
       (click)="onIndexChange(0)"
     >
-      出境
+      {{activeIndex == 3 ? '離站' : '出境'}}
     </button>
     <button
       class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"
       [ngClass]="toggleIndex == 1 ? 'bg-[#2ed3b6]' : 'bg-[#0c0330]'"
       (click)="onIndexChange(1)"
     >
-      入境
+      {{activeIndex == 3 ? '到站' : '入境'}}
     </button>
     <button
       class="min-w-20 px-2 border border-blue-500 rounded-sm cursor-pointer"

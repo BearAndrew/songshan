@@ -1,21 +1,26 @@
 <div class="fixed top-16 sm:hidden mb-2 w-[calc(50vw-1.25rem)] z-50">
-  <app-dropdown class="pl-4 w-full" [value]="0" [options]="mobileOptions" (selectionChange)="onTabChange($event.value)"></app-dropdown>
+  <app-dropdown
+    class="pl-4 w-full"
+    [value]="0"
+    [options]="mobileOptions"
+    (selectionChange)="onTabChange($event.value)"
+  ></app-dropdown>
 </div>
 
 <div class="flex flex-col gap-4 w-full h-full">
   <div class="hidden sm:flex gap-8 h-fit">
-    @for(button of data; track button.label; let i = $index) {
-    <button
-      class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
-      [ngClass]="{
-        'bg-[#b2b2b2]': activeIndex !== i,
-        'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i
-      }"
-      type="button"
-      (click)="onTabChange(i)"
-    >
-      {{ button.label }}
-    </button>
+    @for (button of data; track button.label; let i = $index) {
+      <button
+        class="text-xl text-white rounded-md w-36 px-2 py-0.5 cursor-pointer"
+        [ngClass]="{
+          'bg-[#b2b2b2]': activeIndex !== i,
+          'bg-gradient-to-r from-[#767df5] to-[#82a2fc]': activeIndex === i,
+        }"
+        type="button"
+        (click)="onTabChange(i)"
+      >
+        {{ button.label }}
+      </button>
     }
   </div>
 
@@ -38,7 +43,11 @@
       </div>
 
       <!-- 航班延誤數據 -->
-      <app-daily-flight-analysis-delay-pie-chart-card [inboundData]="inboundData" [outboundData]="outboundData" [pieCharData]="pieCharData"
+      <app-daily-flight-analysis-delay-pie-chart-card
+        [activeIndex]="activeIndex"
+        [inboundData]="inboundData"
+        [outboundData]="outboundData"
+        [pieCharData]="pieCharData"
         class="card flex flex-col flex-1 gap-2 p-4 min-w-0 h-fit"
       ></app-daily-flight-analysis-delay-pie-chart-card>
     </div>
@@ -56,14 +65,14 @@
         [activeIndex]="activeIndex"
         [barData]="outboundBarData"
         [lineData]="outboundLineData"
-        [title]="'逐時出境統計'"
+        [title]="'逐時' + (activeIndex == 3 ? '離站' : '出境') + '統計'"
       ></app-daily-flight-analysis-barline-chart-card>
       <app-daily-flight-analysis-barline-chart-card
         class="card flex flex-col flex-1 gap-2 p-4 w-full h-fit sm:h-auto min-h-100 sm:min-h-0"
         [activeIndex]="activeIndex"
         [barData]="inboundBarData"
         [lineData]="inboundLineData"
-        [title]="'逐時入境統計'"
+        [title]="'逐時' + (activeIndex == 3 ? '到站' : '入境') + '統計'"
       ></app-daily-flight-analysis-barline-chart-card>
     </div>
   </div>

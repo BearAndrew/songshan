@@ -36,7 +36,7 @@ export class PieChartComponent {
 
   get formattedCenterLabel(): string | number {
     return typeof this.centerLabel === 'number'
-      ? new Intl.NumberFormat().format(this.centerLabel) // Angular number pipe 等效
+      ? new Intl.NumberFormat().format(this.centerLabel)
       : this.centerLabel;
   }
 

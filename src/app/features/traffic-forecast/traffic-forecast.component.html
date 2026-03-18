@@ -45,13 +45,13 @@
   <div class="card flex flex-col sm:flex-row flex-1 gap-12 p-4 w-full min-h-0 overflow-hidden">
     <app-traffic-forecast-table
       class="flex-1 min-h-0 max-h-80 sm:max-h-none"
-      [title]="'出境'"
+      [title]="activeIndex == 3 ? '離站' : '出境'"
       [table]="tableOut"
     ></app-traffic-forecast-table>
 
     <app-traffic-forecast-table
       class="flex-1 min-h-0 max-h-80 sm:max-h-none"
-      [title]="'入境'"
+      [title]="activeIndex == 3 ? '到站' : '入境'"
       [table]="tableIn"
     ></app-traffic-forecast-table>
   </div>

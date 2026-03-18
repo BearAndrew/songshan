@@ -43,8 +43,8 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '離站', value: 0, total: 0 },
-        { label: '到站', value: 0, total: 0 },
+        { label: '出境', value: 0, total: 0 },
+        { label: '入境', value: 0, total: 0 },
       ],
     },
     {
@@ -54,8 +54,8 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '離站', value: 0, total: 0 },
-        { label: '到站', value: 0, total: 0 },
+        { label: '出境', value: 0, total: 0 },
+        { label: '入境', value: 0, total: 0 },
       ],
     },
     {
@@ -65,15 +65,15 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '離站', value: 0, total: 0 },
-        { label: '到站', value: 0, total: 0 },
+        { label: '出境', value: 0, total: 0 },
+        { label: '入境', value: 0, total: 0 },
       ],
     },
     {
       label: '國內線',
       passengerData: [
-        { label: '出境', value: 0, total: 0 },
-        { label: '入境', value: 0, total: 0 },
+        { label: '離站', value: 0, total: 0 },
+        { label: '到站', value: 0, total: 0 },
       ],
       flightData: [
         { label: '離站', value: 0, total: 0 },
@@ -87,8 +87,8 @@ export class DailyFixedRouteOperationsForecastComponent {
         { label: '入境', value: 0, total: 0 },
       ],
       flightData: [
-        { label: '離站', value: 0, total: 0 },
-        { label: '到站', value: 0, total: 0 },
+        { label: '出境', value: 0, total: 0 },
+        { label: '入境', value: 0, total: 0 },
       ],
     },
   ];

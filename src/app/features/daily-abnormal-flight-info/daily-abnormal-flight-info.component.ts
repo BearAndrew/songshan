@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, SimpleChanges } from '@angular/core';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { ApiService } from '../../core/services/api-service.service';
 import {
@@ -117,8 +117,8 @@ export class DailyAbnormalFlightInfoComponent {
   /** 飛航類型下拉選單 */
   flightDirectionOptions = [
     { label: '全部', value: 'all' },
-    { label: '離站', value: 'outbound' },
-    { label: '到站', value: 'inbound' },
+    { label: '出境', value: 'outbound' },
+    { label: '入境', value: 'inbound' },
   ];
 
   /** Get 請求用的參數：異常狀態 */
@@ -235,8 +235,27 @@ export class DailyAbnormalFlightInfoComponent {
     console.log(this.csvUrl);
   }
 
+  setFlightDirectionOptions() {
+    if (this.activeIndex === 3) {
+      // 維持原本
+      this.flightDirectionOptions = [
+        { label: '全部', value: 'all' },
+        { label: '離站', value: 'outbound' },
+        { label: '到站', value: 'inbound' },
+      ];
+    } else {
+      // 修改為出境 / 入境
+      this.flightDirectionOptions = [
+        { label: '全部', value: 'all' },
+        { label: '出境', value: 'outbound' },
+        { label: '入境', value: 'inbound' },
+      ];
+    }
+  }
+
   onTabClick(newIndex: number) {
     this.activeIndex = newIndex;
+    this.setFlightDirectionOptions();
     this.refreshTrigger$.next();
   }
 

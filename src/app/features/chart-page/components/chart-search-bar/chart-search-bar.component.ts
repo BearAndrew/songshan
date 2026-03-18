@@ -529,14 +529,13 @@ export class ChartSearchBarComponent {
 
     // 清除對應錯誤
     if (this.isDate) {
-      if (
-        this.formData.startYear !== null && this.formData.endYear !== null
-      ) {
+      if (this.formData.startYear !== null && this.formData.endYear !== null) {
         this.dateError = null;
       }
     } else {
       if (
-        this.formData.firstYear !== null && this.formData.secondYear !== null
+        this.formData.firstYear !== null &&
+        this.formData.secondYear !== null
       ) {
         this.yearError = null;
       }
@@ -548,7 +547,24 @@ export class ChartSearchBarComponent {
   // 當切換按鈕時更新 formData
   onScopeChange(tab: TabType) {
     this.formData.flightType = tab;
+    this.setDirectionOptions();
     this.getAirlineList();
+  }
+
+  setDirectionOptions() {
+    if (this.formData.flightType == TabType.DOMESTIC) {
+      this.directionOptions = [
+        { label: '全部', value: '' },
+        { label: '離站', value: 'OUTBOUND' },
+        { label: '到站', value: 'INBOUND' },
+      ];
+    } else {
+      this.directionOptions = [
+        { label: '全部', value: '' },
+        { label: '出境', value: 'OUTBOUND' },
+        { label: '入境', value: 'INBOUND' },
+      ];
+    }
   }
 
   // 確認按鈕

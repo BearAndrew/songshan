@@ -67,7 +67,7 @@
     <div
       class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-white text-black text-center leading-tight rounded-full [writing-mode:vertical-rl] h-22 flex items-center justify-center px-1"
     >
-      出境
+      {{activeIndex == 3 ? '離站' : '出境'}}
     </div>
   </div>
 
@@ -122,7 +122,7 @@
     <div
       class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-white text-black text-center leading-tight rounded-full [writing-mode:vertical-rl] h-22 flex items-center justify-center px-1"
     >
-      入境
+      {{activeIndex == 3 ? '到站' : '入境'}}
     </div>
   </div>
 </div>
