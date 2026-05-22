@@ -623,19 +623,20 @@ export class DailyFlightAnalysisComponent {
       });
     });
 
-    // res.allDelayFlights.forEach((item) => {
-    //   if (item === null) {
-    //     return;
-    //   }
+    res.allDelayFlights?.forEach((item) => {
+      if (item === null) {
+        return;
+      }
 
-    //   this.abnormalAllData.info.push({
-    //     flightNumber: item.flightNo,
-    //     destination: item.airportName,
-    //     scheduledTime: item.schTime,
-    //     affectedPeople: +item.pax,
-    //     status: item.reason,
-    //   });
-    // });
+      this.abnormalAllData.info.push({
+        flightNumber: item.flightNo,
+        direction: '',
+        destination: item.airportName,
+        scheduledTime: item.schTime,
+        affectedPeople: +item.pax,
+        status: item.reason,
+      });
+    });
 
     res.outTop3Airport?.forEach((item) => {
       if (item === null) {
@@ -879,6 +880,8 @@ export class DailyFlightAnalysisComponent {
       status: 'MOCK',
     }));
 
+    res.allDelayFlights = [...res.outDelayFlights, ...res.inDelayFlights];
+
     res.outTop3Airport = [0, 1, 2].map((i) => ({
       iata: `M${this.activeIndex}${i}`,
       name_zhTW: `${m.tag}出`,
@@ -895,6 +898,15 @@ export class DailyFlightAnalysisComponent {
       estimatePax: 1200 + i * 100,
       actualFlight: 9 + i,
       actualPax: 1100 + i * 90,
+    }));
+
+    res.allTop3Airport = [0, 1, 2].map((i) => ({
+      iata: `M${this.activeIndex}${i}`,
+      name_zhTW: `${m.tag}全`,
+      estimateFlight: 22 + i,
+      estimatePax: 2200 + i * 100,
+      actualFlight: 17 + i,
+      actualPax: 2000 + i * 90,
     }));
   }
 

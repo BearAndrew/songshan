@@ -13,22 +13,14 @@ export class DailyFlightAnalysisAbnormalCardComponent extends DailyFlightAnalysi
   toggleIndex: number = 0;
   @Input() inData!: DailyFlightAnalysisAbnormalData;
   @Input() outData!: DailyFlightAnalysisAbnormalData;
+  @Input() allData!: DailyFlightAnalysisAbnormalData;
 
   get displayData(): DailyFlightAnalysisAbnormalData {
     switch (this.toggleIndex) {
       case 1:
         return this.inData;
       case 2:
-        return {
-          info: [
-            ...(this.inData?.info ?? []),
-            ...(this.outData?.info ?? []),
-          ],
-          top3: [
-            ...(this.inData?.top3 ?? []),
-            ...(this.outData?.top3 ?? []),
-          ],
-        };
+        return this.allData;
       case 0:
       default:
         return this.outData;
