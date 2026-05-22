@@ -12,6 +12,7 @@ import { DailyFlightAnalysisBarlineChartCardComponent } from './components/daily
 import { ApiService } from '../../core/services/api-service.service';
 import { CommonService } from '../../core/services/common.service';
 import { TodayDelayStat } from '../../models/today-delay-stat.model';
+import { environment } from '../../../environments/environment';
 import { TodayPredict } from '../../models/today-predict.model';
 import {
   DataSetWithData,
@@ -520,6 +521,11 @@ export class DailyFlightAnalysisComponent {
   }
 
   setDelayData(res: TodayDelayStat) {
+    // dev only：依 activeIndex 注入可辨識的假異常資料，方便驗證切換 tab 時「全部」是否同步更新
+    if (!environment.production) {
+      this.applyMockAbnormalData(res);
+    }
+
     // delayData
     // 不分線，只分出入境,
     this.clearDelayData();
@@ -835,6 +841,61 @@ export class DailyFlightAnalysisComponent {
       this.abnormalOutData.info = [];
       this.abnormalOutData.top3 = [];
     }
+  }
+
+  /**
+   * dev 環境用：依 activeIndex 覆蓋異常航班與 top3 機場欄位，
+   * 讓不同 tab 的資料明顯可辨識，方便驗證「全部」分頁切換更新。
+   * prod 不會呼叫此方法（由 environment.production gate）。
+   */
+  private applyMockAbnormalData(res: TodayDelayStat): void {
+    const mockMatrix = [
+      { tag: '國際兩岸', outFlights: ['MOCK-A-OUT-1', 'MOCK-A-OUT-2'], inFlights: ['MOCK-A-IN-1'] },
+      { tag: '國際',     outFlights: ['MOCK-B-OUT-1'],                  inFlights: ['MOCK-B-IN-1', 'MOCK-B-IN-2'] },
+      { tag: '兩岸',     outFlights: ['MOCK-C-OUT-1', 'MOCK-C-OUT-2'], inFlights: ['MOCK-C-IN-1', 'MOCK-C-IN-2'] },
+      { tag: '國內',     outFlights: ['MOCK-D-OUT-1'],                  inFlights: ['MOCK-D-IN-1'] },
+      { tag: '總數',     outFlights: ['MOCK-E-OUT-1', 'MOCK-E-OUT-2', 'MOCK-E-OUT-3'], inFlights: ['MOCK-E-IN-1', 'MOCK-E-IN-2'] },
+    ];
+
+    const m = mockMatrix[this.activeIndex] ?? mockMatrix[0];
+
+    res.outDelayFlights = m.outFlights.map((flightNo, i) => ({
+      flightNo,
+      airport: 'MCK',
+      airportName: `${m.tag}目的地${i + 1}`,
+      schTime: `0${8 + i}:${(i * 7) % 60}`.padStart(5, '0'),
+      pax: String(100 + i * 13),
+      reason: `${m.tag}假資料原因${i + 1}`,
+      status: 'MOCK',
+    }));
+
+    res.inDelayFlights = m.inFlights.map((flightNo, i) => ({
+      flightNo,
+      airport: 'MCK',
+      airportName: `${m.tag}出發地${i + 1}`,
+      schTime: `1${i}:${(i * 11) % 60}`.padStart(5, '0'),
+      pax: String(80 + i * 17),
+      reason: `${m.tag}假資料原因${i + 1}`,
+      status: 'MOCK',
+    }));
+
+    res.outTop3Airport = [0, 1, 2].map((i) => ({
+      iata: `M${this.activeIndex}${i}`,
+      name_zhTW: `${m.tag}出`,
+      estimateFlight: 10 + i,
+      estimatePax: 1000 + i * 100,
+      actualFlight: 8 + i,
+      actualPax: 900 + i * 90,
+    }));
+
+    res.inTop3Airport = [0, 1, 2].map((i) => ({
+      iata: `M${this.activeIndex}${i}`,
+      name_zhTW: `${m.tag}入`,
+      estimateFlight: 12 + i,
+      estimatePax: 1200 + i * 100,
+      actualFlight: 9 + i,
+      actualPax: 1100 + i * 90,
+    }));
   }
 
   /** 切換分頁時立刻刷新 */
