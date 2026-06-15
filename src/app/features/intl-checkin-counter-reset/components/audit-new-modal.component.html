@@ -1,0 +1,80 @@
+<div class="ops-modal ops-scope" style="width: min(780px, 94vw); max-height: 88vh">
+  <div class="ops-modal-head">
+    <div class="title">{{ title }}</div>
+    <div class="close" (click)="cancel()">✕</div>
+  </div>
+
+  <div class="ops-modal-body">
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="ops-note is-cyan">
+        此為航空公司新增申請,<strong>申請內容不可修改</strong>;請指派櫃檯後核准,或填寫駁回原因退回。
+      </div>
+
+      <div class="ops-section-line">申請內容(唯讀)</div>
+      <div class="ops-form-grid">
+        <div class="ops-field">
+          <label class="ops-field-label">航班編號</label>
+          <div class="ops-read-field"><span class="ops-text-cyan" style="font-family: var(--ops-font-en); font-weight: 700">{{ code }}</span></div>
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">航點</label>
+          <div class="ops-read-field">{{ dest }}</div>
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">起飛時間</label>
+          <div class="ops-read-field"><span class="ops-cell-num">{{ dep }}</span></div>
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">飛航星期</label>
+          <div class="ops-read-field">{{ week }}</div>
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">開櫃時間</label>
+          <div class="ops-read-field"><span class="ops-cell-num ops-text-cyan">{{ openTime }}</span></div>
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">關櫃時間</label>
+          <div class="ops-read-field"><span class="ops-cell-num" style="color: var(--ops-orange)">{{ closeTime }}</span></div>
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">申請別</label>
+          <div class="ops-read-field">
+            <span class="ops-type-tag" [class.is-season]="type === 'season'" [class.is-range]="type === 'range'">{{ type === 'range' ? '指定期間' : '整季' }}</span>
+          </div>
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">{{ type === 'range' ? '指定期間' : '季度' }}</label>
+          <div class="ops-read-field">{{ type === 'range' ? (info.applyForPeriod || '—') : (season || '—') }}</div>
+        </div>
+        <div class="ops-field span-2">
+          <label class="ops-field-label">備註</label>
+          <div class="ops-read-field">{{ note || '—' }}</div>
+        </div>
+      </div>
+
+      <div class="ops-section-line">航站指派</div>
+      <div class="ops-form-grid">
+        <div class="ops-field">
+          <label class="ops-field-label">指派櫃檯<span class="req">*</span></label>
+          <app-ops-select [options]="counterOptions" [(ngModel)]="assignedCounterArea" placeholder="請指派櫃檯…" [block]="true"></app-ops-select>
+          @if (submitted && !assignedCounterArea) {
+            <span class="ops-field-hint ops-text-red">核准前必填 · 每筆僅指派一個櫃檯</span>
+          } @else {
+            <span class="ops-field-hint">核准前必填 · 每筆僅指派一個櫃檯</span>
+          }
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">駁回原因(駁回時填寫)</label>
+          <textarea class="ops-input" rows="2" [(ngModel)]="reason" placeholder="若無法核准,請說明原因…"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ops-modal-foot">
+    <button class="ops-btn ops-btn-red" (click)="reject()">駁回</button>
+    <span style="margin-left: auto"></span>
+    <button class="ops-btn ops-btn-ghost" (click)="cancel()">取消</button>
+    <button class="ops-btn ops-btn-orange" (click)="approve()">核准並通知</button>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<div style="display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0">
+  <!-- Controls(季別/日期 · 調整範圍 同一排)-->
+  <div class="ops-tabs">
+    <div class="ops-filter-group" style="margin-left: 0">
+      @if (mode === '單日') {
+        <span class="ops-filter-label">日期</span>
+        <input class="ops-input is-mono" type="date" style="width: 170px; flex: 0 1 170px"
+          [(ngModel)]="dateStr" (change)="onDateChange()" />
+      } @else {
+        <span class="ops-filter-label">季別</span>
+        <app-ops-select [options]="seasonOptions" [(ngModel)]="selectedSeason"
+          (ngModelChange)="onSeasonChange()" [minWidth]="160"></app-ops-select>
+      }
+      <span class="brk-sm"></span>
+      <span class="ops-filter-label">調整範圍</span>
+      <div class="ops-toggle">
+        <span class="opt" [class.is-on]="mode === '整季'" (click)="onModeChange('整季')">整季</span>
+        <span class="opt" [class.is-on]="mode === '單日'" (click)="onModeChange('單日')">單日</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gantt panel -->
+  <div class="ops-panel ops-scroll" style="flex: 1; min-height: 0">
+    <div class="ops-panel-header">
+      <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+        <div>
+          <div class="ops-panel-title">櫃檯時間軸 · 06:00 – 22:00</div>
+          <div class="ops-panel-sub">
+            <span class="ops-legend"><span class="sw" style="background: var(--ops-cyan)"></span>整季</span>
+            <span class="ops-legend"><span class="sw" style="background: var(--ops-orange)"></span>指定期間</span>
+          </div>
+        </div>
+        <span class="ops-panel-sub">點擊時段可開啟異動彈窗</span>
+      </div>
+    </div>
+
+    <div class="ops-gantt">
+      <div class="ops-gantt-corner"></div>
+      <div class="ops-gantt-hours" [style.grid-template-columns]="'repeat(' + hourCols.length + ', 1fr)'">
+        @for (h of hourCols; track h) {
+          <div class="ops-gantt-hour">{{ pad2(h) }}:00</div>
+        }
+      </div>
+
+      @for (c of counters; track c; let ci = $index) {
+        <div class="ops-gantt-counter-label"><span class="ops-cell-box">{{ c }}</span></div>
+        <div class="ops-gantt-track">
+          @for (b of blocksFor(ci); track b.info.requestId) {
+            <div
+              class="ops-gantt-block"
+              [class.is-cyan]="b.type === 'season'"
+              [class.is-orange]="b.type === 'range'"
+              [style.left.%]="b.leftPct"
+              [style.width.%]="b.widthPct"
+              style="cursor: pointer"
+              (click)="openEdit(b)"
+            >
+              <span class="flight">{{ b.flight }}</span>
+              <span class="meta">· {{ b.dest }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

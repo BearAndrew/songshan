@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @use "tailwindcss";
+@use "./app/features/intl-checkin-counter-reset/ops-theme.scss";
 
 html,body {
   height: 100%;

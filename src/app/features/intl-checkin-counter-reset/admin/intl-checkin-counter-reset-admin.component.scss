@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+/* 手機:固定可視高度,讓上方控制列不動、資料面板內部捲動 */
+@media (max-width: 639px) {
+  :host {
+    height: calc(100vh - 150px);
+    height: calc(100dvh - 150px);
+  }
+}
+
+.hidden {
+  display: none;
+}

@@ -39,11 +39,16 @@ export class CalendarTriggerComponent implements OnChanges {
   @Input() title: string = '選擇日期';
   @Input() startDate: Date | null = null; // 用於年份選擇
   @Input() endDate: Date | null = null; // 用於年份選擇
+  /** 禁選早於 anchorDay 的日期(如:結束日不可早於起始日) */
+  @Input() disableBeforeAnchor: boolean = false;
+  @Input() anchorDay: Date | null = null;
   @Input() placeholder: string = '';
+  /** 觸發器外觀:default = 原本淺色樣式(預設);ops = 深色 ops 頁面樣式 */
+  @Input() theme: 'default' | 'ops' = 'default';
   @Output() dateChange = new EventEmitter<Date>();
   @Output() timeChange = new EventEmitter<Shift>();
 
-  @ViewChild('triggerBtn', { static: true }) triggerBtn!: ElementRef;
+  @ViewChild('triggerBtn', { static: false }) triggerBtn!: ElementRef;
 
   selectedTimeLabel: string = '';
 
@@ -135,6 +140,8 @@ export class CalendarTriggerComponent implements OnChanges {
     calendarRef.instance.startDate = this.startDate;
     calendarRef.instance.endDate = this.endDate;
     calendarRef.instance.isAllDay = this.isAllDay;
+    calendarRef.instance.disableBeforeAnchor = this.disableBeforeAnchor;
+    if (this.anchorDay) calendarRef.instance.anchorDay = this.anchorDay;
 
     calendarRef.instance.dateSelected.subscribe((date: Date) => {
       this.selectedDate = date;

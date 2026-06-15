@@ -1,0 +1,20 @@
+<button
+  #trigger
+  type="button"
+  class="ops-select ops-dd-trigger"
+  [class.is-disabled]="disabled"
+  [style.min-width.px]="minWidth"
+  (click)="toggle($event)"
+>
+  <span class="ops-dd-value" [class.is-placeholder]="!selectedLabel">{{ selectedLabel || placeholder }}</span>
+</button>
+
+<ng-template #menu>
+  <div class="ops-dd-panel ops-scroll" [style.max-height.px]="maxHeight" (click)="$event.stopPropagation()">
+    @for (opt of options; track opt.value) {
+      <div class="ops-dd-item" [class.is-selected]="opt.value === value" (click)="select(opt)">{{ opt.label }}</div>
+    } @empty {
+      <div class="ops-dd-item" style="cursor: default; color: var(--ops-text-3)">無選項</div>
+    }
+  </div>
+</ng-template>

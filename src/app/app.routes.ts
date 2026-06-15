@@ -27,6 +27,8 @@ import { IntlCheckinCounterTableComponent } from './features/intl-checkin-counte
 import { IntlCheckinCounterUserTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-user-table/intl-checkin-counter-user-table.component';
 import { IntlCheckinCounterAdminTableComponent } from './features/intl-checkin-counter/intl-checkin-counter-admin-table/intl-checkin-counter-admin-table.component';
 import { TestPageComponent } from './features/chart-page/page/test-page/test-page.component';
+import { IntlCheckinCounterResetAirlineComponent } from './features/intl-checkin-counter-reset/airline/intl-checkin-counter-reset-airline.component';
+import { IntlCheckinCounterResetAdminComponent } from './features/intl-checkin-counter-reset/admin/intl-checkin-counter-reset-admin.component';
 
 export const routes: Routes = [
   {
@@ -181,6 +183,16 @@ export const routes: Routes = [
       {
         path: 'intl-checkin-counter-admin-table',
         component: IntlCheckinCounterAdminTableComponent,
+        data: { title: '國際線報到櫃檯模組', theme: 'dark' },
+      },
+      {
+        path: 'intl-checkin-counter-reset/airline',
+        component: IntlCheckinCounterResetAirlineComponent,
+        data: { title: '國際線報到櫃檯模組', theme: 'dark' },
+      },
+      {
+        path: 'intl-checkin-counter-reset/admin',
+        component: IntlCheckinCounterResetAdminComponent,
         data: { title: '國際線報到櫃檯模組', theme: 'dark' },
       },
       {

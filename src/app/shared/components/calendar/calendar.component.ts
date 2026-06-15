@@ -109,6 +109,11 @@ export class CalendarComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isDisabled(date: Date): boolean {
+    // 早於錨點日期一律禁選(用於「結束日不可早於起始日」等情境;opt-in,不影響其他用法)
+    if (this.disableBeforeAnchor && this.anchorDay && this.isBefore(date, this.anchorDay)) {
+      return true;
+    }
+
     // 如果是全天候模式，則所有日期都可選
     if (this.isAllDay) return false;
     console.log('this.isAllDay: ',this.isAllDay)

@@ -1,0 +1,232 @@
+<div class="ops-modal ops-scope" style="width: min(760px, 94vw); max-height: 88vh">
+  <div class="ops-modal-head">
+    <div class="title">{{ title }}</div>
+    <div class="close" (click)="cancel()">✕</div>
+  </div>
+
+  <div class="ops-modal-body">
+    <div style="display: flex; flex-direction: column; gap: 18px">
+      <!-- 航班資訊 -->
+      <div class="ops-section-line">航班資訊</div>
+      <div class="ops-form-grid">
+        <div class="ops-field">
+          <label class="ops-field-label">航班編號<span class="req">*</span></label>
+          <input class="ops-input is-mono" [(ngModel)]="flightNo" placeholder="請輸入" />
+          @if (flightNoErr) {
+            <span class="ops-field-hint ops-text-red">請輸入航班編號</span>
+          }
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">航點<span class="req">*</span></label>
+          <app-ops-select [options]="airportOptions" [(ngModel)]="departureIata" placeholder="請選擇航點…" [block]="true"></app-ops-select>
+          @if (departureErr) {
+            <span class="ops-field-hint ops-text-red">請選擇航點</span>
+          }
+        </div>
+        <div class="ops-field">
+          <label class="ops-field-label">起飛時間<span class="req">*</span></label>
+          <div style="display: flex; align-items: center; gap: 6px">
+            <app-ops-select [options]="hourOptions" [(ngModel)]="depHH" placeholder="時" [minWidth]="78" [maxHeight]="240"></app-ops-select>
+            <span class="sep">:</span>
+            <app-ops-select [options]="minuteOptions" [(ngModel)]="depMM" placeholder="分" [minWidth]="78" [maxHeight]="240"></app-ops-select>
+          </div>
+          @if (depTimeErr) {
+            <span class="ops-field-hint ops-text-red">請選擇起飛時間</span>
+          }
+        </div>
+      </div>
+
+      <!-- 申請時間 -->
+      <div class="ops-section-line">申請時間</div>
+      <div>
+        <div style="display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap">
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <span class="ops-time-tag is-open">開櫃時間</span>
+            <div style="display: flex; align-items: center; gap: 6px">
+              <app-ops-select [options]="hourOptions" [ngModel]="openHH" (ngModelChange)="openHH=$event; onOpenTimeChange()" placeholder="時" [minWidth]="78" [maxHeight]="240"></app-ops-select>
+              <span class="sep">:</span>
+              <app-ops-select [options]="minuteOptions" [ngModel]="openMM" (ngModelChange)="openMM=$event; onOpenTimeChange()" placeholder="分" [minWidth]="78" [maxHeight]="240"></app-ops-select>
+            </div>
+          </div>
+          <span style="color: var(--ops-text-3); font-weight: 700; padding: 0 2px 8px">~</span>
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <span class="ops-time-tag is-close">關櫃時間</span>
+            <div style="display: flex; align-items: center; gap: 6px">
+              <app-ops-select [options]="closeHourOptions" [ngModel]="closeHH" (ngModelChange)="closeHH=$event; onCloseHourChange()" placeholder="時" [minWidth]="78" [maxHeight]="240" [disabled]="!openComplete"></app-ops-select>
+              <span class="sep">:</span>
+              <app-ops-select [options]="closeMinuteOptions" [(ngModel)]="closeMM" placeholder="分" [minWidth]="78" [maxHeight]="240" [disabled]="!openComplete"></app-ops-select>
+            </div>
+          </div>
+        </div>
+        @if (applyTimeErr) {
+          <span class="ops-field-hint ops-text-red">請選擇完整申請時間(開櫃 / 關櫃)</span>
+        }
+        <div style="margin-top: 8px; font-size: 12.5px; color: var(--ops-text-3)">
+          (每櫃一筆,加開櫃檯請另行新增一筆申請)
+        </div>
+      </div>
+
+      <!-- 星期 -->
+      <div class="ops-section-line">星期</div>
+      <div class="ops-weekday-row">
+        @for (d of weekList; track d.v) {
+          <div
+            class="ops-weekday"
+            [class.is-on]="weekdays.has(d.v)"
+            [class.is-off]="!weekdays.has(d.v)"
+            (click)="toggleWeekday(d.v)"
+          >
+            {{ d.l }}
+          </div>
+        }
+      </div>
+      @if (weekdayErr) {
+        <span class="ops-field-hint ops-text-red">請至少選擇一天</span>
+      }
+
+      <!-- 申請日期 -->
+      <div class="ops-section-line">申請日期</div>
+
+      @if (mode === 'new') {
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap">
+            <span
+              class="ops-radio-chip"
+              [class.is-active]="dateType === 'season'"
+              (click)="setDateType('season')"
+            >
+              <span class="dot"></span>整季定期航班
+            </span>
+            <span
+              class="ops-radio-chip"
+              [class.is-active]="dateType === 'range'"
+              (click)="setDateType('range')"
+            >
+              <span class="dot"></span>指定期間
+            </span>
+          </div>
+
+          @if (dateType === 'season') {
+            <div class="ops-field" style="width: 25%; min-width: 150px">
+              <label class="ops-field-label">季度<span class="req">*</span></label>
+              <app-ops-select [options]="seasonOptions" [(ngModel)]="season" placeholder="請選擇季度…" [block]="true"></app-ops-select>
+              @if (seasonErr) {
+                <span class="ops-field-hint ops-text-red">請選擇季度</span>
+              }
+            </div>
+          } @else {
+            <div class="ops-field">
+              <label class="ops-field-label">指定起迄日期<span class="req">*</span></label>
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+                <span class="ops-field-hint">起</span>
+                <app-calendar-trigger
+                  theme="ops"
+                  style="flex: 1 1 180px"
+                  [selectedDate]="rangeStart"
+                  [isAllDay]="true"
+                  [placeholder]="'-- -- --'"
+                  [title]="'日期(起)'"
+                  (dateChange)="onDate('rangeStart', $event)"
+                ></app-calendar-trigger>
+                <span style="color: var(--ops-text-3); font-weight: 700">~</span>
+                <span class="ops-field-hint">迄</span>
+                <app-calendar-trigger
+                  theme="ops"
+                  style="flex: 1 1 180px"
+                  [selectedDate]="rangeEnd"
+                  [isAllDay]="true"
+                  [disabled]="!rangeStart"
+                  [disableBeforeAnchor]="true"
+                  [anchorDay]="endAnchor"
+                  [placeholder]="'-- -- --'"
+                  [title]="'日期(迄)'"
+                  (dateChange)="onDate('rangeEnd', $event)"
+                ></app-calendar-trigger>
+              </div>
+              @if (rangeErr) {
+                <span class="ops-field-hint ops-text-red">請選擇完整起迄日期</span>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <!-- 異動:申請別不可變更,顯示為文字 -->
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+            <span
+              class="ops-type-tag"
+              [class.is-season]="dateType === 'season'"
+              [class.is-range]="dateType === 'range'"
+              >{{ dateType === 'range' ? '指定期間' : '整季' }}</span
+            >
+            <span style="font-size: 15px; font-weight: 700; color: var(--ops-text)">{{ typeLabel }}</span>
+            <span style="font-size: 12.5px; color: var(--ops-text-3)">· 既有申請之申請別,異動時不可變更</span>
+          </div>
+
+          @if (dateType === 'season') {
+            <div class="ops-field" style="max-width: 420px">
+              <label class="ops-field-label">生效起始日<span class="req">*</span></label>
+              <app-calendar-trigger
+                theme="ops"
+                [selectedDate]="effectiveStart"
+                [isAllDay]="true"
+                [placeholder]="'-- -- --'"
+                [title]="'生效起始日'"
+                (dateChange)="onDate('effectiveStart', $event)"
+              ></app-calendar-trigger>
+              <span class="ops-field-hint">異動將自此日起套用至本季結束(此日前維持原設定);起飛表定時間前 3 小時內,當天航班不可異動。</span>
+              @if (effectiveErr) {
+                <span class="ops-field-hint ops-text-red">請選擇生效起始日</span>
+              }
+            </div>
+          } @else {
+            <div class="ops-field">
+              <label class="ops-field-label">生效期間<span class="req">*</span></label>
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+                <span class="ops-field-hint">起</span>
+                <app-calendar-trigger
+                  theme="ops"
+                  style="flex: 1 1 180px"
+                  [selectedDate]="rangeStart"
+                  [isAllDay]="true"
+                  [placeholder]="'-- -- --'"
+                  [title]="'日期(起)'"
+                  (dateChange)="onDate('rangeStart', $event)"
+                ></app-calendar-trigger>
+                <span style="color: var(--ops-text-3); font-weight: 700">~</span>
+                <span class="ops-field-hint">迄</span>
+                <app-calendar-trigger
+                  theme="ops"
+                  style="flex: 1 1 180px"
+                  [selectedDate]="rangeEnd"
+                  [isAllDay]="true"
+                  [disabled]="!rangeStart"
+                  [disableBeforeAnchor]="true"
+                  [anchorDay]="endAnchor"
+                  [placeholder]="'-- -- --'"
+                  [title]="'日期(迄)'"
+                  (dateChange)="onDate('rangeEnd', $event)"
+                ></app-calendar-trigger>
+              </div>
+              @if (rangeErr) {
+                <span class="ops-field-hint ops-text-red">請選擇完整生效期間</span>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- 備註 -->
+      <div class="ops-section-line">備註</div>
+      <textarea class="ops-input" rows="2" [(ngModel)]="note" placeholder="備註(選填)"></textarea>
+    </div>
+  </div>
+
+  <div class="ops-modal-foot">
+    <span style="margin-left: auto"></span>
+    <button class="ops-btn ops-btn-ghost" (click)="cancel()">取消</button>
+    <button class="ops-btn ops-btn-orange" (click)="submit()">
+      {{ mode === 'new' ? '送出申請' : '送出異動' }}
+    </button>
+  </div>
+</div>

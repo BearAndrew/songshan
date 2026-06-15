@@ -1,0 +1,48 @@
+<div class="ops-modal ops-scope" style="width: min(840px, 94vw); max-height: 88vh">
+  <div class="ops-modal-head">
+    <div class="title">{{ title }}</div>
+    <div class="close" (click)="cancel()">✕</div>
+  </div>
+
+  <div class="ops-modal-body">
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="ops-note is-purple">
+        此為異動申請,下方顯示<strong>異動前後完整內容</strong>;航站無需修改,確認後核准即生效,或填寫駁回原因退回。
+      </div>
+
+      <div class="ops-section-line">異動內容對照</div>
+      <div class="ops-cmp">
+        <div class="ops-cmp-head">
+          <div>欄位</div>
+          <div>異動前</div>
+          <div class="after">異動後</div>
+        </div>
+        @for (c of cmp; track c.field) {
+          <div class="ops-cmp-row" [class.changed]="c.changed">
+            <div class="field">{{ c.field }}</div>
+            <div class="before">{{ c.before }}</div>
+            <div class="after">
+              {{ c.after }}
+              @if (c.changed) { <span class="ops-changed-tag">已變更</span> }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="ops-field">
+        <label class="ops-field-label">駁回原因(選填 · 駁回時必填)</label>
+        <textarea class="ops-input" rows="2" [(ngModel)]="reason" placeholder="若無法核准此異動,請說明原因…"></textarea>
+        @if (submitted && !reason.trim()) {
+          <span class="ops-field-hint ops-text-red">駁回需填寫原因</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="ops-modal-foot">
+    <button class="ops-btn ops-btn-red" (click)="reject()">駁回</button>
+    <span style="margin-left: auto"></span>
+    <button class="ops-btn ops-btn-ghost" (click)="cancel()">取消</button>
+    <button class="ops-btn ops-btn-orange" (click)="approve()">核准異動並通知</button>
+  </div>
+</div>

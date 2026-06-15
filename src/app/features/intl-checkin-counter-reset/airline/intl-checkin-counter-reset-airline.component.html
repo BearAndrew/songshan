@@ -1,0 +1,84 @@
+<div class="ops-scope">
+  <div class="ops-frame-body">
+    <!-- Tabs + filters -->
+    <div class="ops-tabs">
+      @for (t of tabs; track t; let i = $index) {
+        <div class="ops-tab" [class.is-active]="activeTab === t" (click)="setTab(t)">{{ t }}</div>
+        <!-- 手機:當季/下季 一排,本週/下週/今日 一排 -->
+        @if (i === 1) { <span class="brk-sm"></span> }
+      }
+      <div class="ops-filter-group">
+        <span class="ops-filter-label">申請類別</span>
+        <app-ops-select [options]="typeOptions" [(ngModel)]="typeFilter" [minWidth]="110"></app-ops-select>
+        <span class="brk-sm"></span>
+        <span class="ops-filter-label">狀態</span>
+        <app-ops-select [options]="statusOptions" [(ngModel)]="statusFilter" [minWidth]="110"></app-ops-select>
+        <span class="brk-sm"></span>
+        <a class="ops-btn ops-btn-blue" [href]="csvUrl">匯出 EXCEL</a>
+        <button class="ops-btn ops-btn-orange" (click)="openCreate()">+ 新增申請</button>
+      </div>
+    </div>
+
+    <!-- Table panel -->
+    <div class="ops-panel ops-scroll" style="flex: 1; min-height: 0">
+      <div class="ops-panel-header">
+        <div class="ops-panel-title">航班與櫃檯申請</div>
+      </div>
+
+      <table class="ops-table">
+        <thead>
+          <tr>
+            <th>航班編號</th>
+            <th>航點</th>
+            <th>飛航星期</th>
+            <th>起飛時間</th>
+            <th>櫃檯</th>
+            <th>申請時間</th>
+            <th>申請別</th>
+            <th>狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of filteredRows; track rowKey(r, $index); let i = $index) {
+            <tr>
+              <td><span class="ops-text-cyan" style="font-family: var(--ops-font-en); font-weight: 700">{{ r.code }}</span></td>
+              <td>{{ r.dest }}</td>
+              <td class="ops-cell-num" style="color: var(--ops-text-2)">{{ r.week }}</td>
+              <td class="ops-cell-num">{{ r.dep }}</td>
+              <td>
+                <div style="display: flex; gap: 8px; align-items: center">
+                  <span class="ops-cell-box">{{ r.counter }}</span>
+                  @if (r.extra) { <span class="ops-extra-tag">加開</span> }
+                </div>
+              </td>
+              <td><span class="ops-text-cyan ops-cell-num">{{ r.applyTime }}</span></td>
+              <td>
+                <span class="ops-type-tag" [class.is-season]="r.type === 'season'" [class.is-range]="r.type === 'range'">
+                  {{ r.type === 'range' ? '指定期間' : '整季' }}
+                </span>
+              </td>
+              <td>
+                <span class="ops-status" [ngClass]="'is-' + r.status">
+                  {{ r.status === 'pending' ? '待審核' : r.status === 'approved' ? '已核准' : '已駁回' }}
+                </span>
+              </td>
+              <td style="position: relative; overflow: visible">
+                <button class="ops-btn ops-btn-ghost" style="padding: 4px 12px; font-size: 13.5px" (click)="toggleMenu(i, $event)">編輯 ▾</button>
+                @if (openMenuIndex === i) {
+                  <div class="ops-menu" (click)="$event.stopPropagation()">
+                    <div class="ops-menu-item is-cyan" (click)="openModify(r)"><span>✎</span>異動</div>
+                    <div class="ops-menu-divider"></div>
+                    <div class="ops-menu-item is-red" (click)="openWithdraw(r)"><span>↩</span>撤回</div>
+                  </div>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="9"><div class="ops-empty">此區間尚無申請資料</div></td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
