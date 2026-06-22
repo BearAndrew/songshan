@@ -59,8 +59,8 @@ test.describe('航空公司視角', () => {
     await editButtons.nth(0).click();
     await expect(page.locator('.ops-menu')).toHaveCount(1);
 
-    // 點面板標題(選單外)→ 應關閉,確保畫面同時只有一個選單
-    await page.locator('.ops-panel-title').first().click();
+    // 點選單外(表頭)→ 應關閉,確保畫面同時只有一個選單
+    await page.locator('.ops-table th').first().click();
     await expect(page.locator('.ops-menu')).toHaveCount(0);
   });
 });
@@ -79,19 +79,19 @@ test.describe('航站管理員視角', () => {
     await expect(page.locator('.ops-gantt')).toBeVisible();
 
     await page.locator('.ops-tab', { hasText: '報表' }).click();
-    await expect(page.getByText('週次', { exact: false })).toBeVisible();
+    await expect(page.locator('.ops-report-switch')).toBeVisible();
   });
 
   test('報表 週/日 切換', async ({ page }) => {
     await gotoAdmin(page);
     await page.locator('.ops-tab', { hasText: '報表' }).click();
 
-    // 切到「日」
-    await page.locator('.ops-toggle .opt', { hasText: '日' }).click();
-    await expect(page.getByText('當日全六櫃檯排程', { exact: false })).toBeVisible();
+    // 切到「日」→ 顯示前日/後日 導覽
+    await page.locator('.ops-report-switch .opt', { hasText: '日' }).click();
+    await expect(page.getByRole('button', { name: '前日', exact: false })).toBeVisible();
 
-    // 切回「週」
-    await page.locator('.ops-toggle .opt', { hasText: '週' }).click();
-    await expect(page.getByText('週次', { exact: false })).toBeVisible();
+    // 切回「週」→ 顯示上週/下週 導覽
+    await page.locator('.ops-report-switch .opt', { hasText: '週' }).click();
+    await expect(page.getByRole('button', { name: '上週', exact: false })).toBeVisible();
   });
 });

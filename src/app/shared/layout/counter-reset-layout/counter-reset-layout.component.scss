@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.reset-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--ops-bg, #191919);
+}
+
+/* header 固定不動:flex 子項不收縮,且永遠在最上方(內容於下方 .reset-content 捲動) */
+.reset-shell > app-header {
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* 內容區自身為捲動容器:頁面內 sticky(top:0)以此為基準,不會被 header 切掉。
+   內距(含上方與 header 的間距、左右、下方)由頁面 .ops-frame-body / sticky 提供,
+   這裡不加 margin-top,避免頂端露出底色色塊。 */
+.reset-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}

@@ -1,13 +1,18 @@
 <div class="ops-scope">
   <div class="ops-frame-body">
     <!-- Nav tabs -->
-    <div class="ops-tabs">
+    <div class="ops-tabs ops-main-tabs">
       @for (t of tabs; track t) {
         <div class="ops-tab" [class.is-active]="activeTab === t" (click)="setTab(t)">{{ t }}</div>
       }
 
       @if (activeTab === '航班資料') {
-        <div class="ops-filter-group">
+        <!-- 手機版收合切換(桌機隱藏)-->
+        <button class="ops-btn ops-btn-ghost mobile-only" style="flex: 1 1 100%; justify-content: center"
+          (click)="filtersOpen = !filtersOpen">
+          {{ filtersOpen ? '收合篩選 ▴' : '展開篩選 ▾' }}
+        </button>
+        <div class="ops-filter-group" [class.is-collapsed]="!filtersOpen">
           <span class="ops-filter-label">航空公司</span>
           <app-ops-select [options]="airlineFilterOptions" [(ngModel)]="airlineFilter" [minWidth]="120"></app-ops-select>
           <span class="brk-sm"></span>
@@ -17,7 +22,8 @@
           <span class="ops-filter-label">狀態</span>
           <app-ops-select [options]="statusOptions" [(ngModel)]="statusFilter" [minWidth]="110"></app-ops-select>
           <span class="brk-sm"></span>
-          <input class="ops-input ops-search" placeholder="🔍 搜尋航班編號 / 航點..." style="flex: 0 1 240px; width: 240px" [(ngModel)]="search" />
+          <span class="ops-filter-label">搜尋</span>
+          <input class="ops-input ops-search" placeholder="航班編號 / 航點..." style="flex: 0 1 240px; width: 240px" [(ngModel)]="search" />
           <span class="brk-sm"></span>
           <input type="file" #fileInput class="hidden" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
           <button class="ops-btn ops-btn-ghost" (click)="fileInput.click()">⇣ 匯入 EXCEL</button>
@@ -29,56 +35,54 @@
     <!-- 航班資料 -->
     @if (activeTab === '航班資料') {
       <div class="ops-panel ops-scroll" style="flex: 1; min-height: 0">
-        <div class="ops-panel-header">
-          <div class="ops-panel-title">航班與櫃檯申請</div>
-        </div>
-
-        <table class="ops-table">
-          <thead>
-            <tr>
-              <th>航班編號</th>
-              <th>航點</th>
-              <th>飛航星期</th>
-              <th>起飛時間</th>
-              <th>櫃檯</th>
-              <th>申請時間</th>
-              <th>申請別</th>
-              <th>狀態</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (r of filteredRows; track r.info.requestId + '-' + r.counter) {
+        <div class="ops-x-scroll ops-frozen-table">
+          <table class="ops-table ops-table-sm">
+            <thead>
               <tr>
-                <td><span class="ops-text-cyan" style="font-family: var(--ops-font-en); font-weight: 700">{{ r.code }}</span></td>
-                <td>{{ r.dest }}</td>
-                <td class="ops-cell-num" style="color: var(--ops-text-2); font-size: 13px">{{ r.week }}</td>
-                <td class="ops-cell-num">{{ r.dep }}</td>
-                <td><span class="ops-cell-box">{{ r.counter }}</span></td>
-                <td><span class="ops-text-cyan ops-cell-num">{{ r.applyTime }}</span></td>
-                <td>
-                  <span class="ops-type-tag" [class.is-season]="r.type === 'season'" [class.is-range]="r.type === 'range'">
-                    {{ r.type === 'range' ? '指定期間' : '整季' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="ops-status" [ngClass]="'is-' + r.status">
-                    {{ r.status === 'pending' ? '待審核' : r.status === 'approved' ? '已核准' : '已駁回' }}
-                  </span>
-                </td>
-                <td>
-                  @if (r.status === 'pending') {
-                    <span style="color: var(--ops-cyan); font-weight: 700; cursor: pointer; font-size: 14px" (click)="openAudit(r)">審核 ›</span>
-                  } @else {
-                    <span style="color: var(--ops-text-2); font-weight: 600; cursor: pointer; font-size: 14px" (click)="openEdit(r)">編輯 ›</span>
-                  }
-                </td>
+                <th>航班編號</th>
+                <th>航點</th>
+                <th>飛航星期</th>
+                <th>起飛時間</th>
+                <th>櫃檯</th>
+                <th>申請時間</th>
+                <th>申請別</th>
+                <th>狀態</th>
+                <th>操作</th>
               </tr>
-            } @empty {
-              <tr><td colspan="9"><div class="ops-empty">尚無航班資料</div></td></tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (r of filteredRows; track r.info.requestId + '-' + r.counter) {
+                <tr>
+                  <td><span class="ops-text-cyan" style="font-family: var(--ops-font-en); font-weight: 700">{{ r.code }}</span></td>
+                  <td>{{ r.dest }}</td>
+                  <td class="ops-cell-num" style="color: var(--ops-text-2); font-size: 13px">{{ r.week }}</td>
+                  <td class="ops-cell-num">{{ r.dep }}</td>
+                  <td><span class="ops-cell-box">{{ r.counter }}</span></td>
+                  <td><span class="ops-text-cyan ops-cell-num">{{ r.applyTime }}</span></td>
+                  <td>
+                    <span class="ops-type-tag" [class.is-season]="r.type === 'season'" [class.is-range]="r.type === 'range'">
+                      {{ r.type === 'range' ? '指定期間' : '整季' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="ops-status" [ngClass]="'is-' + r.status">
+                      {{ r.status === 'pending' ? '待審核' : r.status === 'approved' ? '已核准' : '已駁回' }}
+                    </span>
+                  </td>
+                  <td class="ops-nowrap">
+                    @if (r.status === 'pending') {
+                      <span class="ops-nowrap" style="color: var(--ops-cyan); font-weight: 700; cursor: pointer; font-size: 14px" (click)="openAudit(r)">審核 ›</span>
+                    } @else {
+                      <span class="ops-nowrap" style="color: var(--ops-text-2); font-weight: 600; cursor: pointer; font-size: 14px" (click)="openEdit(r)">編輯 ›</span>
+                    }
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="9"><div class="ops-empty">尚無航班資料</div></td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
 

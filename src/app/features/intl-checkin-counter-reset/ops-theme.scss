@@ -7,7 +7,7 @@
    ============================================================ */
 
 :root {
-  --ops-bg:           #0B0F14;
+  --ops-bg:           #191919;  /* 沿用 App 原本深色背景,避免頁面出現兩種底色 */
   --ops-panel:        #15191E;
   --ops-panel-2:      #1B2026;
   --ops-row:          #232830;
@@ -68,12 +68,22 @@
 .ops-frame { width: 100%; height: 100%; display: flex; flex-direction: column; flex: 1; min-height: 0; }
 .ops-frame-body {
   flex: 1; min-height: 0;
-  padding: 16px 18px 18px;
+  /* 桌機:四周內距(與 header 上方間距 = 左右間距)。桌機無頁面捲動,不會造成 sticky 跳動。
+     手機在媒體查詢內改成上方 0,改由 sticky 自身 padding-top 提供間距(避免跳動) */
+  padding: 24px;
   display: flex; flex-direction: column; gap: 14px;
+  min-width: 0;
 }
 
 /* ---------- Tabs ---------- */
-.ops-tabs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ops-tabs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; min-width: 0; }
+.ops-main-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding-bottom: 14px;
+  background: linear-gradient(180deg, var(--ops-bg) 0%, var(--ops-bg) 84%, rgba(11,15,20,0));
+}
 .ops-tab {
   padding: 6px 16px;
   background: var(--ops-panel-2);
@@ -96,7 +106,7 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.4);
 }
 
-.ops-filter-group { display: flex; align-items: center; gap: 12px; margin-left: auto; flex-wrap: wrap; }
+.ops-filter-group { display: flex; align-items: center; gap: 12px; margin-left: auto; flex-wrap: wrap; min-width: 0; }
 .ops-filter-label { color: var(--ops-text-2); font-size: 15px; font-weight: 500; }
 
 .ops-select {
@@ -178,6 +188,7 @@ app-ops-select.is-block .ops-dd-trigger { width: 100%; }
   padding: 12px 20px;
   border-bottom: 1px solid var(--ops-divider);
   background: var(--ops-panel);
+  min-width: 0;
 }
 .ops-panel-title { font-size: 18px; font-weight: 700; margin: 0; }
 .ops-panel-sub { color: var(--ops-text-3); font-size: 13px; margin-top: 3px; }
@@ -227,6 +238,7 @@ app-ops-select.is-block .ops-dd-trigger { width: 100%; }
   display: inline-flex; align-items: center; gap: 6px;
   padding: 3px 10px; border-radius: var(--r-pill);
   font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 .ops-status.is-pending  { background: rgba(241,194,50,0.15); color: var(--ops-amber); }
 .ops-status.is-approved { background: rgba(46,229,167,0.15); color: var(--ops-green); }
@@ -339,6 +351,13 @@ textarea.ops-input { resize: vertical; }
   background: linear-gradient(90deg, transparent, var(--ops-divider), transparent);
 }
 
+/* 純文字顯示(審核唯讀欄,不做成輸入框外觀以免誤會可編輯)*/
+.ops-read-text {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 24px; padding: 2px 0;
+  font-size: 15px; color: var(--ops-text); font-weight: 600;
+}
+
 /* ---------- Read-only field (審核) ---------- */
 .ops-read-field {
   padding: 8px 12px; min-height: 38px;
@@ -446,6 +465,45 @@ textarea.ops-input { resize: vertical; }
 .ops-toggle { display: inline-flex; padding: 3px; background: var(--ops-panel-2); border: 1px solid var(--ops-border); border-radius: var(--r-pill); gap: 2px; }
 .ops-toggle .opt { padding: 5px 18px; border-radius: var(--r-pill); font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; color: var(--ops-text-2); }
 .ops-toggle .opt.is-on { background: linear-gradient(180deg, #3BC7D6 0%, #1FA3B1 100%); color: #0B0F14; box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.4); }
+.ops-range-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  white-space: nowrap;
+}
+.ops-single-day-row,
+.ops-season-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  width: 100%;
+}
+.ops-single-day-row app-calendar-trigger {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.ops-label-nowrap {
+  white-space: nowrap;
+}
+.ops-report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  margin-left: 8px; /* 桌機:與上下切換按鈕保留間距 */
+}
+.ops-report-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
 
 .ops-edit-badge {
   display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: var(--r-pill);
@@ -470,45 +528,180 @@ textarea.ops-input { resize: vertical; }
 .ops-day-chip .flight { font-family: var(--ops-font-en); font-weight: 700; font-size: 17px; color: var(--ops-text); }
 .ops-day-chip .dest { font-family: var(--ops-font-en); font-size: 14px; color: var(--ops-text-3); margin-left: 6px; }
 
+.ops-nowrap { white-space: nowrap; }
+
+/* 櫃檯分配:季別下拉 / 日期選擇器固定同寬(切換整季/單日不變動) */
+.ops-alloc-date { flex: 0 0 200px !important; width: 200px; min-width: 200px; }
+.ops-alloc-date .ops-dd-trigger,
+.ops-alloc-date.ops-cal-trigger,
+.ops-alloc-date .ops-cal-trigger { width: 100%; }
+.ops-x-scroll { width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: visible; }
+
 /* empty state */
 .ops-empty { display: flex; align-items: center; justify-content: center; padding: 48px; color: var(--ops-text-3); font-size: 15px; }
 
 /* 換行點:桌機隱藏,手機(媒體查詢內)才強制換行 */
 .brk-sm { display: none; }
+/* 僅手機顯示的元素(如收合按鈕);桌機隱藏 */
+.mobile-only { display: none; }
+/* 收合的控制列(僅手機才會收合;桌機一律展開) */
 
 /* ============================================================
    手機版(<640px):維持版型/字體,僅縮間距;
-   上方控制列(tabs/篩選/按鈕)固定不捲動,資料區可上下左右捲動。
+   上方控制列可摺疊,資料表格完整展開、由整頁捲動(不鎖在表格內)。
    ============================================================ */
 @media (max-width: 639px) {
-  .ops-frame-body { padding: 10px 12px 12px; gap: 10px; }
-  .ops-tabs { gap: 6px; }
-  /* 篩選列換行,不橫向捲動;按鈕一律可見 */
-  .ops-filter-group { gap: 8px; margin-left: 0; width: 100%; }
+  /* 不鎖高度 → 內容完整展開,由外層整頁捲動 */
+  .ops-scope { height: auto; }
+  .ops-frame-body { padding: 0 16px 16px; gap: 10px; flex: initial; }
+  /* 控制列各列間距一致 */
+  .ops-tabs { gap: 10px; }
+  /* 內容區自身為捲動容器(counter-reset-layout),故 sticky 直接 top:0 即可,不會被 header 切掉。
+     sticky 區塊下方留 padding,捲動時與資料區有間距。 */
+  .ops-main-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    /* 手機:上方間距改由 sticky 自身提供(與 header 的距離),不造成跳動 */
+    padding-top: 16px;
+    padding-bottom: 14px;
+    /* 實色背景:sticky 釘住時上/下 padding 為實際可見間距,內容不會透出 */
+    background: var(--ops-bg);
+  }
+  .ops-sub-sticky {
+    position: sticky;
+    top: 64px;
+    z-index: 39;
+    padding-top: 4px;
+    padding-bottom: 14px;
+    background: var(--ops-bg);
+  }
+  .ops-filter-group { gap: 10px; margin-left: 0; width: 100%; }
   .ops-panel-header { padding: 10px 12px; }
-  /* 寬表格 / 看板在面板內可左右捲動(不撐破畫面) */
+  /* 資料面板:完整高度,內容溢出由整頁捲動(左右/上下)。
+     面板多帶 inline flex:1,需 !important 才能覆蓋。 */
+  .ops-panel { flex: initial !important; min-height: 0 !important; min-width: 0 !important; }
+  .ops-panel.ops-scroll { overflow: hidden; }
   .ops-panel .ops-table { min-width: 760px; }
   .ops-gantt { min-width: 720px; }
-  /* 表頭在垂直捲動時固定 */
-  .ops-table thead th { position: sticky; top: 0; }
+  /* 手機收合控制列 */
+  .ops-filter-group.is-collapsed { display: none; }
+  /* 航班資料表格:自身為捲動框,表頭凍結(永遠可見),左右/上下皆於框內捲動 */
+  .ops-frozen-table {
+    overflow: auto;
+    max-height: 60vh;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ops-frozen-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+  }
+  /* 航班資料表格:手機版整體字級 / 間距縮小 */
+  .ops-table-sm { min-width: 600px; }
+  .ops-table-sm thead th { font-size: 13px; padding: 8px 10px; letter-spacing: 0.02em; }
+  .ops-table-sm thead th:first-child { padding-left: 12px; }
+  .ops-table-sm thead th:last-child { padding-right: 12px; }
+  .ops-table-sm tbody td { font-size: 13px; padding: 8px 10px; }
+  .ops-table-sm tbody td:first-child { padding-left: 12px; }
+  .ops-table-sm tbody td:last-child { padding-right: 12px; }
+  .ops-table-sm .ops-cell-box { min-width: 32px; height: 26px; padding: 0 8px; font-size: 13px; }
+  .ops-table-sm .ops-type-tag { font-size: 11.5px; padding: 2px 8px; }
+  .ops-table-sm .ops-status { font-size: 11.5px; padding: 2px 8px; }
+  .ops-x-scroll { max-width: 100%; overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; }
   /* 彈窗表單改單欄 */
   .ops-form-grid { grid-template-columns: 1fr; }
   .ops-modal-body { padding: 16px; }
+  /* 收合按鈕顯示 */
+  .mobile-only { display: inline-flex; }
+  .mobile-only.ops-btn { width: 100%; justify-content: center; }
   /* 強制換行點(手機才生效),用來控制控制列分組 */
   .brk-sm { display: block; flex-basis: 100%; width: 100%; height: 0; margin: 0; }
 
   /* 上方控制列延伸滿寬 */
   .ops-tab { flex: 1 1 auto; text-align: center; }
-  .ops-filter-group { gap: 8px 10px; }
-  /* 固定 label 寬度 + 兩端對齊,讓「申請類別」「狀態」的右側起點一致 */
+  /* 固定 label 寬度 + 兩端對齊,讓各篩選下拉的起點一致 */
   .ops-filter-label {
     flex: 0 0 4.5em;
     text-align: justify;
     text-align-last: justify;
   }
-  /* 下拉 / 按鈕填滿剩餘寬度 */
+  /* 下拉 / 按鈕 / 搜尋填滿剩餘寬度 */
   .ops-filter-group app-ops-select { flex: 1 1 0; min-width: 0; }
   .ops-filter-group app-ops-select .ops-dd-trigger { width: 100%; }
   .ops-filter-group .ops-btn { flex: 1 1 auto; justify-content: center; }
   .ops-filter-group .ops-search { flex: 1 1 100%; width: 100%; }
+  .ops-single-day-row {
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .ops-single-day-row > .ops-filter-label {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    text-align: left;
+    text-align-last: auto;
+  }
+  .ops-single-day-row .ops-range-control {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+  }
+  /* 手機:季別/日期改填滿寬度 */
+  .ops-alloc-date { flex: 1 1 100% !important; width: 100%; min-width: 0; }
+  .ops-season-row {
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .ops-season-row > .ops-filter-label {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    text-align: left;
+    text-align-last: auto;
+  }
+  .ops-season-row .ops-range-control {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+  }
+
+  .ops-report-head {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    row-gap: 10px;
+  }
+  .ops-report-head-left {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .ops-report-head-right {
+    flex: 1 1 100%;
+    min-width: 0;
+    flex-wrap: wrap !important;
+    justify-content: flex-end;
+  }
+  .ops-report-switch {
+    flex: 0 0 auto;
+    order: 3;
+    margin-left: auto; /* 手機:推到該行最右,避免左側多出空白 */
+  }
+  .ops-report-head-right .ops-cal-trigger {
+    flex: 1 1 100%;
+    min-width: 0;
+    order: 1;
+  }
+  .ops-report-nav {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    order: 2;
+  }
+  .ops-report-nav .ops-btn {
+    flex: 0 0 auto;
+  }
+  .ops-report-head-right app-calendar-trigger {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+    order: 1;
+  }
 }

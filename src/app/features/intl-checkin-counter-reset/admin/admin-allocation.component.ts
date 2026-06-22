@@ -11,6 +11,7 @@ import {
   CounterSeason,
 } from '../../../models/counter.model';
 import { Option } from '../../../shared/components/dropdown/dropdown.component';
+import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
 import { OpsSelectComponent } from '../components/ops-select.component';
 import {
   ApplicationFormData,
@@ -35,7 +36,7 @@ const HOURS = 16; // 06:00 ~ 22:00
 @Component({
   selector: 'app-admin-allocation',
   standalone: true,
-  imports: [CommonModule, FormsModule, OpsSelectComponent],
+  imports: [CommonModule, FormsModule, OpsSelectComponent, CalendarTriggerComponent],
   templateUrl: './admin-allocation.component.html',
   styles: [':host{display:flex;flex-direction:column;flex:1;min-height:0;}'],
 })
@@ -47,6 +48,7 @@ export class AdminAllocationComponent implements OnInit {
 
   mode: '整季' | '單日' = '單日';
   dateStr = ''; // yyyy-MM-dd
+  selectedDate: Date = new Date();
 
   seasonList: CounterSeason[] = [];
   seasonOptions: Option[] = [];
@@ -137,7 +139,10 @@ export class AdminAllocationComponent implements OnInit {
     this.mode = m;
     this.load();
   }
-  onDateChange(): void {
+  onDateChange(d: Date): void {
+    if (!d) return;
+    this.selectedDate = d;
+    this.dateStr = this.fmt(d);
     this.load();
   }
   onSeasonChange(): void {

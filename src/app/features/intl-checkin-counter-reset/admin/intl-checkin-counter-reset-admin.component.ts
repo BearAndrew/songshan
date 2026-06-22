@@ -75,6 +75,8 @@ export class IntlCheckinCounterResetAdminComponent implements OnInit {
   typeFilter: 'all' | ApplyType = 'all';
   statusFilter: 'all' | StatusKind = 'all';
   search = '';
+  /** 手機版上方控制列是否展開(手機預設收合;桌機此旗標不影響,篩選恆顯示)*/
+  filtersOpen = false;
 
   airlineOptions: Option[] = [];
   airportNameMap: Record<string, string> = {};

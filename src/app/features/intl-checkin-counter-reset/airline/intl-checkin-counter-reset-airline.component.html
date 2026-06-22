@@ -1,7 +1,7 @@
 <div class="ops-scope">
   <div class="ops-frame-body">
     <!-- Tabs + filters -->
-    <div class="ops-tabs">
+    <div class="ops-tabs ops-main-tabs">
       @for (t of tabs; track t; let i = $index) {
         <div class="ops-tab" [class.is-active]="activeTab === t" (click)="setTab(t)">{{ t }}</div>
         <!-- 手機:當季/下季 一排,本週/下週/今日 一排 -->
@@ -21,10 +21,6 @@
 
     <!-- Table panel -->
     <div class="ops-panel ops-scroll" style="flex: 1; min-height: 0">
-      <div class="ops-panel-header">
-        <div class="ops-panel-title">航班與櫃檯申請</div>
-      </div>
-
       <table class="ops-table">
         <thead>
           <tr>
@@ -59,11 +55,11 @@
                 </span>
               </td>
               <td>
-                <span class="ops-status" [ngClass]="'is-' + r.status">
+                <span class="ops-status ops-nowrap" [ngClass]="'is-' + r.status">
                   {{ r.status === 'pending' ? '待審核' : r.status === 'approved' ? '已核准' : '已駁回' }}
                 </span>
               </td>
-              <td style="position: relative; overflow: visible">
+              <td class="ops-nowrap" style="position: relative; overflow: visible">
                 <button class="ops-btn ops-btn-ghost" style="padding: 4px 12px; font-size: 13.5px" (click)="toggleMenu(i, $event)">編輯 ▾</button>
                 @if (openMenuIndex === i) {
                   <div class="ops-menu" (click)="$event.stopPropagation()">

@@ -5,10 +5,10 @@
   min-height: 0;
 }
 
-/* 手機:固定可視高度,讓上方控制列不動、資料面板內部捲動 */
+/* 手機:不鎖高度,資料完整展開由整頁捲動 */
 @media (max-width: 639px) {
   :host {
-    height: calc(100vh - 150px);
-    height: calc(100dvh - 150px);
+    height: auto;
+    flex: initial;
   }
 }

@@ -43,6 +43,7 @@ export class CalendarTriggerComponent implements OnChanges {
   @Input() disableBeforeAnchor: boolean = false;
   @Input() anchorDay: Date | null = null;
   @Input() placeholder: string = '';
+  @Input() displayValue: string = '';
   /** 觸發器外觀:default = 原本淺色樣式(預設);ops = 深色 ops 頁面樣式 */
   @Input() theme: 'default' | 'ops' = 'default';
   @Output() dateChange = new EventEmitter<Date>();

@@ -8,6 +8,7 @@ import {
   CounterInfo,
 } from '../../../models/counter.model';
 import { Option } from '../../../shared/components/dropdown/dropdown.component';
+import { CalendarTriggerComponent } from '../../../shared/components/calendar-trigger/calendar-trigger.component';
 import { OpsSelectComponent } from '../components/ops-select.component';
 import { ApplyType, getApplyType, hhmm } from '../reset-shared';
 
@@ -22,7 +23,7 @@ interface Booking {
 @Component({
   selector: 'app-admin-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule, OpsSelectComponent],
+  imports: [CommonModule, FormsModule, OpsSelectComponent, CalendarTriggerComponent],
   templateUrl: './admin-reports.component.html',
   styles: [':host{display:flex;flex-direction:column;flex:1;min-height:0;}'],
 })
@@ -32,6 +33,7 @@ export class AdminReportsComponent implements OnInit {
 
   counters = [1, 2, 3, 4, 5, 6];
   dayLabels = ['一', '二', '三', '四', '五', '六', '日'];
+  fullDayLabels = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
   dayDates: string[] = []; // MM-DD
 
   weekStart!: Date; // 週一
@@ -79,13 +81,16 @@ export class AdminReportsComponent implements OnInit {
     return this.addDays(this.weekStart, 6);
   }
   get weekRangeLabel(): string {
-    return `${this.fmt(this.weekStart)} (一) – ${this.fmt(this.weekEnd)} (日)`;
+    return `${this.fmt(this.weekStart)} ~ ${this.fmt(this.weekEnd)}`;
   }
   get selectedDate(): Date {
     return this.addDays(this.weekStart, this.dayIdx);
   }
   get selectedDateLabel(): string {
     return this.fmt(this.selectedDate);
+  }
+  get selectedDateTitle(): string {
+    return `${this.selectedDateLabel}(${this.fullDayLabels[this.dayIdx]})`;
   }
 
   load(): void {
@@ -162,6 +167,20 @@ export class AdminReportsComponent implements OnInit {
   }
   nextWeek(): void {
     this.weekStart = this.addDays(this.weekStart, 7);
+    this.load();
+  }
+
+  /** 週檢視:選任一日期 → 跳到該週 */
+  onWeekPick(d: Date): void {
+    if (!d) return;
+    this.weekStart = this.mondayOf(d);
+    this.load();
+  }
+  /** 日檢視:選任一日期 → 跳到該日(同步該週)*/
+  onDayPick(d: Date): void {
+    if (!d) return;
+    this.weekStart = this.mondayOf(d);
+    this.dayIdx = d.getDay() === 0 ? 6 : d.getDay() - 1; // 0=一 … 6=日
     this.load();
   }
 

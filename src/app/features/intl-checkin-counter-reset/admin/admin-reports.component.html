@@ -1,13 +1,10 @@
 <div style="display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0">
   <!-- Controls -->
-  <div class="ops-tabs">
+  <div class="ops-tabs ops-sub-sticky">
     <div class="ops-filter-group" style="margin-left: 0">
-      <div class="ops-toggle" style="margin-right: 4px">
-        <span class="opt" [class.is-on]="view === 'week'" (click)="setView('week')">週</span>
-        <span class="opt" [class.is-on]="view === 'day'" (click)="setView('day')">日</span>
-      </div>
       <span class="ops-filter-label">航空公司</span>
       <app-ops-select [options]="airlineSelectOptions" [(ngModel)]="airlineFilter" [minWidth]="100"></app-ops-select>
+      <span class="brk-sm"></span>
       <a class="ops-btn ops-btn-blue" [href]="exportPeriod()">{{ view === 'day' ? '匯出當日' : '匯出當週' }}</a>
       <a class="ops-btn ops-btn-blue" [href]="exportSeason()">匯出當季</a>
     </div>
@@ -15,25 +12,38 @@
 
   <!-- Info bar -->
   <div class="ops-panel" style="flex: 0 0 auto">
-    <div class="ops-panel-header">
+    <div class="ops-panel-header ops-report-head" style="flex-wrap: nowrap; row-gap: 10px">
       @if (view === 'week') {
-        <div>
-          <div class="ops-panel-title" style="font-size: 19px">週次:{{ weekRangeLabel }}</div>
-          <div class="ops-panel-sub" style="font-size: 14px; color: var(--ops-text-2)">點選任一星期欄位,可跳至該日全櫃檯檢視</div>
+        <div class="ops-report-head-left">
+          <div class="ops-panel-title ops-report-title" style="font-size: 19px">{{ weekRangeLabel }}</div>
         </div>
-        <div style="margin-left: auto; display: flex; gap: 8px; align-items: center">
-          <button class="ops-btn ops-btn-ghost" (click)="prevWeek()">‹ 上週</button>
-          <button class="ops-btn ops-btn-ghost" (click)="nextWeek()">下週 ›</button>
+        <div class="ops-report-head-right" style="margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; min-width: 0">
+          <app-calendar-trigger theme="ops" style="flex: 1 1 190px; min-width: 160px" [selectedDate]="weekStart"
+            [isAllDay]="true" [placeholder]="'選擇週'" [title]="'週'" (dateChange)="onWeekPick($event)"></app-calendar-trigger>
+          <div class="ops-report-nav">
+            <button class="ops-btn ops-btn-ghost" (click)="prevWeek()">‹ 上週</button>
+            <button class="ops-btn ops-btn-ghost" (click)="nextWeek()">下週 ›</button>
+          </div>
+          <div class="ops-toggle ops-report-switch">
+            <span class="opt is-on">週</span>
+            <span class="opt" (click)="setView('day')">日</span>
+          </div>
         </div>
       } @else {
-        <div>
-          <div class="ops-panel-title" style="font-size: 19px">日期:{{ selectedDateLabel }} (<span style="color: var(--ops-cyan)">{{ dayLabels[dayIdx] }}</span>)</div>
-          <div class="ops-panel-sub" style="font-size: 14px; color: var(--ops-text-2)">當日全六櫃檯排程 · 依時間排序</div>
+        <div class="ops-report-head-left">
+          <div class="ops-panel-title ops-report-title" style="font-size: 19px">{{ selectedDateTitle }}</div>
         </div>
-        <div style="margin-left: auto; display: flex; gap: 8px; align-items: center">
-          <button class="ops-btn ops-btn-ghost" (click)="prevDay()">‹ 前一日</button>
-          <button class="ops-btn ops-btn-ghost" (click)="nextDay()">後一日 ›</button>
-          <button class="ops-btn ops-btn-cyan" (click)="setView('week')">↩ 回到週檢視</button>
+        <div class="ops-report-head-right" style="margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; min-width: 0">
+          <app-calendar-trigger theme="ops" style="flex: 1 1 190px; min-width: 160px" [selectedDate]="selectedDate"
+            [isAllDay]="true" [placeholder]="'選擇日期'" [title]="'日期'" (dateChange)="onDayPick($event)"></app-calendar-trigger>
+          <div class="ops-report-nav">
+            <button class="ops-btn ops-btn-ghost" (click)="prevDay()">‹ 前日</button>
+            <button class="ops-btn ops-btn-ghost" (click)="nextDay()">後日 ›</button>
+          </div>
+          <div class="ops-toggle ops-report-switch">
+            <span class="opt" (click)="setView('week')">週</span>
+            <span class="opt is-on">日</span>
+          </div>
         </div>
       }
     </div>
@@ -42,81 +52,87 @@
   <!-- Week view -->
   @if (view === 'week') {
     <div class="ops-panel ops-scroll" style="flex: 1; min-height: 0">
-      <table class="ops-table" style="font-size: 18px">
-        <thead>
-          <tr>
-            <th style="min-width: 64px">櫃檯</th>
-            @for (d of dayLabels; track $index; let di = $index) {
-              <th style="cursor: pointer" (click)="openDay(di)" title="點選跳至當日檢視">
-                {{ d }} {{ dayDates[di] }} ›
-              </th>
-            }
-          </tr>
-        </thead>
-        <tbody>
-          @for (cn of counters; track cn; let ci = $index) {
+      <div class="ops-x-scroll">
+        <table class="ops-table" style="font-size: 18px">
+          <thead>
             <tr>
-              <td><span class="ops-cell-box">{{ cn }}</span></td>
+              <th style="min-width: 64px">櫃檯</th>
               @for (d of dayLabels; track $index; let di = $index) {
-                <td style="vertical-align: top">
-                  @if (bookingsFor(ci, di).length === 0) {
-                    <span style="color: var(--ops-text-2); font-size: 17px">—</span>
-                  } @else {
-                    @for (b of bookingsFor(ci, di); track $index) {
-                      <div style="line-height: 1.4; margin-bottom: 8px">
-                        <div>
-                          <span style="font-family: var(--ops-font-en); font-weight: 700; font-size: 17px"
-                            [style.color]="b.type === 'range' ? 'var(--ops-orange)' : 'var(--ops-cyan)'">{{ b.flight }}</span>
-                          <span style="font-family: var(--ops-font-en); font-size: 13.5px; color: var(--ops-text-3); margin-left: 6px">{{ b.dest }}</span>
-                        </div>
-                        <div style="font-family: var(--ops-font-en); color: #CBD4DD; font-size: 15px">{{ b.time }}</div>
-                      </div>
-                    }
-                  }
-                </td>
+                <th style="cursor: pointer" (click)="openDay(di)" title="點選跳至當日檢視">
+                  {{ d }} {{ dayDates[di] }} ›
+                </th>
               }
             </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (cn of counters; track cn; let ci = $index) {
+              <tr>
+                <td><span class="ops-cell-box">{{ cn }}</span></td>
+                @for (d of dayLabels; track $index; let di = $index) {
+                  <td style="vertical-align: top">
+                    @if (bookingsFor(ci, di).length === 0) {
+                      <span style="color: var(--ops-text-2); font-size: 17px">—</span>
+                    } @else {
+                      @for (b of bookingsFor(ci, di); track $index) {
+                        <div style="line-height: 1.4; margin-bottom: 8px">
+                          <div>
+                            <span style="font-family: var(--ops-font-en); font-weight: 700; font-size: 17px"
+                              [style.color]="b.type === 'range' ? 'var(--ops-orange)' : 'var(--ops-cyan)'">{{ b.flight }}</span>
+                            <span style="font-family: var(--ops-font-en); font-size: 13.5px; color: var(--ops-text-3); margin-left: 6px">{{ b.dest }}</span>
+                          </div>
+                          <div style="font-family: var(--ops-font-en); color: #CBD4DD; font-size: 15px">{{ b.time }}</div>
+                        </div>
+                      }
+                    }
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   } @else {
     <!-- Day view -->
     <div class="ops-panel ops-scroll" style="flex: 1; min-height: 0">
-      <table class="ops-table" style="font-size: 18px">
-        <thead>
-          <tr>
-            <th style="min-width: 96px">櫃檯</th>
-            <th>當日排程(依時間排序)</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (cn of counters; track cn; let ci = $index) {
+      <div class="ops-x-scroll">
+        <table class="ops-table" style="font-size: 18px">
+          <thead>
             <tr>
-              <td style="vertical-align: middle">
-                <span style="display: inline-flex; align-items: center; gap: 10px">
-                  <span class="ops-cell-box">{{ cn }}</span>
-                  <span style="font-size: 13.5px; color: var(--ops-text-3)">{{ countFor(ci, dayIdx) }} 筆</span>
-                </span>
-              </td>
-              <td>
-                @if (countFor(ci, dayIdx) === 0) {
-                  <span style="color: var(--ops-text-2); font-size: 17px">當日無排程</span>
-                } @else {
-                  <div style="display: flex; flex-wrap: wrap; gap: 12px">
-                    @for (b of bookingsFor(ci, dayIdx); track $index) {
-                      <div class="ops-day-chip" [class.is-season]="b.type === 'season'" [class.is-range]="b.type === 'range'">
-                        <div class="time">{{ b.time }}</div>
-                        <div><span class="flight">{{ b.flight }}</span><span class="dest">{{ b.dest }}</span></div>
-                      </div>
-                    }
-                  </div>
-                }
-              </td>
+              <th style="min-width: 96px">櫃檯</th>
+              <th>{{ selectedDateLabel }}</th>
             </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (cn of counters; track cn; let ci = $index) {
+              <tr>
+                <td style="vertical-align: middle">
+                  <span style="display: inline-flex; align-items: center; gap: 10px">
+                    <span class="ops-cell-box">{{ cn }}</span>
+                    @if (countFor(ci, dayIdx) > 0) {
+                      <span style="font-size: 13.5px; color: var(--ops-text-3)">{{ countFor(ci, dayIdx) }} 筆</span>
+                    }
+                  </span>
+                </td>
+                <td>
+                  @if (countFor(ci, dayIdx) === 0) {
+                    <span style="color: var(--ops-text-2); font-size: 17px">-</span>
+                  } @else {
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px">
+                      @for (b of bookingsFor(ci, dayIdx); track $index) {
+                        <div class="ops-day-chip" [class.is-season]="b.type === 'season'" [class.is-range]="b.type === 'range'">
+                          <div class="time">{{ b.time }}</div>
+                          <div><span class="flight">{{ b.flight }}</span><span class="dest">{{ b.dest }}</span></div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   }
 </div>
